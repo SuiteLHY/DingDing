@@ -1,0 +1,11 @@
+# develop environment
+# \u7AEF\u53E3
+server:
+  port: 8081
+# \u6570\u636E\u5E93
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/spring_example?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    username: User
+    password: 123456

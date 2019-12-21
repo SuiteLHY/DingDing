@@ -1,0 +1,4 @@
+# 此处配置使用 dev 的配置环境
+spring:
+  profiles:
+    active: dev
