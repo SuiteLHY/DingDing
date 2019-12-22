@@ -36,15 +36,26 @@
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
         <!-- WebSocket -->
-        <dependency>
+        <!--<dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
-        </dependency>
-        <!-- Redis -->
-        <dependency>
+        </dependency>-->
+        <!-- ===== Redis ===== -->
+        <!--<dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+        </dependency>-->
+        <!-- Spring-session -->
+        <!--<dependency>
+            <groupId>org.springframework.session</groupId>
+            <artifactId>spring-session-data-redis</artifactId>
+            <version>2.2.0.RELEASE</version>
+        </dependency>-->
+        <!-- ===== -->
 
         <!-- Test 模块 -->
         <dependency>
@@ -73,18 +84,37 @@
             <artifactId>aspectjrt</artifactId>
         </dependency>
 
-        <!-- Spring Transaction Manager -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>org.springframework.transaction</artifactId>
-            <version>3.2.2.RELEASE</version>
-        </dependency>
-
         <!-- MySQL 连接 -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
+
+        <!-- Mybatis -->
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+        </dependency>
+
+        <!-- Spring boot - devtools: 额外开发工具包 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- ===== Springfox - Swagger ===== -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>2.9.2</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>2.9.2</version>
+        </dependency>
+        <!-- ===== -->
 
         <!-- Spring FrameWork 相关依赖资源 -->
         <dependency>
