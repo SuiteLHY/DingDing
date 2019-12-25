@@ -94,6 +94,9 @@
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
+            <!-- Spring boot 默认开发环境 (spring-boot-starter-parent) 已经不管理 Mybatis 了,
+            也就国内用的多, 截止目前, 美欧日韩开发市场中 Hibernate 占据绝大多数份额...... -->
+            <version>2.1.1</version>
         </dependency>
 
         <!-- Spring boot - devtools: 额外开发工具包 -->
@@ -103,7 +106,7 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- ===== Springfox - Swagger ===== -->
+        <!-- ===== SpringFox - Swagger ===== -->
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>

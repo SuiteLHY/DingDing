@@ -6,7 +6,8 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/spring_example?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+#    url: jdbc:mysql://localhost:3306/spring_example?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
     username: User
     password: 123456
   # 开发环境关闭 Thymeleaf 的缓存
@@ -32,7 +33,6 @@ spring:
 #        max-idle: 8
 #        # \u8FDE\u63A5\u6C60\u4E2D\u7684\u6700\u5C0F\u7A7A\u95F2\u8FDE\u63A5 \u9ED8\u8BA4 0
 #        min-idle: 0
-#===== Spring MVC =====#
 #==========#
 
 ## mybatis config
@@ -47,5 +47,3 @@ logging:
     com.favorites: DEBUG
     org.springframework.web: INFO
     org.hibernate: ERROR
-
-
