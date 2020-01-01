@@ -1,4 +1,15 @@
-# 此处配置使用 dev 的配置环境
+# Mybatis 配置
+mybatis:
+  configuration:
+    # 驼峰自动转下划线
+    map-underscore-to-camel-case: true
+  # Mapper 别名配置, 这是 Spring boot 提供的兼容配置
+  #-> , 挖jar包: org.mybatis.spring.boot.autoconfigure.MybatisProperties
+  #-> , 或者官方文档: <a href="https://mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/">
+  #->     mybatis-spring-boot-autoconfigure – Introduction</a>
+  type-aliases-package: github.com.suitelhy.webchat.domain.entity
+
+# 加载 dev 环境配置
 spring:
   profiles:
     active: dev

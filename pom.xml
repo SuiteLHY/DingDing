@@ -62,15 +62,9 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.junit.vintage</groupId>
-                    <artifactId>junit-vintage-engine</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
-        <!-- AspectJ -->
+        <!-- ===== AspectJ ===== -->
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
@@ -83,6 +77,7 @@
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjrt</artifactId>
         </dependency>
+        <!-- ===== -->
 
         <!-- MySQL 连接 -->
         <dependency>
@@ -94,12 +89,12 @@
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
-            <!-- Spring boot 默认开发环境 (spring-boot-starter-parent) 已经不管理 Mybatis 了,
-            也就国内用的多, 截止目前, 美欧日韩开发市场中 Hibernate 占据绝大多数份额...... -->
+            <!-- Spring boot 默认开发环境 (spring-boot-starter-parent) 将 Mybatis 作为外部资源兼容;
+            Mybatis 也就国内用的多, 截止目前, 美欧日韩开发市场中 Hibernate 占据绝大多数份额...... -->
             <version>2.1.1</version>
         </dependency>
 
-        <!-- Spring boot - devtools: 额外开发工具包 -->
+        <!-- Spring boot - devtools, 仅开发环境下启用 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
@@ -118,6 +113,8 @@
             <version>2.9.2</version>
         </dependency>
         <!-- ===== -->
+
+
 
         <!-- Spring FrameWork 相关依赖资源 -->
         <dependency>

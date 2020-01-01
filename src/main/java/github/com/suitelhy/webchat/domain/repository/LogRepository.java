@@ -1,0 +1,73 @@
+package github.com.suitelhy.webchat.domain.repository;
+
+import github.com.suitelhy.webchat.domain.entity.Log;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+/**
+ * 日志记录数据基础交互业务接口
+ */
+// 此处选择使用 Mybatis-Spring 的XML文件配置方式实现 mapper, 用来演示复杂SQL情景下的一种设计思路:
+//-> 聚焦于 SQL.
+@Mapper
+@Repository("logRepository")
+public interface LogRepository {
+
+    //===== select data =====//
+    /**
+     * 查询指定范围的日志记录
+     * @param offset
+     * @param limit
+     * @return
+     */
+    List<Log> selectAll(@Param("offset") int offset
+            , @Param("limit") int limit);
+
+    /**
+     * 查询日志记录总数
+     * @return
+     */
+    Log selectCount();
+
+    Log selectCountByUserid(@Param("userid") String userid);
+
+    /**
+     * 查询指定用户的日志记录
+     * @param userid
+     * @param offset
+     * @param limit
+     * @return
+     */
+    List<Log> selectLogByUserid(@Param("userid") String userid
+            , @Param("offset") int offset
+            , @Param("limit") int limit);
+
+    //===== insert data =====//
+    boolean insert(@Param("log") Log log);
+
+    //===== delete data =====//
+    /**
+     * 删除指定记录ID的日志记录
+     * @param id
+     * @return
+     */
+    boolean delete(@Param("id") String id);
+
+    /**
+     * 删除指定用户对应的所有日志记录
+     * @param userid
+     * @return
+     */
+    boolean deleteThisUser(@Param("id") String userid);
+
+    // 参考项目中提供了 deleteAll 业务接口; 如果更深入一些, 在实际生产情景下,
+    //-> 不应该提供这类不严谨的业务接口 (...), 删除操作也仅限于用户权限以内.
+    // 即便是删除指定账户, 也应该在数据库中保留必要的信息以供备案 (常见的策略
+    //-> 是提供业务层面的删除接口, 而持久层数据不做修改或者在保留必要信息的基
+    //-> 础上改变状态).
+    /*boolean deleteAll();*/
+
+}
