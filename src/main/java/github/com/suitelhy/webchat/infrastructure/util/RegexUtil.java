@@ -9,12 +9,19 @@ import java.util.regex.PatternSyntaxException;
 /**
  * <tt>RegexUtil</tt> 的 <code>Pattern</code> 缓存池
  *
- * @Description 由于是项目级别的工具类, 使用必定非常频繁
- *-> , 故采用单例缓存并限制最大容量, 提高性能、精简资源;
+ * @Description 由于是项目级别的工具类, 使用必定非常频繁, 故采用单例
+ *-> (枚举实现单例便于业务拓展) 来缓存并限制最大容量, 提高性能、精简资源.
  *-> 该缓存仅提供读取和插入 <code>Pattern</code> 的操作.
  * @Reference
  *-> <a href="https://examples.javacodegeeks.com/core-java/util/regex/patternsyntaxexception/java-util-regex-patternsyntaxexception-example/">
  *->     java.util.regex.PatternSyntaxException Example | Examples Java Code Geeks - 2019</a>
+ *-> , <a href="https://github.com/CyC2018/CS-Notes/blob/master/notes/Java%20%E5%B9%B6%E5%8F%91.md#%E4%B9%9D%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E7%A4%BA%E4%BE%8B">
+ *->     CS-Notes/Java 并发.md at master · CyC2018/CS-Notes</a>
+ *-> , <a href="https://www.jianshu.com/p/d9977a048dab">线程不安全的SimpleDateFormat - 简书</a>
+ *-> , <a href="https://my.oschina.net/githubhty/blog/658633">
+ *->     java并发问题，java并发容器解决全局变量的并发问题 - 帅的不像男的的个人空间 - OSCHINA</a>
+ *-> , <a href="https://github.com/CyC2018/CS-Notes/blob/master/notes/Java%20%E5%B9%B6%E5%8F%91.md#%E5%8D%81java-%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B">
+ *->     CS-Notes/Java 并发.md at master · CyC2018/CS-Notes</a>
  *
  */
 enum RegexUtilCache {
@@ -46,7 +53,10 @@ enum RegexUtilCache {
         if (null != regex
                 && REGEX_PATTERN_MAP.size() != MAX_CAPACITY
                 && null != (pattern = pattern(regex))) {
-            REGEX_PATTERN_MAP.put(regex, pattern);
+            //--- 并发环境下保证一致性
+            synchronized (REGEX_PATTERN_MAP) {
+                REGEX_PATTERN_MAP.put(regex, pattern);
+            }
             return true;
         }
         return false;
