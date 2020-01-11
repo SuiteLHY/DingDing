@@ -1,8 +1,9 @@
 package github.com.suitelhy.webchat.web;
 
-import github.com.suitelhy.webchat.application.service.LogService;
-import github.com.suitelhy.webchat.application.service.UserService;
+import github.com.suitelhy.webchat.application.task.LogTask;
+import github.com.suitelhy.webchat.application.task.UserTask;
 import github.com.suitelhy.webchat.domain.entity.User;
+import github.com.suitelhy.webchat.domain.vo.AccountVo;
 import github.com.suitelhy.webchat.infrastructure.web.util.CommonDate;
 import github.com.suitelhy.webchat.infrastructure.web.util.LogUtil;
 import github.com.suitelhy.webchat.infrastructure.web.util.NetUtil;
@@ -28,10 +29,10 @@ import java.util.List;
 public class LoginController {
 
     @Resource
-    private UserService userService;
+    private UserTask userTask;
 
     @Resource
-    private LogService logService;
+    private LogTask logTask;
 
     /**
      * 登入 - 页面
@@ -66,7 +67,7 @@ public class LoginController {
             , NetUtil netUtil
             , HttpServletRequest request) {
         final String ip = netUtil.getIpAddress(request);
-    	final User user = userService.selectUserByUserid(userid);
+    	final User user = userTask.selectUserByUserid(userid);
         if (null == user) {
             attributes.addFlashAttribute("error", defined.LOGIN_USERID_ERROR);
             return "redirect:/user/login";
@@ -75,7 +76,7 @@ public class LoginController {
             attributes.addFlashAttribute("error", defined.LOGIN_PASSWORD_ERROR);
             return "redirect:/user/login";
         }
-        if (user.getStatus() != 1) {
+        if (user.getStatus() != AccountVo.Status.NORMAL) {
             attributes.addFlashAttribute("error", defined.LOGIN_USERID_DISABLED);
             return "redirect:/user/login";
         }
@@ -91,7 +92,7 @@ public class LoginController {
                 return "redirect:/user/login";
             }
         }
-        logService.insert(logUtil.setLog(userid
+        logTask.insert(logUtil.setLog(userid
                 , date.getTime24()
                 , defined.LOG_TYPE_LOGIN
                 , defined.LOG_DETAIL_USER_LOGIN
@@ -100,7 +101,7 @@ public class LoginController {
         session.setAttribute("login_status", true);
         user.setLasttime(date.getTime24());
         user.setIp(ip);
-        userService.update(user);
+        userTask.update(user);
         attributes.addFlashAttribute("message", defined.LOGIN_SUCCESS);
         return "redirect:/chat";
     }

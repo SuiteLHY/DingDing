@@ -1,7 +1,8 @@
 package github.com.suitelhy.webchat.web;
 
-import github.com.suitelhy.webchat.application.service.UserService;
+import github.com.suitelhy.webchat.application.task.UserTask;
 import github.com.suitelhy.webchat.domain.entity.User;
+import github.com.suitelhy.webchat.infrastructure.domain.policy.DBPolicy;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.ui.Model;
@@ -14,12 +15,11 @@ import javax.annotation.Resource;
 @RequestMapping("/hello")
 public class HelloController {
 
-    // 测试接口使用
     @Resource
-    private UserService userService;
+    private UserTask userTask;
 
     @ApiOperation(httpMethod = "GET"
-            , notes = "跳转到 hello world 展示页面"
+            , notes = "获取 hello world 展示页面的数据"
             , value = "hello world")
     @GetMapping("/helloPage")
     public ModelAndView helloPage(Model model) {
@@ -44,8 +44,13 @@ public class HelloController {
     @RequestMapping(value = "/select"
             , method = {RequestMethod.GET, RequestMethod.POST})
     public String select(@RequestParam("id") String userId) {
-        User user = userService.selectUserByUserid(userId);
-        return user.toString();
+        //=== 拦截器 ===//
+        if (!DBPolicy.MYSQL.validateUuid(userId)) {
+            return "{}";
+        }
+        //======//
+        User result = userTask.selectUserByUserid(userId);
+        return null != result ? result.toString() : "{}";
     }
 
 }

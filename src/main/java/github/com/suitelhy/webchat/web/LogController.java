@@ -1,6 +1,6 @@
 package github.com.suitelhy.webchat.web;
 
-import github.com.suitelhy.webchat.application.service.LogService;
+import github.com.suitelhy.webchat.application.task.LogTask;
 import github.com.suitelhy.webchat.domain.entity.Log;
 import github.com.suitelhy.webchat.infrastructure.web.config.LogControllerConfig;
 import org.springframework.stereotype.Controller;
@@ -20,14 +20,17 @@ import java.util.List;
 public class LogController {
 
     @Resource
-    private LogService logService;
+    private LogTask logTask;
 
     @RequestMapping(value = "{userid}/log")
     public ModelAndView selectAll(@PathVariable("userid") String userid
             , @RequestParam(defaultValue = "1") Integer page) {
         ModelAndView view = new ModelAndView("log");
-        List<Log> list = logService.selectLogByUserid(userid, page, LogControllerConfig.PAGE_SIZE);
-        Integer count = logService.selectCountByUserid(userid, LogControllerConfig.PAGE_SIZE);
+        List<Log> list = logTask.selectLogByUserid(userid
+                , page
+                , LogControllerConfig.PAGE_SIZE);
+        Integer count = logTask.selectCountByUserid(userid
+                , LogControllerConfig.PAGE_SIZE);
         view.addObject("list", list);
         view.addObject("count", count);
         return view;
