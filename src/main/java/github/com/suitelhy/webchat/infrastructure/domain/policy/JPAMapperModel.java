@@ -5,6 +5,8 @@ import github.com.suitelhy.webchat.infrastructure.domain.annotation.SuiteColumn;
 import github.com.suitelhy.webchat.infrastructure.domain.annotation.SuiteTable;
 import github.com.suitelhy.webchat.infrastructure.domain.model.EntityModel;
 import github.com.suitelhy.webchat.infrastructure.domain.util.EntityUtil;
+import github.com.suitelhy.webchat.infrastructure.domain.util.SqlUtil;
+import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotNull;
 import java.lang.reflect.Field;
@@ -161,12 +163,54 @@ public class JPAMapperModel<E extends EntityModel> {
 
     /**
      * 获取用于生成 SQL 的 {数据库表字段名 - Entity 属性名称SQL表示} 映射集合
+     * @Description Entity 属性名称SQL表示中将会注入合法的SQL语句 <param>prefixSql</param> 作为前缀
+     * @param entityClazz
+     * @param prefixSql
+     * @param <T>
+     * @return
+     */
+    protected static <T extends EntityModel> Map<String, String> getColumnsMapForSQL(@NotNull Class<T> entityClazz
+            , @NotNull String prefixSql) {
+        if (null == prefixSql
+                || !SqlUtil.Regex.validateSQL(prefixSql)) {
+            throw new RuntimeException("异常的 SQL 注入", new IllegalArgumentException());
+        }
+        Map<String, String> result = new LinkedHashMap<>(0);
+        Field[] fields = entityClazz.getDeclaredFields();
+        if (fields.length > 0) {
+            for (Field field : fields) {
+                String columnName = getColumn(field);
+                if (null == columnName) continue;
+                String columnValue = field.getName();
+                result.put(columnName, (null != columnValue)
+                        ? ("#{" + prefixSql + columnValue + "}")
+                        : null);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 获取用于生成 SQL 的 {数据库表字段名 - Entity 属性名称SQL表示} 映射集合
      * @param entity
      * @param <T>
      * @return [{<tt>数据库表字段名</tt>=<tt>Entity属性名称SQL表示</tt>}, ...]
      */
     public static <T extends EntityModel> Map<String, String> getColumnsMapForSQL(@NotNull T entity) {
         return getColumnsMapForSQL(entity.getClass());
+    }
+
+    /**
+     * 获取用于生成 SQL 的 {数据库表字段名 - Entity 属性名称SQL表示} 映射集合
+     * @Description Entity 属性名称SQL表示中将会注入合法的SQL语句 <param>prefixSql</param> 作为前缀
+     * @param entity
+     * @param prefixSql
+     * @param <T>
+     * @return
+     */
+    public static <T extends EntityModel> Map<String, String> getColumnsMapForSQL(@NotNull T entity
+            , @Nullable String prefixSql) {
+        return getColumnsMapForSQL(entity.getClass(), prefixSql);
     }
 
     /**
