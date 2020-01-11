@@ -1,12 +1,18 @@
 package github.com.suitelhy.webchat.domain.entity;
 
-import github.com.suitelhy.webchat.infrastructure.domain.annotation.SuiteColumn;
-import github.com.suitelhy.webchat.infrastructure.domain.annotation.SuiteTable;
+import github.com.suitelhy.webchat.domain.vo.AccountVo;
+import github.com.suitelhy.webchat.domain.vo.HumanVo;
+import github.com.suitelhy.webchat.infrastructure.domain.model.AbstractEntityModel;
 import github.com.suitelhy.webchat.infrastructure.domain.model.EntityFactory;
 import github.com.suitelhy.webchat.infrastructure.domain.model.EntityModel;
-import github.com.suitelhy.webchat.infrastructure.domain.policy.DBPolicy;
-import github.com.suitelhy.webchat.infrastructure.domain.policy.JPAMapperModel;
+import github.com.suitelhy.webchat.infrastructure.domain.util.EntityUtil;
 import github.com.suitelhy.webchat.infrastructure.util.CalendarController;
+import github.com.suitelhy.webchat.infrastructure.web.util.NetUtil;
+import org.hibernate.annotations.GenericGenerator;
+import org.springframework.lang.Nullable;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 /**
  * 用户信息
@@ -16,54 +22,67 @@ import github.com.suitelhy.webchat.infrastructure.util.CalendarController;
  * 关于数据脱敏的自定义注解实现, 可参考: <a href="https://blog.csdn.net/liufei198613/article/details/79009015">
  *->     注解实现json序列化的时候自动进行数据脱敏_liufei198613的博客-CSDN博客</a>
  */
-@SuiteTable("user")
-public class User implements EntityModel<String> {
+/**
+ * 关于 id 生成策略, 个人倾向于使用"代理键", 所选策略还是应该交由数据库来实现.
+ * @Reference <a href="https://dzone.com/articles/persisting-natural-key-entities-with-spring-data-j">
+ *->     Persisting Natural Key Entities With Spring Data JPA</a>
+ */
+/*@SuiteTable("user")*/
+@Entity
+@Table
+public class User /*implements EntityModel<String>*/
+        extends AbstractEntityModel<String> {
 
     private static final long serialVersionUID = 1L;
 
     // 用户ID
-    @SuiteColumn(nullable = false)
-    private String userid;
+    @GeneratedValue(/*strategy = GenerationType.TABLE*/generator = "USER_ID_STRATEGY")
+    @GenericGenerator(name = "USER_ID_STRATEGY", strategy = "uuid")
+    @Id
+    private /*final */String userid;
 
     // 用户 - 年龄
-    @SuiteColumn
-    private transient Integer age;
+    @Column
+    private Integer age;
 
     // 注册时间
-    @SuiteColumn(nullable = false)
-    private transient String firsttime;
+    @Column(nullable = false)
+    private String firsttime;
 
     // 最后登陆IP
-    @SuiteColumn(nullable = false)
-    private transient String ip;
+    @Column(nullable = false)
+    private String ip;
 
     // 最后登录时间
-    @SuiteColumn(nullable = false)
-    private transient String lasttime;
+    @Column(nullable = false)
+    private String lasttime;
 
     // 用户 - 昵称
-    @SuiteColumn(nullable = false)
-    private transient String nickname;
+    /*@SuiteColumn(nullable = false)*/
+    @Column(nullable = false, unique = true)
+    private String nickname;
 
     // 用户 - 密码
-    @SuiteColumn(nullable = false)
-    private transient String password;
+    @Column(nullable = false)
+    private String password;
 
     // 用户 - 简介
-    @SuiteColumn
-    private transient String profile;
+    @Column
+    private String profile;
 
     // 用户 - 头像
-    @SuiteColumn
-    private transient String profilehead;
+    @Column
+    private String profilehead;
 
-    // 用户 - 性别
-    @SuiteColumn
-    private transient Integer sex;
+    // 用户 - 性别 -> {0:女, 1:男}
+    @Column
+    @Convert(converter = HumanVo.Sex.Converter.class)
+    private HumanVo.Sex sex;
 
     // 账号状态 -> {0:已注销, 1:正常, 2:异常&禁用}
-    @SuiteColumn(nullable = false)
-    private transient Integer status;
+    @Column(nullable = false)
+    @Convert(converter = AccountVo.Status.Converter.class)
+    private AccountVo.Status status;
 
     //===== Entity Model =====//
     @Override
@@ -81,13 +100,53 @@ public class User implements EntityModel<String> {
         return EntityModel.hashCode(this);
     }
 
+    /**
+     * 是否无效: id() 为空 || 不符合业务要求 || 未持久化
+     *
+     * @Description <tt>id() -> nonNull || !isLegal() || isPersistence() -> not false</tt>
+     * @return
+     */
     @Override
     public boolean isEmpty() {
-        return null == id()
-                || "".equals(id().trim())
-                || !"1".equals(this.getStatus())
-                || null == this.getFirsttime()
-                || !CalendarController.isParse(this.getFirsttime());
+        /*return (null == id() || "".equals(id().trim())) // 用户ID
+                || (null == this.getFirsttime() // 注册时间
+                        || !CalendarController.isParse(this.getFirsttime()))
+                || (null == this.getIp() // 最后登陆IP
+                        || !NetUtil.validateIpAddress(this.getIp()))
+                || (null == this.getLasttime() // 最后登录时间
+                        || !CalendarController.isParse(this.getLasttime()))
+                || (null == this.getNickname() // 用户 - 昵称
+                        || "".equals(this.getNickname().trim()))
+                || (null == this.getPassword() // 用户 - 密码
+                        || "".equals(this.getPassword().trim()))
+                || (null == this.getStatus() // 账号状态
+                        || !this.getStatus().equals(1));*/
+        return (null == id() || "".equals(id().trim())) // 用户ID
+                || !isLegal()
+                || (null != isPersistence()
+                        && !isPersistence());
+    }
+
+    /**
+     * 是否符合业务要求
+     *
+     * @return
+     * @Description 需要实现类实现该抽象方法
+     */
+    @Override
+    public boolean isLegal() {
+        return (null != this.getFirsttime()
+                        && CalendarController.isParse(this.getFirsttime())) // 注册时间
+                && (null != this.getIp()
+                        && NetUtil.validateIpAddress(this.getIp())) // 最后登陆IP
+                && (null != this.getLasttime()
+                        && CalendarController.isParse(this.getLasttime())) // 最后登录时间
+                && (null != this.getNickname()
+                        && !"".equals(this.getNickname().trim())) // 用户 - 昵称
+                && (null != this.getPassword()
+                        && !"".equals(this.getPassword().trim())) // 用户 - 密码
+                && (null != this.getStatus()
+                        && this.getStatus().equals(AccountVo.Status.NORMAL))/* 账号状态 */;
     }
 
     @Override
@@ -96,63 +155,259 @@ public class User implements EntityModel<String> {
     }
 
     //===== entity mapper =====//
-    //----- 根据是否需要个性化操作, 选择如下代码块拓展 Entity 映射操作
-    //-> 或者使用 Entity 映射模板提供的静态方法.
-    public static final UserMapper MAPPER = UserMapper.getInstance();
+//    //----- 根据是否需要个性化操作, 选择如下代码块拓展 Entity 映射操作
+//    //-> 或者使用 Entity 映射模板提供的静态方法.
+//    public static final UserMapper MAPPER = UserMapper.getInstance();
+//
+//    public static final class UserMapper extends JPAMapperModel<User> {
+//
+//        //=== 工厂模式实现单例 ===//
+//        private UserMapper() {
+//            super(User.class);
+//        }
+//
+//        private static final class JPAMapperFactory {
+//            public static final UserMapper INSTANCE = new UserMapper();
+//        }
+//
+//        public static final UserMapper getInstance() {
+//            return JPAMapperFactory.INSTANCE;
+//        }
+//        //======//
+//
+//        // 用户 - 用户业务信息字段
+//        private final String[] businessFieldNames = {getColumn("userid")
+//                , getColumn("age")
+//                , getColumn("firsttime")
+//                , getColumn("lasttime")
+//                , getColumn("nickname")
+//                , getColumn("password")
+//                , getColumn("profile")
+//                , getColumn("profilehead")
+//                , getColumn("status")};
+//
+//        public String[] getBusinessFieldNames() {
+//            return businessFieldNames;
+//        }
+//
+//    }
 
-    public static final class UserMapper extends JPAMapperModel<User> {
-
-        //=== 工厂模式实现单例 ===//
-        private UserMapper() {
-            super(User.class);
-        }
-
-        private static final class JPAMapperFactory {
-            public static final UserMapper INSTANCE = new UserMapper();
-        }
-
-        public static final UserMapper getInstance() {
-            return JPAMapperFactory.INSTANCE;
-        }
-        //======//
-
-        // 用户 - 用户业务信息字段
-        private final String[] businessFieldNames = {getColumn("userid")
-                , getColumn("age")
-                , getColumn("firsttime")
-                , getColumn("lasttime")
-                , getColumn("nickname")
-                , getColumn("password")
-                , getColumn("profile")
-                , getColumn("profilehead")
-                , getColumn("status")};
-
-        public String[] getBusinessFieldNames() {
-            return businessFieldNames;
-        }
-
-    }
+    //===== base constructor =====//
+    /**
+     * 仅用于持久化注入
+     */
+    public User() {}
 
     //===== entity factory =====//
-    private User() {
-        this.setUserid(DBPolicy.uuid());
-        this.setStatus(1);
-        this.setFirsttime(new CalendarController().toCalendarString());
+//    /**
+//     * 创建用户 - Entity对象
+//     *
+//     * @Description 仅用于添加用户.
+//     */
+//    private User(@Nullable Integer age
+//            , @NotNull String firsttime
+//            , @NotNull String ip
+//            , @NotNull String lasttime
+//            , @NotNull String nickname
+//            , @NotNull String password
+//            , @Nullable String profile
+//            , @Nullable String profilehead
+//            , @Nullable HumanCharacteristics.Sex sex) {
+//        /*this.setUserid(DBPolicy.uuid());*/
+//        // 用户ID
+//        String id = DBPolicy.MYSQL.uuid();
+//        new User(id, age, firsttime
+//                , ip, lasttime, nickname
+//                , password, profile, profilehead
+//                , sex);
+//    }
+
+    /**
+     * 创建/更新用户 -> Entity对象
+     *
+     * @Description 添加(<param>id</param>为 null) / 更新(<param>id</param>合法)用户.
+     * @param id            用户ID
+     * @param age           用户 - 年龄
+     * @param firsttime     注册时间
+     * @param ip            最后登陆IP
+     * @param lasttime      最后登录时间
+     * @param nickname      用户 - 昵称
+     * @param password      用户 - 密码
+     * @param profile       用户 - 简介
+     * @param profilehead   用户 - 头像
+     * @param sex           用户 - 性别
+     * @throws IllegalArgumentException
+     */
+    private User(@NotNull String id
+            , @Nullable Integer age
+            , @NotNull String firsttime
+            , @NotNull String ip
+            , @NotNull String lasttime
+            , @NotNull String nickname
+            , @NotNull String password
+            , @Nullable String profile
+            , @Nullable String profilehead
+            , @Nullable HumanVo.Sex sex) {
+        if (null == id) {
+            //--- <param>id</param>为 null 时, 对应添加用户功能.
+            /*id = DBPolicy.MYSQL.uuid();*/
+        } else {
+            //--- 对应更新用户功能.
+            /*if (!DBPolicy.MYSQL.validateUuid(id)) {
+                //-- 非法输入: 用户ID
+                throw new IllegalArgumentException(this.getClass().getSimpleName()
+                        + " -> 非法输入: 用户ID");
+            }*/
+        }
+
+        if (null != age && age < 0) {
+            //-- 非法输入: 用户 - 年龄
+            throw new IllegalArgumentException(this.getClass().getSimpleName()
+                    + " -> 非法输入: 用户 - 年龄");
+        }
+        if (null == firsttime
+                || !CalendarController.isParse(firsttime)) {
+            //-- 非法输入: 注册时间
+            throw new IllegalArgumentException(this.getClass().getSimpleName()
+                    + " -> 非法输入: 注册时间");
+        }
+        if (null == ip
+                || !NetUtil.validateIpAddress(ip)) {
+            //-- 非法输入: 最后登陆IP
+            throw new IllegalArgumentException(this.getClass().getSimpleName()
+                    + " -> 非法输入: 最后登陆IP");
+        }
+        if (null == lasttime
+                || !CalendarController.isParse(lasttime)) {
+            //-- 非法输入: 最后登录时间
+            throw new IllegalArgumentException(this.getClass().getSimpleName()
+                    + " -> 非法输入: 最后登录时间");
+        }
+        if (null == nickname || "".equals(nickname.trim())) {
+            //-- 非法输入: 用户 - 昵称
+            throw new IllegalArgumentException(this.getClass().getSimpleName()
+                    + " -> 非法输入: 用户 - 昵称");
+        }
+        if (null == password
+                || !EntityUtil.Regex.validateUserPassword(password)) {
+            //-- 非法输入: 用户 - 密码
+            throw new IllegalArgumentException(this.getClass().getSimpleName()
+                    + " -> 非法输入: 用户 - 密码");
+        }
+        // 用户ID
+        this.setUserid(id);
+        // 用户 - 年龄
+        this.setAge(age);
+        // 注册时间
+        this.setFirsttime(new CalendarController().toString());
+        // 最后登陆IP
+        this.setIp(ip);
+        // 最后登录时间
+        this.setLasttime(lasttime);
+        // 用户 - 昵称
+        this.setNickname(nickname);
+        // 用户 - 密码
+        this.setPassword(password);
+        // 用户 - 简介
+        this.setProfile(profile);
+        // 用户 - 头像
+        this.setProfilehead(profilehead);
+        // 用户 - 性别
+        this.setSex(sex);
+        // 账号状态
+        this.setStatus(AccountVo.Status.NORMAL);
     }
 
     public enum Factory implements EntityFactory<User> {
-        SINGLETON;
+        USER;
 
         /**
          * 获取 Entity 实例
          *
-         * @return
+         * @return <code>null</code>
          */
         @Override
         public User create() {
-            return new User();
+            return null;
         }
 
+        /**
+         * 创建用户
+         *
+         * @param age           用户 - 年龄
+         * @param firsttime     注册时间
+         * @param ip            最后登陆IP
+         * @param lasttime      最后登录时间
+         * @param nickname      用户 - 昵称
+         * @param password      用户 - 密码
+         * @param profile       用户 - 简介
+         * @param profilehead   用户 - 头像
+         * @param sex           用户 - 性别
+         * @throws IllegalArgumentException
+         */
+        public User create(@Nullable Integer age
+                , @NotNull String firsttime
+                , @NotNull String ip
+                , @NotNull String lasttime
+                , @NotNull String nickname
+                , @NotNull String password
+                , @Nullable String profile
+                , @Nullable String profilehead
+                , @Nullable HumanVo.Sex sex) {
+            return new User(null, age, firsttime
+                    , ip, lasttime, nickname
+                    , password, profile, profilehead
+                    , sex);
+        }
+
+        /**
+         * 更新用户
+         *
+         * @param id            用户ID
+         * @param age           用户 - 年龄
+         * @param firsttime     注册时间
+         * @param ip            最后登陆IP
+         * @param lasttime      最后登录时间
+         * @param nickname      用户 - 昵称
+         * @param password      用户 - 密码
+         * @param profile       用户 - 简介
+         * @param profilehead   用户 - 头像
+         * @param sex           用户 - 性别
+         * @throws IllegalArgumentException 此时 <param>id</param> 非法
+         * @return 可为 null, 此时输入参数非法
+         */
+        public User update(@NotNull String id
+                , @Nullable Integer age
+                , @NotNull String firsttime
+                , @NotNull String ip
+                , @NotNull String lasttime
+                , @NotNull String nickname
+                , @NotNull String password
+                , @Nullable String profile
+                , @Nullable String profilehead
+                , @Nullable HumanVo.Sex sex) {
+            if (null == id) {
+                throw new IllegalArgumentException("非法输入: 用户ID");
+            }
+            return new User(id, age, firsttime
+                    , ip, lasttime, nickname
+                    , password, profile, profilehead
+                    , sex);
+        }
+
+        /**
+         * 销毁 Entity 实例
+         * @param user
+         * @return {<code>true</code> : <b>销毁成功</b>
+         *->      , <code>false</code> : <b>销毁失败; 此时 <param>user</param></b> 无效或无法销毁}
+         */
+        public boolean delete(@NotNull User user) {
+            if (null != user && !user.isEmpty()) {
+                user.setStatus(AccountVo.Status.DESTRUCTION);
+                return true;
+            }
+            return false;
+        }
     }
 
     //===== getter & setter =====//
@@ -228,20 +483,31 @@ public class User implements EntityModel<String> {
         this.profilehead = profilehead;
     }
 
-    public Integer getSex() {
+    public HumanVo.Sex getSex() {
         return sex;
     }
 
-    public void setSex(Integer sex) {
+    public void setSex(HumanVo.Sex sex) {
         this.sex = sex;
     }
 
-    public Integer getStatus() {
+    public AccountVo.Status getStatus() {
         return status;
     }
 
-    private void setStatus(Integer status) {
+    private void setStatus(AccountVo.Status status) {
         this.status = status;
     }
+
+    /*private boolean setStatus(Byte value) {
+        for (AccountVo.Status each : AccountVo.Status.values()) {
+            if (each.equals(value)) {
+                *//*this.status = each;*//*
+                this.status = value;
+                return true;
+            }
+        }
+        return false;
+    }*/
 
 }
