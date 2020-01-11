@@ -16,13 +16,25 @@ public final class EntityUtil {
     public static class Regex {
 
         /**
-         * 校验字段名称格式
+         * 校验 -> Entity 属性名称
          * @Description 使用正则表达式校验
          * @param fieldName
          * @return
          */
         public static boolean validateFieldName(@Nullable String fieldName) {
-                return RegexUtil.getPattern("[a-z][A-Za-z0-9]+").matcher(fieldName).matches();
+                return null != fieldName
+                        && RegexUtil.getPattern("[a-z][A-Za-z0-9]+").matcher(fieldName).matches();
+        }
+
+        /**
+         * 校验 -> 用户密码
+         * @Description 用户密码规则: 以字母开头, 长度在6~18之间, 只能包含字母、数字和下划线.
+         * @param password
+         * @return
+         */
+        public static boolean validateUserPassword(@Nullable String password) {
+            return null != password
+                    && RegexUtil.getPattern("^[a-zA-Z]\\w{5,17}$").matcher(password).matches();
         }
 
         private Regex() {}
