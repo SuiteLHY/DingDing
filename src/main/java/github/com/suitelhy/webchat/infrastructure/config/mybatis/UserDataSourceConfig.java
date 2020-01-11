@@ -1,37 +1,37 @@
-package github.com.suitelhy.webchat.infrastructure.config.datasource;
-
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.mybatis.spring.SqlSessionFactoryBean;
-import org.mybatis.spring.SqlSessionTemplate;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.jdbc.DataSourceBuilder;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-
-import javax.sql.DataSource;
-
-/**
- * 主数据源配置
- *
- * 参照资料: <a href="http://www.ityouknow.com/springboot/2016/11/25/spring-boot-multi-mybatis.html">
- *->      Spring Boot(七)：Mybatis 多数据源最简解决方案 - 纯洁的微笑博客 </a>
- * 参考资料: <a href="http://mybatis.org/spring/zh/getting-started.html">
- *->     mybatis-spring – MyBatis-Spring | 入门</a>,
- *-> <a href="http://mybatis.org/spring/zh/mappers.html">mybatis-spring – MyBatis-Spring | 注入映射器</a>
- *-> , <a href="https://www.jianshu.com/p/dba49fc5a741">mybatis源码-@Mapper @MapperScan配置及注入原理 - 简书</a>
- *-> (Mapper接口映射器的自动注入)
- *
- * @Description 基于 Mybatis 框架的数据源的配置和注入. 逐层地 配置并注入.
- */
-@Configuration
-// @MapperScan 扫描领域层(Domain)的领域资源层(Repository), 且向其中注入指定的 SqlSessionTemplate.
-// TIPS: 不使用这个数据源的配置就屏蔽该注解 (有声明配置无使用绑定)
-/*@MapperScan(basePackages = "github.com.suitelhy.webchat.domain.repository"
-        , sqlSessionTemplateRef = "userSqlSessionTemplate")*/
-public class UserDataSourceConfig {
+//package github.com.suitelhy.webchat.infrastructure.config.datasource;
+//
+//import org.apache.ibatis.session.SqlSessionFactory;
+//import org.mybatis.spring.SqlSessionFactoryBean;
+//import org.mybatis.spring.SqlSessionTemplate;
+//import org.springframework.beans.factory.annotation.Qualifier;
+//import org.springframework.boot.context.properties.ConfigurationProperties;
+//import org.springframework.boot.jdbc.DataSourceBuilder;
+//import org.springframework.context.annotation.Bean;
+//import org.springframework.context.annotation.Configuration;
+//import org.springframework.context.annotation.Primary;
+//import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+//
+//import javax.sql.DataSource;
+//
+///**
+// * 主数据源配置
+// *
+// * 参照资料: <a href="http://www.ityouknow.com/springboot/2016/11/25/spring-boot-multi-mybatis.html">
+// *->      Spring Boot(七)：Mybatis 多数据源最简解决方案 - 纯洁的微笑博客 </a>
+// * 参考资料: <a href="http://mybatis.org/spring/zh/getting-started.html">
+// *->     mybatis-spring – MyBatis-Spring | 入门</a>,
+// *-> <a href="http://mybatis.org/spring/zh/mappers.html">mybatis-spring – MyBatis-Spring | 注入映射器</a>
+// *-> , <a href="https://www.jianshu.com/p/dba49fc5a741">mybatis源码-@Mapper @MapperScan配置及注入原理 - 简书</a>
+// *-> (Mapper接口映射器的自动注入)
+// *
+// * @Description 基于 Mybatis 框架的数据源的配置和注入. 逐层地 配置并注入.
+// */
+//@Configuration
+//// @MapperScan 扫描领域层(Domain)的领域资源层(Repository), 且向其中注入指定的 SqlSessionTemplate.
+//// TIPS: 不使用这个数据源的配置就屏蔽该注解 (有声明配置无使用绑定)
+///*@MapperScan(basePackages = "github.com.suitelhy.webchat.domain.repository"
+//        , sqlSessionTemplateRef = "userSqlSessionTemplate")*/
+//public class UserDataSourceConfig {
 
 //    /**
 //     * 配置数据源 (DataSource)
@@ -87,5 +87,5 @@ public class UserDataSourceConfig {
 //    public DataSourceTransactionManager userTransactionManager(@Qualifier("userDataSource") DataSource dataSource) {
 //        return new DataSourceTransactionManager(dataSource);
 //    }
-
-}
+//
+//}
