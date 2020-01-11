@@ -7,20 +7,18 @@ import java.io.Serializable;
 
 /**
  * 实体设计模板
- * @param <I> - Entity 的唯一标识 (Identify) 的类型
+ * @param <ID> - Entity 的唯一标识 (Identify) 的类型
  */
-public interface EntityModel<I> extends Serializable {
+public interface EntityModel<ID> extends Serializable {
 
     /**
      * Entity 对象的唯一标识
-     *
      * @return The unique identify of the entity.
      */
-    I id();
+    ID id();
 
     /**
      * 判断是否相同
-     *
      * @Description <code>equals(Object obj)</code> 应该根据 <code>equals(EntityModel entity)</code> 的实现来重写.
      * @param obj
      * @return
@@ -29,7 +27,6 @@ public interface EntityModel<I> extends Serializable {
 
     /**
      * 判断是否相同
-     *
      * @Description 默认按照 Entity 设计实现, 不应该被重写
      * @param entity 实体对象
      * @return
@@ -56,7 +53,6 @@ public interface EntityModel<I> extends Serializable {
 
     /**
      * 计算哈希值
-     *
      * @Description 如果重写了 <code>equals(Object obj)</code>, 则必须根据 <code>equals(Object obj)</code>
      *-> 的实现重写 <code>hashCode()</code>.
      * @return
@@ -80,6 +76,7 @@ public interface EntityModel<I> extends Serializable {
 
     /**
      * 是否无效
+     * @Description <tt>EntityModel.isEmpty(this) || !isLegal() || isPersistence() -> not false</tt>
      * @return
      */
     boolean isEmpty();
@@ -87,17 +84,31 @@ public interface EntityModel<I> extends Serializable {
     /**
      * 是否无效
      *
-     * @Description Entity模板提供的实现
+     * @Description Entity模板提供的实现 -> 仅检验 <tt><method>id()</method> -> nonNull</tt>.
      * @param entity
      * @param <T>
      * @return
      */
     static <T extends EntityModel> boolean isEmpty(@Nullable T entity) {
         return null == entity
-                || (entity.id() instanceof EntityModel)
-                    ? (((EntityModel) entity.id()).isEmpty())
-                    : null == entity.id();
+                || (entity.id() instanceof EntityModel
+                        ? (((EntityModel) entity.id()).isEmpty())
+                        : null == entity.id());
     }
+
+    /**
+     * 是否符合业务要求
+     * @Description 需要实现类实现该接口
+     * @return
+     */
+    boolean isLegal();
+
+    /**
+     * 是否已持久化
+     * @return 可为 null, 此时未实现该接口.
+     */
+    @Nullable
+    Boolean isPersistence();
 
     /**
      * 转换为字符串

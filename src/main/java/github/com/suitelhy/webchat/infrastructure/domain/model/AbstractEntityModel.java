@@ -1,14 +1,16 @@
 package github.com.suitelhy.webchat.infrastructure.domain.model;
 
-public abstract class AbstractEntityModel<I> implements EntityModel<I> {
+public abstract class AbstractEntityModel<ID>
+        implements EntityModel<ID> {
 
+    //===== EntityModel =====//
     /**
      * Entity 对象的唯一标识
      *
      * @return The unique identify of the entity.
      */
     @Override
-    public abstract I id();
+    public abstract ID id();
 
     /**
      * 判断是否相同
@@ -37,13 +39,35 @@ public abstract class AbstractEntityModel<I> implements EntityModel<I> {
     }
 
     /**
-     * 是否无效
+     * 是否无效: id() 为空 || 不符合业务要求 || 未持久化
      *
+     * @Description <tt>EntityModel.isEmpty(this) || !isLegal() || isPersistence() -> not false</tt>
      * @return
      */
     @Override
     public boolean isEmpty() {
-        return EntityModel.isEmpty(this);
+        return EntityModel.isEmpty(this)
+                || !isLegal()
+                || !isPersistence();
+    }
+
+    /**
+     * 是否符合业务要求
+     *
+     * @Description 需要实现类实现该抽象方法
+     * @return
+     */
+    @Override
+    public abstract boolean isLegal();
+
+    /**
+     * 是否已持久化
+     *
+     * @return 可为 null, 此时未实现该接口.
+     */
+    @Override
+    public Boolean isPersistence() {
+        return null;
     }
 
     /**
