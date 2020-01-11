@@ -1,13 +1,13 @@
-package github.com.suitelhy.webchat.application.service;
+package github.com.suitelhy.webchat.application.task;
 
 import github.com.suitelhy.webchat.domain.entity.Log;
 
 import java.util.List;
 
 /**
- * 日志记录 - 业务接口
+ * 日志记录 - 任务调度接口
  */
-public interface LogService {
+public interface LogTask {
 
     /**
      * 查询所有日志记录 (分页)

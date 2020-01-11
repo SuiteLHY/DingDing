@@ -1,10 +1,13 @@
-package github.com.suitelhy.webchat.application.service;
+package github.com.suitelhy.webchat.application.task;
 
 import github.com.suitelhy.webchat.domain.entity.User;
 
 import java.util.List;
 
-public interface UserService {
+/**
+ * 用户 - 任务调度接口
+ */
+public interface UserTask {
 
     /**
      * 查询用户列表
