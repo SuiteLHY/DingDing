@@ -1,5 +1,7 @@
 package github.com.suitelhy.webchat.infrastructure.web.util;
 
+import github.com.suitelhy.webchat.infrastructure.util.RegexUtil;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 import java.util.regex.Pattern;
@@ -42,9 +44,11 @@ enum NetUtilConfig {
     /**
      * 正则表达式 - 匹配 IP 地址
      *
-     * @link <a href="https://www.jianshu.com/p/82886d77440c">正则表达式 - 匹配 IP 地址</a>
+     * @Reference <a href="https://www.jianshu.com/p/82886d77440c">正则表达式 - 匹配 IP 地址</a>
+     * <a href="https://c.runoob.com/front-end/854">正则表达式在线测试 | 菜鸟工具</a>
      */
-    private final String REGEX_IP = "((2(5[0-5]|[0-4]\\d))|[0-1]?\\d{1,2})(\\.((2(5[0-5]|[0-4]\\d))|[0-1]?\\d{1,2})){3}";
+    private final String REGEX_IP = /*"((2(5[0-5]|[0-4]\\d))|[0-1]?\\d{1,2})(\\.((2(5[0-5]|[0-4]\\d))|[0-1]?\\d{1,2})){3}"*/
+            "((?:(?:25[0-5]|2[0-4]\\d|[01]?\\d?\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|[01]?\\d?\\d))";
 
     //===== getter =====//
 
@@ -72,7 +76,7 @@ enum NetUtilConfig {
 public class NetUtil {
 
     // 配置
-    private final NetUtilConfig NET_UTIL_CONFIG = /*NetUtilConfig.getInstance()*/NetUtilConfig.SINGLETON;
+    private static final NetUtilConfig NET_UTIL_CONFIG = /*NetUtilConfig.getInstance()*/NetUtilConfig.SINGLETON;
 
     /**
      * 校验 IP 地址格式
@@ -80,10 +84,10 @@ public class NetUtil {
      * @return {<code>true</code> : <p>符合 IP 地址格式</p>
      *-> , <code>false</code> : <p>参数 ip 为空或不符合 IP 地址格式</p>}
      */
-    public boolean validateIpAddress(@NotNull String ip) {
+    public static boolean validateIpAddress(@NotNull String ip) {
         return null != ip
-                && ip.isEmpty()
-                && Pattern.compile(NET_UTIL_CONFIG.getRegexIp()).matcher(ip).matches();
+                && !ip.isEmpty()
+                && RegexUtil.getPattern(NET_UTIL_CONFIG.getRegexIp()).matcher(ip).matches();
     }
 
     /**
@@ -103,7 +107,7 @@ public class NetUtil {
     //-> <a href="https://blog.csdn.net/hhhh222222/article/details/77878510">
     //->     根据HttpServletRequest获取用户真实IP地址_hhhh222222的博客-CSDN博客</a>
     // 总之, 黑猫白猫, 能干好活就是好猫, coding after thinking, 避免不必要的错误(...).
-    public String getIpAddress(@NotNull HttpServletRequest request) {
+    public static String getIpAddress(@NotNull HttpServletRequest request) {
         String ipAddress = null;
         for (String requestHeader : NET_UTIL_CONFIG.getProxyServerRequestHeaders()) {
             ipAddress = request.getHeader(requestHeader);
@@ -126,7 +130,7 @@ public class NetUtil {
                 }
             } catch (Exception e) {
                 //-- 获取不到 IP 地址的情况
-                throw new RuntimeException(this.getClass().getSimpleName()
+                throw new RuntimeException(NetUtil.class.getSimpleName()
                         + " - "
                         + "getIpAddress(HttpServletRequest request)"
                         + " -> 从 Request 中获取 IP 地址出错!"
