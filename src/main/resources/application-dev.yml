@@ -11,35 +11,20 @@ webchat:
   datasource:
     ### 主数据源
     user:
-      driver-class-name: com.mysql.jdbc.Driver
+      driver-class-name: com.mysql.cj.jdbc.Driver
       # Spring Boot 2.xx 将默认的JDBC连接池从Tomcat更改为更快更好的HikariCP, 导致<item>url</item>需要改为<item>jdbc-url</item>
-      jdbc-url: jdbc:mysql://localhost:3306/webchat?serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8&useSSL=true
+      jdbc-url: jdbc:mysql://localhost:3306/webchat?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false
       username: User
       password: 123456
     ### 测试用的数据源
     test:
-      driver-class-name: com.mysql.jdbc.Driver
-      jdbc-url: jdbc:mysql://localhost:3306/test?serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8&useSSL=true
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://localhost:3306/test?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false
       username: User
       password: 123456
 
 # Spring 生态 - 配置
 spring:
-#  # 数据源配置
-#  datasource:
-#    # 主数据源
-#    user:
-#      driver-class-name: com.mysql.jdbc.Driver
-#      # Spring Boot 2.xx 将默认的JDBC连接池从Tomcat更改为更快更好的HikariCP, 导致<item>url</item>需要改为<item>jdbc-url</item>
-#      jdbc-url: jdbc:mysql://localhost:3306/webchat?serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8&useSSL=true
-#      username: User
-#      password: 123456
-#    # 测试用的数据源
-#    test:
-#      driver-class-name: com.mysql.jdbc.Driver
-#      jdbc-url: jdbc:mysql://localhost:3306/test?serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8&useSSL=true
-#      username: User
-#      password: 123456
   # 开发环境关闭 Thymeleaf 的缓存
   thymeleaf:
     cache: false
@@ -67,16 +52,17 @@ spring:
 
 # log 配置
 logging:
-  ## 输出地址
-  path: /user/local/log
   ## 输出级别
   level:
     com.favorites: DEBUG
     org.springframework.web: INFO
     org.hibernate: ERROR
     github.com.suitelhy.webchat.domain.repository.*: DEBUG
+  file:
+    ### 输出地址
+    path: /user/local/log
 
-# Mybatis 配置 (测试环境)
-mybatis:
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+## Mybatis 配置 (测试环境)
+#mybatis:
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
