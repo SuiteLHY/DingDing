@@ -25,6 +25,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+        <!-- Spring data JPA -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
         <!-- Thymeleaf -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -62,6 +67,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+            <exclusions>
+                <!-- 排除 JUnit Vintage(兼容并启用已淘汰的 Junit 4 & 3) -->
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- ===== AspectJ ===== -->
@@ -86,13 +98,13 @@
         </dependency>
 
         <!-- Mybatis -->
-        <dependency>
+        <!--<dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
-            <!-- Spring boot 默认开发环境 (spring-boot-starter-parent) 将 Mybatis 作为外部资源兼容;
-            Mybatis 也就国内用的多, 截止目前, 美欧日韩开发市场中 Hibernate 占据绝大多数份额...... -->
+            &lt;!&ndash; Spring boot 默认开发环境 (spring-boot-starter-parent) 将 Mybatis 作为外部资源兼容;
+            Mybatis 也就国内用的多, 截止目前, 美欧日韩开发市场中 Hibernate 占据绝大多数份额...... &ndash;&gt;
             <version>2.1.1</version>
-        </dependency>
+        </dependency>-->
 
         <!-- Spring boot - devtools, 仅开发环境下启用 -->
         <dependency>
@@ -114,7 +126,12 @@
         </dependency>
         <!-- ===== -->
 
-
+        <!-- lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
 
         <!-- Spring FrameWork 相关依赖资源 -->
         <dependency>
