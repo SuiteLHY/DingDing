@@ -17,4 +17,19 @@
  *-> 之后被丢弃.
  *
  */
+/**
+ * VO 对象目前全都选用 枚举类型(enum) 对象实现.
+ *
+ * 关于枚举 (enum):
+ * · 枚举继承了 java.lang.Enum 类.
+ *-> 详见 API Docs:
+ *-> <a href="http://www.enseignement.polytechnique.fr/informatique/Java/1.8/java/lang/Enum.html">
+ *->     Enum (Java Platform SE 8 )</a>
+ * · 枚举 (enum) 与 Mybatis 的类型处理器:
+ *-> (1) 设计: 需要配置 Mybatis 的类型处理器 -> 针对 VO 进行合适的处理.
+ *-> (2) 官方文档:
+ *-> <a href="https://mybatis.org/mybatis-3/zh/configuration.html#typeHandlers">
+ *->     mybatis – MyBatis 3 | 配置#类型处理器（typeHandlers）</a>
+ *
+ */
 package github.com.suitelhy.webchat.domain.vo;
