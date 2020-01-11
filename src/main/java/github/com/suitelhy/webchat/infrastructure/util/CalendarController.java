@@ -410,7 +410,7 @@ public class CalendarController {
 		if (null == pattern) {
 			return safeSdf.get().get(DEFAULT_DATE_FORMAT);
 		}
-		if (safeSdf.get().size() > 999) {// (临时策略)
+		if (safeSdf.get().size() >= 512) {// (临时策略)
 			/*throw new Exception("当前线程中的时间模板实例已达到上限,新增实例操作被拒绝!");*/
 			return new SimpleDateFormat(pattern);
 		}
