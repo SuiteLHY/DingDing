@@ -11,7 +11,7 @@ public interface UserService {
 
     /**
      * 查询用户列表
-     * @param dataIndex 从第 <param>dataIndex</param> + 1 条数据开始查询
+     * @param dataIndex 分页索引, 从0开始
      * @param pageSize
      * @return 用户 Entity 对象集合
      */
@@ -22,7 +22,7 @@ public interface UserService {
      * @param pageSize 分页 - 每页容量
      * @return 分页 - 总页数
      */
-    Integer selectCount(int pageSize);
+    Long selectCount(int pageSize);
 
     /**
      * 查询指定的用户

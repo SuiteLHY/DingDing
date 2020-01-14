@@ -1,11 +1,14 @@
 package github.com.suitelhy.webchat.domain.entity;
 
 import github.com.suitelhy.webchat.domain.vo.AccountVo;
+import github.com.suitelhy.webchat.domain.vo.HandleTypeVo;
 import github.com.suitelhy.webchat.domain.vo.HumanVo;
 import github.com.suitelhy.webchat.infrastructure.domain.model.AbstractEntityModel;
 import github.com.suitelhy.webchat.infrastructure.domain.model.EntityFactory;
 import github.com.suitelhy.webchat.infrastructure.domain.model.EntityModel;
+import github.com.suitelhy.webchat.infrastructure.domain.model.EntityValidator;
 import github.com.suitelhy.webchat.infrastructure.domain.util.EntityUtil;
+import github.com.suitelhy.webchat.infrastructure.domain.util.VoUtil;
 import github.com.suitelhy.webchat.infrastructure.util.CalendarController;
 import github.com.suitelhy.webchat.infrastructure.web.util.NetUtil;
 import org.hibernate.annotations.GenericGenerator;
@@ -108,23 +111,9 @@ public class User /*implements EntityModel<String>*/
      */
     @Override
     public boolean isEmpty() {
-        /*return (null == id() || "".equals(id().trim())) // 用户ID
-                || (null == this.getFirsttime() // 注册时间
-                        || !CalendarController.isParse(this.getFirsttime()))
-                || (null == this.getIp() // 最后登陆IP
-                        || !NetUtil.validateIpAddress(this.getIp()))
-                || (null == this.getLasttime() // 最后登录时间
-                        || !CalendarController.isParse(this.getLasttime()))
-                || (null == this.getNickname() // 用户 - 昵称
-                        || "".equals(this.getNickname().trim()))
-                || (null == this.getPassword() // 用户 - 密码
-                        || "".equals(this.getPassword().trim()))
-                || (null == this.getStatus() // 账号状态
-                        || !this.getStatus().equals(1));*/
         return (null == id() || "".equals(id().trim())) // 用户ID
                 || !isLegal()
-                || (null != isPersistence()
-                        && !isPersistence());
+                || (null != isPersistence() && !isPersistence());
     }
 
     /**
@@ -135,23 +124,91 @@ public class User /*implements EntityModel<String>*/
      */
     @Override
     public boolean isLegal() {
-        return (null != this.getFirsttime()
-                        && CalendarController.isParse(this.getFirsttime())) // 注册时间
-                && (null != this.getIp()
-                        && NetUtil.validateIpAddress(this.getIp())) // 最后登陆IP
-                && (null != this.getLasttime()
-                        && CalendarController.isParse(this.getLasttime())) // 最后登录时间
-                && (null != this.getNickname()
-                        && !"".equals(this.getNickname().trim())) // 用户 - 昵称
-                && (null != this.getPassword()
-                        && !"".equals(this.getPassword().trim())) // 用户 - 密码
-                && (null != this.getStatus()
-                        && this.getStatus().equals(AccountVo.Status.NORMAL))/* 账号状态 */;
+        return Validator.USER.firsttime(this.getFirsttime()) // 注册时间
+                && Validator.USER.ip(this.getIp()) // 最后登陆IP
+                && Validator.USER.lasttime(this.getLasttime()) // 最后登录时间
+                && Validator.USER.nickname(this.getNickname()) // 用户 - 昵称
+                && Validator.USER.password(this.getPassword()) // 用户 - 密码
+                && (Validator.USER.status(this.getStatus())
+                        && AccountVo.Status.NORMAL.equals(this.getStatus()))/* 账号状态 */;
     }
 
     @Override
     public String toString() {
         return EntityModel.toString(this);
+    }
+
+    //===== entity validator =====//
+    /**
+     * 用户 - 属性校验器
+     * @Description 各个属性的基础校验(注意: ≠完全校验).
+     */
+    public enum Validator implements EntityValidator<User, String> {
+        USER;
+
+        @Override
+        public boolean validateId(@NotNull User entity) {
+            return null != entity.id()
+                    && userid(entity.id());
+        }
+
+        @Override
+        public boolean id(@NotNull String id) {
+            return userid(id);
+        }
+
+        public boolean userid(@NotNull String userid) {
+            return EntityUtil.Regex.validateId(userid);
+        }
+
+        public boolean age(@Nullable Integer age) {
+            return null == age || age > 0;
+        }
+
+        public boolean firsttime(@NotNull String firsttime) {
+            return null != firsttime && CalendarController.isParse(firsttime);
+        }
+
+        public boolean ip(@NotNull String ip) {
+            return NetUtil.validateIpAddress(ip);
+        }
+
+        public boolean lasttime(@NotNull String lasttime) {
+            return null != lasttime && CalendarController.isParse(lasttime);
+        }
+
+        public boolean nickname(@NotNull String nickname) {
+            return null != nickname && !"".equals(nickname.trim());
+        }
+
+        public boolean password(@NotNull String password) {
+            return EntityUtil.Regex.validateUserPassword(password);
+        }
+
+        public boolean profile(String profile) {
+            //--- 暂无业务设计约束
+            return true;
+        }
+
+        public boolean profilehead(String profilehead) {
+            //--- 暂无业务设计约束
+            return true;
+        }
+
+        public boolean sex(HumanVo.Sex sex) {
+            if (null == sex) {
+                return null != VoUtil.getVoByValue(HumanVo.Sex.class, null);
+            }
+            return true;
+        }
+
+        public boolean status(@NotNull AccountVo.Status status) {
+            if (null == status) {
+                return null != VoUtil.getVoByValue(AccountVo.Status.class, null);
+            }
+            return true;
+        }
+
     }
 
     //===== entity mapper =====//
@@ -250,46 +307,40 @@ public class User /*implements EntityModel<String>*/
             , @Nullable HumanVo.Sex sex) {
         if (null == id) {
             //--- <param>id</param>为 null 时, 对应添加用户功能.
-            /*id = DBPolicy.MYSQL.uuid();*/
         } else {
             //--- 对应更新用户功能.
-            /*if (!DBPolicy.MYSQL.validateUuid(id)) {
+            if (!Validator.USER.id(id)) {
                 //-- 非法输入: 用户ID
                 throw new IllegalArgumentException(this.getClass().getSimpleName()
                         + " -> 非法输入: 用户ID");
-            }*/
+            }
         }
-
-        if (null != age && age < 0) {
+        if (!Validator.USER.age(age)) {
             //-- 非法输入: 用户 - 年龄
             throw new IllegalArgumentException(this.getClass().getSimpleName()
                     + " -> 非法输入: 用户 - 年龄");
         }
-        if (null == firsttime
-                || !CalendarController.isParse(firsttime)) {
+        if (!Validator.USER.firsttime(firsttime)) {
             //-- 非法输入: 注册时间
             throw new IllegalArgumentException(this.getClass().getSimpleName()
                     + " -> 非法输入: 注册时间");
         }
-        if (null == ip
-                || !NetUtil.validateIpAddress(ip)) {
+        if (!Validator.USER.ip(ip)) {
             //-- 非法输入: 最后登陆IP
             throw new IllegalArgumentException(this.getClass().getSimpleName()
                     + " -> 非法输入: 最后登陆IP");
         }
-        if (null == lasttime
-                || !CalendarController.isParse(lasttime)) {
+        if (!Validator.USER.lasttime(lasttime)) {
             //-- 非法输入: 最后登录时间
             throw new IllegalArgumentException(this.getClass().getSimpleName()
                     + " -> 非法输入: 最后登录时间");
         }
-        if (null == nickname || "".equals(nickname.trim())) {
+        if (!Validator.USER.nickname(nickname)) {
             //-- 非法输入: 用户 - 昵称
             throw new IllegalArgumentException(this.getClass().getSimpleName()
                     + " -> 非法输入: 用户 - 昵称");
         }
-        if (null == password
-                || !EntityUtil.Regex.validateUserPassword(password)) {
+        if (!Validator.USER.password(password)) {
             //-- 非法输入: 用户 - 密码
             throw new IllegalArgumentException(this.getClass().getSimpleName()
                     + " -> 非法输入: 用户 - 密码");
@@ -498,16 +549,5 @@ public class User /*implements EntityModel<String>*/
     private void setStatus(AccountVo.Status status) {
         this.status = status;
     }
-
-    /*private boolean setStatus(Byte value) {
-        for (AccountVo.Status each : AccountVo.Status.values()) {
-            if (each.equals(value)) {
-                *//*this.status = each;*//*
-                this.status = value;
-                return true;
-            }
-        }
-        return false;
-    }*/
 
 }

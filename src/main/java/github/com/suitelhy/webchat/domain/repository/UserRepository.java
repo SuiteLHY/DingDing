@@ -25,7 +25,7 @@ import java.util.Optional;
 //-> 然而用了就无法对该接口声明任何 Bean !... (orz)
 /*@NoRepositoryBean*/
 public interface UserRepository
-        extends /*EntityRepository<User, String>*/JpaRepository<User, String> {
+        extends JpaRepository<User, String> {
 
     //===== select data =====//
     /**

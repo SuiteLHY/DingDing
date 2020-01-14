@@ -14,7 +14,7 @@ import java.util.List;
 //-> 聚焦于 SQL.
 @Mapper*/
 public interface LogRepository
-        extends JpaRepository<Log, String> {
+        extends JpaRepository<Log, Long> {
 
     //===== select data =====//
     /**
@@ -62,13 +62,13 @@ public interface LogRepository
      * @param id 记录ID
      */
     @Override
-    void deleteById(String id);
+    void deleteById(Long id);
 
     /**
      * 删除指定用户对应的所有日志记录
      * @param userid
      */
-    void deleteByUserid(String userid);
+    long removeByUserid(String userid);
 
     // 参考项目中提供了 deleteAll 业务接口; 如果更深入一些, 在实际生产情景下,
     //-> 不应该提供这类不严谨的业务接口 (...), 删除操作也仅限于用户权限以内.

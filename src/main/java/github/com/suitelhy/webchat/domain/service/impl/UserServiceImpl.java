@@ -49,11 +49,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Integer selectCount(int pageSize) {
+    public Long selectCount(int pageSize) {
         if (pageSize < 1) {
             throw new RuntimeException("非法输入: <param>pageSize</param>");
         }
-        int dataNumber = (int) userRepository.count();
+        long dataNumber = userRepository.count();
         return (dataNumber % pageSize == 0)
                 ? (dataNumber / pageSize)
                 : (dataNumber / pageSize + 1);
