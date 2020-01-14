@@ -17,7 +17,7 @@ import org.springframework.test.web.servlet.ResultActions;
 /**
  * Web层（API） MockMvc测试 (静态) (未启动服务)
  *
- * @description 使用 MockMvc 实现 Http请求 模拟 Web 交互流程。</br>
+ * @Description 使用 MockMvc 实现 Http请求 模拟 Web 交互流程。</br>
  *-> 通过使用标注在测试用例上的 @AutoConfigureMockMvc 注释来注入 MockMvc 实例.
  * @Reference
  *-> <a href="https://github.com/kolorobot/spring-boot-junit5/blob/master/src/test/java/pl/codeleak/samples/springbootjunit5/todo/TaskControllerMockMvcTest.java">

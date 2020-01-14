@@ -41,7 +41,7 @@ public class HelloControllerIntegrationTest {
 
     /**
      * org.springframework.boot.test.web.client.TestRestTemplate
-     * @Description 替代RestTemplate方法适用于集成测试。
+     * @Description 替代 RestTemplate 方法适用于集成测试。
      * @Reference <a href="https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/test/web/client/TestRestTemplate.html">
      *->     TestRestTemplate（Spring Boot Docs 2.2.2.RELEASE API）</a>
      */

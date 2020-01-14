@@ -62,7 +62,7 @@ public class UserTaskTests {
     @Test
     @Transactional
     public void selectCount() {
-        Integer result;
+        Long result;
         Assert.notNull(result = userTask.selectCount(10)
                 , "selectCount(int) -> null");
         Assert.isTrue(result > 0
