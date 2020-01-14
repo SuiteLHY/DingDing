@@ -2,15 +2,15 @@ package github.com.suitelhy.webchat.application.task.impl;
 
 import github.com.suitelhy.webchat.domain.entity.Log;
 import github.com.suitelhy.webchat.application.task.LogTask;
+import github.com.suitelhy.webchat.domain.entity.User;
 import github.com.suitelhy.webchat.domain.service.LogService;
-import github.com.suitelhy.webchat.infrastructure.domain.policy.DBPolicy;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * 日志记录相关业务
+ * 日志记录 - 任务调度实现
  */
 @Service("logTask")
 public class LogTaskImpl implements LogTask {
@@ -19,38 +19,44 @@ public class LogTaskImpl implements LogTask {
     private LogService logService;
 
     @Override
-    public List<Log> selectAll(int page, int pageSize) {
-        return logService.selectAll(page, pageSize).toList();
+    public List<Log> selectAll(int pageCount, int pageSize) {
+        return logService.selectAll(--pageCount, pageSize).toList();
     }
 
     @Override
-    public List<Log> selectLogByUserid(String userid, int page, int pageSize) {
-        if (null == userid || !DBPolicy.MYSQL.validateUuid(userid)) {
+    public List<Log> selectLogByUserid(String userid, int pageCount, int pageSize) {
+        if (!User.Validator.USER.userid(userid)) {
             throw new RuntimeException("非法输入: 用户ID");
         }
-        if (page < 1) {
-            throw new RuntimeException("非法输入: <param>page</param>");
+        if (pageCount < 1) {
+            throw new RuntimeException("非法输入: <param>pageCount</param>");
         }
         if (pageSize < 1) {
             throw new RuntimeException("非法输入: <param>pageSize</param>");
         }
-        return logService.selectLogByUserid(userid, page, pageSize);
+        return logService.selectLogByUserid(userid, --pageCount, pageSize);
     }
 
     @Override
-    public Integer selectCount(int pageSize) {
-        int dataNumber = logService.selectCount(pageSize);
+    public Long selectCount(int pageSize) {
+        if (pageSize < 1) {
+            throw new RuntimeException("非法输入: <param>pageSize</param>");
+        }
+        long dataNumber = logService.selectCount(pageSize);
         return (dataNumber % pageSize == 0)
                 ? (dataNumber / pageSize)
                 : (dataNumber / pageSize + 1);
     }
 
     @Override
-    public Integer selectCountByUserid(String userid, int pageSize) {
-        if (null == userid || !DBPolicy.MYSQL.validateUuid(userid)) {
+    public Long selectCountByUserid(String userid, int pageSize) {
+        if (!User.Validator.USER.userid(userid)) {
             throw new RuntimeException("非法输入: 用户ID");
         }
-        int dataNumber = logService.selectCountByUserid(userid, pageSize);
+        if (pageSize < 1) {
+            throw new RuntimeException("非法输入: <param>pageSize</param>");
+        }
+        long dataNumber = logService.selectCountByUserid(userid, pageSize);
         return (dataNumber % pageSize == 0)
                 ? (dataNumber / pageSize)
                 : (dataNumber / pageSize + 1);
@@ -58,7 +64,7 @@ public class LogTaskImpl implements LogTask {
 
     @Override
     public boolean insert(Log log) {
-        if (null == log || (null != log.id() && log.isEmpty())) {
+        if (null == log || !log.isLegal()) {
             throw new RuntimeException("非法输入: <param>log</param>");
         }
         return logService.insert(log);
@@ -66,10 +72,10 @@ public class LogTaskImpl implements LogTask {
 
     @Override
     public boolean delete(String id) {
-        if (null == id || !DBPolicy.MYSQL.validateUuid(id)) {
+        if (!User.Validator.USER.id(id)) {
             throw new RuntimeException("非法输入: 日志记录ID");
         }
-        return logService.delete(id);
+        return logService.deleteById(Long.parseLong(id));
     }
 
 }

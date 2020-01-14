@@ -11,35 +11,35 @@ public interface LogTask {
 
     /**
      * 查询所有日志记录 (分页)
-     * @param page
+     * @param pageCount 页码, 从1开始
      * @param pageSize
      * @return
      */
-    List<Log> selectAll(int page, int pageSize);
+    List<Log> selectAll(int pageCount, int pageSize);
+
+    /**
+     * 查询日志记录数量 (分页)
+     * @param pageSize
+     * @return
+     */
+    Long selectCount(int pageSize);
 
     /**
      * 查询指定用户对应的日志记录 (分页)
      * @param userid
-     * @param page
+     * @param pageCount 页码, 从1开始
      * @param pageSize
      * @return
      */
-    List<Log> selectLogByUserid(String userid, int page, int pageSize);
+    List<Log> selectLogByUserid(String userid, int pageCount, int pageSize);
 
     /**
-     *
-     * @param pageSize
-     * @return
-     */
-    Integer selectCount(int pageSize);
-
-    /**
-     *
+     * 查询指定用户对应的日志记录数量 (分页)
      * @param userid
      * @param pageSize
      * @return
      */
-    Integer selectCountByUserid(String userid, int pageSize);
+    Long selectCountByUserid(String userid, int pageSize);
 
     /**
      * 新增日志记录

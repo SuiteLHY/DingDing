@@ -23,10 +23,10 @@ public class UserTaskImpl implements UserTask {
     private UserService userService;
 
     @Override
-    public List<User> selectAll(int dataIndex, int pageSize) {
+    public List<User> selectAll(int pageCount, int pageSize) {
         List<User> result = null;
         try {
-            result = userService.selectAll(dataIndex, pageSize);
+            result = userService.selectAll(--pageCount, pageSize);
         }  catch (Exception e) {
             log.error("<class>{}</class> - <method>{}</method> <- 第{}行"
                     , this.getClass().getName()
@@ -56,8 +56,8 @@ public class UserTaskImpl implements UserTask {
     }
 
     @Override
-    public Integer selectCount(int pageSize) {
-        Integer result = null;
+    public Long selectCount(int pageSize) {
+        Long result = null;
         try {
             result = userService.selectCount(pageSize);
         }  catch (Exception e) {
