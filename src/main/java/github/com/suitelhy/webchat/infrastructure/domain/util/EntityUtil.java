@@ -1,6 +1,7 @@
 package github.com.suitelhy.webchat.infrastructure.domain.util;
 
 import github.com.suitelhy.webchat.infrastructure.domain.model.EntityModel;
+import github.com.suitelhy.webchat.infrastructure.domain.policy.DBPolicy;
 import github.com.suitelhy.webchat.infrastructure.util.RegexUtil;
 import org.springframework.lang.Nullable;
 
@@ -9,7 +10,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
- * entity 层 - 业务辅助工具
+ * Entity 层 - 业务辅助工具
+ *
  */
 public final class EntityUtil {
 
@@ -24,6 +26,18 @@ public final class EntityUtil {
         public static boolean validateFieldName(@Nullable String fieldName) {
                 return null != fieldName
                         && RegexUtil.getPattern("[a-z][A-Za-z0-9]+").matcher(fieldName).matches();
+        }
+
+        /**
+         * 校验 -> Entity 唯一标识 (ID)
+         * @Description Entity - ID 校验通用规范. 至多32位的16(或以下)进制数字
+         * @param id
+         * @return
+         */
+        public static boolean validateId(@Nullable String id) {
+            return null != id
+                    && (RegexUtil.getPattern("^[a-zA-Z0-9]{1,32}$").matcher(id).matches()
+                            || DBPolicy.MYSQL.validateUuid(id));
         }
 
         /**
