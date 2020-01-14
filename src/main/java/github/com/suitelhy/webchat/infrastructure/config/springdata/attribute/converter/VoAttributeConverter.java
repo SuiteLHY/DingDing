@@ -13,29 +13,24 @@ import javax.persistence.Converter;
  *-> {@link github.com.suitelhy.webchat.infrastructure.config.mybatis.typehandler.VoTypeHandler}
  *-> ; 不确定是否和 Mybatis 的 <function>TypeHandler</function> 是否一致
  *-> (通过 Constructor 注入具体类型), <Google>查找</Google> 了一下:
- *-> <a href="https://blog.csdn.net/wanping321/article/details/90269057">
+ *-> <a href="https://stackoverflow.com/questions/23564506/is-it-possible-to-write-a-generic-enum-converter-for-jpa">
+ *->     java-是否可以为JPA编写通用枚举转换器？ - 堆栈溢出</a>
+ *-> , <a href="https://blog.csdn.net/wanping321/article/details/90269057">
  *->     Springboot JPA  枚举Enum类型存入到数据库_Enum存库,JPA_miskss的博客-CSDN博客</a>
  *
  * @param <V>
  */
 @Converter
-public abstract class VoAttributeConverter<VO extends Enum<VO> & /*VoModel<C>*/VoModel<VO, V>, V extends Number>
+public abstract class VoAttributeConverter<VO extends Enum<VO> & VoModel<VO, V>, V extends Number>
         implements AttributeConverter<VO, V> {
 
     private final Class<VO> voClazz;
-
-    /*private final VO[] enums;*/
 
     public VoAttributeConverter(Class<VO> voClazz) {
         if (null == voClazz) {
             throw new IllegalArgumentException("Type argument cannot be null");
         } else {
             this.voClazz = voClazz;
-            /*this.enums = voClazz.getEnumConstants();
-            if (null == this.enums) {
-                throw new IllegalArgumentException(voClazz.getSimpleName()
-                        + " does not represent an enum type.");
-            }*/
         }
     }
 
@@ -58,7 +53,7 @@ public abstract class VoAttributeConverter<VO extends Enum<VO> & /*VoModel<C>*/V
      */
     @Override
     public VO convertToEntityAttribute(@Nullable V value) {
-        for (VO each : /*enums*/voClazz.getEnumConstants()) {
+        for (VO each : voClazz.getEnumConstants()) {
             if (each.equalsValue(value)) {
                 return each;
             }
