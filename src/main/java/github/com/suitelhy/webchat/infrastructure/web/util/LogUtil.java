@@ -19,12 +19,6 @@ public class LogUtil {
             , Integer type
             , String detail
             , String ip) {
-        /*Log log = Log.Factory.USER_LOG.create();
-        log.setUserid(userid);
-        log.setTime(time);
-        log.setType(type);
-        log.setDetail(detail);
-        log.setIp(ip);*/
         HandleTypeVo.Log typeVo = null;
         for (HandleTypeVo.Log each : HandleTypeVo.Log.class.getEnumConstants()) {
             if (each.equalsValue(type)) {
@@ -32,8 +26,7 @@ public class LogUtil {
                 break;
             }
         }
-        return Log.Factory.USER_LOG.create(null
-                , detail
+        return Log.Factory.USER_LOG.create(detail
                 , ip
                 , time
                 , typeVo
