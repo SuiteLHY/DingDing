@@ -24,6 +24,8 @@ public class HelloController {
     @GetMapping("/helloPage")
     public ModelAndView helloPage(Model model) {
         model.addAttribute("message", "Hello World!");
+        // ...
+        model.addAttribute("userid", "aaa");
         return new ModelAndView("example/hello");
     }
 

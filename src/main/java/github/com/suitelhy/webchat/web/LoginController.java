@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
@@ -97,11 +98,14 @@ public class LoginController {
                 , defined.LOG_TYPE_LOGIN
                 , defined.LOG_DETAIL_USER_LOGIN
                 , ip));
+
         session.setAttribute("userid", userid);
         session.setAttribute("login_status", true);
+
         user.setLasttime(date.getTime24());
         user.setIp(ip);
         userTask.update(user);
+
         attributes.addFlashAttribute("message", defined.LOGIN_SUCCESS);
         return "redirect:/chat";
     }
@@ -113,15 +117,16 @@ public class LoginController {
      * @param defined
      * @return
      */
-    @RequestMapping(value = "/logout")
-    public String logout(HttpSession session, RedirectAttributes attributes, WordDefined defined) {
+    @RequestMapping(value = "/logout", method = {RequestMethod.GET, RequestMethod.POST})
+    public String logout(HttpSession session
+            , RedirectAttributes attributes
+            , WordDefined defined) {
         session.removeAttribute("userid");
         session.removeAttribute("login_status");
-        attributes.addFlashAttribute("message", defined.LOGOUT_SUCCESS);
+
+        attributes.addFlashAttribute("message"
+                , defined.LOGOUT_SUCCESS);
         return "redirect:/user/login";
     }
-   
-   
-    
-    
+
 }

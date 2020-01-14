@@ -5,6 +5,7 @@ import github.com.suitelhy.webchat.infrastructure.web.util.*;
 import github.com.suitelhy.webchat.application.task.LogTask;
 import github.com.suitelhy.webchat.application.task.UserTask;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,11 +23,11 @@ import java.io.IOException;
  * 用户信息 - web 交互
  */
 /*@Controller*/
-@RestController
+/*@RestController*/
 // @SessionAttributes: Spring Framework Annotation, API Doc
 //-> -> <a href="https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/bind/annotation/SessionAttributes.html">
 //->        SessionAttributes（Spring Framework 5.2.2.RELEASE API）</a>
-@SessionAttributes("userid")
+/*@SessionAttributes("userid")*/
 public class UserController {
 
     @Autowired(required = false)
@@ -176,7 +177,9 @@ public class UserController {
             , UploadUtil uploadUtil
             , RedirectAttributes attributes, NetUtil netUtil, LogUtil logUtil, CommonDate date, WordDefined defined) {
         try{
-            String fileUrl = uploadUtil.upload(request, "upload", userid);
+            String fileUrl = uploadUtil.upload(request
+                    , "upload"
+                    , userid);
             user = userTask.selectUserByUserid(userid);
             user.setProfilehead(fileUrl);
             boolean flag = userTask.update(user);
