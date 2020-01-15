@@ -37,7 +37,13 @@ spring:
       format_sql: true
     show-sql: true
     open-in-view: true
-
+  mvc:
+    ### 配置静态资源访问前缀
+    ###-> @Reference <class>org.springframework.boot.autoconfigure.web.servlet.WebMvcProperties</class>
+    static-path-pattern: /static/**
   ## 加载 dev 环境配置
   profiles:
     active: dev
+  ## 配置静态资源路径 (默认配置失效)
+  resources:
+    static-locations[0]: classpath:/static/
