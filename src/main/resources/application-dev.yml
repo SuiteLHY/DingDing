@@ -4,6 +4,27 @@ server:
   ## 端口
   port: 8081
 
+# Slf4j 日志配置
+#-> 配置项参见 <jar>org.springframework.boot.context.logging.LoggingApplicationListener</jar>
+#-> @Reference
+#-> <a href="https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/context/logging/LoggingApplicationListener.html">
+#->     LoggingApplicationListener (Spring Boot Docs 2.2.2.RELEASE API)</a>
+#-> , <a href="https://docs.spring.io/spring-boot/docs/1.5.6.RELEASE/reference/htmlsingle/#boot-features-logging">
+#->     26. Logging</a>
+logging:
+  ## 输出级别
+  level:
+    com.favorites: DEBUG
+    org.hibernate: ERROR
+    org.springframework.web: INFO
+    github.com.suitelhy.webchat.domain.repository.*: DEBUG
+  ## @Reference <jar>org.springframework.boot.logging.LogFile</jar>
+  file:
+    ### ↓ (建议使用) 将会在项目路径下的<relativePath>/output/log/webchat</relativePath>之下生成<file>webchat.log</file>.
+    name: ./output/log/webchat/webchat.log
+    ### ↓ (不建议使用) 这个配置会在指定路径下生成一个 <file>spring.log</file> 作为日志输出.
+#    path: ./output/log/webchat
+
 # 项目个性化配置
 webchat:
   ## 数据源配置
@@ -29,6 +50,9 @@ spring:
   ## 开发环境关闭 Thymeleaf 的缓存
   thymeleaf:
     cache: false
+    ### @Reference <a href="https://stackoverflow.com/questions/28624768/thymeleaf-strict-html-parsing-issue">
+    ###->     Thymeleaf - Strict HTML parsing issue - Stack Overflow</a>
+    mode: LEGACYHTML5
   datasource:
     dbcp2:
       ### 开发环境关缓存
@@ -54,27 +78,6 @@ spring:
 #        # 连接池中的最小空闲连接 默认 0
 #        min-idle: 0
 #==========#
-
-# Slf4j 日志配置
-#-> 配置项参见 <jar>org.springframework.boot.context.logging.LoggingApplicationListener</jar>
-#-> @Reference
-#-> <a href="https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/context/logging/LoggingApplicationListener.html">
-#->     LoggingApplicationListener (Spring Boot Docs 2.2.2.RELEASE API)</a>
-#-> , <a href="https://docs.spring.io/spring-boot/docs/1.5.6.RELEASE/reference/htmlsingle/#boot-features-logging">
-#->     26. Logging</a>
-logging:
-  ## 输出级别
-  level:
-    com.favorites: DEBUG
-    org.springframework.web: INFO
-    org.hibernate: ERROR
-    github.com.suitelhy.webchat.domain.repository.*: DEBUG
-  ## @Reference <jar>org.springframework.boot.logging.LogFile</jar>
-  file:
-    ### ↓ (建议使用) 将会在项目路径下的<relativePath>/output/log/webchat</relativePath>之下生成<file>webchat.log</file>.
-    name: ./output/log/webchat/webchat.log
-    ### ↓ (不建议使用) 这个配置会在指定路径下生成一个 <file>spring.log</file> 作为日志输出.
-#    path: ./output/log/webchat
 
 ## Mybatis 配置 (测试环境)
 #mybatis:
