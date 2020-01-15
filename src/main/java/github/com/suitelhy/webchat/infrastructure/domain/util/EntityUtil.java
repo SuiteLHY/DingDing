@@ -41,6 +41,17 @@ public final class EntityUtil {
         }
 
         /**
+         * 校验 -> 用户名称
+         * @Description 用户名称 <- 规则: <tt>大小写字母 | 数字(无符号) | 中文字符</tt>, 长度范围 [1,18].
+         * @param username
+         * @return
+         */
+        public static boolean validateUsername(@Nullable String username) {
+            return null != username
+                    && RegexUtil.getPattern("^[a-zA-Z0-9\\u4e00-\\u9fa5]{1,18}$").matcher(username).matches();
+        }
+
+        /**
          * 校验 -> 用户密码
          * @Description 用户密码规则: 以字母开头, 长度在6~18之间, 只能包含字母、数字和下划线.
          * @param password
