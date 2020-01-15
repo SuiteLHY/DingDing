@@ -48,8 +48,16 @@ public interface UserRepository
      * @param userid
      * @return
      */
-    @Query("select u from User u where u.userid = ?1")
+    /*@Query("select u from User u where u.userid = ?1")*/
     Optional<User> findById(String userid);
+
+    /**
+     * 查询用户
+     * @param username
+     * @param status
+     * @return
+     */
+    Optional<User> findUserByUsernameAndStatus(String username, AccountVo.Status status);
 
     //===== insert data =====//
     /**
