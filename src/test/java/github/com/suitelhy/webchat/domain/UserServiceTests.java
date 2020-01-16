@@ -27,7 +27,7 @@ public class UserServiceTests {
     @Transactional
     public void selectAll() {
         List<User> result;
-        Assert.notEmpty(result = userService.selectAll(0, 10)
+        Assert.notEmpty(result = userService.selectAll(0, 10).getContent()
                 , "The result of count() equaled to or less than 0");
         System.out.println(result);
         System.out.println(result.size());
@@ -47,7 +47,7 @@ public class UserServiceTests {
     public void selectUserByUserid() {
         User result;
         List<User> userList;
-        Assert.notEmpty(userList = userService.selectAll(0, 10)
+        Assert.notEmpty(userList = userService.selectAll(0, 10).getContent()
                 , "===== Init handle -> false, cause by not enough data");
         Assert.isTrue(null != userList.get(0) && !userList.get(0).isEmpty()
                 , "===== Init handle -> false, cause by empty data");
@@ -67,6 +67,7 @@ public class UserServiceTests {
                 , "a12345678"
                 , "测试数据"
                 , null
+                , ("测试" + new CalendarController())
                 , HumanVo.Sex.MALE);
         Assert.isTrue(newUser.isLegal()
                 , "User.Factory.USER.create(..) -> 无效的 User");
@@ -88,6 +89,7 @@ public class UserServiceTests {
                 , "a12345678"
                 , "测试数据"
                 , null
+                , ("测试" + new CalendarController())
                 , HumanVo.Sex.MALE);
         Assert.isTrue(result.isLegal()
                 , "===== User.Factory.USER.create(..) -> 无效的 User");
@@ -118,6 +120,7 @@ public class UserServiceTests {
                 , "a12345678"
                 , "测试数据"
                 , null
+                , ("测试" + new CalendarController())
                 , HumanVo.Sex.MALE);
         Assert.isTrue(result.isLegal()
                 , "===== User.Factory.USER.create(..) -> 无效的 User");

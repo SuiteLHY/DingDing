@@ -54,6 +54,7 @@ public class LogTaskTests {
                 , "test123"
                 , "测试数据"
                 , null
+                , ("测试" + new CalendarController())
                 , HumanVo.Sex.MALE);
         Assert.notNull(newUser
                 , "User.Factory.USER -> create(..) -> null");
@@ -94,6 +95,7 @@ public class LogTaskTests {
                 , "test123"
                 , "测试数据"
                 , null
+                , ("测试" + new CalendarController())
                 , HumanVo.Sex.MALE);
         Assert.notNull(newUser
                 , "User.Factory.USER -> create(..) -> null");
@@ -133,6 +135,7 @@ public class LogTaskTests {
                 , "test123"
                 , "测试数据"
                 , null
+                , ("测试" + new CalendarController())
                 , HumanVo.Sex.MALE);
         Assert.notNull(newUser
                 , "User.Factory.USER -> create(..) -> null");
@@ -167,6 +170,7 @@ public class LogTaskTests {
                 , "test123"
                 , "测试数据"
                 , null
+                , ("测试" + new CalendarController())
                 , HumanVo.Sex.MALE);
         Assert.notNull(newUser
                 , "User.Factory.USER -> create(..) -> null");

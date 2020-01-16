@@ -46,6 +46,7 @@ public class UserTaskTests {
                 , "test123"
                 , "测试数据"
                 , null
+                , ("测试" + new CalendarController())
                 , HumanVo.Sex.MALE);
         Assert.notNull(newUser
                 , "insert - User.Factory.USER -> create(..) -> null");
@@ -81,6 +82,7 @@ public class UserTaskTests {
                 , "test123"
                 , "测试数据"
                 , null
+                , ("测试" + new CalendarController())
                 , HumanVo.Sex.MALE);
         Assert.notNull(newUser
                 , "User.Factory.USER -> create(..) -> null");
@@ -102,6 +104,7 @@ public class UserTaskTests {
                 , "test123"
                 , "测试数据"
                 , null
+                , ("测试" + new CalendarController())
                 , HumanVo.Sex.MALE);
         Assert.notNull(newUser
                 , "insert - User.Factory.USER -> create(..) -> null");
@@ -129,6 +132,7 @@ public class UserTaskTests {
                 , "a12345678"
                 , "测试数据"
                 , null
+                , ("测试" + new CalendarController())
                 , HumanVo.Sex.MALE);
         Assert.isTrue(newUser.isLegal()
                 , "===== User.Factory.USER.create(..) -> 无效的 User");

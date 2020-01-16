@@ -92,6 +92,7 @@ public class UserRepositoryTests {
                 , "a12345678"
                 , "测试数据"
                 , null
+                , ("测试" + new CalendarController())
                 , HumanVo.Sex.MALE);
         Assert.isTrue(newUser.isLegal(), "User.Factory.USER.create(..) -> 无效的 User");
         Assert.notNull(newUser = userRepository.saveAndFlush(newUser)
@@ -112,6 +113,7 @@ public class UserRepositoryTests {
                 , "a12345678"
                 , "测试数据"
                 , null
+                , ("测试" + new CalendarController())
                 , HumanVo.Sex.MALE);
         Assert.isTrue(newUser.isLegal(), "User.Factory.USER.create(..) -> 无效的 User");
         //=== insert
@@ -141,6 +143,7 @@ public class UserRepositoryTests {
                 , "a12345678"
                 , "测试数据"
                 , null
+                , ("测试" + new CalendarController())
                 , HumanVo.Sex.MALE);
         Assert.isTrue(newUser.isLegal(), "User.Factory.USER.create(..) -> 无效的 User");
         //=== insert
@@ -172,6 +175,7 @@ public class UserRepositoryTests {
                 , "a12345678"
                 , "测试数据"
                 , null
+                , ("测试" + new CalendarController())
                 , HumanVo.Sex.MALE);
         Assert.isTrue(newUser.isLegal(), "User.Factory.USER.create(..) -> 无效的 User");
         //=== insert

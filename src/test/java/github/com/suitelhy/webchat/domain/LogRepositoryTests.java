@@ -121,6 +121,7 @@ public class LogRepositoryTests {
                 , "a12345678"
                 , "测试数据"
                 , null
+                , ("测试" + new CalendarController())
                 , HumanVo.Sex.MALE);
         Assert.isTrue(newUser.isLegal()
                 , "User.Factory.USER.create(..) -> 无效的 User");
@@ -158,6 +159,7 @@ public class LogRepositoryTests {
                 , "a12345678"
                 , "测试数据"
                 , null
+                , ("测试" + new CalendarController())
                 , HumanVo.Sex.MALE);
         Assert.isTrue(newUser.isLegal()
                 , "User.Factory.USER.create(..) -> 无效的 User");
@@ -208,6 +210,7 @@ public class LogRepositoryTests {
                 , "a12345678"
                 , "测试数据"
                 , null
+                , ("测试" + new CalendarController())
                 , HumanVo.Sex.MALE);
         Assert.isTrue(newUser.isLegal()
                 , "User.Factory.USER.create(..) -> 无效的 User");
