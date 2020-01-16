@@ -3,15 +3,16 @@ package github.com.suitelhy.webchat.domain.service.impl;
 import github.com.suitelhy.webchat.domain.entity.User;
 import github.com.suitelhy.webchat.domain.repository.UserRepository;
 import github.com.suitelhy.webchat.domain.service.UserService;
-import github.com.suitelhy.webchat.infrastructure.domain.policy.DBPolicy;
+import github.com.suitelhy.webchat.domain.vo.AccountVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
 /**
@@ -24,8 +25,8 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public List<User> selectAll(int dataIndex, int pageSize) {
-        if (dataIndex < 0) {
+    public Page<User> selectAll(int pageIndex, int pageSize) {
+        if (pageIndex < 0) {
             throw new RuntimeException("非法输入: <param>dataIndex</param>");
         }
         if (pageSize < 1) {
@@ -34,18 +35,34 @@ public class UserServiceImpl implements UserService {
         Sort.TypedSort<User> userTypedSort = Sort.sort(User.class);
         Sort userSort = userTypedSort.by(User::getUserid).ascending()
                 .and(userTypedSort.by(User::getStatus).ascending());
-        Pageable page = PageRequest.of(dataIndex, pageSize, userSort);
-        return userRepository.findAll(page).getContent();
+        Pageable page = PageRequest.of(pageIndex, pageSize, userSort);
+        return userRepository.findAll(page);
     }
 
     @Nullable
     @Override
     public User selectUserByUserid(String userid){
-        if (null == userid || !DBPolicy.MYSQL.validateUuid(userid)) {
+        if (!User.Validator.USER.userid(userid)) {
             throw new RuntimeException("非法输入: 用户ID");
         }
         Optional<User> result = userRepository.findById(userid);
-        return result.isPresent() ? result.get() : null;
+        return result.orElse(null);
+    }
+
+    /**
+     * 查询指定的用户
+     *
+     * @param username
+     * @return
+     */
+    @Override
+    public User selectUserByUsername(@NotNull String username) {
+        if (!User.Validator.USER.username(username)) {
+            throw new RuntimeException("非法输入: 用户名称");
+        }
+        Optional<User> result = userRepository.findUserByUsernameAndStatus(username
+                , AccountVo.Status.NORMAL);
+        return result.orElse(null);
     }
 
     @Override
