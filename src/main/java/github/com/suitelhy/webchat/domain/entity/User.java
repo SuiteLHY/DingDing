@@ -30,16 +30,14 @@ import javax.validation.constraints.NotNull;
  * @Reference <a href="https://dzone.com/articles/persisting-natural-key-entities-with-spring-data-j">
  *->     Persisting Natural Key Entities With Spring Data JPA</a>
  */
-/*@SuiteTable("user")*/
 @Entity
 @Table
-public class User /*implements EntityModel<String>*/
-        extends AbstractEntityModel<String> {
+public class User extends AbstractEntityModel<String> {
 
     private static final long serialVersionUID = 1L;
 
     // 用户ID
-    @GeneratedValue(/*strategy = GenerationType.TABLE*/generator = "USER_ID_STRATEGY")
+    @GeneratedValue(generator = "USER_ID_STRATEGY")
     @GenericGenerator(name = "USER_ID_STRATEGY", strategy = "uuid")
     @Id
     private /*final */String userid;
@@ -61,11 +59,10 @@ public class User /*implements EntityModel<String>*/
     private String lasttime;
 
     // 用户 - 昵称
-    /*@SuiteColumn(nullable = false)*/
     @Column(nullable = false, unique = true)
     private String nickname;
 
-    // 用户 - 密码
+    // 用户密码
     @Column(nullable = false)
     private String password;
 
@@ -77,12 +74,16 @@ public class User /*implements EntityModel<String>*/
     @Column
     private String profilehead;
 
-    // 用户 - 性别 -> {0:女, 1:男}
+    // 用户名称
+    @Column(nullable = false, unique = true)
+    private String username;
+
+    // 用户 - 性别
     @Column
     @Convert(converter = HumanVo.Sex.Converter.class)
     private HumanVo.Sex sex;
 
-    // 账号状态 -> {0:已注销, 1:正常, 2:异常&禁用}
+    // 账号状态
     @Column(nullable = false)
     @Convert(converter = AccountVo.Status.Converter.class)
     private AccountVo.Status status;
@@ -111,7 +112,7 @@ public class User /*implements EntityModel<String>*/
      */
     @Override
     public boolean isEmpty() {
-        return (null == id() || "".equals(id().trim())) // 用户ID
+        return (null == id() || "".equals(id().trim())) // Entity - ID
                 || !isLegal()
                 || (null != isPersistence() && !isPersistence());
     }
@@ -124,13 +125,14 @@ public class User /*implements EntityModel<String>*/
      */
     @Override
     public boolean isLegal() {
-        return Validator.USER.firsttime(this.getFirsttime()) // 注册时间
-                && Validator.USER.ip(this.getIp()) // 最后登陆IP
-                && Validator.USER.lasttime(this.getLasttime()) // 最后登录时间
-                && Validator.USER.nickname(this.getNickname()) // 用户 - 昵称
-                && Validator.USER.password(this.getPassword()) // 用户 - 密码
-                && (Validator.USER.status(this.getStatus())
-                        && AccountVo.Status.NORMAL.equals(this.getStatus()))/* 账号状态 */;
+        return Validator.USER.firsttime(this.firsttime) // 注册时间
+                && Validator.USER.ip(this.ip) // 最后登陆IP
+                && Validator.USER.lasttime(this.lasttime) // 最后登录时间
+                && Validator.USER.nickname(this.nickname) // 用户 - 昵称
+                && Validator.USER.password(this.password) // 用户密码
+                && Validator.USER.username(this.username) // 用户名称
+                && (Validator.USER.status(this.status)
+                        && AccountVo.Status.NORMAL.equals(this.status))/* 账号状态 */;
     }
 
     @Override
@@ -195,6 +197,10 @@ public class User /*implements EntityModel<String>*/
             return true;
         }
 
+        public boolean username(@NotNull String username) {
+            return EntityUtil.Regex.validateUsername(username);
+        }
+
         public boolean sex(HumanVo.Sex sex) {
             if (null == sex) {
                 return null != VoUtil.getVoByValue(HumanVo.Sex.class, null);
@@ -256,29 +262,6 @@ public class User /*implements EntityModel<String>*/
     public User() {}
 
     //===== entity factory =====//
-//    /**
-//     * 创建用户 - Entity对象
-//     *
-//     * @Description 仅用于添加用户.
-//     */
-//    private User(@Nullable Integer age
-//            , @NotNull String firsttime
-//            , @NotNull String ip
-//            , @NotNull String lasttime
-//            , @NotNull String nickname
-//            , @NotNull String password
-//            , @Nullable String profile
-//            , @Nullable String profilehead
-//            , @Nullable HumanCharacteristics.Sex sex) {
-//        /*this.setUserid(DBPolicy.uuid());*/
-//        // 用户ID
-//        String id = DBPolicy.MYSQL.uuid();
-//        new User(id, age, firsttime
-//                , ip, lasttime, nickname
-//                , password, profile, profilehead
-//                , sex);
-//    }
-
     /**
      * 创建/更新用户 -> Entity对象
      *
@@ -289,9 +272,10 @@ public class User /*implements EntityModel<String>*/
      * @param ip            最后登陆IP
      * @param lasttime      最后登录时间
      * @param nickname      用户 - 昵称
-     * @param password      用户 - 密码
+     * @param password      用户密码
      * @param profile       用户 - 简介
      * @param profilehead   用户 - 头像
+     * @param username      用户名称
      * @param sex           用户 - 性别
      * @throws IllegalArgumentException
      */
@@ -304,6 +288,7 @@ public class User /*implements EntityModel<String>*/
             , @NotNull String password
             , @Nullable String profile
             , @Nullable String profilehead
+            , @NotNull String username
             , @Nullable HumanVo.Sex sex) {
         if (null == id) {
             //--- <param>id</param>为 null 时, 对应添加用户功能.
@@ -341,9 +326,14 @@ public class User /*implements EntityModel<String>*/
                     + " -> 非法输入: 用户 - 昵称");
         }
         if (!Validator.USER.password(password)) {
-            //-- 非法输入: 用户 - 密码
+            //-- 非法输入: 用户密码
             throw new IllegalArgumentException(this.getClass().getSimpleName()
-                    + " -> 非法输入: 用户 - 密码");
+                    + " -> 非法输入: 用户密码");
+        }
+        if (!Validator.USER.username(username)) {
+            //-- 非法输入: 用户名称
+            throw new IllegalArgumentException(this.getClass().getSimpleName()
+                    + " -> 非法输入: 用户名称");
         }
         // 用户ID
         this.setUserid(id);
@@ -357,12 +347,14 @@ public class User /*implements EntityModel<String>*/
         this.setLasttime(lasttime);
         // 用户 - 昵称
         this.setNickname(nickname);
-        // 用户 - 密码
+        // 用户密码
         this.setPassword(password);
         // 用户 - 简介
         this.setProfile(profile);
         // 用户 - 头像
         this.setProfilehead(profilehead);
+        // 用户名称
+        this.setUsername(username);
         // 用户 - 性别
         this.setSex(sex);
         // 账号状态
@@ -390,9 +382,10 @@ public class User /*implements EntityModel<String>*/
          * @param ip            最后登陆IP
          * @param lasttime      最后登录时间
          * @param nickname      用户 - 昵称
-         * @param password      用户 - 密码
+         * @param password      用户密码
          * @param profile       用户 - 简介
          * @param profilehead   用户 - 头像
+         * @param username      用户名称
          * @param sex           用户 - 性别
          * @throws IllegalArgumentException
          */
@@ -404,11 +397,12 @@ public class User /*implements EntityModel<String>*/
                 , @NotNull String password
                 , @Nullable String profile
                 , @Nullable String profilehead
+                , @NotNull String username
                 , @Nullable HumanVo.Sex sex) {
             return new User(null, age, firsttime
                     , ip, lasttime, nickname
                     , password, profile, profilehead
-                    , sex);
+                    , username, sex);
         }
 
         /**
@@ -436,14 +430,15 @@ public class User /*implements EntityModel<String>*/
                 , @NotNull String password
                 , @Nullable String profile
                 , @Nullable String profilehead
+                , @NotNull String username
                 , @Nullable HumanVo.Sex sex) {
-            if (null == id) {
+            if (!Validator.USER.id(id)) {
                 throw new IllegalArgumentException("非法输入: 用户ID");
             }
             return new User(id, age, firsttime
                     , ip, lasttime, nickname
                     , password, profile, profilehead
-                    , sex);
+                    , username, sex);
         }
 
         /**
@@ -459,6 +454,7 @@ public class User /*implements EntityModel<String>*/
             }
             return false;
         }
+
     }
 
     //===== getter & setter =====//
@@ -532,6 +528,14 @@ public class User /*implements EntityModel<String>*/
 
     public void setProfilehead(String profilehead) {
         this.profilehead = profilehead;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    private void setUsername(String username) {
+        this.username = username;
     }
 
     public HumanVo.Sex getSex() {
