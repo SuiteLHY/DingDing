@@ -19,27 +19,36 @@
     </properties>
 
     <dependencies>
-
         <!-- Web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
         <!-- Spring data JPA -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
+
+        <!-- === Spring Security === -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- ====== -->
+
         <!-- Thymeleaf -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
-        <!-- Spring AOP -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
-        </dependency>
+
         <!-- WebSocket -->
         <!--<dependency>
             <groupId>org.springframework.boot</groupId>
@@ -62,7 +71,7 @@
         </dependency>-->
         <!-- ===== -->
 
-        <!-- Test 模块 -->
+        <!-- Spring Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -106,10 +115,11 @@
             <version>2.1.1</version>
         </dependency>-->
 
-        <!-- Spring boot - devtools, 仅开发环境下启用 -->
+        <!-- Spring boot - devtools -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
+            <!-- 仅开发环境下启用 -->
             <optional>true</optional>
         </dependency>
 
@@ -139,7 +149,6 @@
             <artifactId>annotations</artifactId>
             <version>3.0.1</version>
         </dependency>
-
     </dependencies>
 
     <build>
