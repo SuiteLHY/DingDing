@@ -26,7 +26,7 @@ public class UserTaskImpl implements UserTask {
     public List<User> selectAll(int pageCount, int pageSize) {
         List<User> result = null;
         try {
-            result = userService.selectAll(--pageCount, pageSize);
+            result = userService.selectAll(--pageCount, pageSize).getContent();
         }  catch (Exception e) {
             log.error("<class>{}</class> - <method>{}</method> <- 第{}行"
                     , this.getClass().getName()
