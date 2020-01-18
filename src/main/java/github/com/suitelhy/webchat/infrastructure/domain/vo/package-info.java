@@ -32,4 +32,4 @@
  *->     mybatis – MyBatis 3 | 配置#类型处理器（typeHandlers）</a>
  *
  */
-package github.com.suitelhy.webchat.domain.vo;
+package github.com.suitelhy.webchat.infrastructure.domain.vo;

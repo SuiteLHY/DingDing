@@ -3,7 +3,7 @@ package github.com.suitelhy.webchat.domain.service.impl;
 import github.com.suitelhy.webchat.domain.entity.User;
 import github.com.suitelhy.webchat.domain.repository.UserRepository;
 import github.com.suitelhy.webchat.domain.service.UserService;
-import github.com.suitelhy.webchat.domain.vo.AccountVo;
+import github.com.suitelhy.webchat.infrastructure.domain.vo.AccountVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean insert(User user) {
-        if (null == user || !user.isLegal()) {
+        if (null == user || !user.isEntityLegal()) {
             throw new RuntimeException("非法用户");
         }
         return !userRepository.saveAndFlush(user).isEmpty();

@@ -52,7 +52,7 @@ public class LogServiceImpl implements LogService {
     @Override
     @Transactional
     public boolean insert(Log log) {
-        if (null != log && log.isLegal()) {
+        if (null != log && log.isEntityLegal()) {
             logRepository.saveAndFlush(log);
             return !log.isEmpty()
                     && logRepository.existsById(log.id());

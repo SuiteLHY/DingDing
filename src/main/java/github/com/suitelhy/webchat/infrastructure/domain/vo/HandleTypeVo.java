@@ -1,4 +1,4 @@
-package github.com.suitelhy.webchat.domain.vo;
+package github.com.suitelhy.webchat.infrastructure.domain.vo;
 
 import github.com.suitelhy.webchat.infrastructure.config.springdata.attribute.converter.VoAttributeConverter;
 import github.com.suitelhy.webchat.infrastructure.domain.model.VoModel;
@@ -8,13 +8,13 @@ import org.springframework.lang.Nullable;
  * 操作类型
  *
  */
-public interface HandleTypeVo<VO extends Enum, V extends Number>
-        extends VoModel<VO, V> {
+public interface HandleTypeVo<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V extends Number, _DESCRIPTION>
+        extends VoModel<VO, V, _DESCRIPTION> {
 
     /**
      * 日志记录 - 操作类型
      */
-    enum Log implements HandleTypeVo<Log, Integer> {
+    enum Log implements HandleTypeVo<Log, Integer, String> {
         USER_REGISTRATION(1
                 , "用户注册"
                 , "正常业务流程, 注册用户")
@@ -42,7 +42,7 @@ public interface HandleTypeVo<VO extends Enum, V extends Number>
          */
         @javax.persistence.Converter(autoApply = true)
         public static class Converter
-                extends VoAttributeConverter<Log, Integer> {
+                extends VoAttributeConverter<Log, Integer, String> {
 
             public Converter() {
                 super(Log.class);
@@ -83,11 +83,7 @@ public interface HandleTypeVo<VO extends Enum, V extends Number>
 
         @Override
         public String toString() {
-            return name()
-                    + "{code=" + this.code
-                    + ", name=" + this.name
-                    + ", description=" + this.description
-                    + "}";
+            return VoModel.toString(this);
         }
 
     }

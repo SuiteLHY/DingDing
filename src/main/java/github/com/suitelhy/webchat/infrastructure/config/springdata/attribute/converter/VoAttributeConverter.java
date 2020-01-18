@@ -21,7 +21,7 @@ import javax.persistence.Converter;
  * @param <V>
  */
 @Converter
-public abstract class VoAttributeConverter<VO extends Enum<VO> & VoModel<VO, V>, V extends Number>
+public abstract class VoAttributeConverter<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V extends Number, _DESCRIPTION>
         implements AttributeConverter<VO, V> {
 
     private final Class<VO> voClazz;

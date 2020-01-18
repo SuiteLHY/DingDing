@@ -5,7 +5,7 @@ public abstract class AbstractEntityModel<ID>
 
     //===== EntityModel =====//
     /**
-     * Entity 对象的唯一标识
+     * 唯一标识 <- Entity 对象
      *
      * @return The unique identify of the entity.
      */
@@ -21,9 +21,7 @@ public abstract class AbstractEntityModel<ID>
      */
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof EntityModel
-                ? equals((EntityModel) obj)
-                : false;
+        return obj instanceof EntityModel && equals((EntityModel) obj);
     }
 
     /**
@@ -47,31 +45,31 @@ public abstract class AbstractEntityModel<ID>
     @Override
     public boolean isEmpty() {
         return EntityModel.isEmpty(this)
-                || !isLegal()
-                || !isPersistence();
+                || !isEntityLegal()
+                || (null != isEntityPersistence() && !isEntityPersistence());
     }
 
     /**
-     * 是否符合业务要求
+     * 是否符合业务要求 <- Entity 对象
      *
      * @Description 需要实现类实现该抽象方法
      * @return
      */
     @Override
-    public abstract boolean isLegal();
+    public abstract boolean isEntityLegal();
 
     /**
-     * 是否已持久化
+     * 是否已持久化 <- Entity 对象
      *
      * @return 可为 null, 此时未实现该接口.
      */
     @Override
-    public Boolean isPersistence() {
+    public Boolean isEntityPersistence() {
         return null;
     }
 
     /**
-     * 转换为字符串
+     * 转换为字符串 <- Entity 对象
      * @return
      */
     @Override

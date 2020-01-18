@@ -12,7 +12,18 @@ import javax.validation.constraints.NotNull;
 public final class VoUtil {
 
     @Nullable
-    public static <VO extends Enum & VoModel<VO, V>, V extends Number>
+    public static <VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V extends Number, _DESCRIPTION>
+    VO getVoByName(@NotNull Class<VO> voClass, @NotNull String name) {
+        for (VO each : voClass.getEnumConstants()) {
+            if (each.name().equals(name)) {
+                return each;
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    public static <VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V extends Number, _DESCRIPTION>
     VO getVoByValue(@NotNull Class<VO> voClass, @Nullable V value) {
         for (VO each : voClass.getEnumConstants()) {
             if (each.equalsValue(value)) {

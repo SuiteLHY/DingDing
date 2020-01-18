@@ -150,40 +150,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     * 注入自定义 UserDetailsService 实例
-     * @return
-     */
-    /*@Bean
-    @Override
-    public UserDetailsService userDetailsService() {
-        return userDetailsService;
-    }*/
-
-//    /**
-//     * <super>SecurityBuilder</super> 用于创建一个 AuthenticationManager
-//     * @Description 允许轻松构建内存身份验证、LDAP身份验证、基于JDBC的身份验证, 添加 UserDetailsService 和添加 AuthenticationProvider.
-//     * @Reference
-//     *-> <API><a href="https://docs.spring.io/spring-security/site/docs/4.0.x/apidocs/org/springframework/security/config/annotation/authentication/builders/AuthenticationManagerBuilder.html">
-//     *->     AuthenticationManagerBuilder（Spring Security 4.0.4.RELEASE API）</a></API>
-//     * @param auth
-//     * @throws Exception
-//     */
-//    @Override
-//    public void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth
-//                .ldapAuthentication() // 配置 LDAP 服务器
-//                    .userDnPatterns("uid={0},ou=people")
-//                    .groupSearchBase("ou=groups")
-//                    .contextSource()
-//                        .url("ldap://localhost:8389/dc=springframework,dc=org")
-//                        .and()
-//                        .passwordCompare() // 配置编码器和密码属性的名称
-//                            .passwordEncoder(/*new LdapShaPasswordEncoder()*/
-//                                    /*new BCryptPasswordEncoder()*/this.getPasswordEncoder()) // (更换新的加密方式, 替换过时策略)
-//                            .passwordAttribute("userPassword");
-//    }
-
-    /**
      * 定制化 <interface>PasswordEncoder</interface>(密码编码器)
      * @Description 设计目的: 解耦.
      * @return
@@ -192,16 +158,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected PasswordEncoder getPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-//    /**
-//     * 配置一个 <interface>UserDetailsService</interface> Bean
-//     * @Description 配置一个 <interface>UserDetailsService</interface> Bean
-//     *-> , 不再生成默认 security.user 用户.
-//     */
-//    @Bean
-//    @Override
-//    protected UserDetailsService userDetailsService() {
-//        return super.userDetailsService();
-//    }
 
 }

@@ -1,8 +1,7 @@
 package github.com.suitelhy.webchat.domain.entity;
 
-import github.com.suitelhy.webchat.domain.vo.AccountVo;
-import github.com.suitelhy.webchat.domain.vo.HandleTypeVo;
-import github.com.suitelhy.webchat.domain.vo.HumanVo;
+import github.com.suitelhy.webchat.infrastructure.domain.vo.AccountVo;
+import github.com.suitelhy.webchat.infrastructure.domain.vo.HumanVo;
 import github.com.suitelhy.webchat.infrastructure.domain.model.AbstractEntityModel;
 import github.com.suitelhy.webchat.infrastructure.domain.model.EntityFactory;
 import github.com.suitelhy.webchat.infrastructure.domain.model.EntityModel;
@@ -74,10 +73,6 @@ public class User extends AbstractEntityModel<String> {
     @Column
     private String profilehead;
 
-    // 用户名称
-    @Column(nullable = false, unique = true)
-    private String username;
-
     // 用户 - 性别
     @Column
     @Convert(converter = HumanVo.Sex.Converter.class)
@@ -88,7 +83,12 @@ public class User extends AbstractEntityModel<String> {
     @Convert(converter = AccountVo.Status.Converter.class)
     private AccountVo.Status status;
 
+    // 用户名称
+    @Column(nullable = false, unique = true)
+    private String username;
+
     //===== Entity Model =====//
+    @NotNull
     @Override
     public String id() {
         return this.getUserid();
@@ -113,8 +113,8 @@ public class User extends AbstractEntityModel<String> {
     @Override
     public boolean isEmpty() {
         return (null == id() || "".equals(id().trim())) // Entity - ID
-                || !isLegal()
-                || (null != isPersistence() && !isPersistence());
+                || !isEntityLegal()
+                || (null != isEntityPersistence() && !isEntityPersistence());
     }
 
     /**
@@ -124,7 +124,7 @@ public class User extends AbstractEntityModel<String> {
      * @Description 需要实现类实现该抽象方法
      */
     @Override
-    public boolean isLegal() {
+    public boolean isEntityLegal() {
         return Validator.USER.firsttime(this.firsttime) // 注册时间
                 && Validator.USER.ip(this.ip) // 最后登陆IP
                 && Validator.USER.lasttime(this.lasttime) // 最后登录时间
@@ -365,16 +365,6 @@ public class User extends AbstractEntityModel<String> {
         USER;
 
         /**
-         * 获取 Entity 实例
-         *
-         * @return <code>null</code>
-         */
-        @Override
-        public User create() {
-            return null;
-        }
-
-        /**
          * 创建用户
          *
          * @param age           用户 - 年龄
@@ -458,100 +448,167 @@ public class User extends AbstractEntityModel<String> {
     }
 
     //===== getter & setter =====//
+    @NotNull
     public String getUserid() {
         return userid;
     }
 
-    private void setUserid(String userid) {
-        this.userid = userid;
+    private boolean setUserid(String userid) {
+        if (Validator.USER.userid(userid)) {
+            this.userid = userid;
+            return true;
+        }
+        return false;
     }
 
     public Integer getAge() {
         return age;
     }
 
-    public void setAge(Integer age) {
-        this.age = age;
+    public boolean setAge(Integer age) {
+        if (Validator.USER.age(age)) {
+            this.age = age;
+            return true;
+        }
+        return false;
     }
 
     public String getFirsttime() {
         return firsttime;
     }
 
-    public void setFirsttime(String firsttime) {
-        this.firsttime = firsttime;
+    public boolean setFirsttime(String firsttime) {
+        if (Validator.USER.firsttime(firsttime)) {
+            this.firsttime = firsttime;
+            return true;
+        }
+        return false;
     }
 
     public String getIp() {
         return ip;
     }
 
-    public void setIp(String ip) {
-        this.ip = ip;
+    public boolean setIp(String ip) {
+        if (Validator.USER.ip(ip)) {
+            this.ip = ip;
+            return true;
+        }
+        return false;
     }
 
     public String getLasttime() {
         return lasttime;
     }
 
-    public void setLasttime(String lasttime) {
-        this.lasttime = lasttime;
+    public boolean setLasttime(String lasttime) {
+        if (Validator.USER.lasttime(lasttime)) {
+            this.lasttime = lasttime;
+            return true;
+        }
+        return false;
     }
 
     public String getNickname() {
         return nickname;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public boolean setNickname(String nickname) {
+        if (Validator.USER.nickname(nickname)) {
+            this.nickname = nickname;
+            return true;
+        }
+        return false;
     }
 
+    @NotNull
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public boolean setPassword(@NotNull String password) {
+        if (Validator.USER.password(password)) {
+            this.password = password;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 判断密码是否相同
+     *
+     * @param password
+     * @return {true: <tt>密码相同</tt>, false: <tt>密码不相同</tt>, null: <tt>Entity无效</tt>}
+     */
+    public Boolean equalsPassword(@NotNull String password) {
+        if (Validator.USER.password(password)) {
+            if (isEmpty()) {
+                return null;
+            }
+            return this.password.equals(password);
+        }
+        return false;
     }
 
     public String getProfile() {
         return profile;
     }
 
-    public void setProfile(String profile) {
-        this.profile = profile;
+    public boolean setProfile(String profile) {
+        if (Validator.USER.profile(profile)) {
+            this.profile = profile;
+            return true;
+        }
+        return false;
     }
 
     public String getProfilehead() {
         return profilehead;
     }
 
-    public void setProfilehead(String profilehead) {
-        this.profilehead = profilehead;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    private void setUsername(String username) {
-        this.username = username;
+    public boolean setProfilehead(String profilehead) {
+        if (Validator.USER.profilehead(profilehead)) {
+            this.profilehead = profilehead;
+            return true;
+        }
+        return false;
     }
 
     public HumanVo.Sex getSex() {
         return sex;
     }
 
-    public void setSex(HumanVo.Sex sex) {
-        this.sex = sex;
+    public boolean setSex(HumanVo.Sex sex) {
+        if (Validator.USER.sex(sex)) {
+            this.sex = sex;
+            return true;
+        }
+        return false;
     }
 
     public AccountVo.Status getStatus() {
         return status;
     }
 
-    private void setStatus(AccountVo.Status status) {
-        this.status = status;
+    private boolean setStatus(AccountVo.Status status) {
+        if (Validator.USER.status(status)) {
+            this.status = status;
+            return true;
+        }
+        return false;
+    }
+
+    @NotNull
+    public String getUsername() {
+        return username;
+    }
+
+    private boolean setUsername(String username) {
+        if (Validator.USER.username(username)) {
+            this.username = username;
+            return true;
+        }
+        return false;
     }
 
 }

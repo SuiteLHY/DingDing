@@ -1,6 +1,6 @@
 package github.com.suitelhy.webchat.domain.entity;
 
-import github.com.suitelhy.webchat.domain.vo.HandleTypeVo;
+import github.com.suitelhy.webchat.infrastructure.domain.vo.HandleTypeVo;
 import github.com.suitelhy.webchat.infrastructure.domain.model.AbstractEntityModel;
 import github.com.suitelhy.webchat.infrastructure.domain.model.EntityFactory;
 import github.com.suitelhy.webchat.infrastructure.domain.model.EntityModel;
@@ -76,8 +76,8 @@ public class Log extends AbstractEntityModel<Long> {
     @Override
     public boolean isEmpty() {
         return !Validator.LOG.validateId(this)
-                || !isLegal()
-                || (null != isPersistence() && !isPersistence());
+                || !isEntityLegal()
+                || (null != isEntityPersistence() && !isEntityPersistence());
     }
 
     /**
@@ -86,7 +86,7 @@ public class Log extends AbstractEntityModel<Long> {
      * @return
      */
     @Override
-    public boolean isLegal() {
+    public boolean isEntityLegal() {
         return Validator.LOG.detail(this.detail)
                 && Validator.LOG.ip(this.ip)
                 && Validator.LOG.time(this.time)
@@ -221,16 +221,6 @@ public class Log extends AbstractEntityModel<Long> {
 
     public enum Factory implements EntityFactory<Log> {
         USER_LOG;
-
-        /**
-         * 获取 Entity 实例
-         *
-         * @return <code>null</code>
-         */
-        @Override
-        public Log create() {
-            return null;
-        }
 
         /**
          * 获取 Entity 实例

@@ -7,12 +7,14 @@ import java.io.Serializable;
 
 /**
  * 实体设计模板
+ *
  * @param <ID> - Entity 的唯一标识 (Identify) 的类型
  */
 public interface EntityModel<ID> extends Serializable {
 
     /**
-     * Entity 对象的唯一标识
+     * 唯一标识 <- Entity 对象
+     *
      * @return The unique identify of the entity.
      */
     ID id();
@@ -26,7 +28,8 @@ public interface EntityModel<ID> extends Serializable {
     boolean equals(Object obj);
 
     /**
-     * 判断是否相同
+     * 判断是否相同 <- Entity 对象
+     *
      * @Description 默认按照 Entity 设计实现, 不应该被重写
      * @param entity 实体对象
      * @return
@@ -36,7 +39,7 @@ public interface EntityModel<ID> extends Serializable {
     }
 
     /**
-     * 判断是否相同
+     * 判断是否相同 <- Entity 对象
      *
      * @Description Entity模板提供的实现
      * @param entity
@@ -47,20 +50,19 @@ public interface EntityModel<ID> extends Serializable {
     static <T extends EntityModel> boolean equals(@Nullable T entity, @Nullable Object obj) {
         return (null != entity && null != entity.id() && !entity.isEmpty()
                 && obj instanceof EntityModel && null != ((EntityModel) obj).id() && !((EntityModel) obj).isEmpty())
-                ? entity.id().equals(((EntityModel) obj).id())
-                : false;
+                && entity.id().equals(((EntityModel) obj).id());
     }
 
     /**
      * 计算哈希值
      * @Description 如果重写了 <code>equals(Object obj)</code>, 则必须根据 <code>equals(Object obj)</code>
-     *-> 的实现重写 <code>hashCode()</code>.
+     *-> 的实现来重写 <code>hashCode()</code>.
      * @return
      */
     int hashCode();
 
     /**
-     * 计算哈希值
+     * 计算哈希值 <- Entity 对象
      *
      * @Description Entity模板提供的实现
      * @param entity
@@ -82,7 +84,7 @@ public interface EntityModel<ID> extends Serializable {
     boolean isEmpty();
 
     /**
-     * 是否无效
+     * 是否无效 <- Entity 对象
      *
      * @Description Entity模板提供的实现 -> 仅检验 <tt><method>id()</method> -> nonNull</tt>.
      * @param entity
@@ -97,18 +99,18 @@ public interface EntityModel<ID> extends Serializable {
     }
 
     /**
-     * 是否符合业务要求
+     * 是否符合业务要求 <- Entity 对象
      * @Description 需要实现类实现该接口
      * @return
      */
-    boolean isLegal();
+    boolean isEntityLegal();
 
     /**
-     * 是否已持久化
+     * 是否已持久化 <- Entity 对象
      * @return 可为 null, 此时未实现该接口.
      */
     @Nullable
-    Boolean isPersistence();
+    Boolean isEntityPersistence();
 
     /**
      * 转换为字符串
@@ -117,7 +119,7 @@ public interface EntityModel<ID> extends Serializable {
     String toString();
 
     /**
-     * 转换为字符串
+     * 转换为字符串 <- Entity 对象
      *
      * @Description Entity模板提供的实现
      * @param entity
