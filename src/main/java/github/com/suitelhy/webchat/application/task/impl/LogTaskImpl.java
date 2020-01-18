@@ -4,6 +4,7 @@ import github.com.suitelhy.webchat.domain.entity.Log;
 import github.com.suitelhy.webchat.application.task.LogTask;
 import github.com.suitelhy.webchat.domain.entity.User;
 import github.com.suitelhy.webchat.domain.service.LogService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -13,6 +14,7 @@ import java.util.List;
  * 日志记录 - 任务调度实现
  */
 @Service("logTask")
+@Slf4j
 public class LogTaskImpl implements LogTask {
 
     @Resource
@@ -64,7 +66,7 @@ public class LogTaskImpl implements LogTask {
 
     @Override
     public boolean insert(Log log) {
-        if (null == log || !log.isLegal()) {
+        if (null == log || !log.isEntityLegal()) {
             throw new RuntimeException("非法输入: <param>log</param>");
         }
         return logService.insert(log);

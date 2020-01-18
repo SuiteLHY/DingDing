@@ -1,6 +1,6 @@
 package github.com.suitelhy.webchat.application.task;
 
-import github.com.suitelhy.webchat.domain.entity.User;
+import github.com.suitelhy.webchat.infrastructure.application.dto.UserDto;
 
 import java.util.List;
 
@@ -15,14 +15,21 @@ public interface UserTask {
      * @param pageSize
      * @return 用户 Entity 对象集合
      */
-    List<User> selectAll(int pageCount, int pageSize);
+    List<UserDto> selectAll(int pageCount, int pageSize);
 
     /**
      * 查询指定的用户
      * @param userid
      * @return 用户 Entity 对象
      */
-    User selectUserByUserid(String userid);
+    UserDto selectUserByUserid(String userid);
+
+    /**
+     * 查询指定的用户
+     * @param username
+     * @return
+     */
+    UserDto selectUserByUsername(String username);
 
     /**
      * 查询用户列表 - 分页 - 总页数
@@ -36,20 +43,26 @@ public interface UserTask {
      * @param user
      * @return 业务操作是否成功
      */
-    boolean insert(User user);
+    boolean insert(UserDto user
+            , String password
+            , String ip
+            , String lasttime);
 
     /**
      * 更新指定的用户
      * @param user
      * @return 业务操作是否成功
      */
-    boolean update(User user);
+    boolean update(UserDto user
+            , String password
+            , String ip
+            , String lasttime);
 
     /**
      * 删除指定的用户
      * @param user
      * @return 业务操作是否成功
      */
-    boolean delete(User user);
+    boolean delete(UserDto user, String password);
 
 }

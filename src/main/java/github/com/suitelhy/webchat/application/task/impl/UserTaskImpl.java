@@ -2,11 +2,14 @@ package github.com.suitelhy.webchat.application.task.impl;
 
 import github.com.suitelhy.webchat.domain.entity.User;
 import github.com.suitelhy.webchat.application.task.UserTask;
+import github.com.suitelhy.webchat.domain.entity.security.SecurityUser;
 import github.com.suitelhy.webchat.domain.service.UserService;
+import github.com.suitelhy.webchat.infrastructure.application.dto.UserDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,10 +26,14 @@ public class UserTaskImpl implements UserTask {
     private UserService userService;
 
     @Override
-    public List<User> selectAll(int pageCount, int pageSize) {
-        List<User> result = null;
+    public List<UserDto> selectAll(int pageCount, int pageSize) {
+        List<UserDto> result = null;
         try {
-            result = userService.selectAll(--pageCount, pageSize).getContent();
+            List<User> userList = userService.selectAll(--pageCount, pageSize).getContent();
+            result = new ArrayList<>(userList.size());
+            for (User each : userList) {
+                result.add(UserDto.Factory.USER_DTO.create(new SecurityUser(each)));
+            }
         }  catch (Exception e) {
             log.error("<class>{}</class> - <method>{}</method> <- 第{}行"
                     , this.getClass().getName()
@@ -40,10 +47,34 @@ public class UserTaskImpl implements UserTask {
     }
 
     @Override
-    public User selectUserByUserid(String userid) {
-        User result = null;
+    public UserDto selectUserByUserid(String userid) {
+        UserDto result = null;
         try {
-            result = userService.selectUserByUserid(userid);
+            result = UserDto.Factory.USER_DTO.create(
+                    new SecurityUser(userService.selectUserByUserid(userid)));
+        }  catch (Exception e) {
+            log.error("<class>{}</class> - <method>{}</method> <- 第{}行"
+                    , this.getClass().getName()
+                    , Thread.currentThread().getStackTrace()[1].getMethodName()
+                    , Thread.currentThread().getStackTrace()[1].getLineNumber()
+                    , e);
+        } finally {
+            return result;
+        }
+    }
+
+    /**
+     * 查询指定的用户
+     *
+     * @param username
+     * @return
+     */
+    @Override
+    public UserDto selectUserByUsername(String username) {
+        UserDto result = null;
+        try {
+            result = UserDto.Factory.USER_DTO.create(
+                    new SecurityUser(userService.selectUserByUsername(username)));
         }  catch (Exception e) {
             log.error("<class>{}</class> - <method>{}</method> <- 第{}行"
                     , this.getClass().getName()
@@ -72,10 +103,14 @@ public class UserTaskImpl implements UserTask {
     }
 
     @Override
-    public boolean insert(User user) {
+    public boolean insert(@NotNull UserDto userDto
+            , @NotNull String password
+            , @NotNull String ip
+            , @NotNull String lasttime) {
         boolean result = false;
         try {
-            result = userService.insert(user);
+            result = userService.insert(userDto.dtoId(userDto.getUsername()
+                    , password));
         }  catch (Exception e) {
             log.error("<class>{}</class> - <method>{}</method> <- 第{}行"
                     , this.getClass().getName()
@@ -88,10 +123,26 @@ public class UserTaskImpl implements UserTask {
     }
 
     @Override
-    public boolean update(User user) {
+    public boolean update(@NotNull UserDto userDto
+            , @NotNull String password
+            , @NotNull String ip
+            , @NotNull String lasttime) {
         boolean result = false;
         try {
+            User user = userDto.dtoId(userDto.getUsername(), password);
+            if (null == user) {
+                throw new IllegalArgumentException("越权操作");
+            }
+            if (user.isEmpty()) {
+                throw new IllegalArgumentException("非法参数");
+            }
             result = userService.update(user);
+        } catch (IllegalArgumentException e) {
+            log.warn("<class>{}</class> - <method>{}</method> <- 第{}行"
+                    , this.getClass().getName()
+                    , Thread.currentThread().getStackTrace()[1].getMethodName()
+                    , Thread.currentThread().getStackTrace()[1].getLineNumber()
+                    , e);
         }  catch (Exception e) {
             log.error("<class>{}</class> - <method>{}</method> <- 第{}行"
                     , this.getClass().getName()
@@ -104,10 +155,11 @@ public class UserTaskImpl implements UserTask {
     }
 
     @Override
-    public boolean delete(User user) {
+    public boolean delete(@NotNull UserDto userDto, @NotNull String password) {
         boolean result = false;
         try {
-            result = userService.deleteAndValidate(user);
+            result = userService.deleteAndValidate(userDto.dtoId(userDto.getUsername()
+                    , password));
         }  catch (Exception e) {
             log.error("<class>{}</class> - <method>{}</method> <- 第{}行"
                     , this.getClass().getName()
