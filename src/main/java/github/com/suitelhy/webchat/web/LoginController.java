@@ -2,20 +2,20 @@ package github.com.suitelhy.webchat.web;
 
 import github.com.suitelhy.webchat.application.task.LogTask;
 import github.com.suitelhy.webchat.application.task.UserTask;
-import github.com.suitelhy.webchat.domain.entity.User;
-import github.com.suitelhy.webchat.domain.vo.AccountVo;
-import github.com.suitelhy.webchat.infrastructure.web.util.CommonDate;
+import github.com.suitelhy.webchat.domain.entity.security.SecurityUser;
+import github.com.suitelhy.webchat.infrastructure.application.dto.UserDto;
+import github.com.suitelhy.webchat.infrastructure.domain.vo.AccountVo;
+import github.com.suitelhy.webchat.infrastructure.util.CalendarController;
 import github.com.suitelhy.webchat.infrastructure.web.util.LogUtil;
 import github.com.suitelhy.webchat.infrastructure.web.util.NetUtil;
 import github.com.suitelhy.webchat.infrastructure.web.util.WordDefined;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.annotation.Resource;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -29,16 +29,17 @@ import java.util.List;
 @RequestMapping(value = "/user")
 public class LoginController {
 
-    @Resource
+    @Autowired
     private UserTask userTask;
 
-    @Resource
+    @Autowired
     private LogTask logTask;
 
     /**
      * 登入 - 页面
      * @return
      */
+    @ApiOperation(value = "用户登录页面")
     @GetMapping(value = "/login")
     public String login() {
         return "login";
@@ -46,77 +47,85 @@ public class LoginController {
 
     /**
      * 登入 - 操作
-     * @param userid
+     * @param username
      * @param password
      * @param session
      * @param attributes
      * @param defined
-     * @param date
      * @param logUtil
-     * @param netUtil
      * @param request
      * @return
      */
+    @ApiOperation(value = "用户登录操作")
     @PostMapping(value = "/login")
-    public String login(String userid
+    public String login(@AuthenticationPrincipal SecurityUser currentUser
+            , String username
             , String password
             , HttpSession session
             , RedirectAttributes attributes
             , WordDefined defined
-            , CommonDate date
             , LogUtil logUtil
-            , NetUtil netUtil
             , HttpServletRequest request) {
-        final String ip = netUtil.getIpAddress(request);
-    	final User user = userTask.selectUserByUserid(userid);
-        if (null == user) {
+        final String ip = NetUtil.getIpAddress(request);
+    	/*final UserDto user = userTask.selectUserByUsername(username);*/
+        final UserDto user = UserDto.Factory.USER_DTO.create(currentUser);
+        if (null == user || user.isEmpty()) {
             attributes.addFlashAttribute("error", defined.LOGIN_USERID_ERROR);
+            // 重定向 -> 登入 - 页面
             return "redirect:/user/login";
         }
-        if (!user.getPassword().equals(password)) {
+        if (null == user.equalsPassword(password) || !user.equalsPassword(password)) {
             attributes.addFlashAttribute("error", defined.LOGIN_PASSWORD_ERROR);
+            // 重定向 -> 登入 - 页面
             return "redirect:/user/login";
         }
-        if (user.getStatus() != AccountVo.Status.NORMAL) {
+        if (!AccountVo.Status.NORMAL.showName().equals(user.getStatus())) {
             attributes.addFlashAttribute("error", defined.LOGIN_USERID_DISABLED);
+            // 重定向 -> 登入 - 页面
             return "redirect:/user/login";
         }
-        ServletContext application = request.getServletContext();
-        if (null == application.getAttribute("online")) {
+
+        ServletContext servletContext = request.getServletContext();
+        if (null == servletContext.getAttribute("online")) {
             List<String> list = new ArrayList<>();
-            list.add(userid);
-            application.setAttribute("online", list);
+            list.add(username);
+            servletContext.setAttribute("online", list);
         } else {
-            List<String> list = (List<String>) application.getAttribute("online");
-            if (list.contains(userid)) {
+            List<String> list = (List<String>) servletContext.getAttribute("online");
+            if (list.contains(username)) {
                 attributes.addFlashAttribute("error","已在线");
+                // 重定向 -> 登入 - 页面
                 return "redirect:/user/login";
             }
         }
-        logTask.insert(logUtil.setLog(userid
-                , date.getTime24()
+
+        logTask.insert(logUtil.setLog(user.id()
+                , new CalendarController().toString()
                 , defined.LOG_TYPE_LOGIN
                 , defined.LOG_DETAIL_USER_LOGIN
                 , ip));
 
-        session.setAttribute("userid", userid);
+        session.setAttribute("userid", username);
         session.setAttribute("login_status", true);
 
-        user.setLasttime(date.getTime24());
-        user.setIp(ip);
-        userTask.update(user);
+        userTask.update(user
+                , currentUser.getPassword()
+                , ip
+                , new CalendarController().toString());
 
         attributes.addFlashAttribute("message", defined.LOGIN_SUCCESS);
+        // 重定向 -> 视频主页(暂未开放)
         return "redirect:/chat";
     }
 
     /**
-     * 登出 - 操作 & 页面
+     * 登出 - 操作
      * @param session
      * @param attributes
      * @param defined
      * @return
      */
+    @ApiOperation(value = "用户登出操作")
     @RequestMapping(value = "/logout", method = {RequestMethod.GET, RequestMethod.POST})
     public String logout(HttpSession session
             , RedirectAttributes attributes
@@ -126,6 +135,7 @@ public class LoginController {
 
         attributes.addFlashAttribute("message"
                 , defined.LOGOUT_SUCCESS);
+        // 重定向 -> 登入 - 页面
         return "redirect:/user/login";
     }
 

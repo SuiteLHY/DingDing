@@ -1,17 +1,20 @@
 package github.com.suitelhy.webchat.web;
 
 import github.com.suitelhy.webchat.domain.entity.User;
+import github.com.suitelhy.webchat.domain.entity.security.SecurityUser;
+import github.com.suitelhy.webchat.infrastructure.application.dto.UserDto;
+import github.com.suitelhy.webchat.infrastructure.util.CalendarController;
 import github.com.suitelhy.webchat.infrastructure.web.util.*;
 import github.com.suitelhy.webchat.application.task.LogTask;
 import github.com.suitelhy.webchat.application.task.UserTask;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.annotation.Resource;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,23 +25,24 @@ import java.io.IOException;
 /**
  * 用户信息 - web 交互
  */
-/*@Controller*/
+@Controller
 /*@RestController*/
 // @SessionAttributes: Spring Framework Annotation, API Doc
 //-> -> <a href="https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/bind/annotation/SessionAttributes.html">
 //->        SessionAttributes（Spring Framework 5.2.2.RELEASE API）</a>
 /*@SessionAttributes("userid")*/
+// 声明 Spring Security 作用域
 public class UserController {
 
+    /*// 当前会话对应的用户 Entity
     @Autowired(required = false)
-    // 当前会话对应的用户 Entity
-    private User user;
+    private User user;*/
 
-    @Resource
+    @Autowired
     // 用户业务 Task
     private UserTask userTask;
 
-    @Resource
+    @Autowired
     // 日志记录业务 Task
     private LogTask logTask;
     
@@ -65,10 +69,13 @@ public class UserController {
      */
     @GetMapping(value = "/{userid}")
     public ModelAndView selectUserByUserid(@PathVariable("userid") String userid
-            , @ModelAttribute("userid") String sessionid){
+            , @ModelAttribute("userid") String sessionid
+            , @AuthenticationPrincipal SecurityUser currentUser){
         ModelAndView view = new ModelAndView("information");
-        user = userTask.selectUserByUserid(userid);
-        view.addObject("user", user);
+        /*user = userTask.selectUserByUserid(userid);
+        view.addObject("user", user);*/
+        view.addObject("user"
+                , userTask.selectUserByUsername(currentUser.getUsername()));
         return view;
     }
 
@@ -80,10 +87,13 @@ public class UserController {
      */
     @RequestMapping(value = "/{userid}/config")
     public ModelAndView setting(@PathVariable("userid") String userid
-            , @ModelAttribute("userid") String sessionid) {
+            , @ModelAttribute("userid") String sessionid
+            , @AuthenticationPrincipal SecurityUser currentUser) {
         ModelAndView view = new ModelAndView("info-setting");
-        user = userTask.selectUserByUserid(userid);
-        view.addObject("user", user);
+        /*user = userTask.selectUserByUserid(userid);
+        view.addObject("user", user);*/
+        view.addObject("user"
+                , userTask.selectUserByUsername(currentUser.getUsername()));
         return view;
     }
 
@@ -94,19 +104,24 @@ public class UserController {
      * @param user
      * @return
      */
+
     @PostMapping(value = "/{userid}/update")
     public String update(@PathVariable("userid") String userid
             , @ModelAttribute("userid") String sessionid
-            , User user
+            , @AuthenticationPrincipal SecurityUser currentUser
+            , UserDto user
             , RedirectAttributes attributes
             , NetUtil netUtil
             , LogUtil logUtil
-            , CommonDate date
             , WordDefined defined
             , HttpServletRequest request) {
-        boolean flag = userTask.update(user);
+        boolean flag = userTask.update(user
+                , currentUser.getPassword()
+                , NetUtil.getIpAddress(request)
+                , new CalendarController().toString());
         if (flag) {
-            logTask.insert(logUtil.setLog(userid, date.getTime24()
+            logTask.insert(logUtil.setLog(userid
+                    , new CalendarController().toString()
                     , defined.LOG_TYPE_UPDATE
                     , defined.LOG_DETAIL_UPDATE_PROFILE
                     , netUtil.getIpAddress(request)));
@@ -129,22 +144,26 @@ public class UserController {
      */
     @RequestMapping(value = "/{userid}/pass", method = RequestMethod.POST)
     public String changePassword(@PathVariable("userid") String userid
+            , @AuthenticationPrincipal SecurityUser currentUser
             , String oldPassword
             , String newPassword
             , RedirectAttributes attributes
             , NetUtil netUtil
             , LogUtil logUtil
-            , CommonDate date
             , WordDefined defined
             , HttpServletRequest request) {
-        user = userTask.selectUserByUserid(userid);
+        /*user = userTask.selectUserByUserid(userid);*/
         if (null != oldPassword
-                && oldPassword.equals(user.getPassword())) {
-            //--- 密码验证通过
-            user.setPassword(newPassword);
-            boolean flag = userTask.update(user);
+                && oldPassword.equals(currentUser.getPassword())) {
+            //--- 新旧密码一致
+            /*user.setPassword(newPassword);*/
+            boolean flag = userTask.update(UserDto.Factory.USER_DTO.create(currentUser)
+                    , currentUser.getPassword()
+                    , NetUtil.getIpAddress(request)
+                    , new CalendarController().toString());
             if (flag) {
-                logTask.insert(logUtil.setLog(userid, date.getTime24()
+                logTask.insert(logUtil.setLog(userid
+                        , new CalendarController().toString()
                         , defined.LOG_TYPE_UPDATE
                         , defined.LOG_DETAIL_UPDATE_PASSWORD
                         , netUtil.getIpAddress(request))
@@ -172,20 +191,28 @@ public class UserController {
      */
     @RequestMapping(value = "/{userid}/upload")
     public String upload(@PathVariable("userid") String userid
+            , @AuthenticationPrincipal SecurityUser currentUser
             , MultipartFile file
             , HttpServletRequest request
             , UploadUtil uploadUtil
-            , RedirectAttributes attributes, NetUtil netUtil, LogUtil logUtil, CommonDate date, WordDefined defined) {
+            , RedirectAttributes attributes
+            , NetUtil netUtil
+            , LogUtil logUtil
+            , WordDefined defined) {
         try{
             String fileUrl = uploadUtil.upload(request
                     , "upload"
                     , userid);
-            user = userTask.selectUserByUserid(userid);
-            user.setProfilehead(fileUrl);
-            boolean flag = userTask.update(user);
+            /*user = userTask.selectUserByUserid(userid);*/
+            UserDto userDto = UserDto.Factory.USER_DTO.create(currentUser);
+            userDto.setProfilehead(fileUrl);
+            boolean flag = userTask.update(userDto
+                    , currentUser.getPassword()
+                    , NetUtil.getIpAddress(request)
+                    , new CalendarController().toString());
             if (flag) {
                 logTask.insert(logUtil.setLog(userid
-                        , date.getTime24()
+                        , new CalendarController().toString()
                         , defined.LOG_TYPE_UPDATE
                         , defined.LOG_DETAIL_UPDATE_PROFILEHEAD
                         , netUtil.getIpAddress(request)));
@@ -206,13 +233,15 @@ public class UserController {
      */
     @RequestMapping(value = "/{userid}/head")
     public void head(@PathVariable("userid") String userid
+            , @AuthenticationPrincipal SecurityUser currentUser
             , HttpServletRequest request
             , HttpServletResponse response) {
-        user = userTask.selectUserByUserid(userid);
+        /*user = userTask.selectUserByUserid(userid);*/
+        final UserDto userDto = UserDto.Factory.USER_DTO.create(currentUser);
         ServletOutputStream outputStream = null;
         FileInputStream inputStream = null;
         try {
-            String path = user.getProfilehead();
+            String path = userDto.getProfilehead();
             String rootPath = request.getSession().getServletContext().getRealPath("/");
             String picturePath = rootPath + path;
             response.setContentType("image/jpeg; charset=UTF-8");

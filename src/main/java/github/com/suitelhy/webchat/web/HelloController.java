@@ -2,9 +2,12 @@ package github.com.suitelhy.webchat.web;
 
 import github.com.suitelhy.webchat.application.task.UserTask;
 import github.com.suitelhy.webchat.domain.entity.User;
+import github.com.suitelhy.webchat.domain.entity.security.SecurityUser;
+import github.com.suitelhy.webchat.infrastructure.application.dto.UserDto;
 import github.com.suitelhy.webchat.infrastructure.domain.policy.DBPolicy;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -45,14 +48,16 @@ public class HelloController {
             , value = "用户id")
     @RequestMapping(value = "/select"
             , method = {RequestMethod.GET, RequestMethod.POST})
-    public String select(@RequestParam("id") String userId) {
+    public String select(@AuthenticationPrincipal SecurityUser currentUser
+            , @RequestParam("id") String userId) {
         //=== 拦截器 ===//
         if (!DBPolicy.MYSQL.validateUuid(userId)) {
             return "{}";
         }
         //======//
-        User result = userTask.selectUserByUserid(userId);
-        return null != result ? result.toString() : "{}";
+        /*User result = userTask.selectUserByUserid(userId);*/
+        UserDto result = UserDto.Factory.USER_DTO.create(currentUser);
+        return result.toString();
     }
 
 }
