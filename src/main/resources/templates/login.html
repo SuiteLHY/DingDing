@@ -14,13 +14,13 @@
 <body>
     <h1>WebChat</h1>
 
-    <div th:if="${param.error}">
-        Invalid username and password.
-    </div>
+    <th:block th:if="${param.error}">
+        <p style="color: firebrick;">Invalid username and password.</p>
+    </th:block>
 
-    <div th:if="${param.logout}">
-        You have been logged out.
-    </div>
+    <th:block th:if="${param.logout}">
+        <p style="color: lawngreen;">You have been logged out.</p>
+    </th:block>
 
     <div class="login-form">
         <div class="close"></div>
@@ -68,29 +68,31 @@
         </form>
     </div>
 
-    <!-- @Reference <a href="https://www.jianshu.com/p/ee177796702e">Spring Boot系列(四)：thymeleaf使用详解 - 简书</a> -->
-    <!--<script th:if="${not empty param.timeout}">
+    <!--/* @Reference <a href="https://www.jianshu.com/p/ee177796702e">Spring Boot系列(四)：thymeleaf使用详解 - 简书</a> */-->
+    <!--/* <script th:if="${not empty param.timeout}">
         $(function() {
             layer.msg('连接超时,请重新登陆!', {
                 offset: 0,
                 shift: 6
             });
         });
-    </script>-->
+    </script> */-->
 
-    <script>
+    <!--/* 使用JS内联 */-->
+    <!--/* -> @Reference <a href="https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html#inlining">12.3 JavaScript内联</a> */-->
+    <script th:inline="javascript">
         $(function() {
-            /*<c:if test="${not empty param.timeout}">
+            if (!isNull([[${param.timeout}]])) {
                 layer.msg('连接超时,请重新登陆!', {
-                  offset: 0,
-                  shift: 6
+                    offset: 0,
+                    shift: 6
                 });
-            </c:if>*/
-            if ("${error}") {
-                $('#submit').attr('value', "${error}").css('background', 'red');
             }
-            if ("${message}") {
-                layer.msg('${message}', {
+            if ([[${error}]]) {
+                $('#submit').attr('value', [[${error}]]).css('background', 'red');
+            }
+            if ([[${message}]]) {
+                layer.msg([[${message}]], {
                     offset: 0,
                 });
             }
@@ -99,7 +101,7 @@
                     $('.login-form').remove();
                 });
             });
-            $('#username,#password').change(function() {
+            $('#username, #password').change(function() {
                 $('#submit').attr('value', 'Login').css('background', '#3ea751');
             });
         });
@@ -123,12 +125,12 @@
                 $('#submit').attr('value', '请输入密码!!!').css('background', 'red');
                 return false;
             }
-            $('#submit').attr('value', 'Logining~');
+            $('#submit').attr('value', 'Logging~');
             return true;
         }
 
         /**
-         * check the param if it's null or '' or undefined
+         * 判空函数
          * @param input
          * @returns {boolean}
          */
