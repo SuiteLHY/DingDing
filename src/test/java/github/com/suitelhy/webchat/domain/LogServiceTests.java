@@ -2,10 +2,11 @@ package github.com.suitelhy.webchat.domain;
 
 import github.com.suitelhy.webchat.domain.entity.Log;
 import github.com.suitelhy.webchat.domain.entity.User;
+import github.com.suitelhy.webchat.domain.entity.security.SecurityUser;
 import github.com.suitelhy.webchat.domain.service.LogService;
 import github.com.suitelhy.webchat.domain.service.UserService;
-import github.com.suitelhy.webchat.domain.vo.HandleTypeVo;
-import github.com.suitelhy.webchat.domain.vo.HumanVo;
+import github.com.suitelhy.webchat.infrastructure.domain.vo.HandleTypeVo;
+import github.com.suitelhy.webchat.infrastructure.domain.vo.HumanVo;
 import github.com.suitelhy.webchat.infrastructure.util.CalendarController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @SpringBootTest
@@ -24,6 +26,25 @@ public class LogServiceTests {
 
     @Autowired
     private UserService userService;
+
+    @NotNull
+    private User getUserForTest() {
+        return User.Factory.USER.create(20
+                , new CalendarController().toString()
+                , ip()
+                , new CalendarController().toString()
+                , "测试用户"
+                , "test123"
+                , "测试数据"
+                , null
+                , ("测试" + new CalendarController().toString().replaceAll("[-:\\s]", ""))
+                , HumanVo.Sex.MALE);
+    }
+
+    @NotNull
+    private String ip() {
+        return "127.0.0.0";
+    }
 
     @Test
     public void contextLoads() {
@@ -56,17 +77,8 @@ public class LogServiceTests {
     @Transactional
     public void selectCountByUserid() {
         //===== userService =====//
-        User newUser = User.Factory.USER.create(20
-                , new CalendarController().toString()
-                , "127.0.0.1"
-                , new CalendarController().toString()
-                , "测试"
-                , "a12345678"
-                , "测试数据"
-                , null
-                , ("测试" + new CalendarController())
-                , HumanVo.Sex.MALE);
-        Assert.isTrue(newUser.isLegal()
+        User newUser = getUserForTest();
+        Assert.isTrue(newUser.isEntityLegal()
                 , "User.Factory.USER.create(..) -> 无效的 User");
         Assert.isTrue(userService.insert(newUser)
                 , "===== insert(User) -> unexpected");
@@ -82,7 +94,7 @@ public class LogServiceTests {
                 , HandleTypeVo.Log.USER_REGISTRATION
                 , newUser.getUserid()
         );
-        Assert.isTrue(newLog.isLegal()
+        Assert.isTrue(newLog.isEntityLegal()
                 , "Log.Factory.USER_LOG.create(..) -> 无效的 Log");
         Assert.isTrue(logService.insert(newLog)
                 , "===== insert(Log log) -> unexpected");
@@ -102,17 +114,8 @@ public class LogServiceTests {
     @Transactional
     public void selectLogByUserid() {
         //===== userService =====//
-        User newUser = User.Factory.USER.create(20
-                , new CalendarController().toString()
-                , "127.0.0.1"
-                , new CalendarController().toString()
-                , "测试"
-                , "a12345678"
-                , "测试数据"
-                , null
-                , ("测试" + new CalendarController())
-                , HumanVo.Sex.MALE);
-        Assert.isTrue(newUser.isLegal()
+        User newUser = getUserForTest();
+        Assert.isTrue(newUser.isEntityLegal()
                 , "User.Factory.USER.create(..) -> 无效的 User");
         Assert.isTrue(userService.insert(newUser)
                 , "===== insert(User) -> unexpected");
@@ -128,7 +131,7 @@ public class LogServiceTests {
                 , HandleTypeVo.Log.USER_REGISTRATION
                 , newUser.getUserid()
         );
-        Assert.isTrue(newLog.isLegal()
+        Assert.isTrue(newLog.isEntityLegal()
                 , "Log.Factory.USER_LOG.create(..) -> 无效的 Log");
         Assert.isTrue(logService.insert(newLog)
                 , "===== insert(Log log) -> unexpected");
@@ -149,17 +152,8 @@ public class LogServiceTests {
     @Transactional
     public void insert() {
         //===== userService =====//
-        User newUser = User.Factory.USER.create(20
-                , new CalendarController().toString()
-                , "127.0.0.1"
-                , new CalendarController().toString()
-                , "测试"
-                , "a12345678"
-                , "测试数据"
-                , null
-                , ("测试" + new CalendarController())
-                , HumanVo.Sex.MALE);
-        Assert.isTrue(newUser.isLegal()
+        User newUser = getUserForTest();
+        Assert.isTrue(newUser.isEntityLegal()
                 , "User.Factory.USER.create(..) -> 无效的 User");
         Assert.isTrue(userService.insert(newUser)
                 , "===== insert(User) -> unexpected");
@@ -174,7 +168,7 @@ public class LogServiceTests {
                 , HandleTypeVo.Log.USER_REGISTRATION
                 , newUser.getUserid()
         );
-        Assert.isTrue(newLog.isLegal()
+        Assert.isTrue(newLog.isEntityLegal()
                 , "Log.Factory.USER_LOG.create(..) -> 无效的 Log");
         Assert.isTrue(logService.insert(newLog)
                 , "===== insert(Log log) -> unexpected");
@@ -187,17 +181,8 @@ public class LogServiceTests {
     @Transactional
     public void deleteById() {
         //===== userService =====//
-        User newUser = User.Factory.USER.create(20
-                , new CalendarController().toString()
-                , "127.0.0.1"
-                , new CalendarController().toString()
-                , "测试"
-                , "a12345678"
-                , "测试数据"
-                , null
-                , ("测试" + new CalendarController())
-                , HumanVo.Sex.MALE);
-        Assert.isTrue(newUser.isLegal()
+        User newUser = getUserForTest();
+        Assert.isTrue(newUser.isEntityLegal()
                 , "User.Factory.USER.create(..) -> 无效的 User");
         Assert.isTrue(userService.insert(newUser)
                 , "===== insert(User) -> unexpected");
@@ -214,7 +199,7 @@ public class LogServiceTests {
                 , HandleTypeVo.Log.USER_REGISTRATION
                 , newUser.getUserid()
         );
-        Assert.isTrue(newLog.isLegal()
+        Assert.isTrue(newLog.isEntityLegal()
                 , "Log.Factory.USER_LOG.create(..) -> 无效的 Log");
         Assert.isTrue(logService.insert(newLog)
                 , "===== saveAndFlush(Log) -> unexpected");
