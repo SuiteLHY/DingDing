@@ -1,5 +1,6 @@
-# webchat
-#### 提高&构思落地使用; 参考项目地址: [【Github.com】mafulong/webchat-SSM-version2](https://github.com/mafulong/webchat-SSM-version2.git)
+# DingDing
+#### 提高&构思落地使用.
+##### 初始(已过时)版本参考: [【Github.com】mafulong/webchat-SSM-version2](https://github.com/mafulong/webchat-SSM-version2.git)
 ---
 ### DDD (Domain-driven design)
 - 参考经典：
