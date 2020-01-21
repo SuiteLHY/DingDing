@@ -1,8 +1,8 @@
-package github.com.suitelhy.webchat.domain.repository;
+package github.com.suitelhy.dingding.domain.repository;
 
-import github.com.suitelhy.webchat.domain.entity.User;
+import github.com.suitelhy.dingding.domain.entity.User;
 
-import github.com.suitelhy.webchat.infrastructure.domain.vo.AccountVo;
+import github.com.suitelhy.dingding.infrastructure.domain.vo.AccountVo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;

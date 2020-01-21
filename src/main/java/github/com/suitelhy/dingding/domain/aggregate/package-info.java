@@ -27,4 +27,4 @@
  *-> (3) 消除不必要的关联.
  *
  */
-package github.com.suitelhy.webchat.domain.aggregate;
+package github.com.suitelhy.dingding.domain.aggregate;

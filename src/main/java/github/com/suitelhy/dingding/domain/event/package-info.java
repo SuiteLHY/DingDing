@@ -5,4 +5,4 @@
  * event 操作的基本单元: 聚合 (Aggregate).
  *
  */
-package github.com.suitelhy.webchat.domain.event;
+package github.com.suitelhy.dingding.domain.event;

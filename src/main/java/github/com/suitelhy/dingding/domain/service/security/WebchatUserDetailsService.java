@@ -1,8 +1,8 @@
-package github.com.suitelhy.webchat.domain.service.security;
+package github.com.suitelhy.dingding.domain.service.security;
 
-import github.com.suitelhy.webchat.domain.entity.User;
-import github.com.suitelhy.webchat.domain.entity.security.SecurityUser;
-import github.com.suitelhy.webchat.domain.service.UserService;
+import github.com.suitelhy.dingding.domain.service.UserService;
+import github.com.suitelhy.dingding.domain.entity.User;
+import github.com.suitelhy.dingding.domain.entity.security.SecurityUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

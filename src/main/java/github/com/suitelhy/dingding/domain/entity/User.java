@@ -1,20 +1,21 @@
-package github.com.suitelhy.webchat.domain.entity;
+package github.com.suitelhy.dingding.domain.entity;
 
-import github.com.suitelhy.webchat.infrastructure.domain.vo.AccountVo;
-import github.com.suitelhy.webchat.infrastructure.domain.vo.HumanVo;
-import github.com.suitelhy.webchat.infrastructure.domain.model.AbstractEntityModel;
-import github.com.suitelhy.webchat.infrastructure.domain.model.EntityFactory;
-import github.com.suitelhy.webchat.infrastructure.domain.model.EntityModel;
-import github.com.suitelhy.webchat.infrastructure.domain.model.EntityValidator;
-import github.com.suitelhy.webchat.infrastructure.domain.util.EntityUtil;
-import github.com.suitelhy.webchat.infrastructure.domain.util.VoUtil;
-import github.com.suitelhy.webchat.infrastructure.util.CalendarController;
-import github.com.suitelhy.webchat.infrastructure.web.util.NetUtil;
+import github.com.suitelhy.dingding.infrastructure.util.CalendarController;
+import github.com.suitelhy.dingding.infrastructure.web.util.NetUtil;
+import github.com.suitelhy.dingding.infrastructure.domain.vo.AccountVo;
+import github.com.suitelhy.dingding.infrastructure.domain.vo.HumanVo;
+import github.com.suitelhy.dingding.infrastructure.domain.model.AbstractEntityModel;
+import github.com.suitelhy.dingding.infrastructure.domain.model.EntityFactory;
+import github.com.suitelhy.dingding.infrastructure.domain.model.EntityModel;
+import github.com.suitelhy.dingding.infrastructure.domain.model.EntityValidator;
+import github.com.suitelhy.dingding.infrastructure.domain.util.EntityUtil;
+import github.com.suitelhy.dingding.infrastructure.domain.util.VoUtil;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 /**
  * 用户信息
@@ -31,7 +32,8 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table
-public class User extends AbstractEntityModel<String> {
+public class User
+        extends AbstractEntityModel<String> {
 
     private static final long serialVersionUID = 1L;
 
@@ -41,13 +43,34 @@ public class User extends AbstractEntityModel<String> {
     @Id
     private /*final */String userid;
 
+    // 用户名称
+    @Column(nullable = false, unique = true)
+    private String username;
+
+    // 用户 - 昵称
+    @Column(nullable = false, unique = true)
+    private String nickname;
+
     // 用户 - 年龄
     @Column
     private Integer age;
 
+    // 数据更新时间 (由数据库管理)
+    @Column(name = "data_time")
+    @Transient
+    private LocalDateTime dataTime;
+
+    // 用户 - 头像
+    @Column(name = "face_image")
+    private String faceImage;
+
     // 注册时间
     @Column(nullable = false)
     private String firsttime;
+
+    // 用户 - 简介
+    @Column
+    private String introduction;
 
     // 最后登陆IP
     @Column(nullable = false)
@@ -57,21 +80,9 @@ public class User extends AbstractEntityModel<String> {
     @Column(nullable = false)
     private String lasttime;
 
-    // 用户 - 昵称
-    @Column(nullable = false, unique = true)
-    private String nickname;
-
     // 用户密码
     @Column(nullable = false)
     private String password;
-
-    // 用户 - 简介
-    @Column
-    private String profile;
-
-    // 用户 - 头像
-    @Column
-    private String profilehead;
 
     // 用户 - 性别
     @Column
@@ -83,18 +94,13 @@ public class User extends AbstractEntityModel<String> {
     @Convert(converter = AccountVo.Status.Converter.class)
     private AccountVo.Status status;
 
-    // 用户名称
-    @Column(nullable = false, unique = true)
-    private String username;
-
     //===== Entity Model =====//
-    @NotNull
     @Override
-    public String id() {
+    public @NotNull String id() {
         return this.getUserid();
     }
 
-    @Override
+    /*@Override
     public boolean equals(Object obj) {
         return EntityModel.equals(this, obj);
     }
@@ -102,26 +108,26 @@ public class User extends AbstractEntityModel<String> {
     @Override
     public int hashCode() {
         return EntityModel.hashCode(this);
-    }
+    }*/
 
-    /**
-     * 是否无效: id() 为空 || 不符合业务要求 || 未持久化
-     *
-     * @Description <tt>id() -> nonNull || !isLegal() || isPersistence() -> not false</tt>
-     * @return
-     */
-    @Override
-    public boolean isEmpty() {
-        return (null == id() || "".equals(id().trim())) // Entity - ID
-                || !isEntityLegal()
-                || (null != isEntityPersistence() && !isEntityPersistence());
-    }
+//    /**
+//     * 是否无效: id() 为空 || 不符合业务要求 || 未持久化
+//     *
+//     * @Description <tt>id() -> nonNull || !isLegal() || isPersistence() -> not false</tt>
+//     * @return
+//     */
+//    @Override
+//    public boolean isEmpty() {
+//        return (null == id() || "".equals(id().trim())) // Entity - ID
+//                || !isEntityLegal()
+//                || (null != isEntityPersistence() && !isEntityPersistence());
+//    }
 
     /**
      * 是否符合业务要求
      *
-     * @return
      * @Description 需要实现类实现该抽象方法
+     * @return
      */
     @Override
     public boolean isEntityLegal() {
@@ -135,12 +141,24 @@ public class User extends AbstractEntityModel<String> {
                         && AccountVo.Status.NORMAL.equals(this.status))/* 账号状态 */;
     }
 
+//    @Override
+//    public String toString() {
+//        return EntityModel.toString(this);
+//    }
+
+    /**
+     * 校验 Entity - ID
+     *
+     * @Description <abstractClass>AbstractEntityModel</abstractClass>提供的模板设计.
+     * @param id <method>id()</method>
+     * @return
+     */
     @Override
-    public String toString() {
-        return EntityModel.toString(this);
+    protected boolean validateId(@NotNull String id) {
+        return Validator.USER.id(id);
     }
 
-    //===== entity validator =====//
+    //===== Entity Validator =====//
     /**
      * 用户 - 属性校验器
      * @Description 各个属性的基础校验(注意: ≠完全校验).
@@ -163,6 +181,14 @@ public class User extends AbstractEntityModel<String> {
             return EntityUtil.Regex.validateId(userid);
         }
 
+        public boolean username(@NotNull String username) {
+            return EntityUtil.Regex.validateUsername(username);
+        }
+
+        public boolean nickname(@NotNull String nickname) {
+            return null != nickname && !"".equals(nickname.trim());
+        }
+
         public boolean age(@Nullable Integer age) {
             return null == age || age > 0;
         }
@@ -179,26 +205,18 @@ public class User extends AbstractEntityModel<String> {
             return null != lasttime && CalendarController.isParse(lasttime);
         }
 
-        public boolean nickname(@NotNull String nickname) {
-            return null != nickname && !"".equals(nickname.trim());
-        }
-
         public boolean password(@NotNull String password) {
             return EntityUtil.Regex.validateUserPassword(password);
         }
 
-        public boolean profile(String profile) {
+        public boolean introduction(String introduction) {
             //--- 暂无业务设计约束
             return true;
         }
 
-        public boolean profilehead(String profilehead) {
+        public boolean faceImage(String faceImage) {
             //--- 暂无业务设计约束
             return true;
-        }
-
-        public boolean username(@NotNull String username) {
-            return EntityUtil.Regex.validateUsername(username);
         }
 
         public boolean sex(HumanVo.Sex sex) {
@@ -273,8 +291,8 @@ public class User extends AbstractEntityModel<String> {
      * @param lasttime      最后登录时间
      * @param nickname      用户 - 昵称
      * @param password      用户密码
-     * @param profile       用户 - 简介
-     * @param profilehead   用户 - 头像
+     * @param introduction       用户 - 简介
+     * @param faceImage   用户 - 头像
      * @param username      用户名称
      * @param sex           用户 - 性别
      * @throws IllegalArgumentException
@@ -286,8 +304,8 @@ public class User extends AbstractEntityModel<String> {
             , @NotNull String lasttime
             , @NotNull String nickname
             , @NotNull String password
-            , @Nullable String profile
-            , @Nullable String profilehead
+            , @Nullable String introduction
+            , @Nullable String faceImage
             , @NotNull String username
             , @Nullable HumanVo.Sex sex) {
         if (null == id) {
@@ -299,6 +317,11 @@ public class User extends AbstractEntityModel<String> {
                 throw new IllegalArgumentException(this.getClass().getSimpleName()
                         + " -> 非法输入: 用户ID");
             }
+        }
+        if (!Validator.USER.username(username)) {
+            //-- 非法输入: 用户名称
+            throw new IllegalArgumentException(this.getClass().getSimpleName()
+                    + " -> 非法输入: 用户名称");
         }
         if (!Validator.USER.age(age)) {
             //-- 非法输入: 用户 - 年龄
@@ -330,13 +353,12 @@ public class User extends AbstractEntityModel<String> {
             throw new IllegalArgumentException(this.getClass().getSimpleName()
                     + " -> 非法输入: 用户密码");
         }
-        if (!Validator.USER.username(username)) {
-            //-- 非法输入: 用户名称
-            throw new IllegalArgumentException(this.getClass().getSimpleName()
-                    + " -> 非法输入: 用户名称");
-        }
         // 用户ID
         this.setUserid(id);
+        // 用户名称
+        this.setUsername(username);
+        // 用户 - 昵称
+        this.setNickname(nickname);
         // 用户 - 年龄
         this.setAge(age);
         // 注册时间
@@ -345,16 +367,12 @@ public class User extends AbstractEntityModel<String> {
         this.setIp(ip);
         // 最后登录时间
         this.setLasttime(lasttime);
-        // 用户 - 昵称
-        this.setNickname(nickname);
         // 用户密码
         this.setPassword(password);
         // 用户 - 简介
-        this.setProfile(profile);
+        this.setIntroduction(introduction);
         // 用户 - 头像
-        this.setProfilehead(profilehead);
-        // 用户名称
-        this.setUsername(username);
+        this.setFaceImage(faceImage);
         // 用户 - 性别
         this.setSex(sex);
         // 账号状态
@@ -373,8 +391,8 @@ public class User extends AbstractEntityModel<String> {
          * @param lasttime      最后登录时间
          * @param nickname      用户 - 昵称
          * @param password      用户密码
-         * @param profile       用户 - 简介
-         * @param profilehead   用户 - 头像
+         * @param introduction       用户 - 简介
+         * @param faceImage   用户 - 头像
          * @param username      用户名称
          * @param sex           用户 - 性别
          * @throws IllegalArgumentException
@@ -385,13 +403,13 @@ public class User extends AbstractEntityModel<String> {
                 , @NotNull String lasttime
                 , @NotNull String nickname
                 , @NotNull String password
-                , @Nullable String profile
-                , @Nullable String profilehead
+                , @Nullable String introduction
+                , @Nullable String faceImage
                 , @NotNull String username
                 , @Nullable HumanVo.Sex sex) {
             return new User(null, age, firsttime
                     , ip, lasttime, nickname
-                    , password, profile, profilehead
+                    , password, introduction, faceImage
                     , username, sex);
         }
 
@@ -405,8 +423,8 @@ public class User extends AbstractEntityModel<String> {
          * @param lasttime      最后登录时间
          * @param nickname      用户 - 昵称
          * @param password      用户 - 密码
-         * @param profile       用户 - 简介
-         * @param profilehead   用户 - 头像
+         * @param introduction       用户 - 简介
+         * @param faceImage   用户 - 头像
          * @param sex           用户 - 性别
          * @throws IllegalArgumentException 此时 <param>id</param> 非法
          * @return 可为 null, 此时输入参数非法
@@ -418,8 +436,8 @@ public class User extends AbstractEntityModel<String> {
                 , @NotNull String lasttime
                 , @NotNull String nickname
                 , @NotNull String password
-                , @Nullable String profile
-                , @Nullable String profilehead
+                , @Nullable String introduction
+                , @Nullable String faceImage
                 , @NotNull String username
                 , @Nullable HumanVo.Sex sex) {
             if (!Validator.USER.id(id)) {
@@ -427,7 +445,7 @@ public class User extends AbstractEntityModel<String> {
             }
             return new User(id, age, firsttime
                     , ip, lasttime, nickname
-                    , password, profile, profilehead
+                    , password, introduction, faceImage
                     , username, sex);
         }
 
@@ -550,25 +568,25 @@ public class User extends AbstractEntityModel<String> {
         return false;
     }
 
-    public String getProfile() {
-        return profile;
+    public String getIntroduction() {
+        return introduction;
     }
 
-    public boolean setProfile(String profile) {
-        if (Validator.USER.profile(profile)) {
-            this.profile = profile;
+    public boolean setIntroduction(String introduction) {
+        if (Validator.USER.introduction(introduction)) {
+            this.introduction = introduction;
             return true;
         }
         return false;
     }
 
-    public String getProfilehead() {
-        return profilehead;
+    public String getFaceImage() {
+        return faceImage;
     }
 
-    public boolean setProfilehead(String profilehead) {
-        if (Validator.USER.profilehead(profilehead)) {
-            this.profilehead = profilehead;
+    public boolean setFaceImage(String faceImage) {
+        if (Validator.USER.faceImage(faceImage)) {
+            this.faceImage = faceImage;
             return true;
         }
         return false;

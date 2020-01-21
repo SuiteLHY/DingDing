@@ -9,4 +9,4 @@
  *-> 对于软件业务的实现是否有必要. 而不是依赖于其所抽象的现实事物的特征.
  *
  */
-package github.com.suitelhy.webchat.domain.entity;
+package github.com.suitelhy.dingding.domain.entity;

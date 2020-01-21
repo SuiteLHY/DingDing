@@ -16,4 +16,4 @@
  *
  */
 @org.springframework.lang.NonNullApi
-package github.com.suitelhy.webchat.domain.repository;
+package github.com.suitelhy.dingding.domain.repository;

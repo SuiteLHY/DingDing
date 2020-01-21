@@ -1,7 +1,7 @@
-package github.com.suitelhy.webchat.domain.entity.security;
+package github.com.suitelhy.dingding.domain.entity.security;
 
-import github.com.suitelhy.webchat.domain.entity.User;
-import github.com.suitelhy.webchat.infrastructure.domain.vo.AccountVo;
+import github.com.suitelhy.dingding.domain.entity.User;
+import github.com.suitelhy.dingding.infrastructure.domain.vo.AccountVo;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;

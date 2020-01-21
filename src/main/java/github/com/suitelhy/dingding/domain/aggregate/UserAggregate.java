@@ -1,4 +1,4 @@
-package github.com.suitelhy.webchat.domain.aggregate;
+package github.com.suitelhy.dingding.domain.aggregate;
 
 /**
  * 基于用户信息实体的聚合

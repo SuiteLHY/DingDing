@@ -4,4 +4,4 @@
  * 服务 (Service) 应该是无状态的.
  *
  */
-package github.com.suitelhy.webchat.domain.service;
+package github.com.suitelhy.dingding.domain.service;

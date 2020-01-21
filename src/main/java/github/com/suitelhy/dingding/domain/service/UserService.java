@@ -1,10 +1,9 @@
-package github.com.suitelhy.webchat.domain.service;
+package github.com.suitelhy.dingding.domain.service;
 
-import github.com.suitelhy.webchat.domain.entity.User;
+import github.com.suitelhy.dingding.domain.entity.User;
 import org.springframework.data.domain.Page;
 
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 /**
  * 用户 - 业务接口

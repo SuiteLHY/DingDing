@@ -1,6 +1,6 @@
-package github.com.suitelhy.webchat.domain.service;
+package github.com.suitelhy.dingding.domain.service;
 
-import github.com.suitelhy.webchat.domain.entity.Log;
+import github.com.suitelhy.dingding.domain.entity.Log;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

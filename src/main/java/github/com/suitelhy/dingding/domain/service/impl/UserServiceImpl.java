@@ -1,9 +1,9 @@
-package github.com.suitelhy.webchat.domain.service.impl;
+package github.com.suitelhy.dingding.domain.service.impl;
 
-import github.com.suitelhy.webchat.domain.entity.User;
-import github.com.suitelhy.webchat.domain.repository.UserRepository;
-import github.com.suitelhy.webchat.domain.service.UserService;
-import github.com.suitelhy.webchat.infrastructure.domain.vo.AccountVo;
+import github.com.suitelhy.dingding.domain.entity.User;
+import github.com.suitelhy.dingding.domain.repository.UserRepository;
+import github.com.suitelhy.dingding.domain.service.UserService;
+import github.com.suitelhy.dingding.infrastructure.domain.vo.AccountVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
