@@ -1,6 +1,6 @@
-package github.com.suitelhy.webchat.application.task;
+package github.com.suitelhy.dingding.application.task;
 
-import github.com.suitelhy.webchat.infrastructure.application.dto.UserDto;
+import github.com.suitelhy.dingding.infrastructure.application.dto.UserDto;
 
 import java.util.List;
 

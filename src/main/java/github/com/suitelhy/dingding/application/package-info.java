@@ -12,4 +12,4 @@
  * 任务 (Task) 及其调度的服务 (Service) 都应该是无状态的.
  *
  */
-package github.com.suitelhy.webchat.application;
+package github.com.suitelhy.dingding.application;

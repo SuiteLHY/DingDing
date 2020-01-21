@@ -1,9 +1,9 @@
-package github.com.suitelhy.webchat.application.task.impl;
+package github.com.suitelhy.dingding.application.task.impl;
 
-import github.com.suitelhy.webchat.domain.entity.Log;
-import github.com.suitelhy.webchat.application.task.LogTask;
-import github.com.suitelhy.webchat.domain.entity.User;
-import github.com.suitelhy.webchat.domain.service.LogService;
+import github.com.suitelhy.dingding.application.task.LogTask;
+import github.com.suitelhy.dingding.domain.entity.Log;
+import github.com.suitelhy.dingding.domain.entity.User;
+import github.com.suitelhy.dingding.domain.service.LogService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,6 @@
-package github.com.suitelhy.webchat.application.task;
+package github.com.suitelhy.dingding.application.task;
 
-import github.com.suitelhy.webchat.domain.entity.Log;
+import github.com.suitelhy.dingding.domain.entity.Log;
 
 import java.util.List;
 

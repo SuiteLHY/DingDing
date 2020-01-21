@@ -1,10 +1,10 @@
-package github.com.suitelhy.webchat.application.task.impl;
+package github.com.suitelhy.dingding.application.task.impl;
 
-import github.com.suitelhy.webchat.domain.entity.User;
-import github.com.suitelhy.webchat.application.task.UserTask;
-import github.com.suitelhy.webchat.domain.entity.security.SecurityUser;
-import github.com.suitelhy.webchat.domain.service.UserService;
-import github.com.suitelhy.webchat.infrastructure.application.dto.UserDto;
+import github.com.suitelhy.dingding.infrastructure.application.dto.UserDto;
+import github.com.suitelhy.dingding.domain.entity.User;
+import github.com.suitelhy.dingding.application.task.UserTask;
+import github.com.suitelhy.dingding.domain.entity.security.SecurityUser;
+import github.com.suitelhy.dingding.domain.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
