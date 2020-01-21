@@ -28,10 +28,11 @@ spring:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
-      ### 设计: 数据库结构不应该被框架操作
+      ### @Description 设计: 数据库结构不应该被框架操作
       ddl-auto: none
+      ### @Tips 策略配置参照相应接口实现类的 API Docs (<class>SpringImplicitNamingStrategy</class>的实现有点坑)
       naming:
-        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
         physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
     properties:
       format_sql: true

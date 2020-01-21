@@ -7,7 +7,7 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/webchat?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/dingding?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
     username: User
     password: 123456
 #===== Use Redis in Spring =====#

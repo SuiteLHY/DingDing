@@ -20,13 +20,13 @@ logging:
     github.com.suitelhy.webchat.domain.repository.*: DEBUG
   ## @Reference <jar>org.springframework.boot.logging.LogFile</jar>
   file:
-    ### ↓ (建议使用) 将会在项目路径下的<relativePath>/output/log/webchat</relativePath>之下生成<file>webchat.log</file>.
-    name: ./output/log/webchat/webchat.log
+    ### ↓ (建议使用) 将会在项目路径下的<relativePath>/output/log/dingding</relativePath>之下生成<file>dingding.log</file>.
+    name: ./output/log/dingding/dingding.log
     ### ↓ (不建议使用) 这个配置会在指定路径下生成一个 <file>spring.log</file> 作为日志输出.
-#    path: ./output/log/webchat
+#    path: ./output/log/dingding
 
 # 项目个性化配置
-webchat:
+dingding:
   ## 数据源配置
   ##-> TIPS: 个性化配置不应该与 Spring 等开发框架共用同一个命名空间, 故迁移.
   datasource:
@@ -34,7 +34,7 @@ webchat:
     user:
       driver-class-name: com.mysql.cj.jdbc.Driver
       # Spring Boot 2.xx 将默认的JDBC连接池从Tomcat更改为更快更好的HikariCP, 导致<item>url</item>需要改为<item>jdbc-url</item>
-      jdbc-url: jdbc:mysql://localhost:3306/webchat?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false
+      jdbc-url: jdbc:mysql://localhost:3306/dingding?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false
       username: User
       password: 123456
     ### 测试用的数据源
