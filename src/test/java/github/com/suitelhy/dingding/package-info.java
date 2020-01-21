@@ -33,4 +33,4 @@
  *-> <a href="http://docs.swagger.io/swagger-core/v1.5.0/apidocs/io/swagger/annotations/package-summary.html">
  *->     io.swagger.annotations (swagger-annotations 1.5.0 API)</a>
  */
-package github.com.suitelhy.webchat;
+package github.com.suitelhy.dingding;

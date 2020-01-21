@@ -1,11 +1,9 @@
-package github.com.suitelhy.webchat.application;
+package github.com.suitelhy.dingding.application;
 
-import github.com.suitelhy.webchat.application.task.UserTask;
-import github.com.suitelhy.webchat.domain.entity.User;
-import github.com.suitelhy.webchat.domain.entity.security.SecurityUser;
-import github.com.suitelhy.webchat.infrastructure.application.dto.UserDto;
-import github.com.suitelhy.webchat.infrastructure.domain.vo.HumanVo;
-import github.com.suitelhy.webchat.infrastructure.util.CalendarController;
+import github.com.suitelhy.dingding.application.task.UserTask;
+import github.com.suitelhy.dingding.domain.entity.security.SecurityUser;
+import github.com.suitelhy.dingding.infrastructure.application.dto.UserDto;
+import github.com.suitelhy.dingding.infrastructure.util.CalendarController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -133,7 +131,7 @@ public class UserTaskTests {
                 , "insert - insert(User user) -> false");
         //=== update
         newUserDto.setAge("18");
-        newUserDto.setProfile("最新_" + newUserDto.getProfile());
+        newUserDto.setIntroduction("最新_" + newUserDto.getIntroduction());
         Assert.isTrue(userTask.update(newUserDto
                     , newUser.getPassword()
                     , ip()

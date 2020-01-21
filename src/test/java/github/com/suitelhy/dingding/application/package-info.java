@@ -9,4 +9,4 @@
  *->     javadoc-api/org/springframework/util/Assert</a>
  *
  */
-package github.com.suitelhy.webchat.application;
+package github.com.suitelhy.dingding.application;

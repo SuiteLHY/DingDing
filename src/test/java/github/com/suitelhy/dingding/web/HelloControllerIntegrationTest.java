@@ -1,4 +1,4 @@
-package github.com.suitelhy.webchat.web;
+package github.com.suitelhy.dingding.web;
 
 import lombok.var;
 import org.junit.jupiter.api.Test;

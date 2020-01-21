@@ -1,4 +1,4 @@
-package github.com.suitelhy.webchat.web;
+package github.com.suitelhy.dingding.web;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

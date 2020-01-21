@@ -1,14 +1,12 @@
-package github.com.suitelhy.webchat.application;
+package github.com.suitelhy.dingding.application;
 
-import github.com.suitelhy.webchat.application.task.LogTask;
-import github.com.suitelhy.webchat.application.task.UserTask;
-import github.com.suitelhy.webchat.domain.entity.Log;
-import github.com.suitelhy.webchat.domain.entity.User;
-import github.com.suitelhy.webchat.domain.entity.security.SecurityUser;
-import github.com.suitelhy.webchat.infrastructure.application.dto.UserDto;
-import github.com.suitelhy.webchat.infrastructure.domain.vo.HandleTypeVo;
-import github.com.suitelhy.webchat.infrastructure.domain.vo.HumanVo;
-import github.com.suitelhy.webchat.infrastructure.util.CalendarController;
+import github.com.suitelhy.dingding.application.task.LogTask;
+import github.com.suitelhy.dingding.application.task.UserTask;
+import github.com.suitelhy.dingding.domain.entity.Log;
+import github.com.suitelhy.dingding.domain.entity.security.SecurityUser;
+import github.com.suitelhy.dingding.infrastructure.application.dto.UserDto;
+import github.com.suitelhy.dingding.infrastructure.domain.vo.HandleTypeVo;
+import github.com.suitelhy.dingding.infrastructure.util.CalendarController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

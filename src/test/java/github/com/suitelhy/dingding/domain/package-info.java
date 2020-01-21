@@ -4,4 +4,4 @@
  *->     Spring Data JPA - Reference Documentation # 5.2. Persisting Entities</a>
  *
  */
-package github.com.suitelhy.webchat.domain;
+package github.com.suitelhy.dingding.domain;

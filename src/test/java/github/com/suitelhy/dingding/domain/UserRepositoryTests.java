@@ -1,10 +1,10 @@
-package github.com.suitelhy.webchat.domain;
+package github.com.suitelhy.dingding.domain;
 
-import github.com.suitelhy.webchat.domain.entity.User;
-import github.com.suitelhy.webchat.domain.repository.UserRepository;
-import github.com.suitelhy.webchat.infrastructure.domain.vo.AccountVo;
-import github.com.suitelhy.webchat.infrastructure.domain.vo.HumanVo;
-import github.com.suitelhy.webchat.infrastructure.util.CalendarController;
+import github.com.suitelhy.dingding.domain.entity.User;
+import github.com.suitelhy.dingding.domain.repository.UserRepository;
+import github.com.suitelhy.dingding.infrastructure.domain.vo.AccountVo;
+import github.com.suitelhy.dingding.infrastructure.domain.vo.HumanVo;
+import github.com.suitelhy.dingding.infrastructure.util.CalendarController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

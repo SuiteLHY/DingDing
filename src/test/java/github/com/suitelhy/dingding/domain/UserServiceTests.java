@@ -1,9 +1,9 @@
-package github.com.suitelhy.webchat.domain;
+package github.com.suitelhy.dingding.domain;
 
-import github.com.suitelhy.webchat.domain.entity.User;
-import github.com.suitelhy.webchat.domain.service.UserService;
-import github.com.suitelhy.webchat.infrastructure.domain.vo.HumanVo;
-import github.com.suitelhy.webchat.infrastructure.util.CalendarController;
+import github.com.suitelhy.dingding.domain.entity.User;
+import github.com.suitelhy.dingding.domain.service.UserService;
+import github.com.suitelhy.dingding.infrastructure.domain.vo.HumanVo;
+import github.com.suitelhy.dingding.infrastructure.util.CalendarController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -101,13 +101,13 @@ public class UserServiceTests {
         Assert.isTrue(!result.isEmpty()
                 , "===== insert - insert(User) -> 无效的 User");
         //=== update
-        System.out.println(result.getProfile());
-        result.setProfile("最新测试数据");
+        System.out.println(result.getIntroduction());
+        result.setIntroduction("最新测试数据");
         Assert.isTrue(userService.update(result)
                 , "===== update - update(User) -> false");
         Assert.isTrue(!result.isEmpty()
                 , "===== update - update(User) -> 无效的 User");
-        System.out.println(result.getProfile());
+        System.out.println(result.getIntroduction());
         System.out.println(result);
     }
 

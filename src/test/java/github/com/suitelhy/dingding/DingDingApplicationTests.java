@@ -1,10 +1,10 @@
-package github.com.suitelhy.webchat;
+package github.com.suitelhy.dingding;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class WebchatApplicationTests {
+class DingDingApplicationTests {
 
     @Test
     void contextLoads() {
