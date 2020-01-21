@@ -1,6 +1,6 @@
 # 叮叮
+
 #### 提高&构思落地使用.
-##### 初始(已过时)版本参考: [【Github.com】mafulong/webchat-SSM-version2](https://github.com/mafulong/webchat-SSM-version2.git)
 ---
 ### DDD (Domain-driven design)
 - 参考经典：
@@ -14,4 +14,8 @@
 - 参考资料:
   - [ *CS-Notes/代码可读性.md at master · CyC2018/CS-Notes* ](https://github.com/CyC2018/CS-Notes/blob/master/notes/%E4%BB%A3%E7%A0%81%E5%8F%AF%E8%AF%BB%E6%80%A7.md)
   - [ *CS-Notes/代码风格规范.md at master · CyC2018/CS-Notes* ](https://github.com/CyC2018/CS-Notes/blob/master/notes/%E4%BB%A3%E7%A0%81%E9%A3%8E%E6%A0%BC%E8%A7%84%E8%8C%83.md)
+---
+### 项目构建 - 补充说明
+Inspired by 
+  - @github/mafulong, link: [【github.com】mafulong/webchat-SSM-version2](https://github.com/mafulong/webchat-SSM-version2.git)
 ---
