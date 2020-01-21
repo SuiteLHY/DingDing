@@ -9,16 +9,17 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>github.com.SuiteLHY</groupId>
-    <artifactId>webchat</artifactId>
+    <artifactId>DingDing</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>webchat</name>
-    <description>Webchat, SpringBoot</description>
+    <name>DingDing</name>
+    <description>DingDing - Suite</description>
 
     <properties>
         <java.version>1.8</java.version>
     </properties>
 
     <dependencies>
+
         <!-- Web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -149,6 +150,14 @@
             <artifactId>annotations</artifactId>
             <version>3.0.1</version>
         </dependency>
+
+        <!-- Netty框架 -->
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>4.1.44.Final</version>
+        </dependency>
+
     </dependencies>
 
     <build>
