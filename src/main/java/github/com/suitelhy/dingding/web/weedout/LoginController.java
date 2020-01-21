@@ -1,14 +1,14 @@
-package github.com.suitelhy.webchat.web;
+package github.com.suitelhy.dingding.web.weedout;
 
-import github.com.suitelhy.webchat.application.task.LogTask;
-import github.com.suitelhy.webchat.application.task.UserTask;
-import github.com.suitelhy.webchat.domain.entity.security.SecurityUser;
-import github.com.suitelhy.webchat.infrastructure.application.dto.UserDto;
-import github.com.suitelhy.webchat.infrastructure.domain.vo.AccountVo;
-import github.com.suitelhy.webchat.infrastructure.util.CalendarController;
-import github.com.suitelhy.webchat.infrastructure.web.util.LogUtil;
-import github.com.suitelhy.webchat.infrastructure.web.util.NetUtil;
-import github.com.suitelhy.webchat.infrastructure.web.util.WordDefined;
+import github.com.suitelhy.dingding.application.task.LogTask;
+import github.com.suitelhy.dingding.application.task.UserTask;
+import github.com.suitelhy.dingding.domain.entity.security.SecurityUser;
+import github.com.suitelhy.dingding.infrastructure.application.dto.UserDto;
+import github.com.suitelhy.dingding.infrastructure.util.CalendarController;
+import github.com.suitelhy.dingding.infrastructure.web.util.LogUtil;
+import github.com.suitelhy.dingding.infrastructure.web.util.NetUtil;
+import github.com.suitelhy.dingding.infrastructure.web.util.WordDefined;
+import github.com.suitelhy.dingding.infrastructure.domain.vo.AccountVo;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

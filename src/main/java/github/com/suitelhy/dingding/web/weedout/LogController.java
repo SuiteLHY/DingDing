@@ -1,8 +1,8 @@
-package github.com.suitelhy.webchat.web;
+package github.com.suitelhy.dingding.web.weedout;
 
-import github.com.suitelhy.webchat.application.task.LogTask;
-import github.com.suitelhy.webchat.domain.entity.Log;
-import github.com.suitelhy.webchat.infrastructure.web.config.LogControllerConfig;
+import github.com.suitelhy.dingding.application.task.LogTask;
+import github.com.suitelhy.dingding.domain.entity.Log;
+import github.com.suitelhy.dingding.infrastructure.web.config.LogControllerConfig;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -1,10 +1,9 @@
-package github.com.suitelhy.webchat.web;
+package github.com.suitelhy.dingding.web.weedout;
 
-import github.com.suitelhy.webchat.application.task.UserTask;
-import github.com.suitelhy.webchat.domain.entity.User;
-import github.com.suitelhy.webchat.domain.entity.security.SecurityUser;
-import github.com.suitelhy.webchat.infrastructure.application.dto.UserDto;
-import github.com.suitelhy.webchat.infrastructure.domain.policy.DBPolicy;
+import github.com.suitelhy.dingding.application.task.UserTask;
+import github.com.suitelhy.dingding.domain.entity.security.SecurityUser;
+import github.com.suitelhy.dingding.infrastructure.application.dto.UserDto;
+import github.com.suitelhy.dingding.infrastructure.domain.policy.DBPolicy;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

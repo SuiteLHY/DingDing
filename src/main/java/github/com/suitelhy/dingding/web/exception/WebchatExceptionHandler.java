@@ -1,4 +1,4 @@
-package github.com.suitelhy.webchat.web.exception;
+package github.com.suitelhy.dingding.web.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

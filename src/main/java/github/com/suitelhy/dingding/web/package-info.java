@@ -9,4 +9,4 @@
  *-> 外部接口提供符合 REST 规范的响应数据.
  *
  */
-package github.com.suitelhy.webchat.web;
+package github.com.suitelhy.dingding.web;

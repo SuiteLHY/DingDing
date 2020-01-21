@@ -1,4 +1,4 @@
-package github.com.suitelhy.webchat.web.security;
+package github.com.suitelhy.dingding.web.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;

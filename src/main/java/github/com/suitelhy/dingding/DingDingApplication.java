@@ -1,15 +1,13 @@
-package github.com.suitelhy.webchat;
+package github.com.suitelhy.dingding;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
-import javax.annotation.PostConstruct;
-
 @SpringBootApplication
-public class WebchatApplication extends SpringBootServletInitializer {
+public class DingDingApplication
+        extends SpringBootServletInitializer {
 
 //    @Autowired
 //    DataInitializer initializer;
@@ -29,11 +27,11 @@ public class WebchatApplication extends SpringBootServletInitializer {
      */
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(WebchatApplication.class);
+        return application.sources(DingDingApplication.class);
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(WebchatApplication.class, args);
+        SpringApplication.run(DingDingApplication.class, args);
     }
 
 }

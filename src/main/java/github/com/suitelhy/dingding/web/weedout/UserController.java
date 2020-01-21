@@ -1,15 +1,16 @@
-package github.com.suitelhy.webchat.web;
+package github.com.suitelhy.dingding.web.weedout;
 
-import github.com.suitelhy.webchat.domain.entity.User;
-import github.com.suitelhy.webchat.domain.entity.security.SecurityUser;
-import github.com.suitelhy.webchat.infrastructure.application.dto.UserDto;
-import github.com.suitelhy.webchat.infrastructure.util.CalendarController;
-import github.com.suitelhy.webchat.infrastructure.web.util.*;
-import github.com.suitelhy.webchat.application.task.LogTask;
-import github.com.suitelhy.webchat.application.task.UserTask;
+import github.com.suitelhy.dingding.application.task.LogTask;
+import github.com.suitelhy.dingding.application.task.UserTask;
+import github.com.suitelhy.dingding.domain.entity.security.SecurityUser;
+import github.com.suitelhy.dingding.infrastructure.application.dto.UserDto;
+import github.com.suitelhy.dingding.infrastructure.util.CalendarController;
+import github.com.suitelhy.dingding.infrastructure.web.util.LogUtil;
+import github.com.suitelhy.dingding.infrastructure.web.util.NetUtil;
+import github.com.suitelhy.dingding.infrastructure.web.util.UploadUtil;
+import github.com.suitelhy.dingding.infrastructure.web.util.WordDefined;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -25,7 +26,7 @@ import java.io.IOException;
 /**
  * 用户信息 - web 交互
  */
-@Controller
+/*@Controller*/
 /*@RestController*/
 // @SessionAttributes: Spring Framework Annotation, API Doc
 //-> -> <a href="https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/bind/annotation/SessionAttributes.html">
@@ -205,7 +206,7 @@ public class UserController {
                     , userid);
             /*user = userTask.selectUserByUserid(userid);*/
             UserDto userDto = UserDto.Factory.USER_DTO.create(currentUser);
-            userDto.setProfilehead(fileUrl);
+            userDto.setFaceImage(fileUrl);
             boolean flag = userTask.update(userDto
                     , currentUser.getPassword()
                     , NetUtil.getIpAddress(request)
@@ -241,7 +242,7 @@ public class UserController {
         ServletOutputStream outputStream = null;
         FileInputStream inputStream = null;
         try {
-            String path = userDto.getProfilehead();
+            String path = userDto.getFaceImage();
             String rootPath = request.getSession().getServletContext().getRealPath("/");
             String picturePath = rootPath + path;
             response.setContentType("image/jpeg; charset=UTF-8");
