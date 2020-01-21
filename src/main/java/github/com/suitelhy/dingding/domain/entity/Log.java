@@ -1,14 +1,11 @@
-package github.com.suitelhy.webchat.domain.entity;
+package github.com.suitelhy.dingding.domain.entity;
 
-import github.com.suitelhy.webchat.infrastructure.domain.vo.HandleTypeVo;
-import github.com.suitelhy.webchat.infrastructure.domain.model.AbstractEntityModel;
-import github.com.suitelhy.webchat.infrastructure.domain.model.EntityFactory;
-import github.com.suitelhy.webchat.infrastructure.domain.model.EntityModel;
-import github.com.suitelhy.webchat.infrastructure.domain.model.EntityValidator;
-import github.com.suitelhy.webchat.infrastructure.domain.util.EntityUtil;
-import github.com.suitelhy.webchat.infrastructure.domain.util.VoUtil;
-import github.com.suitelhy.webchat.infrastructure.util.CalendarController;
-import github.com.suitelhy.webchat.infrastructure.web.util.NetUtil;
+import github.com.suitelhy.dingding.infrastructure.domain.model.*;
+import github.com.suitelhy.dingding.infrastructure.util.CalendarController;
+import github.com.suitelhy.dingding.infrastructure.web.util.NetUtil;
+import github.com.suitelhy.dingding.infrastructure.domain.vo.HandleTypeVo;
+import github.com.suitelhy.dingding.infrastructure.domain.util.EntityUtil;
+import github.com.suitelhy.dingding.infrastructure.domain.util.VoUtil;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
@@ -73,12 +70,12 @@ public class Log extends AbstractEntityModel<Long> {
         return this.getId();
     }
 
-    @Override
-    public boolean isEmpty() {
-        return !Validator.LOG.validateId(this)
-                || !isEntityLegal()
-                || (null != isEntityPersistence() && !isEntityPersistence());
-    }
+//    @Override
+//    public boolean isEmpty() {
+//        return !Validator.LOG.validateId(this)
+//                || !isEntityLegal()
+//                || (null != isEntityPersistence() && !isEntityPersistence());
+//    }
 
     /**
      * 是否符合业务要求
@@ -94,12 +91,24 @@ public class Log extends AbstractEntityModel<Long> {
                 && Validator.USER.userid(this.userid);
     }
 
+    /**
+     * 校验 Entity - ID
+     *
+     * @param id <method>id()</method>
+     * @return
+     * @Description <abstractClass>AbstractEntityModel</abstractClass>提供的模板设计.
+     */
+    @Override
+    protected @NotNull boolean validateId(@NotNull Long id) {
+        return Validator.LOG.id(id);
+    }
+
     //===== entity validator =====//
     public enum Validator implements EntityValidator<Log, Long> {
-        LOG, USER(User.Validator.USER, String.class);
+        LOG, USER(User.class, User.Validator.USER);
 
-        //===== 外键设计 (仅限也仅应该为 Entity 的唯一标识) =====//
-        public final EntityValidator FOREIGN_VALIDATOR;
+        //===== 外键设计 (仅限也仅应该为 Entity 的唯一标识) (简单实现) =====//
+        /*public final EntityValidator FOREIGN_VALIDATOR;
 
         public final Class FOREIGN_ID_CLAZZ;
 
@@ -108,8 +117,8 @@ public class Log extends AbstractEntityModel<Long> {
             this.FOREIGN_ID_CLAZZ = null;
         }
 
-        <E extends EntityModel<ID>, ID>
-        Validator(@NotNull EntityValidator<E, ID> foreignValidator, @NotNull Class<ID> idClass) {
+        <E extends EntityModel<ID>, ID> Validator(@NotNull EntityValidator<E, ID> foreignValidator
+                , @NotNull Class<ID> idClass) {
             this.FOREIGN_VALIDATOR = foreignValidator;
             this.FOREIGN_ID_CLAZZ = idClass;
         }
@@ -121,20 +130,23 @@ public class Log extends AbstractEntityModel<Long> {
                 return this.FOREIGN_VALIDATOR.id(id);
             }
             return false;
+        }*/
+        //===== 外键设计 (仅限也仅应该为 Entity 的唯一标识) (模块化实现) =====//
+        private final ForeignEntityValidator FOREIGN_VALIDATOR;
+
+        Validator() {
+            this.FOREIGN_VALIDATOR = null;
         }
+
+        <E extends EntityModel<ID>, ID> Validator(@NotNull Class<E> foreignEntityClazz
+                , @NotNull EntityValidator<E, ID> foreignValidator) {
+            this.FOREIGN_VALIDATOR = new ForeignEntityValidator(foreignEntityClazz, foreignValidator);
+        }
+
         //==========//
-
-        @Override
-        public boolean validateId(@NotNull Log entity) {
-            return null != entity
-                    && null != entity.id()
-                    && /*EntityUtil.Regex.validateId(entity.id())*/
-                            (null != entity.id() && entity.id() > 0);
-        }
-
         @Override
         public boolean id(@NotNull Long id) {
-            return null != id && id > 0;
+            return null != id && id > 0L;
         }
 
         public boolean id(@NotNull String id) {
@@ -162,7 +174,8 @@ public class Log extends AbstractEntityModel<Long> {
         }
 
         public boolean userid(String userid) {
-            return Validator.USER.foreignId(userid);
+            return /*Validator.USER.foreignId(userid)*/
+                    Validator.USER.FOREIGN_VALIDATOR.foreignId(User.class, userid);
         }
 
     }
