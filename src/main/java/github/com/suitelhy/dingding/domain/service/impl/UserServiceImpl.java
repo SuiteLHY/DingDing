@@ -3,7 +3,7 @@ package github.com.suitelhy.dingding.domain.service.impl;
 import github.com.suitelhy.dingding.domain.entity.User;
 import github.com.suitelhy.dingding.domain.repository.UserRepository;
 import github.com.suitelhy.dingding.domain.service.UserService;
-import github.com.suitelhy.dingding.infrastructure.domain.vo.AccountVo;
+import github.com.suitelhy.dingding.infrastructure.domain.vo.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("非法输入: 用户名称");
         }
         Optional<User> result = userRepository.findUserByUsernameAndStatus(username
-                , AccountVo.Status.NORMAL);
+                , Account.StatusVo.NORMAL);
         return result.orElse(null);
     }
 
