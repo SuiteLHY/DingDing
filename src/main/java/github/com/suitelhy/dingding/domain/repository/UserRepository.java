@@ -2,7 +2,7 @@ package github.com.suitelhy.dingding.domain.repository;
 
 import github.com.suitelhy.dingding.domain.entity.User;
 
-import github.com.suitelhy.dingding.infrastructure.domain.vo.AccountVo;
+import github.com.suitelhy.dingding.infrastructure.domain.vo.Account;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
@@ -57,7 +57,7 @@ public interface UserRepository
      * @param status
      * @return
      */
-    Optional<User> findUserByUsernameAndStatus(String username, AccountVo.Status status);
+    Optional<User> findUserByUsernameAndStatus(String username, Account.StatusVo status);
 
     //===== insert data =====//
     /**
@@ -81,7 +81,7 @@ public interface UserRepository
     @Modifying
     @Query("update User u set u.nickname = ?1 where u.userid = ?2 and u.status = ?3")
     @Transactional(timeout = 10)
-    int modifyByIdAndStatus(String nickname, String id, AccountVo.Status status);
+    int modifyByIdAndStatus(String nickname, String id, Account.StatusVo status);
 
     //===== delete data =====//
 //    /**
