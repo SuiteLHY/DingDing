@@ -8,7 +8,7 @@ import github.com.suitelhy.dingding.infrastructure.util.CalendarController;
 import github.com.suitelhy.dingding.infrastructure.web.util.LogUtil;
 import github.com.suitelhy.dingding.infrastructure.web.util.NetUtil;
 import github.com.suitelhy.dingding.infrastructure.web.util.WordDefined;
-import github.com.suitelhy.dingding.infrastructure.domain.vo.AccountVo;
+import github.com.suitelhy.dingding.infrastructure.domain.vo.Account;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -79,7 +79,7 @@ public class LoginController {
             // 重定向 -> 登入 - 页面
             return "redirect:/user/login";
         }
-        if (!AccountVo.Status.NORMAL.showName().equals(user.getStatus())) {
+        if (!Account.StatusVo.NORMAL.showName().equals(user.getStatus())) {
             attributes.addFlashAttribute("error", defined.LOGIN_USERID_DISABLED);
             // 重定向 -> 登入 - 页面
             return "redirect:/user/login";
