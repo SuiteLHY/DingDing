@@ -12,10 +12,10 @@ import javax.validation.constraints.NotNull;
  * @param <V>
  * @param <_DESCRIPTION>
  */
-public interface UserAttachVo<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V extends Number, _DESCRIPTION>
+public interface UserAttach<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V extends Number, _DESCRIPTION>
         extends VoModel<VO, V, _DESCRIPTION> {
 
-    enum AttachType implements UserAttachVo<AttachType, Integer, String> {
+    enum AttachTypeVo implements UserAttach<AttachTypeVo, Integer, String> {
         FACE_IMAGE(1, "头像", "用户头像")
         , QR_CODE(2, "二维码", "用户二维码");
 
@@ -25,10 +25,23 @@ public interface UserAttachVo<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V 
 
         private final String description;
 
-        AttachType(@NotNull int code, @NotNull String name, @Nullable String description) {
+        AttachTypeVo(@NotNull int code, @NotNull String name, @Nullable String description) {
             this.code = code;
             this.name = name;
             this.description = description;
+        }
+
+        /**
+         * Returns the name of this enum constant, as contained in the
+         * declaration.  This method may be overridden, though it typically
+         * isn't necessary or desirable.  An enum type should override this
+         * method when a more "programmer-friendly" string form exists.
+         *
+         * @return the name of this enum constant
+         */
+        @Override
+        public String toString() {
+            return VoModel.toString(this);
         }
 
         /**
@@ -36,10 +49,10 @@ public interface UserAttachVo<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V 
          */
         @javax.persistence.Converter(autoApply = true)
         public static class Converter
-                extends VoAttributeConverter<AttachType, Integer, String> {
+                extends VoAttributeConverter<AttachTypeVo, Integer, String> {
 
             public Converter() {
-                super(AttachType.class);
+                super(AttachTypeVo.class);
             }
 
         }
