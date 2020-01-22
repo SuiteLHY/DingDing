@@ -5,7 +5,7 @@ import github.com.suitelhy.dingding.domain.entity.security.SecurityUser;
 import github.com.suitelhy.dingding.infrastructure.application.model.DtoModel;
 import github.com.suitelhy.dingding.infrastructure.domain.model.EntityFactory;
 import github.com.suitelhy.dingding.infrastructure.domain.util.VoUtil;
-import github.com.suitelhy.dingding.infrastructure.domain.vo.HumanVo;
+import github.com.suitelhy.dingding.infrastructure.domain.vo.Human;
 import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotNull;
@@ -174,7 +174,7 @@ public class UserDto implements DtoModel<User, String> {
             User newUser = User.Factory.USER.create(age, firsttime, ip
                     , lasttime, nickname, password
                     , profile, profilehead, username
-                    , VoUtil.getVoByName(HumanVo.Sex.class, sex));
+                    , VoUtil.getVoByName(Human.SexVo.class, sex));
             return new UserDto(newUser);
         }
 
@@ -208,7 +208,7 @@ public class UserDto implements DtoModel<User, String> {
             User user = User.Factory.USER.update(id, age, firsttime
                     , ip, lasttime, nickname
                     , password, profile, profilehead
-                    , username, VoUtil.getVoByName(HumanVo.Sex.class, sex));
+                    , username, VoUtil.getVoByName(Human.SexVo.class, sex));
             return new UserDto(user);
         }
 

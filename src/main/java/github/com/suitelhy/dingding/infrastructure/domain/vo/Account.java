@@ -10,13 +10,13 @@ import javax.validation.constraints.NotNull;
  * 账户特性
  *
  */
-public interface AccountVo<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V extends Number, _DESCRIPTION>
+public interface Account<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V extends Number, _DESCRIPTION>
         extends VoModel<VO, V, _DESCRIPTION> {
 
     /**
      * 账户 - 状态
      */
-    enum Status implements AccountVo<Status, Integer, String> {
+    enum StatusVo implements Account<StatusVo, Integer, String> {
         DESTRUCTION(0, "注销", "该账户已经被注销, 业务逻辑上已被删除")
         , NORMAL(1, "正常", "该账户正常")
         , ABNORMAL(2, "异常", "该账户异常, 很可能出现了严重的问题, 应该被禁用");
@@ -26,10 +26,10 @@ public interface AccountVo<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V ext
          */
         @javax.persistence.Converter(autoApply = true)
         public static class Converter
-                extends VoAttributeConverter<Status, Integer, String> {
+                extends VoAttributeConverter<StatusVo, Integer, String> {
 
             public Converter() {
-                super(Status.class);
+                super(StatusVo.class);
             }
 
         }
@@ -41,7 +41,7 @@ public interface AccountVo<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V ext
 
         public final String description;
 
-        Status(Integer code, String name, String description) {
+        StatusVo(Integer code, String name, String description) {
             this.code = code;
             this.name = name;
             this.description = description;
@@ -88,11 +88,7 @@ public interface AccountVo<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V ext
 
         @Override
         public String toString() {
-            return name()
-                    + "{value=" + value()
-                    + ", name=" + this.name
-                    + ", description=" + this.description
-                    + "}";
+            return VoModel.toString(this);
         }
 
     }

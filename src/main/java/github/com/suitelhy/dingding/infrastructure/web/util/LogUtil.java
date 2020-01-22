@@ -2,7 +2,7 @@ package github.com.suitelhy.dingding.infrastructure.web.util;
 
 import github.com.suitelhy.dingding.domain.entity.Log;
 import github.com.suitelhy.dingding.infrastructure.domain.util.VoUtil;
-import github.com.suitelhy.dingding.infrastructure.domain.vo.HandleTypeVo;
+import github.com.suitelhy.dingding.infrastructure.domain.vo.HandleType;
 
 public class LogUtil {
 
@@ -23,7 +23,7 @@ public class LogUtil {
         return Log.Factory.USER_LOG.create(detail
                 , ip
                 , time
-                , VoUtil.getVoByValue(HandleTypeVo.Log.class, type)
+                , VoUtil.getVoByValue(HandleType.LogVo.class, type)
                 , userid);
     }
 

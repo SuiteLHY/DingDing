@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
  * VO - 人类特性
  *
  */
-public interface HumanVo<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V extends Number, _DESCRIPTION>
+public interface Human<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V extends Number, _DESCRIPTION>
         extends VoModel<VO, V, _DESCRIPTION> {
 
     /**
@@ -21,7 +21,7 @@ public interface HumanVo<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V exten
      * <a href="https://stackoverflow.com/questions/26347443/attributeconverter-fails-after-migration-from-glassfish-4-to-wildfly-8-1">
      *     AttributeConverter fails after migration from glassfish 4 to wildfly 8.1</a>
      */
-    enum Sex implements HumanVo<Sex, Integer, String> {
+    enum SexVo implements VoModel<SexVo, Integer, String> {
         UNKNOWN(null, "未知")
         , FEMALE(0, "女")
         , MALE(1, "男");
@@ -31,10 +31,10 @@ public interface HumanVo<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V exten
          */
         @javax.persistence.Converter(autoApply = true)
         public static class Converter
-                extends VoAttributeConverter<Sex, /*Byte*/Integer, String> {
+                extends VoAttributeConverter<SexVo, /*Byte*/Integer, String> {
 
             public Converter() {
-                super(HumanVo.Sex.class);
+                super(SexVo.class);
             }
 
         }
@@ -43,7 +43,7 @@ public interface HumanVo<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V exten
 
         public final String name;
 
-        Sex(Integer code, String name) {
+        SexVo(Integer code, String name) {
             this.code = code;
             this.name = name;
         }

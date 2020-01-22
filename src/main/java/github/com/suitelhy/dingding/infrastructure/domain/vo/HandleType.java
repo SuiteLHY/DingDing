@@ -8,13 +8,13 @@ import org.springframework.lang.Nullable;
  * 操作类型
  *
  */
-public interface HandleTypeVo<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V extends Number, _DESCRIPTION>
+public interface HandleType<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V extends Number, _DESCRIPTION>
         extends VoModel<VO, V, _DESCRIPTION> {
 
     /**
      * 日志记录 - 操作类型
      */
-    enum Log implements HandleTypeVo<Log, Integer, String> {
+    enum LogVo implements HandleType<LogVo, Integer, String> {
         USER_REGISTRATION(1
                 , "用户注册"
                 , "正常业务流程, 注册用户")
@@ -42,10 +42,10 @@ public interface HandleTypeVo<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V 
          */
         @javax.persistence.Converter(autoApply = true)
         public static class Converter
-                extends VoAttributeConverter<Log, Integer, String> {
+                extends VoAttributeConverter<LogVo, Integer, String> {
 
             public Converter() {
-                super(Log.class);
+                super(LogVo.class);
             }
 
         }
@@ -56,7 +56,7 @@ public interface HandleTypeVo<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V 
 
         public final String description;
 
-        Log(Integer code, String name, String description) {
+        LogVo(Integer code, String name, String description) {
             this.code = code;
             this.name = name;
             this.description = description;
