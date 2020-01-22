@@ -2,8 +2,8 @@ package github.com.suitelhy.dingding.domain;
 
 import github.com.suitelhy.dingding.domain.entity.User;
 import github.com.suitelhy.dingding.domain.repository.UserRepository;
-import github.com.suitelhy.dingding.infrastructure.domain.vo.AccountVo;
-import github.com.suitelhy.dingding.infrastructure.domain.vo.HumanVo;
+import github.com.suitelhy.dingding.infrastructure.domain.vo.Account;
+import github.com.suitelhy.dingding.infrastructure.domain.vo.Human;
 import github.com.suitelhy.dingding.infrastructure.util.CalendarController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ public class UserRepositoryTests {
                 , "测试数据"
                 , null
                 , ("测试" + new CalendarController().toString().replaceAll("[-:\\s]", ""))
-                , HumanVo.Sex.MALE);
+                , Human.SexVo.MALE);
     }
 
     @NotNull
@@ -134,7 +134,7 @@ public class UserRepositoryTests {
         //--- update
         Assert.isTrue(userRepository.modifyByIdAndStatus("测试_最新"
                         , newUser.id()
-                        , AccountVo.Status.NORMAL) > 0
+                        , Account.StatusVo.NORMAL) > 0
                 , "===== modifyByIdAndStatus(String, String, AccountVo.Status) -> fault");
         System.out.println(newUser);
     }

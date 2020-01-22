@@ -4,8 +4,8 @@ import github.com.suitelhy.dingding.domain.entity.Log;
 import github.com.suitelhy.dingding.domain.entity.User;
 import github.com.suitelhy.dingding.domain.service.LogService;
 import github.com.suitelhy.dingding.domain.service.UserService;
-import github.com.suitelhy.dingding.infrastructure.domain.vo.HandleTypeVo;
-import github.com.suitelhy.dingding.infrastructure.domain.vo.HumanVo;
+import github.com.suitelhy.dingding.infrastructure.domain.vo.HandleType;
+import github.com.suitelhy.dingding.infrastructure.domain.vo.Human;
 import github.com.suitelhy.dingding.infrastructure.util.CalendarController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @SpringBootTest
-public class LogServiceTests {
+public class LogVoServiceTests {
 
     @Autowired
     private LogService logService;
@@ -37,7 +37,7 @@ public class LogServiceTests {
                 , "测试数据"
                 , null
                 , ("测试" + new CalendarController().toString().replaceAll("[-:\\s]", ""))
-                , HumanVo.Sex.MALE);
+                , Human.SexVo.MALE);
     }
 
     @NotNull
@@ -90,7 +90,7 @@ public class LogServiceTests {
         Log newLog = Log.Factory.USER_LOG.create(null
                 , newUser.getIp()
                 , new CalendarController().toString()
-                , HandleTypeVo.Log.USER_REGISTRATION
+                , HandleType.LogVo.USER_REGISTRATION
                 , newUser.getUserid()
         );
         Assert.isTrue(newLog.isEntityLegal()
@@ -127,7 +127,7 @@ public class LogServiceTests {
         Log newLog = Log.Factory.USER_LOG.create(null
                 , newUser.getIp()
                 , new CalendarController().toString()
-                , HandleTypeVo.Log.USER_REGISTRATION
+                , HandleType.LogVo.USER_REGISTRATION
                 , newUser.getUserid()
         );
         Assert.isTrue(newLog.isEntityLegal()
@@ -164,7 +164,7 @@ public class LogServiceTests {
         Log newLog = Log.Factory.USER_LOG.create(null
                 , newUser.getIp()
                 , new CalendarController().toString()
-                , HandleTypeVo.Log.USER_REGISTRATION
+                , HandleType.LogVo.USER_REGISTRATION
                 , newUser.getUserid()
         );
         Assert.isTrue(newLog.isEntityLegal()
@@ -195,7 +195,7 @@ public class LogServiceTests {
         Log newLog = Log.Factory.USER_LOG.create(null
                 , newUser.getIp()
                 , new CalendarController().toString()
-                , HandleTypeVo.Log.USER_REGISTRATION
+                , HandleType.LogVo.USER_REGISTRATION
                 , newUser.getUserid()
         );
         Assert.isTrue(newLog.isEntityLegal()

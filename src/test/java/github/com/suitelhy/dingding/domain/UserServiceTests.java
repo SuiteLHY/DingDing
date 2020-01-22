@@ -2,7 +2,7 @@ package github.com.suitelhy.dingding.domain;
 
 import github.com.suitelhy.dingding.domain.entity.User;
 import github.com.suitelhy.dingding.domain.service.UserService;
-import github.com.suitelhy.dingding.infrastructure.domain.vo.HumanVo;
+import github.com.suitelhy.dingding.infrastructure.domain.vo.Human;
 import github.com.suitelhy.dingding.infrastructure.util.CalendarController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class UserServiceTests {
                 , "测试数据"
                 , null
                 , ("测试" + new CalendarController().toString().replaceAll("[-:\\s]", ""))
-                , HumanVo.Sex.MALE);
+                , Human.SexVo.MALE);
     }
 
     @NotNull
