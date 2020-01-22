@@ -1,7 +1,6 @@
 package github.com.suitelhy.dingding.domain.entity;
 
 import github.com.suitelhy.dingding.infrastructure.domain.model.*;
-import github.com.suitelhy.dingding.infrastructure.domain.vo.UserAttachVo;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.lang.Nullable;
 
@@ -20,6 +19,8 @@ import java.time.LocalDateTime;
 public class UserAttach
         extends AbstractEntityModel<String> {
 
+    private static final long serialVersionUID = 1L;
+
     // 附件Id
     @GeneratedValue(generator = "USER_ATTACH_ID_STRATEGY")
     @GenericGenerator(name = "USER_ATTACH_ID_STRATEGY", strategy = "uuid")
@@ -36,8 +37,8 @@ public class UserAttach
 
     // 附件类型
     @Column(name = "attach_type", nullable = false)
-    @Convert(converter = UserAttachVo.AttachType.Converter.class)
-    private UserAttachVo.AttachType attachType;
+    @Convert(converter = github.com.suitelhy.dingding.infrastructure.domain.vo.UserAttach.AttachTypeVo.Converter.class)
+    private github.com.suitelhy.dingding.infrastructure.domain.vo.UserAttach.AttachTypeVo attachType;
 
     // 附件描述信息
     @Column(name = "attach_description")
@@ -59,8 +60,8 @@ public class UserAttach
                 , @NotNull EntityValidator<E, ID> foreignValidator) {
             this.FOREIGN_VALIDATOR = new ForeignEntityValidator(foreignEntityClazz, foreignValidator);
         }
-
         //==========//
+
         /**
          * 校验 Entity - ID
          *
@@ -73,15 +74,15 @@ public class UserAttach
         }
 
         public boolean userid(@NotNull String userid) {
-            return Validator.USER.FOREIGN_VALIDATOR.foreignId(User.class, userid);
+            return USER.FOREIGN_VALIDATOR.foreignId(User.class, userid);
         }
 
         public boolean attachContent(@NotNull String attachContent) {
             return null != attachContent && !"".equals(attachContent.trim());
         }
 
-        public boolean attachType(@NotNull UserAttachVo.AttachType attachType) {
-            return null != attachType;
+        public boolean attachType(@NotNull github.com.suitelhy.dingding.infrastructure.domain.vo.UserAttach.AttachTypeVo attachTypeVo) {
+            return null != attachTypeVo;
         }
 
         public boolean attachDescription(@Nullable String attachDescription) {
@@ -98,21 +99,21 @@ public class UserAttach
         public UserAttach create(@NotNull String id
                 , @NotNull String userid
                 , @NotNull String attachContent
-                , @NotNull UserAttachVo.AttachType attachType
+                , @NotNull github.com.suitelhy.dingding.infrastructure.domain.vo.UserAttach.AttachTypeVo attachTypeVo
                 , @Nullable String attachDescription) {
             if (!Validator.USER.id(id)) {
                 throw new IllegalArgumentException("非法参数: <param>id</param>");
             }
             return new UserAttach(id, userid, attachContent
-                    , attachType, attachDescription);
+                    , attachTypeVo, attachDescription);
         }
 
         public UserAttach update(@NotNull String userid
                 , @NotNull String attachContent
-                , @NotNull UserAttachVo.AttachType attachType
+                , @NotNull github.com.suitelhy.dingding.infrastructure.domain.vo.UserAttach.AttachTypeVo attachTypeVo
                 , @Nullable String attachDescription) {
             return new UserAttach(null, userid, attachContent
-                    , attachType, attachDescription);
+                    , attachTypeVo, attachDescription);
         }
 
     }
@@ -166,10 +167,10 @@ public class UserAttach
     //===== base constructor =====//
     public UserAttach() {}
 
-    public UserAttach(@Nullable String id
+    private UserAttach(@Nullable String id
             , @NotNull String userid
             , @NotNull String attachContent
-            , @NotNull UserAttachVo.AttachType attachType
+            , @NotNull github.com.suitelhy.dingding.infrastructure.domain.vo.UserAttach.AttachTypeVo attachTypeVo
             , @Nullable String attachDescription) {
         if (null != id) {
             //--- 更新业务
@@ -183,7 +184,7 @@ public class UserAttach
         if (!Validator.USER.attachContent(attachContent)) {
             throw new IllegalArgumentException("非法参数: <param>attachContent</param>");
         }
-        if (!Validator.USER.attachType(attachType)) {
+        if (!Validator.USER.attachType(attachTypeVo)) {
             throw new IllegalArgumentException("非法参数: <param>attachType</param>");
         }
         if (!Validator.USER.attachDescription(attachDescription)) {
@@ -192,7 +193,7 @@ public class UserAttach
         this.id = id;
         this.userid = userid;
         this.attachContent = attachContent;
-        this.attachType = attachType;
+        this.attachType = attachTypeVo;
         this.attachDescription = attachDescription;
     }
 
@@ -209,12 +210,12 @@ public class UserAttach
         this.attachContent = attachContent;
     }
 
-    public UserAttachVo.AttachType getAttachType() {
+    public github.com.suitelhy.dingding.infrastructure.domain.vo.UserAttach.AttachTypeVo getAttachType() {
         return attachType;
     }
 
-    public void setAttachType(UserAttachVo.AttachType attachType) {
-        this.attachType = attachType;
+    public void setAttachType(github.com.suitelhy.dingding.infrastructure.domain.vo.UserAttach.AttachTypeVo attachTypeVo) {
+        this.attachType = attachTypeVo;
     }
 
     public String getAttachDescription() {

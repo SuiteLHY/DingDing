@@ -2,11 +2,10 @@ package github.com.suitelhy.dingding.domain.entity;
 
 import github.com.suitelhy.dingding.infrastructure.util.CalendarController;
 import github.com.suitelhy.dingding.infrastructure.web.util.NetUtil;
-import github.com.suitelhy.dingding.infrastructure.domain.vo.AccountVo;
-import github.com.suitelhy.dingding.infrastructure.domain.vo.HumanVo;
+import github.com.suitelhy.dingding.infrastructure.domain.vo.Account;
+import github.com.suitelhy.dingding.infrastructure.domain.vo.Human;
 import github.com.suitelhy.dingding.infrastructure.domain.model.AbstractEntityModel;
 import github.com.suitelhy.dingding.infrastructure.domain.model.EntityFactory;
-import github.com.suitelhy.dingding.infrastructure.domain.model.EntityModel;
 import github.com.suitelhy.dingding.infrastructure.domain.model.EntityValidator;
 import github.com.suitelhy.dingding.infrastructure.domain.util.EntityUtil;
 import github.com.suitelhy.dingding.infrastructure.domain.util.VoUtil;
@@ -86,13 +85,13 @@ public class User
 
     // 用户 - 性别
     @Column
-    @Convert(converter = HumanVo.Sex.Converter.class)
-    private HumanVo.Sex sex;
+    @Convert(converter = Human.SexVo.Converter.class)
+    private Human.SexVo sex;
 
     // 账号状态
     @Column(nullable = false)
-    @Convert(converter = AccountVo.Status.Converter.class)
-    private AccountVo.Status status;
+    @Convert(converter = Account.StatusVo.Converter.class)
+    private Account.StatusVo status;
 
     //===== Entity Model =====//
     @Override
@@ -138,7 +137,7 @@ public class User
                 && Validator.USER.password(this.password) // 用户密码
                 && Validator.USER.username(this.username) // 用户名称
                 && (Validator.USER.status(this.status)
-                        && AccountVo.Status.NORMAL.equals(this.status))/* 账号状态 */;
+                        && Account.StatusVo.NORMAL.equals(this.status))/* 账号状态 */;
     }
 
 //    @Override
@@ -219,16 +218,16 @@ public class User
             return true;
         }
 
-        public boolean sex(HumanVo.Sex sex) {
+        public boolean sex(Human.SexVo sex) {
             if (null == sex) {
-                return null != VoUtil.getVoByValue(HumanVo.Sex.class, null);
+                return null != VoUtil.getVoByValue(Human.SexVo.class, null);
             }
             return true;
         }
 
-        public boolean status(@NotNull AccountVo.Status status) {
+        public boolean status(@NotNull Account.StatusVo status) {
             if (null == status) {
-                return null != VoUtil.getVoByValue(AccountVo.Status.class, null);
+                return null != VoUtil.getVoByValue(Account.StatusVo.class, null);
             }
             return true;
         }
@@ -307,7 +306,7 @@ public class User
             , @Nullable String introduction
             , @Nullable String faceImage
             , @NotNull String username
-            , @Nullable HumanVo.Sex sex) {
+            , @Nullable Human.SexVo sex) {
         if (null == id) {
             //--- <param>id</param>为 null 时, 对应添加用户功能.
         } else {
@@ -376,7 +375,7 @@ public class User
         // 用户 - 性别
         this.setSex(sex);
         // 账号状态
-        this.setStatus(AccountVo.Status.NORMAL);
+        this.setStatus(Account.StatusVo.NORMAL);
     }
 
     public enum Factory implements EntityFactory<User> {
@@ -406,7 +405,7 @@ public class User
                 , @Nullable String introduction
                 , @Nullable String faceImage
                 , @NotNull String username
-                , @Nullable HumanVo.Sex sex) {
+                , @Nullable Human.SexVo sex) {
             return new User(null, age, firsttime
                     , ip, lasttime, nickname
                     , password, introduction, faceImage
@@ -439,7 +438,7 @@ public class User
                 , @Nullable String introduction
                 , @Nullable String faceImage
                 , @NotNull String username
-                , @Nullable HumanVo.Sex sex) {
+                , @Nullable Human.SexVo sex) {
             if (!Validator.USER.id(id)) {
                 throw new IllegalArgumentException("非法输入: 用户ID");
             }
@@ -457,7 +456,7 @@ public class User
          */
         public boolean delete(@NotNull User user) {
             if (null != user && !user.isEmpty()) {
-                user.setStatus(AccountVo.Status.DESTRUCTION);
+                user.setStatus(Account.StatusVo.DESTRUCTION);
                 return true;
             }
             return false;
@@ -592,25 +591,25 @@ public class User
         return false;
     }
 
-    public HumanVo.Sex getSex() {
+    public Human.SexVo getSex() {
         return sex;
     }
 
-    public boolean setSex(HumanVo.Sex sex) {
-        if (Validator.USER.sex(sex)) {
-            this.sex = sex;
+    public boolean setSex(Human.SexVo sexVo) {
+        if (Validator.USER.sex(sexVo)) {
+            this.sex = sexVo;
             return true;
         }
         return false;
     }
 
-    public AccountVo.Status getStatus() {
+    public Account.StatusVo getStatus() {
         return status;
     }
 
-    private boolean setStatus(AccountVo.Status status) {
-        if (Validator.USER.status(status)) {
-            this.status = status;
+    private boolean setStatus(Account.StatusVo statusVo) {
+        if (Validator.USER.status(statusVo)) {
+            this.status = statusVo;
             return true;
         }
         return false;

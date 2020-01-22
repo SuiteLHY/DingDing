@@ -3,7 +3,7 @@ package github.com.suitelhy.dingding.domain.entity;
 import github.com.suitelhy.dingding.infrastructure.domain.model.*;
 import github.com.suitelhy.dingding.infrastructure.util.CalendarController;
 import github.com.suitelhy.dingding.infrastructure.web.util.NetUtil;
-import github.com.suitelhy.dingding.infrastructure.domain.vo.HandleTypeVo;
+import github.com.suitelhy.dingding.infrastructure.domain.vo.HandleType;
 import github.com.suitelhy.dingding.infrastructure.domain.util.EntityUtil;
 import github.com.suitelhy.dingding.infrastructure.domain.util.VoUtil;
 import org.springframework.lang.Nullable;
@@ -51,8 +51,8 @@ public class Log extends AbstractEntityModel<Long> {
      * @Description 操作类型大体上分为: 用户信息操作和用户登录操作.
      */
     @Column
-    @Convert(converter = HandleTypeVo.Log.Converter.class)
-    private HandleTypeVo.Log type;
+    @Convert(converter = HandleType.LogVo.Converter.class)
+    private HandleType.LogVo type;
 
     // 用户 - 用户ID
     @Column(nullable = false)
@@ -166,16 +166,16 @@ public class Log extends AbstractEntityModel<Long> {
             return null != time && CalendarController.isParse(time);
         }
 
-        public boolean type(@Nullable HandleTypeVo.Log type) {
+        public boolean type(@Nullable HandleType.LogVo type) {
             if (null == type) {
-                return null != VoUtil.getVoByValue(HandleTypeVo.Log.class, null);
+                return null != VoUtil.getVoByValue(HandleType.LogVo.class, null);
             }
             return true;
         }
 
         public boolean userid(String userid) {
             return /*Validator.USER.foreignId(userid)*/
-                    Validator.USER.FOREIGN_VALIDATOR.foreignId(User.class, userid);
+                    USER.FOREIGN_VALIDATOR.foreignId(User.class, userid);
         }
 
     }
@@ -185,7 +185,7 @@ public class Log extends AbstractEntityModel<Long> {
             , @Nullable String detail
             , @NotNull String ip
             , @NotNull String time
-            , @NotNull HandleTypeVo.Log type
+            , @NotNull HandleType.LogVo type
             , @NotNull String userid) {
         if (null == id) {
             //--- <param>id</param>为 null 时, 对应添加日志记录功能.
@@ -249,7 +249,7 @@ public class Log extends AbstractEntityModel<Long> {
         public Log create(@Nullable String detail
                 , @NotNull String ip
                 , @NotNull String time
-                , @NotNull HandleTypeVo.Log type
+                , @NotNull HandleType.LogVo type
                 , @NotNull String userid) {
             return new Log(null, detail, ip
                     , time, type, userid);
@@ -290,11 +290,11 @@ public class Log extends AbstractEntityModel<Long> {
         this.time = time;
     }
 
-    public HandleTypeVo.Log getType() {
+    public HandleType.LogVo getType() {
         return type;
     }
 
-    private void setType(HandleTypeVo.Log type) {
+    private void setType(HandleType.LogVo type) {
         this.type = type;
     }
 

@@ -1,7 +1,7 @@
 package github.com.suitelhy.dingding.domain.entity.security;
 
 import github.com.suitelhy.dingding.domain.entity.User;
-import github.com.suitelhy.dingding.infrastructure.domain.vo.AccountVo;
+import github.com.suitelhy.dingding.infrastructure.domain.vo.Account;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
@@ -54,23 +54,23 @@ public class SecurityUser implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return !AccountVo.Status.ABNORMAL.equals(user.getStatus());
+        return !Account.StatusVo.ABNORMAL.equals(user.getStatus());
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return AccountVo.Status.NORMAL.equals(user.getStatus());
+        return Account.StatusVo.NORMAL.equals(user.getStatus());
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
         // 凭证未过期... 暂无业务设计
-        return AccountVo.Status.NORMAL.equals(user.getStatus());
+        return Account.StatusVo.NORMAL.equals(user.getStatus());
     }
 
     @Override
     public boolean isEnabled() {
-        return AccountVo.Status.NORMAL.equals(user.getStatus());
+        return Account.StatusVo.NORMAL.equals(user.getStatus());
     }
 
 }
