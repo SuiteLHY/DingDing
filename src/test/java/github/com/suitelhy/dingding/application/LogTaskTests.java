@@ -5,7 +5,7 @@ import github.com.suitelhy.dingding.application.task.UserTask;
 import github.com.suitelhy.dingding.domain.entity.Log;
 import github.com.suitelhy.dingding.domain.entity.security.SecurityUser;
 import github.com.suitelhy.dingding.infrastructure.application.dto.UserDto;
-import github.com.suitelhy.dingding.infrastructure.domain.vo.HandleTypeVo;
+import github.com.suitelhy.dingding.infrastructure.domain.vo.HandleType;
 import github.com.suitelhy.dingding.infrastructure.util.CalendarController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,7 +106,7 @@ public class LogTaskTests {
         Log newLog = Log.Factory.USER_LOG.create(null
                 , ip()
                 , new CalendarController().toString()
-                , HandleTypeVo.Log.USER_REGISTRATION
+                , HandleType.LogVo.USER_REGISTRATION
                 , newUserDto.id()
         );
         Assert.isTrue(logTask.insert(newLog)
@@ -140,7 +140,7 @@ public class LogTaskTests {
         Log newLog = Log.Factory.USER_LOG.create(null
                 , ip()
                 , new CalendarController().toString()
-                , HandleTypeVo.Log.USER_REGISTRATION
+                , HandleType.LogVo.USER_REGISTRATION
                 , newUserDto.id()
         );
         Assert.isTrue(logTask.insert(newLog)
@@ -172,7 +172,7 @@ public class LogTaskTests {
         Log newLog = Log.Factory.USER_LOG.create(null
                 , ip()
                 , new CalendarController().toString()
-                , HandleTypeVo.Log.USER_REGISTRATION
+                , HandleType.LogVo.USER_REGISTRATION
                 , newUserDto.id()
         );
         boolean result;
@@ -201,7 +201,7 @@ public class LogTaskTests {
         Log newLog = Log.Factory.USER_LOG.create(null
                 , ip()
                 , new CalendarController().toString()
-                , HandleTypeVo.Log.USER_REGISTRATION
+                , HandleType.LogVo.USER_REGISTRATION
                 , newUserDto.id()
         );
         Assert.isTrue(logTask.insert(newLog)
