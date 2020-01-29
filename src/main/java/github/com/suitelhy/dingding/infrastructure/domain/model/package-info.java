@@ -1,1 +1,0 @@
-package github.com.suitelhy.dingding.infrastructure.domain.model;
