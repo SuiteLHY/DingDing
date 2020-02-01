@@ -32,4 +32,4 @@
  *->     spring-projects/spring-data-examples/jpa/</a>
  *
  */
-package github.com.suitelhy.dingding.app.infrastructure.config.springdata;
+package github.com.suitelhy.dingding.sso.infrastructure.config.springdata;

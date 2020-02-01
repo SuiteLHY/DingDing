@@ -3,7 +3,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="github.com.suitelhy.dingding.app.domain.repository.LogRepository">
+<mapper namespace="github.com.suitelhy.dingding.LogRepository">
 
     &lt;!&ndash; Mybatis 的配置中定义了 类型别名 (typeAliases), 见 application.yml &ndash;&gt;
 
