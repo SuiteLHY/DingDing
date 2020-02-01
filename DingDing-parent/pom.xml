@@ -44,12 +44,13 @@
             </exclusions>
         </dependency>
 
-        <!-- Spring boot - devtools -->
+        <!-- Spring boot - 热部署(开发)工具 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
-            <!-- 仅开发环境下启用 -->
             <optional>true</optional>
+            <!-- 仅开发环境下启用 -->
+            <scope>test</scope>
         </dependency>
 
         <!-- ===== SpringFox - Swagger ===== -->

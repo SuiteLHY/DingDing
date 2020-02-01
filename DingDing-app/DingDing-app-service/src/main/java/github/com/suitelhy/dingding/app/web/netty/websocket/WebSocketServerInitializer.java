@@ -42,7 +42,7 @@ public class WebSocketServerInitializer extends ChannelInitializer<SocketChannel
          *
          * @Tips 对于 WebSocket 来说, 所有数据都是以 frames 进行传输的, 不同数据类型对应不同的 frames.
          */
-        pipeline.addLast(new WebSocketServerProtocolHandler("/ws"/* websocketPath, 路由地址 */));
+        pipeline.addLast(new WebSocketServerProtocolHandler("/ws"));
         // 添加 Handler: 文本消息处理器
         pipeline.addLast(new ChatHandler());
         //==========//

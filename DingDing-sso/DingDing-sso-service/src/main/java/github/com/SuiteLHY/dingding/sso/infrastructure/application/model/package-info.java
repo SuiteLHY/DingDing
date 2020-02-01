@@ -1,0 +1,1 @@
+package github.com.suitelhy.dingding.sso.infrastructure.application.model;

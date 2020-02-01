@@ -43,8 +43,7 @@ public class ChatHandler
         System.out.println("=== 接收到数据: " + content);
 
         for (Channel channel : clients) {
-            channel.writeAndFlush(new TextWebSocketFrame("[" + new CalendarController()
-                    + "]接收到消息: " + content));
+            channel.writeAndFlush(new TextWebSocketFrame("[" + new CalendarController()+ "]接收到消息: " + content));
         }
         /*//↑ 等效写法; 语法糖, 业务确定后需要简化代码时可用.
         clients.writeAndFlush(new TextWebSocketFrame("[" + new CalendarController()
@@ -75,6 +74,7 @@ public class ChatHandler
         if (null != clients.find(channel.id())) {
             clients.remove(channel);
         }
+        System.out.println("=== " + this.getClass().getSimpleName() + "操作对象已移除 ===");
     }
 
 }

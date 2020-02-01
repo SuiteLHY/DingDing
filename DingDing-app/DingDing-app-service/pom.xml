@@ -42,7 +42,7 @@
         </dependency>
 
         <!-- ===== AspectJ ===== -->
-        <dependency>
+        <!--<dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
         </dependency>
@@ -53,7 +53,7 @@
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjrt</artifactId>
-        </dependency>
+        </dependency>-->
         <!-- ===== -->
 
         <!-- MySQL 连接 -->

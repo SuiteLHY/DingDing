@@ -1,4 +1,4 @@
-package github.com.suitelhy.dingding.app.web.netty.websocket.handler;
+package github.com.suitelhy.dingding.app.web.netty.demo.websocket.handler;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
