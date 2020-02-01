@@ -1,4 +1,4 @@
-package github.com.suitelhy.dingding.app.web.netty.websocket;
+package github.com.suitelhy.dingding.app.web.netty.demo.websocket;
 
 import github.com.suitelhy.dingding.app.web.netty.websocket.handler.ChatHandler;
 import io.netty.channel.ChannelInitializer;

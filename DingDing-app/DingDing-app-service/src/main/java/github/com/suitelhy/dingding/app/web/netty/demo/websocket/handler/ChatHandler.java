@@ -1,4 +1,4 @@
-package github.com.suitelhy.dingding.app.web.netty.websocket.handler;
+package github.com.suitelhy.dingding.app.web.netty.demo.websocket.handler;
 
 import github.com.suitelhy.dingding.app.infrastructure.util.CalendarController;
 import io.netty.channel.Channel;
@@ -74,7 +74,7 @@ public class ChatHandler
         if (null != clients.find(channel.id())) {
             clients.remove(channel);
         }
-        System.out.println("=== " + this.getClass().getSimpleName() + "操作对象已移除 ===");
+        System.out.println("===== " + this.getClass().getSimpleName() + "操作对象已移除 =====");
     }
 
 }

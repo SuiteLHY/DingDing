@@ -1,4 +1,4 @@
-package github.com.suitelhy.dingding.app.web.netty.demo;
+package github.com.suitelhy.dingding.app.web.netty.demo.base;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
