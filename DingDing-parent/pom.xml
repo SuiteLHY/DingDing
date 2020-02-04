@@ -147,6 +147,13 @@
                 <version>2.1.1</version>
             </dependency>-->
 
+            <!-- Spring Security - OAuth2 支持 -->
+            <dependency>
+                <groupId>org.springframework.security.oauth</groupId>
+                <artifactId>spring-security-oauth2</artifactId>
+                <version>2.4.0.RELEASE</version>
+            </dependency>
+
             <!-- Netty框架 -->
             <dependency>
                 <groupId>io.netty</groupId>
