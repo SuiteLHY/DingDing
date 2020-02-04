@@ -16,7 +16,7 @@ public interface Account<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V exten
     /**
      * 账户 - 状态
      */
-    enum StatusVo implements Account<StatusVo, Integer, String> {
+    enum StatusVo implements VoModel<StatusVo, Integer, String> {
         DESTRUCTION(0, "注销", "该账户已经被注销, 业务逻辑上已被删除")
         , NORMAL(1, "正常", "该账户正常")
         , ABNORMAL(2, "异常", "该账户异常, 很可能出现了严重的问题, 应该被禁用");

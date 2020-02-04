@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 public interface UserAttach<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V extends Number, _DESCRIPTION>
         extends VoModel<VO, V, _DESCRIPTION> {
 
-    enum AttachTypeVo implements UserAttach<AttachTypeVo, Integer, String> {
+    enum AttachTypeVo implements VoModel<AttachTypeVo, Integer, String> {
         FACE_IMAGE(1, "头像", "用户头像")
         , QR_CODE(2, "二维码", "用户二维码");
 

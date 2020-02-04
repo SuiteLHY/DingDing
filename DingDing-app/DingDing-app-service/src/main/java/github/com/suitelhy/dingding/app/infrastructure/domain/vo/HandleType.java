@@ -14,7 +14,7 @@ public interface HandleType<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V ex
     /**
      * 日志记录 - 操作类型
      */
-    enum LogVo implements HandleType<LogVo, Integer, String> {
+    enum LogVo implements VoModel<LogVo, Integer, String> {
         USER_REGISTRATION(1
                 , "用户注册"
                 , "正常业务流程, 注册用户")
