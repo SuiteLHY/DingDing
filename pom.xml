@@ -6,14 +6,25 @@
 
     <groupId>github.com.SuiteLHY</groupId>
     <artifactId>DingDing</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
     <name>DingDing</name>
     <description>DingDing - Suite</description>
-    <version>0.0.1-SNAPSHOT</version>
+
+    <properties>
+        <dingding.core.version>1.0.0-SNAPSHOT</dingding.core.version>
+        <dingding.sso.version>1.0.0-SNAPSHOT</dingding.sso.version>
+        <!--<dingding.security.version>1.0.0-SNAPSHOT</dingding.security.version>-->
+        <dingding.security.app.version>1.0.0-SNAPSHOT</dingding.security.app.version>
+        <dingding.security.authorize.version>1.0.0-SNAPSHOT</dingding.security.authorize.version>
+        <dingding.security.browser.version>1.0.0-SNAPSHOT</dingding.security.browser.version>
+        <dingding.security.core.version>1.0.0-SNAPSHOT</dingding.security.core.version>
+    </properties>
 
     <modules>
         <module>DingDing-app</module>
+        <module>DingDing-core</module>
         <module>DingDing-parent</module>
         <module>DingDing-sso</module>
+        <module>DingDing-security</module>
     </modules>
-
 </project>

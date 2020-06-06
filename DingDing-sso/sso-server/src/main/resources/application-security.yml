@@ -1,0 +1,22 @@
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+
+dingding:
+  security:
+    signing-key: dingding
+
+#spring:
+#  security:
+##    oauth2:
+##      client:
+##        registration:
+##          client-id: dingding1
+##          client-secret: dingding_secret1
+##          authorization-grant-type: authorization_code
+##          redirect-uri: http://example.com
+##          scope: all
+#    user:
+#      password: 123456

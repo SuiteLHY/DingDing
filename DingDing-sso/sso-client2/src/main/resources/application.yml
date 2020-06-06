@@ -1,0 +1,31 @@
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+
+server:
+  port: 8060
+  servlet:
+    context-path: /client2
+
+spring:
+  security:
+    oauth2:
+      # 客户端配置: 详见 <class>org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties</class>
+      client:
+        registration:
+          access-token-uri: http://127.0.0.1:9999/authorization-server/oauth/token
+          client-id: dingding2
+          client-secret: dingding_secrect2
+          redirect-uri: http://127.0.0.1:8060/client2/index.html
+#          user-authorization-uri: http://127.0.0.1:9999/authorization-server/oauth/authorize
+#        provider:
+#          authorization-uri: http://127.0.0.1:8060/client2/oauth/check_token
+      # 资源服务器配置: 详见 <class>org.springframework.boot.autoconfigure.security.oauth2.authorization.OAuth2ResourceServerProperties</class>
+      resourceserver:
+        jwt:
+          ### 资源服务器将期望授权服务器具有安全的端点; 我们可以选择使用
+          ###->【/oauth/check_token】端点 (又称自省端点) 或从【/oauth/token_key】获取单个密钥:
+          jwk-set-uri: http://127.0.0.1:9999/authorization-server/oauth/token_key
+#          issuer-uri: http://127.0.0.1:9999/authorization-server/oauth/token_key

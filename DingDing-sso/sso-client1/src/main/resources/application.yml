@@ -1,0 +1,50 @@
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+
+server:
+  port: 8080
+  servlet:
+    context-path: /client1
+
+# 配置项参考:
+#-> <a href="https://www.oschina.net/question/2325281_2287594">
+#->     spring-security-auth-sso 异常 纠结了两天 - OSCHINA</a>
+#-> , <a href="https://www.baeldung.com/spring-security-oauth2-jws-jwk">
+#->     JWS + JWK in a Spring Security OAuth2 Application | Baeldung</a>
+#-> , <a href="https://github.com/Baeldung/spring-security-oauth/blob/master/oauth-jws-jwk-legacy/oauth-resource-server-jws-jwk-legacy/src/main/resources/application.properties">
+#->     spring-security-oauth/application.properties at master · Baeldung/spring-security-oauth</a>
+#-> , 【☆】<a href="https://www.baeldung.com/spring-security-oauth-jwt">
+#->     Using JWT with Spring Security OAuth | Baeldung</a>
+spring:
+  security:
+    oauth2:
+      # 客户端配置: 详见 <class>org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties</class>
+      client:
+        registration:
+          dingding:
+            ## 用于令牌获取的地址
+            access-token-uri: http://127.0.0.1:9999/authorization-server/oauth/token
+            authorization-grant-type: authorization_code,password,refresh_token
+#            clientAuthenticationMethod:
+            client-id: dingding1
+            client-secret: dingding_secrect1
+            redirect-uri: http://127.0.0.1:8080/client1/index.html
+            scope: all
+          github:
+            clientId: a636fa19ee3bb3d561f2
+            clientSecret: da7b517ee438ada466d020b3911b5a5be64be9ef
+        provider:
+          dingding:
+            authorizationUri: http://127.0.0.1:9999/authorization-server/oauth/authorize
+            ### 资源服务器将期望授权服务器具有安全的端点; 我们可以从【/oauth/token_key】获取密钥:
+            jwk-set-uri: http://127.0.0.1:9999/authorization-server/oauth/token_key
+            tokenUri: http://127.0.0.1:9999/authorization-server/oauth/token
+#            userInfoAuthenticationMethod: form
+      # 资源服务器配置: 详见 <class>org.springframework.boot.autoconfigure.security.oauth2.authorization.OAuth2ResourceServerProperties</class>
+      resourceserver:
+        jwt:
+          ### 资源服务器将期望授权服务器具有安全的端点; 我们可以从【/oauth/token_key】获取密钥:
+          jwk-set-uri: http://127.0.0.1:9999/authorization-server/oauth/token_key

@@ -1,0 +1,24 @@
+dingding:
+  security:
+    signing-key: dingding
+
+logging:
+  level:
+    root: WARN
+    org:
+      springframework:
+        web: INFO
+        security: DEBUG
+
+spring:
+  security:
+    oauth2:
+      # 资源服务器配置: 详见 <class>org.springframework.boot.autoconfigure.security.oauth2.authorization.OAuth2ResourceServerProperties</class>
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://127.0.0.1:9999/authorization-server/oauth/token_key
+#          issuer-uri: http://127.0.0.1:9999/authorization-server
+#        opaquetoken:
+#          client-id: dingding1
+#          client-secret: dingding_secrect1
+#          introspection-uri: http://127.0.0.1:9999/authorization-server/oauth/check_token

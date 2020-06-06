@@ -5,19 +5,211 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
 
-    <modules>
-        <module>DingDing-sso-service</module>
-    </modules>
-
-    <parent>
-        <groupId>github.com.SuiteLHY</groupId>
-        <artifactId>DingDing-parent</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
-        <relativePath>../DingDing-parent</relativePath>
-    </parent>
-
     <artifactId>DingDing-sso</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
     <name>sso</name>
     <description>DingDing-sso</description>
 
+    <parent>
+        <groupId>github.com.SuiteLHY</groupId>
+        <artifactId>DingDing</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../../DingDing</relativePath>
+    </parent>
+
+    <modules>
+        <module>sso-authorization</module>
+        <module>sso-resource</module>
+        <module>sso-server</module>
+    </modules>
+
+    <properties>
+        <failOnMissingWebXml>false</failOnMissingWebXml>
+        <java.version>1.8</java.version>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <resource.delimiter>@</resource.delimiter>
+        <spring-cloud.version>Hoxton.SR3</spring-cloud.version>
+        <!--<spring.boot.security>2.2.2.RELEASE</spring.boot.security>-->
+        <spring.security.oauth2>2.4.0.RELEASE</spring.security.oauth2>
+        <spring.security.oauth2.autoconfigure>2.2.1.RELEASE</spring.security.oauth2.autoconfigure>
+        <spring.security.jwt>1.1.0.RELEASE</spring.security.jwt>
+        <springframework.boot.version>2.2.2.RELEASE</springframework.boot.version>
+        <nimbus.jose.jwt.version>8.2.1</nimbus.jose.jwt.version>
+    </properties>
+
+    <dependencies>
+        <!-- === DingDing 组件 === -->
+        <dependency>
+            <groupId>github.com.SuiteLHY</groupId>
+            <artifactId>DingDing-core</artifactId>
+            <version>{dingding.core.version}</version>
+            <optional>true</optional>
+            <scope>compile</scope>
+        </dependency>
+        <!-- ====== -->
+
+        <!-- Web -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- Spring Test -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <!-- 排除 JUnit Vintage(兼容并启用已淘汰的 Junit 4 & 3) -->
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- Spring boot - 热部署(开发)工具 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+            <!-- 仅开发环境下启用 -->
+            <scope>test</scope>
+        </dependency>
+
+        <!-- lombok -->
+        <!--<dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>-->
+
+        <!-- ===== SpringFox - Swagger ===== -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <!--<version>2.9.2</version>-->
+            <version>2.8.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <!--<version>2.9.2</version>-->
+            <version>2.8.0</version>
+        </dependency>
+        <!-- ===== -->
+
+        <!-- Spring FrameWork 相关依赖资源 -->
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>annotations</artifactId>
+            <version>3.0.1</version>
+        </dependency>
+    </dependencies>
+
+    <!-- {@Note <p><code><dependencyManagement></code>标签组中声明的依赖项必须显式声明版本号, 故屏蔽不正确的配置项.</p>} -->
+    <dependencyManagement>
+        <dependencies>
+            <!-- 官方废弃项目 <a href="https://www.jianshu.com/p/3fcfac7a85e7"></a> -->
+            <!--<dependency>
+                <groupId>io.spring.platform</groupId>
+                <artifactId>platform-bom</artifactId>
+                <version>Brussels-SR4</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>-->
+
+            <dependency>
+                <!-- Import dependency management from Spring Boot -->
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${springframework.boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-dependencies -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <!--<version>Dalston.SR2</version>-->
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- === Spring Security === -->
+            <!--<dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-security</artifactId>
+                <version>${spring.boot.security}</version>
+            </dependency>-->
+
+            <!-- === Spring Security OAuth2 === -->
+            <dependency>
+                <groupId>org.springframework.security.oauth</groupId>
+                <artifactId>spring-security-oauth2</artifactId>
+                <version>${spring.security.oauth2}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security.oauth.boot</groupId>
+                <artifactId>spring-security-oauth2-autoconfigure</artifactId>
+                <version>${spring.security.oauth2.autoconfigure}</version>
+            </dependency>
+            <!-- ====== -->
+
+            <!-- === JWT === -->
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-jwt</artifactId>
+                <version>${spring.security.jwt}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/com.nimbusds/nimbus-jose-jwt -->
+            <!--<dependency>
+                <groupId>com.nimbusds</groupId>
+                <artifactId>nimbus-jose-jwt</artifactId>
+                <version>${nimbus.jose.jwt.version}</version>
+            </dependency>-->
+            <!-- ====== -->
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${springframework.boot.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.7</version>
+                <configuration>
+                    <delimiters>
+                        <delimiter>@</delimiter>
+                    </delimiters>
+                    <useDefaultDelimiters>false</useDefaultDelimiters>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

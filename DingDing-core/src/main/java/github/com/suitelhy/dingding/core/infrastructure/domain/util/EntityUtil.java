@@ -1,0 +1,173 @@
+package github.com.suitelhy.dingding.core.infrastructure.domain.util;
+
+import github.com.suitelhy.dingding.core.infrastructure.domain.model.EntityModel;
+import github.com.suitelhy.dingding.core.infrastructure.domain.policy.DBPolicy;
+import github.com.suitelhy.dingding.core.infrastructure.util.RegexUtil;
+import org.springframework.lang.Nullable;
+
+import javax.validation.constraints.NotNull;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Map;
+
+/**
+ * Entity 工具类
+ *
+ * @Description Entity 层 - 业务辅助工具.
+ * @author Suite
+ */
+public final class EntityUtil {
+
+    public static class Regex {
+
+        /**
+         * 通用规则
+         *
+         * @Description 正则表达式校验 - 通用规则分类.
+         */
+        public static class GeneralRule {
+
+            /**
+             * 英文单词
+             *
+             * @Description 英文字母集合的简单校验.
+             * @param param         校验对象
+             * @param isUppercase   是否大写
+             * @param maxLength     单词的最大长度
+             * @return
+             */
+            public static boolean englishPhrases(@NotNull String param
+                    , @Nullable Boolean isUppercase
+                    , @Nullable Integer maxLength) {
+                if (null != param && (null == maxLength || maxLength > 0)) {
+                    String part_lengthRange = (null == maxLength)
+                            ? "+"
+                            : "{1," + maxLength + "}";
+                    if (Boolean.TRUE.equals(isUppercase)) {
+                        return RegexUtil.getPattern("^[A-Z]" + part_lengthRange + "$")
+                                .matcher(param)
+                                .matches();
+                    } else if (Boolean.FALSE.equals(isUppercase)) {
+                        return RegexUtil.getPattern("^[a-z]" + part_lengthRange + "$")
+                                .matcher(param)
+                                .matches();
+                    } else {
+                        return RegexUtil.getPattern("^[A-Za-z]" + part_lengthRange + "$")
+                                .matcher(param)
+                                .matches();
+                    }
+                }
+                return false;
+            }
+
+            /**
+             * 英文单词, 数字
+             *
+             * @Description 英文单词与数字的集合的简单校验; 交集/并集 取决于参数<param>param</param>.
+             * @param param
+             * @param rule
+             * @return
+             */
+            public static boolean englishPhrasesNumber(@NotNull String param, @NotNull Map<String, ?> rule) {
+                return false;
+            }
+
+            /**
+             * URL
+             *
+             * @Description 较为严格的校验.
+             *
+             * @Reference <a href="https://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url">
+             *->     javascript - What is a good regular expression to match a URL? - Stack Overflow</a>
+             *->     , <a href="https://blog.walterlv.com/post/match-web-url-using-regex.html">使用正则表达式尽可能准确匹配域名/网址</a>
+             *
+             * @param param
+             * @return
+             */
+            public static boolean url(@NotNull String param) {
+                return RegexUtil.getPattern("[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)")
+                        .matcher(param)
+                        .matches();
+            }
+
+        }
+
+        /**
+         * 校验 -> Entity 属性名称
+         *
+         * @param fieldName
+         * @return
+         * @Description 使用正则表达式校验
+         */
+        public static boolean validateFieldName(@Nullable String fieldName) {
+            return null != fieldName
+                    && RegexUtil.getPattern("^[a-z][A-Za-z0-9]+$").matcher(fieldName).matches();
+        }
+
+        /**
+         * 校验 -> Entity 唯一标识 (ID)
+         *
+         * @param id
+         * @return
+         * @Description Entity - ID 校验通用规范. 至多32位的16(或以下)进制数字
+         */
+        public static boolean validateId(@Nullable String id) {
+            return null != id
+                    && (RegexUtil.getPattern("^[a-zA-Z0-9]{1,32}$").matcher(id).matches() || DBPolicy.MYSQL.validateUuid(id));
+        }
+
+        /**
+         * 校验 -> 用户名称
+         *
+         * @param username
+         * @return
+         * @Description 用户名称 <- 规则: <tt>大小写字母 | 数字(无符号) | 中文字符</tt>, 长度范围 [1,18].
+         */
+        public static boolean validateUsername(@Nullable String username) {
+            return null != username
+                    && RegexUtil.getPattern("^[a-zA-Z0-9\\u4e00-\\u9fa5]{1,18}$").matcher(username).matches();
+        }
+
+        /**
+         * 校验 -> 用户密码
+         *
+         * @param password
+         * @return
+         * @Description 用户密码规则: 以字母开头, 长度在6~18之间, 只能包含字母、数字和下划线.
+         */
+        public static boolean validateUserPassword(@Nullable String password) {
+            return null != password
+                    && RegexUtil.getPattern("^[a-zA-Z]\\w{5,17}$").matcher(password).matches();
+        }
+
+        private Regex() {}
+
+    }
+
+    /**
+     * 通过反射执行指定方法
+     *
+     * @param entity
+     * @param fieldName
+     * @param parameterTypes
+     * @param args
+     * @param <T>
+     * @return 所执行的方法的返回值 - 可为 null, 此时成功执行方法且方法返回值
+     * -> 为 null, 或者方法执行失败且由 <code>invokeMethod</code> 方法处理异常.
+     */
+    public static <T extends EntityModel> Object invokeMethod(@NotNull T entity
+            , @NotNull String fieldName
+            , @Nullable Class<?>[] parameterTypes
+            , @Nullable Object[] args) {
+        Object result;
+        Method method;
+        try {
+            method = entity.getClass().getMethod(fieldName, parameterTypes);
+            result = method.invoke(entity, args);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException("反射调用工具 - 通过反射执行指定方法出错", e);
+        }
+        return result;
+    }
+
+}

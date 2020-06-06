@@ -1,0 +1,24 @@
+<!-- 参阅<a href="https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html">
+    Thymeleaf 官方文档</a> -->
+<!-- @Reference
+    <a href="https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html#inlining">12 Inlining</a>
+-->
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>异常处理结果</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body th:with="ex=${#request.getAttribute('ex')}">
+    <h2>业务错误: [[${ex.getClass().getSimpleName()}]]</h2>
+
+    <hr />
+
+    <p>错误描述：</p>
+    [[${ex.getMessage()}]]
+
+    <p>错误信息：</p>
+    [[${exStackTrace}]]
+</body>
+</html>
