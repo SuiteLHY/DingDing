@@ -11,13 +11,13 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 /**
- * 用户 - 角色
+ * 角色 - 资源
  *
- * @Description 用户 - 角色 关联关系.
+ * @Description 角色 - 资源 关联关系.
  */
 @Entity
-@Table(name = "SECURITY_USER_ROLE")
-public class UserRole
+@Table(name = "SECURITY_ROLE_RESOURCE")
+public class SecurityRoleResource
         extends AbstractEntityModel<Long> {
 
     /**
@@ -30,20 +30,20 @@ public class UserRole
     private Long id;
 
     /**
-     * 用户ID
-     *
-     * @Description 单个.
-     */
-    @Column(name = "username", nullable = false)
-    private String username;
-
-    /**
      * 角色编码
      *
      * @Description 单个.
      */
     @Column(name = "role_code", nullable = false)
     private String roleCode;
+
+    /**
+     * 资源编码
+     *
+     * @Description 单个.
+     */
+    @Column(name = "resource_code", nullable = false)
+    private String resourceCode;
 
     // 数据更新时间 (由数据库管理)
     @Column(name = "data_time")
@@ -76,8 +76,8 @@ public class UserRole
      */
     @Override
     public boolean isEntityLegal() {
-        return Validator.USER_ROLE.username(this.username)
-                && Validator.USER_ROLE.roleCode(this.roleCode);
+        return Validator.ROLE_RESOURCE.roleCode(this.roleCode)
+                && Validator.ROLE_RESOURCE.resourceCode(this.resourceCode);
     }
 
     /**
@@ -89,12 +89,12 @@ public class UserRole
      */
     @Override
     protected boolean validateId(@NotNull Long id) {
-        return Validator.USER_ROLE.id(id);
+        return Validator.ROLE_RESOURCE.id(id);
     }
 
     @Override
     public String toString() {
-        return Long.toString(id());
+        return roleCode;
     }
 
     //===== Entity Validator =====//
@@ -105,11 +105,11 @@ public class UserRole
      * @Description 各个属性的基础校验(注意: 此校验 ≠ 完全校验).
      */
     public enum Validator
-            implements EntityValidator<UserRole, Long> {
-        USER_ROLE;
+            implements EntityValidator<SecurityRoleResource, Long> {
+        ROLE_RESOURCE;
 
         @Override
-        public boolean validateId(@NotNull UserRole entity) {
+        public boolean validateId(@NotNull SecurityRoleResource entity) {
             return null != entity.id()
                     && id(entity.id());
         }
@@ -120,12 +120,12 @@ public class UserRole
                     && EntityUtil.Regex.validateId(Long.toString(id));
         }
 
-        public boolean username(@NotNull String username) {
-            return SecurityUser.Validator.USER.username(username);
+        public boolean roleCode(@NotNull String roleCode) {
+            return SecurityRole.Validator.ROLE.code(roleCode);
         }
 
-        public boolean roleCode(@NotNull String roleCode) {
-            return Role.Validator.ROLE.code(roleCode);
+        public boolean resourceCode(@NotNull String resourceCode) {
+            return SecurityResource.Validator.RESOURCE.code(resourceCode);
         }
 
     }
@@ -135,7 +135,7 @@ public class UserRole
     /**
      * 仅用于持久化注入
      */
-    public UserRole() {}
+    public SecurityRoleResource() {}
 
     //===== entity factory =====//
 
@@ -143,75 +143,75 @@ public class UserRole
      * (构造器)
      *
      * @param id            数据 ID
-     * @param username      用户名
      * @param roleCode      角色编码
+     * @param resourceCode  资源编码
      * @throws IllegalArgumentException
      */
-    private UserRole(@NotNull Long id
-            , @NotNull String username
-            , @Nullable String roleCode)
+    private SecurityRoleResource(@NotNull Long id
+            , @NotNull String roleCode
+            , @Nullable String resourceCode)
             throws IllegalArgumentException {
         if (null == id) {
             //--- 添加功能
         } else {
             //--- 更新功能
-            if (!Validator.USER_ROLE.id(id)) {
+            if (!Validator.ROLE_RESOURCE.id(id)) {
                 //-- 非法输入: 数据ID
                 throw new IllegalArgumentException(this.getClass().getSimpleName()
                         + " -> 非法输入: 数据ID");
             }
         }
-        if (!Validator.USER_ROLE.username(username)) {
-            //-- 非法输入: 用户名
-            throw new IllegalArgumentException(this.getClass().getSimpleName()
-                    + " -> 非法输入: 用户名");
-        }
-        if (!Validator.USER_ROLE.roleCode(roleCode)) {
+        if (!Validator.ROLE_RESOURCE.roleCode(roleCode)) {
             //-- 非法输入: 角色编码
             throw new IllegalArgumentException(this.getClass().getSimpleName()
                     + " -> 非法输入: 角色编码");
         }
+        if (!Validator.ROLE_RESOURCE.resourceCode(resourceCode)) {
+            //-- 非法输入: 资源编码
+            throw new IllegalArgumentException(this.getClass().getSimpleName()
+                    + " -> 非法输入: 资源编码");
+        }
 
         // 数据ID
         this.id = id;
-        // 用户名
-        this.setUsername(username);
         // 角色编码
         this.setRoleCode(roleCode);
+        // 资源编码
+        this.setResourceCode(resourceCode);
     }
 
     public enum Factory
-            implements EntityFactory<UserRole> {
-        USER_ROLE;
+            implements EntityFactory<SecurityRoleResource> {
+        ROLE_RESOURCE;
 
         /**
          * 创建
          *
-         * @param username      用户名
-         * @param roleCode      角色编码
+         * @param roleCode          角色编码
+         * @param resourceCode      资源编码
          * @throws IllegalArgumentException
          */
-        public UserRole create(@NotNull String username, @Nullable String roleCode)
+        public SecurityRoleResource create(@NotNull String roleCode, @Nullable String resourceCode)
                 throws IllegalArgumentException {
-            return new UserRole(null, username, roleCode);
+            return new SecurityRoleResource(null, roleCode, resourceCode);
         }
 
         /**
          * 更新
          *
-         * @param id          数据 ID
-         * @param username    用户名
-         * @param roleCode    角色编码
+         * @param id            数据 ID
+         * @param roleCode      角色编码
+         * @param resourceCode  资源编码
          * @throws IllegalArgumentException
          */
-        public UserRole update(@NotNull Long id
-                , @NotNull String username
-                , @Nullable String roleCode)
+        public SecurityRoleResource update(@NotNull Long id
+                , @NotNull String roleCode
+                , @Nullable String resourceCode)
                 throws IllegalArgumentException {
-            if (!Validator.USER_ROLE.id(id)) {
+            if (!Validator.ROLE_RESOURCE.id(id)) {
                 throw new IllegalArgumentException("非法输入: 数据 ID");
             }
-            return new UserRole(id, username, roleCode);
+            return new SecurityRoleResource(id, roleCode, resourceCode);
         }
 
     }
@@ -222,25 +222,25 @@ public class UserRole
         return id;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public boolean setUsername(String username) {
-        if (Validator.USER_ROLE.username(username)) {
-            this.username = username;
-            return true;
-        }
-        return false;
-    }
-
     public String getRoleCode() {
         return roleCode;
     }
 
     public boolean setRoleCode(String roleCode) {
-        if (Validator.USER_ROLE.roleCode(roleCode)) {
+        if (Validator.ROLE_RESOURCE.roleCode(roleCode)) {
             this.roleCode = roleCode;
+            return true;
+        }
+        return false;
+    }
+
+    public String getResourceCode() {
+        return resourceCode;
+    }
+
+    public boolean setResourceCode(String resourceCode) {
+        if (Validator.ROLE_RESOURCE.resourceCode(resourceCode)) {
+            this.resourceCode = resourceCode;
             return true;
         }
         return false;

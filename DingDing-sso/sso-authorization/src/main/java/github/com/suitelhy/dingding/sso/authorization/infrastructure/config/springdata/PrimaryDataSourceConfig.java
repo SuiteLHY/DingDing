@@ -26,8 +26,9 @@ import java.util.Map;
 // {@Note 项目复用 - copy 代码以后, 一定要记得这些配置类中的所有配置项必需要彻底检查;
 //->      出问题的时候, 没想起来, Context加载失败报错找不到repository的bean; 最后是找控制面板信息发现
 //->      ".s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 9ms. Found 0 JPA repository interfaces."}
-@EnableJpaRepositories(basePackages = {"github.com.suitelhy.dingding.sso.authorization.domain.repository"}
-        , entityManagerFactoryRef = "primaryEntityManagerFactory"
+@EnableJpaRepositories(basePackages = {"github.com.suitelhy.dingding.sso.authorization.domain.repository"
+            , "github.com.suitelhy.dingding.core.domain.repository"
+        }, entityManagerFactoryRef = "primaryEntityManagerFactory"
         , transactionManagerRef = "primaryTransactionManager")
 @EnableTransactionManagement
 public class PrimaryDataSourceConfig {
@@ -64,7 +65,8 @@ public class PrimaryDataSourceConfig {
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(EntityManagerFactoryBuilder builder) {
         return builder
                 .dataSource(primaryDataSource)
-                .packages("github.com.suitelhy.dingding.sso.authorization.domain.entity") // 设置实体类所在位置
+                .packages("github.com.suitelhy.dingding.sso.authorization.domain.entity"
+                        , "github.com.suitelhy.dingding.core.domain.entity") // 设置实体类所在位置
                 .persistenceUnit("primaryPersistenceUnit")
                 // ↑ 持久性单元的名称.
                 //-> 如果仅构建一个 EntityManagerFactory, 则可以忽略这一点, 但是如果同一应用程序中有多个, 则应给它们指定不同的名称.

@@ -31,10 +31,10 @@ public final class EntityUtil {
              * 英文单词
              *
              * @Description 英文字母集合的简单校验.
-             * @param param         校验对象
+             * @param param         被校验对象
              * @param isUppercase   是否大写
              * @param maxLength     单词的最大长度
-             * @return
+             * @return  校验结果
              */
             public static boolean englishPhrases(@NotNull String param
                     , @Nullable Boolean isUppercase
@@ -64,12 +64,195 @@ public final class EntityUtil {
              * 英文单词, 数字
              *
              * @Description 英文单词与数字的集合的简单校验; 交集/并集 取决于参数<param>param</param>.
-             * @param param
-             * @param rule
-             * @return
+             *
+             * @param param     被校验对象, 不为 null, 非空字符串.
+             * @param rule      参数集合; 说明:
+             *                  {
+             *                      "isUppercase": true / false / null; 是否大写, Boolean类型; 缺省 -> null (兼容大写和小写字母).
+             *                      , "setPrinciple": "intersection" / "union" / null; 集合规则, String类型; 缺省或值为 null -> "union".
+             *                      , "maxLength": Integer类型, 大于 0; 缺省或值为 null -> 正无穷.
+             *                  }
+             * @return  校验结果
              */
-            public static boolean englishPhrasesNumber(@NotNull String param, @NotNull Map<String, ?> rule) {
-                return false;
+            public static boolean englishPhrases_Number(@NotNull String param
+                    , @NotNull Map<String, ?> rule) {
+                //=== 参数合法性校验 ===//
+                if (null == param || "".equals(param)) {
+                    //-- 非法输入: 被校验对象
+                    throw new IllegalArgumentException(GeneralRule.class.getSimpleName()
+                            .concat(" -> 非法输入: 被校验对象 <param>param</param>"));
+                }
+                if (null == rule) {
+                    //-- 非法输入: 参数集合
+                    throw new IllegalArgumentException(GeneralRule.class.getSimpleName()
+                            .concat(" -> 非法输入: 参数集合 <param>rule</param>"));
+                }
+
+                //=== <param>rule</param> 参数提取 ===//
+                Boolean isUppercase = (null == rule.get("isUppercase"))
+                        ? null
+                        : Boolean.TRUE.equals(rule.get("isUppercase"));
+
+                Integer maxLength = rule.get("maxLength") instanceof Integer
+                        ? (Integer) rule.get("maxLength")
+                        : null;
+                if (null != maxLength && maxLength <= 0) {
+                    maxLength = null;
+                }
+
+                String setPrinciple = "intersection".equals(rule.get("setPrinciple"))
+                        ? "intersection"
+                        : "union";
+                //======//
+
+                String part_lengthRange = (null == maxLength)
+                        ? "+"
+                        : "{1,".concat(maxLength.toString()).concat("}");
+
+                if ("intersection".equals(setPrinciple)) {
+                    //--- 集合规则: 交集
+                    if (Boolean.TRUE.equals(isUppercase)) {
+                        return RegexUtil
+                                .getPattern("(^[A-Z]".concat(part_lengthRange).concat("$)")
+                                        .concat("|")
+                                        .concat("(^[0-9]").concat(part_lengthRange).concat("$)"))
+                                .matcher(param)
+                                .matches();
+                    } else if (Boolean.FALSE.equals(isUppercase)) {
+                        return RegexUtil
+                                .getPattern("(^[a-z]".concat(part_lengthRange).concat("$)")
+                                        .concat("|")
+                                        .concat("(^[0-9]").concat(part_lengthRange).concat("$)"))
+                                .matcher(param)
+                                .matches();
+                    } else {
+                        return RegexUtil
+                                .getPattern("(^[A-Za-z]".concat(part_lengthRange).concat("$)")
+                                        .concat("|")
+                                        .concat("(^[0-9]").concat(part_lengthRange).concat("$)"))
+                                .matcher(param)
+                                .matches();
+                    }
+                } else {
+                    //--- 集合规则: 并集
+                    if (Boolean.TRUE.equals(isUppercase)) {
+                        return RegexUtil
+                                .getPattern("^[A-Z0-9]".concat(part_lengthRange).concat("$"))
+                                .matcher(param)
+                                .matches();
+                    } else if (Boolean.FALSE.equals(isUppercase)) {
+                        return RegexUtil
+                                .getPattern("^[a-z0-9]".concat(part_lengthRange).concat("$"))
+                                .matcher(param)
+                                .matches();
+                    } else {
+                        return RegexUtil
+                                .getPattern("^[A-Za-z0-9]".concat(part_lengthRange).concat("$"))
+                                .matcher(param)
+                                .matches();
+                    }
+                }
+            }
+
+            /**
+             * 中文, 英文单词, 数字
+             *
+             * @Description 中文、英文单词与数字的集合的简单校验; 交集/并集 取决于参数<param>param</param>.
+             *
+             * @param param     被校验对象, 不为 null, 非空字符串.
+             * @param rule      参数集合; 说明:
+             *                  {
+             *                      "isUppercase": true / false / null; 是否大写, Boolean类型; 缺省 -> null.
+             *                      , "setPrinciple": "intersection" / "union" / null; 集合规则, String类型; 缺省或值为 null -> "union".
+             *                      , "maxLength": Integer类型, 大于 0; 缺省或值为 null -> 正无穷.
+             *                  }
+             * @return  校验结果
+             */
+            public static boolean chinese_EnglishPhrases_Number(@NotNull String param
+                    , @NotNull Map<String, ?> rule) {
+                //=== 参数合法性校验 ===//
+                if (null == param || "".equals(param)) {
+                    //-- 非法输入: 被校验对象
+                    throw new IllegalArgumentException(GeneralRule.class.getSimpleName()
+                            .concat(" -> 非法输入: 被校验对象 <param>param</param>"));
+                }
+                if (null == rule) {
+                    //-- 非法输入: 参数集合
+                    throw new IllegalArgumentException(GeneralRule.class.getSimpleName()
+                            .concat(" -> 非法输入: 参数集合 <param>rule</param>"));
+                }
+
+                //=== <param>rule</param> 参数提取 ===//
+                Boolean isUppercase = (null == rule.get("isUppercase"))
+                        ? null
+                        : Boolean.TRUE.equals(rule.get("isUppercase"));
+
+                Integer maxLength = rule.get("maxLength") instanceof Integer
+                        ? (Integer) rule.get("maxLength")
+                        : null;
+                if (null != maxLength && maxLength <= 0) {
+                    maxLength = null;
+                }
+
+                String setPrinciple = "intersection".equals(rule.get("setPrinciple"))
+                        ? "intersection"
+                        : "union";
+                //======//
+
+                String part_lengthRange = (null == maxLength)
+                        ? "+"
+                        : "{1,".concat(maxLength.toString()).concat("}");
+
+                if ("intersection".equals(setPrinciple)) {
+                    //--- 集合规则: 交集
+                    if (Boolean.TRUE.equals(isUppercase)) {
+                        return RegexUtil
+                                .getPattern("(^[\\u4e00-\\u9fa5]".concat(part_lengthRange).concat("$)")
+                                        .concat("|")
+                                        .concat("(^[A-Z]").concat(part_lengthRange).concat("$)")
+                                        .concat("|")
+                                        .concat("(^[0-9]").concat(part_lengthRange).concat("$)"))
+                                .matcher(param)
+                                .matches();
+                    } else if (Boolean.FALSE.equals(isUppercase)) {
+                        return RegexUtil
+                                .getPattern(
+                                        "(^[\\u4e00-\\u9fa5]".concat(part_lengthRange).concat("$)")
+                                        .concat("|")
+                                        .concat("(^[a-z]").concat(part_lengthRange).concat("$)")
+                                        .concat("|")
+                                        .concat("(^[0-9]").concat(part_lengthRange).concat("$)"))
+                                .matcher(param)
+                                .matches();
+                    } else {
+                        return RegexUtil
+                                .getPattern("(^[\\u4e00-\\u9fa5]".concat(part_lengthRange).concat("$)")
+                                        .concat("|")
+                                        .concat("(^[A-Za-z]").concat(part_lengthRange).concat("$)")
+                                        .concat("|")
+                                        .concat("(^[0-9]").concat(part_lengthRange).concat("$)"))
+                                .matcher(param)
+                                .matches();
+                    }
+                } else {
+                    //--- 集合规则: 并集
+                    if (Boolean.TRUE.equals(isUppercase)) {
+                        return RegexUtil
+                                .getPattern("^[\\u4e00-\\u9fa5A-Z0-9]".concat(part_lengthRange).concat("$"))
+                                .matcher(param)
+                                .matches();
+                    } else if (Boolean.FALSE.equals(isUppercase)) {
+                        return RegexUtil
+                                .getPattern("^[\\u4e00-\\u9fa5a-z0-9]".concat(part_lengthRange).concat("$"))
+                                .matcher(param)
+                                .matches();
+                    } else {
+                        return RegexUtil
+                                .getPattern("^[\\u4e00-\\u9fa5A-Za-z0-9]".concat(part_lengthRange).concat("$"))
+                                .matcher(param)
+                                .matches();
+                    }
+                }
             }
 
             /**
@@ -80,12 +263,34 @@ public final class EntityUtil {
              * @Reference <a href="https://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url">
              *->     javascript - What is a good regular expression to match a URL? - Stack Overflow</a>
              *->     , <a href="https://blog.walterlv.com/post/match-web-url-using-regex.html">使用正则表达式尽可能准确匹配域名/网址</a>
+             *->     , (相关知识) <a href="https://www.cnblogs.com/panpanwelcome/p/7464511.html">正则匹配-URL-域名 - 晴天彩虹 - 博客园</a>
              *
-             * @param param
-             * @return
+             * @param param     被校验对象
+             * @return  校验结果
              */
             public static boolean url(@NotNull String param) {
-                return RegexUtil.getPattern("[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)")
+                return RegexUtil
+                        .getPattern("[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)")
+                        .matcher(param)
+                        .matches();
+            }
+
+            /**
+             * URL 的 Path 部分
+             *
+             * @Description 较为宽松的校验.
+             *
+             * @Reference <a href="https://stackoverflow.com/questions/27745/getting-parts-of-a-url-regex">
+             *->     language agnostic - Getting parts of a URL (Regex) - Stack Overflow</a>
+             *-> , <a href="https://tools.ietf.org/html/rfc3986#appendix-B">
+             *->     RFC 3986 - Uniform Resource Identifier (URI): Generic Syntax</a>
+             *
+             * @param param     被校验对象
+             * @return          校验结果
+             */
+            public static boolean urlPath(@NotNull String param) {
+                return RegexUtil
+                        .getPattern("\\/([^?#]*)(\\?([^#]*))?(#(.*))?")
                         .matcher(param)
                         .matches();
             }
@@ -95,9 +300,10 @@ public final class EntityUtil {
         /**
          * 校验 -> Entity 属性名称
          *
-         * @param fieldName
-         * @return
          * @Description 使用正则表达式校验
+         *
+         * @param fieldName     被校验对象
+         * @return  校验结果
          */
         public static boolean validateFieldName(@Nullable String fieldName) {
             return null != fieldName
@@ -107,9 +313,10 @@ public final class EntityUtil {
         /**
          * 校验 -> Entity 唯一标识 (ID)
          *
-         * @param id
-         * @return
          * @Description Entity - ID 校验通用规范. 至多32位的16(或以下)进制数字
+         *
+         * @param id    被校验对象
+         * @return  校验结果
          */
         public static boolean validateId(@Nullable String id) {
             return null != id
@@ -119,9 +326,11 @@ public final class EntityUtil {
         /**
          * 校验 -> 用户名称
          *
-         * @param username
-         * @return
          * @Description 用户名称 <- 规则: <tt>大小写字母 | 数字(无符号) | 中文字符</tt>, 长度范围 [1,18].
+         *
+         * @param username      被校验对象
+         * @return  校验结果
+         * @see github.com.suitelhy.dingding.core.domain.entity.User.Validator#USER#validateUsername(String)
          */
         public static boolean validateUsername(@Nullable String username) {
             return null != username
@@ -131,9 +340,11 @@ public final class EntityUtil {
         /**
          * 校验 -> 用户密码
          *
-         * @param password
-         * @return
          * @Description 用户密码规则: 以字母开头, 长度在6~18之间, 只能包含字母、数字和下划线.
+         *
+         * @param password      被校验对象
+         * @return 校验结果
+         * @see github.com.suitelhy.dingding.core.domain.entity.User.Validator#USER#validateUserPassword(String)
          */
         public static boolean validateUserPassword(@Nullable String password) {
             return null != password
@@ -147,13 +358,13 @@ public final class EntityUtil {
     /**
      * 通过反射执行指定方法
      *
-     * @param entity
-     * @param fieldName
-     * @param parameterTypes
-     * @param args
-     * @param <T>
+     * @param entity            实体对象
+     * @param fieldName         字段名称
+     * @param parameterTypes    参数类型 (数组)
+     * @param args              参数对象 (数组)
+     * @param <T>               (泛型) {@link github.com.suitelhy.dingding.core.infrastructure.domain.model.EntityModel}的派生类型
      * @return 所执行的方法的返回值 - 可为 null, 此时成功执行方法且方法返回值
-     * -> 为 null, 或者方法执行失败且由 <code>invokeMethod</code> 方法处理异常.
+     *->    为 null, 或者方法执行失败且由 <code>invokeMethod</code> 方法处理异常.
      */
     public static <T extends EntityModel> Object invokeMethod(@NotNull T entity
             , @NotNull String fieldName

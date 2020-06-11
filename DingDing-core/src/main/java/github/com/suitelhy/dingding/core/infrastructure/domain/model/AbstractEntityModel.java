@@ -4,6 +4,17 @@ import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotNull;
 
+/**
+ * 实体设计模板的标准实现
+ *
+ * @Description 实体设计模板的标准实现.
+ * @Solution
+ *-> · 持久化映射字段及其 getter 方法 (通常情况下) 不应该使用原始类型. <- {@link <a href="https://stackoverflow.com/questions/56497893/org-springframework-aop-aopinvocationexception-null-return-value-from-advice-do">
+ *->     java - org.springframework.aop.AopInvocationException: Null return value from advice does not match primitive return type for: public abstract char - Stack Overflow</a>}
+ *
+ * @param <ID>      Entity 的唯一标识 (Identify) 的类型
+ * @see github.com.suitelhy.dingding.core.infrastructure.domain.model.EntityModel
+ */
 public abstract class AbstractEntityModel<ID>
         implements EntityModel<ID> {
 
@@ -54,7 +65,7 @@ public abstract class AbstractEntityModel<ID>
     public boolean isEmpty() {
         return (EntityModel.isEmpty(this) || !this.validateId(this.id()))
                 || !this.isEntityLegal()
-                || !Boolean.FALSE.equals(this.isEntityPersistence());
+                || Boolean.FALSE.equals(this.isEntityPersistence());
     }
 
     /**

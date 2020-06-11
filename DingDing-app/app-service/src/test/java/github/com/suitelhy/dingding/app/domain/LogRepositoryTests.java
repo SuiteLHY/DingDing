@@ -138,7 +138,7 @@ public class LogRepositoryTests {
                 , "User.Factory.USER.create(..) -> 无效的 User");
         Assert.isTrue(userService.insert(newUser)
                 , "===== insert(User) -> unexpected");
-        Assert.isTrue(!newUser.isEmpty()
+        Assert.isTrue(newUser.isEmpty()
                 , "===== insert(User) -> 无效的 User");
         System.out.println("newUser: " + newUser);
 
@@ -153,7 +153,7 @@ public class LogRepositoryTests {
                 , "Log.Factory.USER_LOG.create(..) -> 无效的 Log");
         Assert.notNull(newLog = logRepository.saveAndFlush(newLog)
                 , "===== saveAndFlush(Log) -> unexpected");
-        Assert.isTrue(!newLog.isEmpty()
+        Assert.isTrue(newLog.isEmpty()
                 , "===== saveAndFlush(Log) -> 无效的 Log");
         System.out.println("newLog: " + newLog);
     }
@@ -167,7 +167,7 @@ public class LogRepositoryTests {
                 , "User.Factory.USER.create(..) -> 无效的 User");
         Assert.isTrue(userService.insert(newUser)
                 , "===== insert(User) -> unexpected");
-        Assert.isTrue(!newUser.isEmpty()
+        Assert.isTrue(newUser.isEmpty()
                 , "===== insert(User) -> 无效的 User");
         System.out.println("newUser: " + newUser);
 
@@ -183,7 +183,7 @@ public class LogRepositoryTests {
                 , "Log.Factory.USER_LOG.create(..) -> 无效的 Log");
         Assert.notNull(newLog = logRepository.saveAndFlush(newLog)
                 , "===== saveAndFlush(Log) -> unexpected");
-        Assert.isTrue(!newLog.isEmpty()
+        Assert.isTrue(newLog.isEmpty()
                 , "===== saveAndFlush(Log) -> 无效的 Log");
         System.out.println("newLog: " + newLog);
 
@@ -209,7 +209,7 @@ public class LogRepositoryTests {
                 , "User.Factory.USER.create(..) -> 无效的 User");
         Assert.isTrue(userService.insert(newUser)
                 , "===== insert(User) -> unexpected");
-        Assert.isTrue(!newUser.isEmpty()
+        Assert.isTrue(newUser.isEmpty()
                 , "===== insert(User) -> 无效的 User");
         System.out.println("newUser: " + newUser);
 
@@ -225,7 +225,7 @@ public class LogRepositoryTests {
                 , "Log.Factory.USER_LOG.create(..) -> 无效的 Log");
         Assert.notNull(newLog = logRepository.saveAndFlush(newLog)
                 , "===== saveAndFlush(Log) -> unexpected");
-        Assert.isTrue(!newLog.isEmpty()
+        Assert.isTrue(newLog.isEmpty()
                 , "===== saveAndFlush(Log) -> 无效的 Log");
         System.out.println("newLog: " + newLog);
 

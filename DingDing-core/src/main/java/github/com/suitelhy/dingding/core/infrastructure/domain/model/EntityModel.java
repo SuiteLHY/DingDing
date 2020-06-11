@@ -8,7 +8,7 @@ import java.io.Serializable;
 /**
  * 实体设计模板
  *
- * @param <ID> - Entity 的唯一标识 (Identify) 的类型
+ * @param <ID>      Entity 的唯一标识 (Identify) 的类型
  */
 public interface EntityModel<ID> extends Serializable {
 

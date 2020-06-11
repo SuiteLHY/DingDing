@@ -1,5 +1,6 @@
 package github.com.suitelhy.dingding.core.domain.entity.security;
 
+import github.com.suitelhy.dingding.core.domain.entity.User;
 import github.com.suitelhy.dingding.core.infrastructure.domain.model.AbstractEntityModel;
 import github.com.suitelhy.dingding.core.infrastructure.domain.model.EntityFactory;
 import github.com.suitelhy.dingding.core.infrastructure.domain.model.EntityValidator;
@@ -28,6 +29,7 @@ public class SecurityUser
     @GeneratedValue(generator = "USER_ID_STRATEGY")
     @GenericGenerator(name = "USER_ID_STRATEGY", strategy = "uuid")
     @Id
+    @Column(name = "user_id")
     private String userId;
 
     /**
@@ -111,28 +113,28 @@ public class SecurityUser
             return userId(id);
         }
 
-        public boolean userId(@NotNull String userid) {
-            return EntityUtil.Regex.validateId(userid);
+        public boolean userId(@NotNull String userId) {
+            return EntityUtil.Regex.validateId(userId);
         }
 
         public boolean username(@NotNull String username) {
             return EntityUtil.Regex.validateUsername(username);
         }
 
-        public boolean roleCodes(@NotNull String roleCodes) {
+        /*public boolean roleCodes(@NotNull String roleCodes) {
             if (null != roleCodes) {
                 for (String each : roleCodes.split(",")) {
-                    if (!Role.Validator.ROLE.code(each)) {
+                    if (!SecurityRole.Validator.ROLE.code(each)) {
                         return false;
                     }
                 }
                 return true;
             }
             return false;
-        }
+        }*/
 
         public boolean status(@NotNull Account.StatusVo status) {
-            return Validator.USER.status(status);
+            return User.Validator.USER.status(status);
         }
 
     }

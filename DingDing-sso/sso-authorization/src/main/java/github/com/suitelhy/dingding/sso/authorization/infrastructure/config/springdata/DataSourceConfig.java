@@ -79,9 +79,10 @@ public class DataSourceConfig {
     /**
      * 加密器
      *
-     * @return
      * @Description 选择在此处注入是为了保证能够及时注入Bean, 主要是解决 Security OAuth 2 升级新版本的二传手 DI 问题.
      * @Reference <a href="https://stackoverflow.com/questions/42865065/spring-boot-upgrade-results-in-unresolvable-circular-reference">Spring Boot升级导致无法解决的循环引用</a>
+     *
+     * @return
      */
 	@Bean
 	public PasswordEncoder passwordEncoder()	{

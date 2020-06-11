@@ -1,5 +1,7 @@
-package github.com.suitelhy.dingding.sso.authorization.domain;
+package github.com.suitelhy.dingding.sso.authorization.domain.repository;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import github.com.suitelhy.dingding.core.domain.entity.User;
 import github.com.suitelhy.dingding.core.domain.repository.UserRepository;
 import github.com.suitelhy.dingding.core.infrastructure.domain.vo.Account;
@@ -23,10 +25,13 @@ import java.util.Optional;
 public class UserRepositoryTests {
 
     @Autowired
+    private ObjectMapper toJSONString;
+
+    @Autowired
     private UserRepository userRepository;
 
     @NotNull
-    private User getUserForTest() {
+    private User getEntityForTest() {
         return User.Factory.USER.create(20
                 , new CalendarController().toString()
                 , ip()
@@ -65,7 +70,8 @@ public class UserRepositoryTests {
 
     @Test
     @Transactional
-    public void findAllByPage() {
+    public void findAllByPage()
+            throws JsonProcessingException {
         Page<User> result;
         Sort.TypedSort<User> userTypedSort = Sort.sort(User.class);
         Sort userSort = userTypedSort.by(User::getUserid).ascending();
@@ -74,7 +80,7 @@ public class UserRepositoryTests {
                 , "The result of findAll(Pageable) equaled to or less than 0");
         Assert.notEmpty(result.getContent()
                 , "The result of result.getContent() -> empty");
-        System.out.println(result);
+        System.out.println(toJSONString.writeValueAsString(result));
         System.out.println(result.getContent());
         System.out.println(result.getTotalElements());
         System.out.println(result.getTotalPages());
@@ -95,15 +101,15 @@ public class UserRepositoryTests {
     @Test
     @Transactional
     public void findById() {
-        User newUser = getUserForTest();
+        User newEntity = getEntityForTest();
         //===== saveAndFlush()
-        Assert.isTrue(newUser.isEntityLegal(), "User.Factory.USER.create(..) -> 无效的 User");
-        Assert.notNull(newUser = userRepository.saveAndFlush(newUser)
+        Assert.isTrue(newEntity.isEntityLegal(), "User.Factory.USER.create(..) -> 无效的 User");
+        Assert.notNull(newEntity = userRepository.saveAndFlush(newEntity)
                 , "===== insert(User) -> unexpected");
-        Assert.isTrue(!newUser.isEmpty()
+        Assert.isTrue(!newEntity.isEmpty()
                 , "===== insert(User) -> 无效的 User");
         //===== findById()
-        Optional<User> result = userRepository.findById(newUser.id());
+        Optional<User> result = userRepository.findById(newEntity.id());
         Assert.notNull(result.get()
                 , "The result of findById(String userid) -> empty");
         System.out.println(result);
@@ -112,31 +118,31 @@ public class UserRepositoryTests {
     @Test
     @Transactional
     public void saveAndFlush() {
-        User newUser = getUserForTest();
-        Assert.isTrue(newUser.isEntityLegal(), "User.Factory.USER.create(..) -> 无效的 User");
-        Assert.notNull(newUser = userRepository.saveAndFlush(newUser)
+        User newEntity = getEntityForTest();
+        Assert.isTrue(newEntity.isEntityLegal(), "User.Factory.USER.create(..) -> 无效的 User");
+        Assert.notNull(newEntity = userRepository.saveAndFlush(newEntity)
                 , "===== insert(User) -> unexpected");
-        Assert.isTrue(!newUser.isEmpty()
+        Assert.isTrue(!newEntity.isEmpty()
                 , "===== insert(User) -> 无效的 User");
-        System.out.println(newUser);
+        System.out.println(newEntity);
     }
 
     @Test
     @Transactional
     public void modifyByIdAndStatus() {
-        User newUser = getUserForTest();
-        Assert.isTrue(newUser.isEntityLegal(), "User.Factory.USER.create(..) -> 无效的 User");
+        User newEntity = getEntityForTest();
+        Assert.isTrue(newEntity.isEntityLegal(), "User.Factory.USER.create(..) -> 无效的 User");
         //=== insert
-        Assert.notNull(newUser = userRepository.saveAndFlush(newUser)
+        Assert.notNull(newEntity = userRepository.saveAndFlush(newEntity)
                 , "===== insert(User) -> unexpected");
-        Assert.isTrue(!newUser.isEmpty()
+        Assert.isTrue(!newEntity.isEmpty()
                 , "===== insert(User) -> 无效的 User");
         //--- update
         Assert.isTrue(userRepository.modifyByIdAndStatus("测试_最新"
-                        , newUser.id()
+                        , newEntity.id()
                         , Account.StatusVo.NORMAL) > 0
                 , "===== modifyByIdAndStatus(String, String, AccountVo.Status) -> fault");
-        System.out.println(newUser);
+        System.out.println(newEntity);
     }
 
     /**
@@ -145,16 +151,16 @@ public class UserRepositoryTests {
     @Test
     @Transactional
     public void delete() {
-        User newUser = getUserForTest();
-        Assert.isTrue(newUser.isEntityLegal(), "User.Factory.USER.create(..) -> 无效的 User");
+        User newEntity = getEntityForTest();
+        Assert.isTrue(newEntity.isEntityLegal(), "User.Factory.USER.create(..) -> 无效的 User");
         //=== insert
-        Assert.notNull(newUser = userRepository.saveAndFlush(newUser)
+        Assert.notNull(newEntity = userRepository.saveAndFlush(newEntity)
                 , "===== insert - insert(User) -> unexpected");
-        Assert.isTrue(!newUser.isEmpty()
+        Assert.isTrue(!newEntity.isEmpty()
                 , "===== insert - insert(User) -> 无效的 User");
         //=== delete
         try {
-            userRepository.delete(newUser);
+            userRepository.delete(newEntity);
         } catch (IllegalArgumentException e) {
             Assert.state(false
                     , "===== delete - delete(User user) -> the given entity is null.");
@@ -162,22 +168,22 @@ public class UserRepositoryTests {
             Assert.state(false
                     , "===== delete - delete(User user) -> the given entity is non persistent.");
         }
-        System.out.println(newUser);
+        System.out.println(newEntity);
     }
 
     @Test
     @Transactional
     public void deleteById() {
-        User newUser = getUserForTest();
-        Assert.isTrue(newUser.isEntityLegal(), "User.Factory.USER.create(..) -> 无效的 User");
+        User newEntity = getEntityForTest();
+        Assert.isTrue(newEntity.isEntityLegal(), "User.Factory.USER.create(..) -> 无效的 User");
         //=== insert
-        Assert.notNull(newUser = userRepository.saveAndFlush(newUser)
+        Assert.notNull(newEntity = userRepository.saveAndFlush(newEntity)
                 , "===== insert - insert(User) -> unexpected");
-        Assert.isTrue(!newUser.isEmpty()
+        Assert.isTrue(!newEntity.isEmpty()
                 , "===== insert - insert(User) -> 无效的 User");
         //=== delete
         try {
-            userRepository.deleteById(newUser.id());
+            userRepository.deleteById(newEntity.id());
         } catch (IllegalArgumentException e) {
             Assert.state(false
                     , "===== delete - delete(String id) -> the given entity is null.");
@@ -185,7 +191,7 @@ public class UserRepositoryTests {
             Assert.state(false
                     , "===== delete - delete(String id) -> the given entity is non persistent.");
         }
-        System.out.println(newUser);
+        System.out.println(newEntity);
     }
 
 }

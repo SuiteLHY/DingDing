@@ -6,21 +6,20 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
- * 日志记录 - 基础业务
+ * (安全) 用户
  *
- * @Description 日志记录数据 - 基础交互业务接口.
+ * @Description (安全) 用户 - 基础交互业务接口.
  */
-/*// 此处选择使用 Mybatis-Spring 的XML文件配置方式实现 mapper, 用来演示复杂SQL情景下的一种设计思路:
-//-> 聚焦于 SQL.
-@Mapper*/
 public interface SecurityUserRepository
-        extends JpaRepository<SecurityUser, Long> {
+        extends JpaRepository<SecurityUser, String> {
 
     //===== Select Data =====//
 
@@ -45,10 +44,9 @@ public interface SecurityUserRepository
      * 查询
      *
      * @param username
-     * @param pageable
      * @return
      */
-    List<SecurityUser> findByUsername(String username, Pageable pageable);
+    Optional<SecurityUser> findByUsername(String username);
 
     /**
      * 查询角色
@@ -59,8 +57,42 @@ public interface SecurityUserRepository
     @Query(nativeQuery = true
             , value = "select ur.role_code as code, r.name as name from SECURITY_USER_ROLE ur "
                     + "left join SECURITY_ROLE r on ur.role_code = r.code "
-                    + "where ur.username = :username")
-    List<Map<String, Object>> selectRoleByUsername(String username);
+                    + "where ur.username = :username ")
+    List<Map<String, Object>> selectRoleByUsername(@Param("username") String username);
+
+    /**
+     * 查询资源
+     *
+     * @param username
+     * @return
+     */
+    @Query(nativeQuery = true
+            , value = "select sr.code as code "
+                    + ", sr.icon as icon "
+                    + ", sr.link as link "
+                    + ", sr.name as name "
+                    + ", sr.parent_code as parent_code "
+                    + ", sr.sort as sort "
+                    + ", sr.type as type "
+                    + "from SECURITY_RESOURCE sr "
+                    + "left join SECURITY_ROLE_RESOURCE rr on rr.resource_code = sr.code "
+                    + "left join SECURITY_USER_ROLE ur on ur.role_code = rr.role_code "
+                    + "where ur.username = :username ")
+    List<Map<String, Object>> selectResourceByUsername(@Param("username") String username);
+
+    /**
+     * 查询 URL
+     *
+     * @param username
+     * @return
+     */
+    @Query(nativeQuery = true
+            , value = "select sru.url_path as url_path "
+                    + "from SECURITY_RESOURCE_URL sru "
+                    + "left join SECURITY_ROLE_RESOURCE rr on rr.resource_code = sru.code "
+                    + "left join SECURITY_USER_ROLE ur on ur.role_code = rr.role_code "
+                    + "where ur.username = :username ")
+    List<Map<String, Object>> selectURLByUsername(@Param("username") String username);
 
     //===== Insert Data =====//
 
@@ -76,15 +108,20 @@ public interface SecurityUserRepository
     //===== Delete Data =====//
 
     /**
-     * 删除指定的日志记录
+     * 删除指定用户
      *
      * @param userId    用户ID
      */
-    @Modifying
     @Override
     @Transactional
-    void deleteById(Long userId);
+    void deleteById(String userId);
 
+    /**
+     * 删除指定用户
+     *
+     * @param username  用户名
+     * @return
+     */
     @Modifying
     @Transactional
     long removeByUsername(String username);

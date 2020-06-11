@@ -60,7 +60,9 @@ public class ResourceServerConfig
     public void configure(HttpSecurity http)
             throws Exception {
         http.authorizeRequests()
-                .antMatchers("/messages/**", "user/**").access("#oauth2.hasScope('all')")
+                .antMatchers("/messages/**"
+                        , "user/**")
+                        .access("#oauth2.hasScope('all')")
                 .anyRequest().authenticated();
     }
 

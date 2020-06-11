@@ -5,10 +5,13 @@ import github.com.suitelhy.dingding.core.infrastructure.domain.model.EntityFacto
 import github.com.suitelhy.dingding.core.infrastructure.domain.model.EntityValidator;
 import github.com.suitelhy.dingding.core.infrastructure.domain.util.EntityUtil;
 import github.com.suitelhy.dingding.core.infrastructure.domain.util.VoUtil;
+import io.swagger.models.auth.In;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 资源类
@@ -17,7 +20,7 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "SECURITY_RESOURCE")
-public class Resource
+public class SecurityResource
         extends AbstractEntityModel<Long> {
 
     /**
@@ -62,19 +65,26 @@ public class Resource
      *
      * @Description 顶级节点可为空.
      */
-    @Column
+    @Column(name = "parent_code")
     private String parentCode;
 
     /**
      * 序号
      *
      * @Description 排序用.
+     * @Solution
+     *-> · 持久化映射字段及其 getter 方法 (通常情况下) 不应该使用原始类型. <- {@link <a href="https://stackoverflow.com/questions/56497893/org-springframework-aop-aopinvocationexception-null-return-value-from-advice-do">
+     *->     java - org.springframework.aop.AopInvocationException: Null return value from advice does not match primitive return type for: public abstract char - Stack Overflow</a>}
      */
     @Column(nullable = false)
-    private int sort;
+    private /*int*/Integer sort;
 
     /**
      * 资源类型
+     *
+     * @Description 非空.
+     *
+     * @see github.com.suitelhy.dingding.core.infrastructure.domain.vo.Resource.TypeVo
      */
     @Column(nullable = false)
     private github.com.suitelhy.dingding.core.infrastructure.domain.vo.Resource.TypeVo type;
@@ -119,7 +129,7 @@ public class Resource
                 && Validator.RESOURCE.name(this.name)
                 && Validator.RESOURCE.parentCode(this)
                 && Validator.RESOURCE.sort(this.sort)
-                /*&& Validator.RESOURCE.urls(this.urls)*/;
+                && Validator.RESOURCE.type(this.type);
     }
 
     /**
@@ -131,7 +141,7 @@ public class Resource
      */
     @Override
     protected boolean validateId(@NotNull Long id) {
-        return Role.Validator.ROLE.id(id);
+        return SecurityRole.Validator.ROLE.id(id);
     }
 
     @Override
@@ -147,11 +157,11 @@ public class Resource
      * @Description 各个属性的基础校验(注意: 此校验 ≠ 完全校验).
      */
     public enum Validator
-            implements EntityValidator<Resource, Long> {
+            implements EntityValidator<SecurityResource, Long> {
         RESOURCE;
 
         @Override
-        public boolean validateId(@NotNull Resource entity) {
+        public boolean validateId(@NotNull SecurityResource entity) {
             return null != entity.id()
                     && id(entity.id());
         }
@@ -163,7 +173,9 @@ public class Resource
         }
 
         public boolean code(@NotNull String code) {
-            return EntityUtil.Regex.GeneralRule.englishPhrases(code, null, 20);
+            Map<String, Object> param_rule = new HashMap<>(1);
+            param_rule.put("maxLength", 20);
+            return EntityUtil.Regex.GeneralRule.englishPhrases_Number(code, param_rule);
         }
 
         public boolean icon(String icon) {
@@ -184,7 +196,7 @@ public class Resource
             return null == parentCode || Validator.RESOURCE.code(parentCode);
         }
 
-        public boolean parentCode(@NotNull Resource entity) {
+        public boolean parentCode(@NotNull SecurityResource entity) {
             return null != entity
                     && null != entity.getCode()
                     && Validator.RESOURCE.code(entity.getCode())
@@ -192,21 +204,39 @@ public class Resource
                     && !entity.getCode().equals(entity.getParentCode());
         }
 
-        public boolean sort(int sort) {
-            //--- 暂无
-            return true;
+        public boolean sort(/*int*/@NotNull Integer sort) {
+            return null != sort;
         }
 
         public boolean type(github.com.suitelhy.dingding.core.infrastructure.domain.vo.Resource.TypeVo type) {
             if (null == type) {
                 return null != VoUtil.getVoByValue(github.com.suitelhy.dingding.core.infrastructure.domain.vo.Resource.TypeVo.class, null);
             }
-            return false;
+            return true;
         }
 
-        public boolean urls(String urls) {
-            //--- 暂无
-            return true;
+        //===== 相对特殊的业务校验方法 =====//
+
+        /**
+         * 判断子节点
+         *
+         * @param parent
+         * @param child
+         * @return
+         */
+        public boolean isChildNode(@NotNull SecurityResource parent, @NotNull SecurityResource child) {
+            if (null != parent && !parent.isEmpty()
+                    && null != child && child.isEntityLegal()) {
+                if (null != child.getParentCode()
+                        && parent.getCode().equals(child.getParentCode())) {
+                    if (null != parent.getParentCode()
+                            && parent.getParentCode().equals(child.getCode())) {
+                        return false;
+                    }
+                    return true;
+                }
+            }
+            return false;
         }
 
     }
@@ -216,7 +246,7 @@ public class Resource
     /**
      * 仅用于持久化注入
      */
-    public Resource() {}
+    public SecurityResource() {}
 
     //===== entity factory =====//
 
@@ -230,17 +260,17 @@ public class Resource
      * @param name          角色名称
      * @param parentCode    父节点 <- 资源编码
      * @param sort          序号
-     * @param urls          资源对应的 URL (集合)
+     * @param type          资源类型
      * @throws IllegalArgumentException
      */
-    private Resource(@NotNull Long id
+    private SecurityResource(@NotNull Long id
             , @NotNull String code
             , @NotNull String icon
             , @NotNull String link
             , @NotNull String name
             , @Nullable String parentCode
             , @NotNull int sort
-            , @Nullable String urls)
+            , @NotNull github.com.suitelhy.dingding.core.infrastructure.domain.vo.Resource.TypeVo type)
             throws IllegalArgumentException {
         if (null == id) {
             //--- 添加功能
@@ -282,10 +312,10 @@ public class Resource
             throw new IllegalArgumentException(this.getClass().getSimpleName()
                     + " -> 非法输入: 序号");
         }
-        if (!Validator.RESOURCE.urls(urls)) {
-            //-- 非法输入: 资源对应的URL
+        if (!Validator.RESOURCE.type(type)) {
+            //-- 非法输入: 资源类型
             throw new IllegalArgumentException(this.getClass().getSimpleName()
-                    + " -> 非法输入: 资源对应的URL");
+                    + " -> 非法输入: 资源类型");
         }
 
         // 数据ID
@@ -302,8 +332,8 @@ public class Resource
         this.setParentCode(parentCode);
         // 序号
         this.setSort(sort);
-        /*// 资源对应的URL (集合)
-        this.setUrls(urls);*/
+        // 资源类型
+        this.setType(type);
 
         if (!Validator.RESOURCE.parentCode(this)) {
             //-- 非法输入: 父节点资源编码
@@ -313,7 +343,7 @@ public class Resource
     }
 
     public enum Factory
-            implements EntityFactory<Resource> {
+            implements EntityFactory<SecurityResource> {
         RESOURCE;
 
         /**
@@ -325,20 +355,20 @@ public class Resource
          * @param name          角色名称
          * @param parentCode    父节点 <- 资源编码
          * @param sort          序号
-         * @param urls          资源对应的 URL (集合)
+         * @param type          资源类型
          * @throws IllegalArgumentException
          */
-        public Resource create(@NotNull String code
+        public SecurityResource create(@NotNull String code
                 , String icon
                 , String link
                 , @NotNull String name
                 , @Nullable String parentCode
                 , @NotNull int sort
-                , @Nullable String urls)
+                , @NotNull github.com.suitelhy.dingding.core.infrastructure.domain.vo.Resource.TypeVo type)
                 throws IllegalArgumentException {
-            return new Resource(null, code, icon
+            return new SecurityResource(null, code, icon
                     , link, name, parentCode
-                    , sort, urls);
+                    , sort, type);
         }
 
         /**
@@ -351,24 +381,24 @@ public class Resource
          * @param name          角色名称
          * @param parentCode    父节点 <- 资源编码
          * @param sort          序号
-         * @param urls          资源对应的 URL (集合)
+         * @param type          资源类型
          * @throws IllegalArgumentException
          */
-        public Resource update(@NotNull Long id
+        public SecurityResource update(@NotNull Long id
                 , @NotNull String code
                 , String icon
                 , String link
                 , @NotNull String name
                 , @Nullable String parentCode
                 , @NotNull int sort
-                , @Nullable String urls)
+                , @NotNull github.com.suitelhy.dingding.core.infrastructure.domain.vo.Resource.TypeVo type)
                 throws IllegalArgumentException {
             if (!Validator.RESOURCE.id(id)) {
                 throw new IllegalArgumentException("非法输入: 数据 ID");
             }
-            return new Resource(id, code, icon
+            return new SecurityResource(id, code, icon
                     , link, name, parentCode
-                    , sort, urls);
+                    , sort, type);
         }
 
     }
@@ -411,16 +441,26 @@ public class Resource
         return parentCode;
     }
 
+    public boolean setParentCode(String parentCode) {
+        if (Validator.RESOURCE.parentCode(parentCode)) {
+            String temp = this.parentCode;
+
+            this.parentCode = parentCode;
+
+            if (Validator.RESOURCE.parentCode(this)) {
+                return true;
+            }
+            this.parentCode = temp;
+        }
+        return false;
+    }
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public void setParentCode(String parentCode) {
-        this.parentCode = parentCode;
     }
 
     @NotNull
@@ -436,12 +476,17 @@ public class Resource
         return false;
     }
 
-    public int getSort() {
+    @NotNull
+    public /*int*/Integer getSort() {
         return sort;
     }
 
-    public void setSort(int sort) {
-        this.sort = sort;
+    public boolean setSort(int sort) {
+        if (Validator.RESOURCE.sort(sort)) {
+            this.sort = sort;
+            return true;
+        }
+        return false;
     }
 
     /*public String getUrls() {

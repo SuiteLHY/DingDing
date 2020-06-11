@@ -5,6 +5,8 @@ import github.com.suitelhy.dingding.core.domain.repository.UserRepository;
 import github.com.suitelhy.dingding.core.domain.service.UserService;
 import github.com.suitelhy.dingding.core.infrastructure.domain.vo.Account;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +21,7 @@ import java.util.Optional;
  * 用户信息 - 业务实现
  */
 @Service("userService")
+@Order(Ordered.LOWEST_PRECEDENCE)
 public class UserServiceImpl
         implements UserService {
 

@@ -4,6 +4,8 @@ import github.com.suitelhy.dingding.core.domain.entity.User;
 import github.com.suitelhy.dingding.core.infrastructure.web.SecurityUser;
 import github.com.suitelhy.dingding.core.domain.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,6 +22,7 @@ import javax.validation.constraints.NotNull;
  * @author Suite
  */
 @Component
+@Order(Ordered.LOWEST_PRECEDENCE)
 public class DingDingUserDetailsService
         implements UserDetailsService {
 

@@ -8,7 +8,10 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
  *
  * @author Suite
  */
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {
+        "github.com.suitelhy.dingding.core"
+        , "github.com.suitelhy.dingding.sso.authorization"
+})
 // (该注解在版本迁移后有设计调整，详见
 //-> <a href="https://juejin.im/post/5d78ac225188257fed0a9ba6">
 //-> 		解决Spring Boot 从1.x升级到 2.x 后 单点登陆(SSO)问题 - 掘金</a>

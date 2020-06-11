@@ -1,5 +1,7 @@
-package github.com.suitelhy.dingding.sso.authorization.domain;
+package github.com.suitelhy.dingding.sso.authorization.domain.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import github.com.suitelhy.dingding.core.domain.entity.Log;
 import github.com.suitelhy.dingding.core.domain.entity.User;
 import github.com.suitelhy.dingding.core.domain.service.LogService;
@@ -19,6 +21,9 @@ import java.util.List;
 
 @SpringBootTest
 public class LogServiceTests {
+
+    @Autowired
+    private ObjectMapper toJSONString;
 
     @Autowired
     private LogService logService;
@@ -105,7 +110,7 @@ public class LogServiceTests {
         Long result = logService.selectCountByUserid(newUser.getUserid()
                 , 10);
         Assert.isTrue(null != result && result > 0
-                , "===== selectCountByUserid(String userid, int pageSize) -> null or not enough data");
+                , "===== The result -> null or not enough data");
         System.out.println(result);
     }
 
@@ -143,7 +148,7 @@ public class LogServiceTests {
                 , 0
                 , 10);
         Assert.notEmpty(result
-                , "===== selectLogByUserid(String userid, int page, int pageSize) -> null or not enough data");
+                , "===== The result -> null or not enough data");
         System.out.println(result);
     }
 

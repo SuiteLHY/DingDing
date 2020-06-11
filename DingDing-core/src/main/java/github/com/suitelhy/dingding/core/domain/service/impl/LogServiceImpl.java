@@ -4,6 +4,8 @@ import github.com.suitelhy.dingding.core.domain.entity.Log;
 import github.com.suitelhy.dingding.core.domain.repository.LogRepository;
 import github.com.suitelhy.dingding.core.domain.service.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +18,7 @@ import java.util.List;
  * 日志记录- 业务实现
  */
 @Service("logService")
+@Order(Ordered.LOWEST_PRECEDENCE)
 public class LogServiceImpl
         implements LogService {
 

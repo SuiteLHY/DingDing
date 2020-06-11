@@ -1,5 +1,7 @@
-package github.com.suitelhy.dingding.sso.authorization.domain;
+package github.com.suitelhy.dingding.sso.authorization.domain.repository;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import github.com.suitelhy.dingding.core.domain.entity.Log;
 import github.com.suitelhy.dingding.core.domain.entity.User;
 import github.com.suitelhy.dingding.core.domain.repository.LogRepository;
@@ -24,13 +26,16 @@ import java.util.List;
 public class LogRepositoryTests {
 
     @Autowired
+    private ObjectMapper toJSONString;
+
+    @Autowired
     private LogRepository logRepository;
 
     @Autowired
     private UserService userService;
 
     @NotNull
-    private User getUserForTest() {
+    private User getEntityForTest() {
         return User.Factory.USER.create(20
                 , new CalendarController().toString()
                 , ip()
@@ -87,7 +92,8 @@ public class LogRepositoryTests {
 
     @Test
     @Transactional
-    public void findAll() {
+    public void findAll()
+            throws JsonProcessingException {
         Page<Log> result;
         Sort.TypedSort<Log> logTypedSort = Sort.sort(Log.class);
         Sort logSort = logTypedSort.by(Log::getUserid).ascending()
@@ -97,7 +103,7 @@ public class LogRepositoryTests {
                 , "The result of findAll(Pageable) equal to or less than 0");
         Assert.notEmpty(result.getContent()
                 , "The result of result.getContent() -> empty");
-        System.out.println(result);
+        System.out.println(toJSONString.writeValueAsString(result));
         System.out.println(result.getContent());
         System.out.println(result.getTotalElements());
         System.out.println(result.getTotalPages());
@@ -133,21 +139,21 @@ public class LogRepositoryTests {
     @Transactional
     public void saveAndFlush() {
         //===== userService =====//
-        User newUser = getUserForTest();
-        Assert.isTrue(newUser.isEntityLegal()
+        User newEntity = getEntityForTest();
+        Assert.isTrue(newEntity.isEntityLegal()
                 , "User.Factory.USER.create(..) -> 无效的 User");
-        Assert.isTrue(userService.insert(newUser)
+        Assert.isTrue(userService.insert(newEntity)
                 , "===== insert(User) -> unexpected");
-        Assert.isTrue(!newUser.isEmpty()
+        Assert.isTrue(!newEntity.isEmpty()
                 , "===== insert(User) -> 无效的 User");
-        System.out.println("newUser: " + newUser);
+        System.out.println("newEntity: " + newEntity);
 
         //===== logRepository =====//
         Log newLog = Log.Factory.USER_LOG.create(null
-                , newUser.getIp()
+                , newEntity.getIp()
                 , new CalendarController().toString()
                 , HandleType.LogVo.USER_REGISTRATION
-                , newUser.getUserid()
+                , newEntity.getUserid()
         );
         Assert.isTrue(newLog.isEntityLegal()
                 , "Log.Factory.USER_LOG.create(..) -> 无效的 Log");
@@ -162,22 +168,22 @@ public class LogRepositoryTests {
     @Transactional
     public void deleteById() {
         //===== userService =====//
-        User newUser = getUserForTest();
-        Assert.isTrue(newUser.isEntityLegal()
+        User newEntity = getEntityForTest();
+        Assert.isTrue(newEntity.isEntityLegal()
                 , "User.Factory.USER.create(..) -> 无效的 User");
-        Assert.isTrue(userService.insert(newUser)
+        Assert.isTrue(userService.insert(newEntity)
                 , "===== insert(User) -> unexpected");
-        Assert.isTrue(!newUser.isEmpty()
+        Assert.isTrue(!newEntity.isEmpty()
                 , "===== insert(User) -> 无效的 User");
-        System.out.println("newUser: " + newUser);
+        System.out.println("newEntity: " + newEntity);
 
         //===== logRepository =====//
         //=== saveAndFlush(Log log)
         Log newLog = Log.Factory.USER_LOG.create(null
-                , newUser.getIp()
+                , newEntity.getIp()
                 , new CalendarController().toString()
                 , HandleType.LogVo.USER_REGISTRATION
-                , newUser.getUserid()
+                , newEntity.getUserid()
         );
         Assert.isTrue(newLog.isEntityLegal()
                 , "Log.Factory.USER_LOG.create(..) -> 无效的 Log");
@@ -204,22 +210,22 @@ public class LogRepositoryTests {
     @Transactional
     public void removeByUserid() {
         //===== userService =====//
-        User newUser = getUserForTest();
-        Assert.isTrue(newUser.isEntityLegal()
-                , "User.Factory.USER.create(..) -> 无效的 User");
-        Assert.isTrue(userService.insert(newUser)
+        User newEntity = getEntityForTest();
+        Assert.isTrue(newEntity.isEntityLegal()
+                , "getEntityForTest() -> 无效的 Entity");
+        Assert.isTrue(userService.insert(newEntity)
                 , "===== insert(User) -> unexpected");
-        Assert.isTrue(!newUser.isEmpty()
-                , "===== insert(User) -> 无效的 User");
-        System.out.println("newUser: " + newUser);
+        Assert.isTrue(!newEntity.isEmpty()
+                , "===== insert(User) -> 无效的 Entity");
+        System.out.println("newEntity: " + newEntity);
 
         //===== logRepository =====//
         //=== saveAndFlush(Log log)
         Log newLog = Log.Factory.USER_LOG.create(null
-                , newUser.getIp()
+                , newEntity.getIp()
                 , new CalendarController().toString()
                 , HandleType.LogVo.USER_REGISTRATION
-                , newUser.getUserid()
+                , newEntity.getUserid()
         );
         Assert.isTrue(newLog.isEntityLegal()
                 , "Log.Factory.USER_LOG.create(..) -> 无效的 Log");
@@ -232,7 +238,7 @@ public class LogRepositoryTests {
         //=== removeByUserid(String userid)
         long result;
         Assert.isTrue((result = logRepository.removeByUserid(newLog.getUserid())) > 0
-                , "===== The result of removeByUserid(String userid) is equal to or less than 0");
+                , "===== The result is equal to or less than 0");
         System.out.println(result);
     }
 

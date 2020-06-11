@@ -1,5 +1,6 @@
-package github.com.suitelhy.dingding.sso.authorization.domain;
+package github.com.suitelhy.dingding.sso.authorization.domain.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import github.com.suitelhy.dingding.core.domain.entity.User;
 import github.com.suitelhy.dingding.core.domain.service.UserService;
 import github.com.suitelhy.dingding.core.infrastructure.domain.vo.Human;
@@ -15,6 +16,9 @@ import java.util.List;
 
 @SpringBootTest
 public class UserServiceTests {
+
+    @Autowired
+    private ObjectMapper toJSONString;
 
     @Autowired
     private UserService userService;
