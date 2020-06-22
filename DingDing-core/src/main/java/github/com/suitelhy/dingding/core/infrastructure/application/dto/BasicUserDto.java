@@ -10,9 +10,12 @@ import org.springframework.lang.Nullable;
 import javax.validation.constraints.NotNull;
 
 public class BasicUserDto
-        implements DtoModel<User, String> {
+        implements DtoModel<User, /*String*/Object[]> {
 
     private static final long serialVersionUID = 1L;
+
+    // 用户 - 昵称
+    protected String userId;
 
     // 用户 - 昵称
     protected String nickname;
@@ -30,10 +33,13 @@ public class BasicUserDto
     protected BasicUserDto(@NotNull User dtoId)
             throws IllegalArgumentException {
         if (null == dtoId || dtoId.isEmpty()) {
-            throw new IllegalArgumentException("非法参数: <param>dtoId</param>");
+            //-- 非法输入: <param>dtoId</param>
+            throw new IllegalArgumentException(this.getClass().getSimpleName()
+                    .concat(" -> 非法输入: <param>dtoId</param>"));
         }
         this.dtoId = dtoId;
 
+        this.userId = this.dtoId.getUserid();
         this.nickname = this.dtoId.getNickname();
         /*this.faceImage = this.dtoId.getFaceImage();*/
         this.username = this.dtoId.getUsername();
@@ -65,7 +71,7 @@ public class BasicUserDto
      * @return The unique identify of the <tt>dtoId()</tt>.
      */
     @Override
-    public String id() {
+    public /*String*/Object[] id() {
         return this.dtoId.id();
     }
 
@@ -186,7 +192,7 @@ public class BasicUserDto
          *
          * @param userDto
          * @return {<code>true</code> : <b>销毁成功</b>
-         * ->      , <code>false</code> : <b>销毁失败; 此时 <param>user</param></b> 无效或无法销毁}
+         *->    , <code>false</code> : <b>销毁失败; 此时 <param>user</param></b> 无效或无法销毁}
          */
         public boolean delete(@NotNull BasicUserDto userDto) {
             if (null != userDto && !userDto.isEmpty()) {
@@ -198,6 +204,14 @@ public class BasicUserDto
     }
 
     //===== getter and setter =====//
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public String getNickname() {
         return nickname;
@@ -213,6 +227,7 @@ public class BasicUserDto
      * @param password
      * @return {true: <tt>密码相同</tt>, false: <tt>密码不相同</tt>, null: <tt>DTO无效</tt>}
      */
+    @Nullable
     public Boolean equalsPassword(String password) {
         if (dtoId().isEmpty()) {
             return null;

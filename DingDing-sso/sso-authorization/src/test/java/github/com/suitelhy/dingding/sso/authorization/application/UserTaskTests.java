@@ -1,5 +1,6 @@
 package github.com.suitelhy.dingding.sso.authorization.application;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import github.com.suitelhy.dingding.core.application.task.UserTask;
 import github.com.suitelhy.dingding.core.domain.entity.User;
 import github.com.suitelhy.dingding.core.infrastructure.application.dto.BasicUserDto;
@@ -20,13 +21,16 @@ import java.util.List;
 public class UserTaskTests {
 
     @Autowired
+    private ObjectMapper toJSONObject;
+
+    @Autowired
     private UserTask userTask;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @NotNull
-    private SecurityUser getUserForTest() {
+    private SecurityUser getEntityForTest() {
         /*final User newUser = User.Factory.USER.update(id()
                 , 20
                 , new CalendarController().toString()
@@ -80,20 +84,24 @@ public class UserTaskTests {
     @Test
     @Transactional
     public void selectUserByUserid() {
-        UserDto result;
-        //=== insert
-        final SecurityUser newUser = getUserForTest();
-        final BasicUserDto newUserDto = newUser.getUserInfo();
-        Assert.notNull(newUser
-                , "insert - User.Factory.USER -> create(..) -> null");
+        final UserDto result;
+
+        //=== 添加测试数据
+        final SecurityUser newEntity = getEntityForTest();
+        final BasicUserDto newUserDto = newEntity.getUserInfo();
+
+        Assert.notNull(newEntity
+                , "===== getEntityForTest() -> null");
         Assert.isTrue(userTask.insert(newUserDto
-                    , newUser.getPassword()
+                    , newEntity.getPassword()
                     , ip()
                     , new CalendarController().toString())
-                , "insert - insert(User user) -> false");
-        //=== select
-        Assert.notNull(result = userTask.selectUserByUserid(newUserDto.id())
-                , "select - selectUserByUserid(Sting) -> null");
+                , "===== 添加测试数据 -> false");
+
+        //=== selectUserByUserid(..)
+        Assert.notNull(result = userTask.selectUserByUserid(newUserDto.getUserId())
+                , "selectUserByUserid(Sting) -> null");
+
         System.out.println(result);
     }
 
@@ -111,8 +119,9 @@ public class UserTaskTests {
     @Test
     @Transactional
     public void insert() {
-        final SecurityUser newUser = getUserForTest();
+        final SecurityUser newUser = getEntityForTest();
         final BasicUserDto newUserDto = newUser.getUserInfo();
+
         Assert.notNull(newUser
                 , "User.Factory.USER -> create(..) -> null");
         Assert.isTrue(userTask.insert(newUserDto
@@ -125,35 +134,41 @@ public class UserTaskTests {
     @Test
     @Transactional
     public void update() {
-        final SecurityUser newSecurityUser = getUserForTest();
-        final BasicUserDto newUserDto = newSecurityUser.getUserInfo();
-        //=== insert
-        Assert.notNull(newSecurityUser
-                , "insert - User.Factory.USER -> create(..) -> null");
+        //=== 添加测试数据
+        final SecurityUser newEntity = getEntityForTest();
+        final BasicUserDto newUserDto = newEntity.getUserInfo();
+
+        Assert.notNull(newEntity
+                , "===== getEntityForTest() -> null");
         Assert.isTrue(userTask.insert(newUserDto
                     , password()
                     , ip()
                     , new CalendarController().toString())
-                , "insert - insert(User user) -> false");
+                , "添加测试数据 -> false");
+
         //=== update
         User newUser = newUserDto.dtoId(username(), password());
+
+        assert newUser != null;
         newUser.setAge(18);
         newUser.setIntroduction("最新_" + newUser.getIntroduction());
+
         Assert.isTrue(userTask.update(newUserDto
                     , password()
                     , ip()
                     , new CalendarController().toString())
                 , "update - update(User user) -> false");
+
         System.out.println(newUserDto);
     }
 
     @Test
     @Transactional
     public void delete() {
-        final SecurityUser newSecurityUser = getUserForTest();
-        System.err.println(newSecurityUser.getUsername());
+        //=== 添加测试数据
+        final SecurityUser newSecurityUser = getEntityForTest();
         final BasicUserDto newUserDto = newSecurityUser.getUserInfo();
-        //=== insert
+
         Assert.isTrue(userTask.insert(newUserDto
                     , password()
                     , ip()
@@ -161,9 +176,11 @@ public class UserTaskTests {
                 , "===== insert - insert(User) -> null");
         Assert.isTrue(!newUserDto.isEmpty()
                 , "===== insert - insert(User) -> 无效的 User");
-        //=== delete
+
+        //=== delete(...)
         Assert.isTrue(userTask.delete(newUserDto, password())
                 , "delete - delete(User user) -> false");
+
         System.out.println(newUserDto);
     }
 

@@ -53,10 +53,6 @@ public class UserRepositoryTests {
     @Transactional
     public void contextLoads() {
         Assert.notNull(userRepository, "获取测试单元失败");
-        // 批量添加测试数据
-        for (int i = 0; i < 10; i++) {
-            saveAndFlush();
-        }
     }
 
     @Test
@@ -72,14 +68,17 @@ public class UserRepositoryTests {
     @Transactional
     public void findAllByPage()
             throws JsonProcessingException {
-        Page<User> result;
+        final Page<User> result;
+
         Sort.TypedSort<User> userTypedSort = Sort.sort(User.class);
         Sort userSort = userTypedSort.by(User::getUserid).ascending();
         Pageable page = PageRequest.of(0, 10, userSort);
+
         Assert.notNull(result = userRepository.findAll(page)
                 , "The result of findAll(Pageable) equaled to or less than 0");
         Assert.notEmpty(result.getContent()
                 , "The result of result.getContent() -> empty");
+
         System.out.println(toJSONString.writeValueAsString(result));
         System.out.println(result.getContent());
         System.out.println(result.getTotalElements());
@@ -101,17 +100,20 @@ public class UserRepositoryTests {
     @Test
     @Transactional
     public void findById() {
+        //===== 添加测试数据
         User newEntity = getEntityForTest();
-        //===== saveAndFlush()
+
         Assert.isTrue(newEntity.isEntityLegal(), "User.Factory.USER.create(..) -> 无效的 User");
         Assert.notNull(newEntity = userRepository.saveAndFlush(newEntity)
                 , "===== insert(User) -> unexpected");
         Assert.isTrue(!newEntity.isEmpty()
                 , "===== insert(User) -> 无效的 User");
-        //===== findById()
-        Optional<User> result = userRepository.findById(newEntity.id());
+
+        //===== findById(..)
+        Optional<User> result = userRepository.findById(newEntity.getUserid());
         Assert.notNull(result.get()
                 , "The result of findById(String userid) -> empty");
+
         System.out.println(result);
     }
 
@@ -119,29 +121,34 @@ public class UserRepositoryTests {
     @Transactional
     public void saveAndFlush() {
         User newEntity = getEntityForTest();
+
         Assert.isTrue(newEntity.isEntityLegal(), "User.Factory.USER.create(..) -> 无效的 User");
         Assert.notNull(newEntity = userRepository.saveAndFlush(newEntity)
                 , "===== insert(User) -> unexpected");
         Assert.isTrue(!newEntity.isEmpty()
                 , "===== insert(User) -> 无效的 User");
+
         System.out.println(newEntity);
     }
 
     @Test
     @Transactional
     public void modifyByIdAndStatus() {
+        //=== 添加测试数据
         User newEntity = getEntityForTest();
-        Assert.isTrue(newEntity.isEntityLegal(), "User.Factory.USER.create(..) -> 无效的 User");
-        //=== insert
+
+        Assert.isTrue(newEntity.isEntityLegal(), "getEntityForTest() -> 无效的 Entity");
         Assert.notNull(newEntity = userRepository.saveAndFlush(newEntity)
-                , "===== insert(User) -> unexpected");
+                , "===== 添加测试数据 -> unexpected");
         Assert.isTrue(!newEntity.isEmpty()
-                , "===== insert(User) -> 无效的 User");
-        //--- update
+                , "===== 添加测试数据 -> 无效的 Entity");
+
+        //=== modifyByIdAndStatus(...)
         Assert.isTrue(userRepository.modifyByIdAndStatus("测试_最新"
-                        , newEntity.id()
+                        , newEntity.getUserid()
                         , Account.StatusVo.NORMAL) > 0
                 , "===== modifyByIdAndStatus(String, String, AccountVo.Status) -> fault");
+
         System.out.println(newEntity);
     }
 
@@ -183,7 +190,7 @@ public class UserRepositoryTests {
                 , "===== insert - insert(User) -> 无效的 User");
         //=== delete
         try {
-            userRepository.deleteById(newEntity.id());
+            userRepository.deleteById(newEntity.getUserid());
         } catch (IllegalArgumentException e) {
             Assert.state(false
                     , "===== delete - delete(String id) -> the given entity is null.");

@@ -105,12 +105,13 @@ public class Log extends AbstractEntityModel<Long> {
      */
     @Override
     protected @NotNull boolean validateId(@NotNull Long id) {
-        return Validator.LOG.id(id);
+        return Validator.LOG.entity_id(id);
     }
 
     //===== entity validator =====//
     public enum Validator implements EntityValidator<Log, Long> {
-        LOG, USER(User.class, User.Validator.USER);
+        LOG
+        , USER(User.class, User.Validator.USER);
 
         //===== 外键设计 (仅限也仅应该为 Entity 的唯一标识) (简单实现) =====//
         /*public final EntityValidator FOREIGN_VALIDATOR;
@@ -150,6 +151,15 @@ public class Log extends AbstractEntityModel<Long> {
 
         //==========//
         @Override
+        public boolean entity_id(@NotNull Long entityId) {
+            return this.id(entityId);
+        }
+
+        public boolean entity_id(@NotNull String entityId) {
+            /*return EntityUtil.Regex.validateId(entityId);*/
+            return this.id(entityId);
+        }
+
         public boolean id(@NotNull Long id) {
             return null != id && id > 0L;
         }
@@ -178,8 +188,9 @@ public class Log extends AbstractEntityModel<Long> {
             return true;
         }
 
-        public boolean userid(String userid) {
-            return USER.FOREIGN_VALIDATOR.foreignId(User.class, userid);
+        public boolean userid(@NotNull String userid) {
+            return /*USER.FOREIGN_VALIDATOR.foreignId(User.class, userid)*/
+                    User.Validator.USER.userid(userid);
         }
 
     }
@@ -195,10 +206,10 @@ public class Log extends AbstractEntityModel<Long> {
             //--- <param>id</param>为 null 时, 对应添加日志记录功能.
         } else {
             //--- 对应更新日志记录功能.
-            if (!Validator.LOG.id(id)) {
+            if (!Validator.LOG.entity_id(id)) {
                 //-- 非法输入: 日志记录ID
                 throw new IllegalArgumentException(this.getClass().getSimpleName()
-                        + " -> 非法输入: 日志记录ID");
+                        .concat(" -> 非法输入: 日志记录ID"));
             }
         }
         if (!Validator.LOG.detail(detail)) {
@@ -240,14 +251,14 @@ public class Log extends AbstractEntityModel<Long> {
         USER_LOG;
 
         /**
-         * 获取 Entity 实例
+         * 创建
          *
          * @param detail 记录的详细信息
          * @param ip     登录的IP地址
          * @param time   操作时间
          * @param type   操作类型
          * @param userid 用户 - 用户ID
-         * @return
+         * @return Log
          */
         @NotNull
         public Log create(@Nullable String detail
@@ -259,55 +270,119 @@ public class Log extends AbstractEntityModel<Long> {
                     , time, type, userid);
         }
 
+        /**
+         * 创建
+         *
+         * @param detail    记录的详细信息
+         * @param time      操作时间
+         * @param type      操作类型
+         * @param user      用户 {@link github.com.suitelhy.dingding.core.domain.entity.User}
+         * @return Log
+         */
+        @NotNull
+        public Log create(@Nullable String detail
+                , @NotNull String time
+                , @NotNull HandleType.LogVo type
+                , @NotNull User user) {
+            return new Log(null, detail, user.getIp()
+                    , time, type, user.getUserid());
+        }
+
+        /**
+         * 创建
+         *
+         * @param detail    记录的详细信息
+         * @param type      操作类型
+         * @param user      用户 {@link github.com.suitelhy.dingding.core.domain.entity.User}
+         * @return Log
+         */
+        @NotNull
+        public Log create(@Nullable String detail
+                , @NotNull HandleType.LogVo type
+                , @NotNull User user) {
+            return new Log(null
+                    , detail
+                    , user.getIp()
+                    , new CalendarController().toString()
+                    , type
+                    , user.getUserid());
+        }
+
     }
 
     //===== getter and setter =====//
+
+    @Nullable
     public Long getId() {
         return id;
     }
 
-    private void setId(Long id) {
-        this.id = id;
+    private boolean setId(@NotNull Long id) {
+        if (Validator.LOG.entity_id(id)) {
+            this.id = id;
+            return true;
+        }
+        return false;
     }
 
     public String getDetail() {
         return detail;
     }
 
-    public void setDetail(String detail) {
-        this.detail = detail;
+    public boolean setDetail(String detail) {
+        if (Validator.LOG.detail(detail)) {
+            this.detail = detail;
+            return true;
+        }
+        return false;
     }
 
     public String getIp() {
         return ip;
     }
 
-    private void setIp(String ip) {
-        this.ip = ip;
+    private boolean setIp(@NotNull String ip) {
+        if (Validator.LOG.ip(ip)) {
+            this.ip = ip;
+            return true;
+        }
+        return false;
     }
 
     public String getTime() {
         return time;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public boolean setTime(String time) {
+        if (Validator.LOG.time(time)) {
+            this.time = time;
+            return true;
+        }
+        return false;
     }
 
     public HandleType.LogVo getType() {
         return type;
     }
 
-    private void setType(HandleType.LogVo type) {
-        this.type = type;
+    private boolean setType(HandleType.LogVo type) {
+        if (Validator.LOG.type(type)) {
+            this.type = type;
+            return true;
+        }
+        return false;
     }
 
     public String getUserid() {
         return userid;
     }
 
-    private void setUserid(String userid) {
-        this.userid = userid;
+    private boolean setUserid(@NotNull String userid) {
+        if (Validator.LOG.userid(userid)) {
+            this.userid = userid;
+            return true;
+        }
+        return false;
     }
 
 }

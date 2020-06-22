@@ -1,22 +1,30 @@
 package github.com.suitelhy.dingding.core.domain.repository;
 
 import github.com.suitelhy.dingding.core.domain.entity.Log;
+import github.com.suitelhy.dingding.core.infrastructure.domain.model.EntityRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
  * 日志记录 - 基础业务
  *
  * @Description 日志记录数据 - 基础交互业务接口.
+ *
+ * @see github.com.suitelhy.dingding.core.domain.entity.Log
  */
 /*// 此处选择使用 Mybatis-Spring 的XML文件配置方式实现 mapper, 用来演示复杂SQL情景下的一种设计思路:
 //-> 聚焦于 SQL.
 @Mapper*/
 public interface LogRepository
-        extends JpaRepository<Log, Long> {
+        extends JpaRepository<Log, Long>, EntityRepository {
 
     //===== Select Data =====//
 
@@ -34,7 +42,7 @@ public interface LogRepository
      * @param userid
      * @return
      */
-    long countByUserid(String userid);
+    long countByUserid(@NotNull String userid);
 
     /**
      * 查询所有日志记录
@@ -52,7 +60,9 @@ public interface LogRepository
      * @param pageable
      * @return
      */
-    List<Log> findByUserid(String userid, Pageable pageable);
+    @Transactional(isolation = Isolation.SERIALIZABLE
+            , propagation = Propagation.REQUIRED)
+    List<Log> findByUserid(@NotNull String userid, Pageable pageable);
 
     //===== Insert Data =====//
 
@@ -63,7 +73,10 @@ public interface LogRepository
      * @return
      */
     @Override
-    Log saveAndFlush(Log log);
+    @Modifying
+    @Transactional(isolation = Isolation.SERIALIZABLE
+            , propagation = Propagation.REQUIRED)
+    Log saveAndFlush(@NotNull Log log);
 
     //===== Delete Data =====//
 
@@ -73,14 +86,20 @@ public interface LogRepository
      * @param id 记录ID
      */
     @Override
-    void deleteById(Long id);
+    @Modifying
+    @Transactional(isolation = Isolation.SERIALIZABLE
+            , propagation = Propagation.REQUIRED)
+    void deleteById(@NotNull Long id);
 
     /**
      * 删除指定用户对应的所有日志记录
      *
      * @param userid
      */
-    long removeByUserid(String userid);
+    @Modifying
+    @Transactional(isolation = Isolation.SERIALIZABLE
+            , propagation = Propagation.REQUIRED)
+    long removeByUserid(@NotNull String userid);
 
     // 参考项目中提供了 deleteAll 业务接口; 如果更深入一些, 在实际生产情景下,
     //-> 不应该提供这类不严谨的业务接口 (...), 删除操作也仅限于用户权限以内.

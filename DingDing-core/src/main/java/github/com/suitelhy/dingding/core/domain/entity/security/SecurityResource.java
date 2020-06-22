@@ -5,13 +5,13 @@ import github.com.suitelhy.dingding.core.infrastructure.domain.model.EntityFacto
 import github.com.suitelhy.dingding.core.infrastructure.domain.model.EntityValidator;
 import github.com.suitelhy.dingding.core.infrastructure.domain.util.EntityUtil;
 import github.com.suitelhy.dingding.core.infrastructure.domain.util.VoUtil;
-import io.swagger.models.auth.In;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 资源类
@@ -21,7 +21,9 @@ import java.util.Map;
 @Entity
 @Table(name = "SECURITY_RESOURCE")
 public class SecurityResource
-        extends AbstractEntityModel<Long> {
+        extends AbstractEntityModel</*Long*/String> {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * ID
@@ -72,6 +74,7 @@ public class SecurityResource
      * 序号
      *
      * @Description 排序用.
+     *
      * @Solution
      *-> · 持久化映射字段及其 getter 方法 (通常情况下) 不应该使用原始类型. <- {@link <a href="https://stackoverflow.com/questions/56497893/org-springframework-aop-aopinvocationexception-null-return-value-from-advice-do">
      *->     java - org.springframework.aop.AopInvocationException: Null return value from advice does not match primitive return type for: public abstract char - Stack Overflow</a>}
@@ -99,9 +102,15 @@ public class SecurityResource
 
     //===== Entity Model =====//
 
+    /**
+     * 业务唯一标识
+     *
+     * @return {@link this#getCode() }
+     * @see this#getCode()
+     */
     @Override
-    public @NotNull Long id() {
-        return this.getId();
+    public /*@NotNull*/@Nullable /*Long*/String id() {
+        return /*this.getId()*/this.getCode();
     }
 
     /**
@@ -112,7 +121,8 @@ public class SecurityResource
      */
     @Override
     public boolean isEmpty() {
-        return super.isEmpty();
+        return /*super.isEmpty()*/!Validator.RESOURCE.id(this.id)
+                || !this.isEntityLegal();
     }
 
     /**
@@ -140,14 +150,48 @@ public class SecurityResource
      * @return
      */
     @Override
-    protected boolean validateId(@NotNull Long id) {
-        return SecurityRole.Validator.ROLE.id(id);
+    protected boolean validateId(@NotNull /*Long*/String id) {
+        return Validator.RESOURCE.entity_id(id);
     }
 
-    @Override
+//    /**
+//     * 判断是否相同 <- Entity 对象
+//     *
+//     * @param entity 实体对象
+//     * @return
+//     */
+//    @Override
+//    public boolean equals(EntityModel entity) {
+//        if (!(entity instanceof SecurityResource)) {
+//            return false;
+//        }
+//        if (null == this.getCode()
+//                || null == ((SecurityResource) entity).getCode()) {
+//            return super.equals(entity);
+//        }
+//        return this.getCode().equals(((SecurityResource) entity).getCode());
+//    }
+
+//    /**
+//     * 计算哈希值
+//     *
+//     * @Description 如果重写了 <method>equals(Object obj)</method>, 则必须根据 <method>equals(Object obj)</method>
+//     * ->    的实现重写 <method>hashCode()</method>.
+//     * ->    注意: 避免无限递归调用 <method>hashCode()</method>.
+//     *
+//     * @return
+//     */
+//    @Override
+//    public int hashCode() {
+//        return null == this.getCode()
+//                ? super.hashCode()
+//                : this.getCode().hashCode();
+//    }
+
+    /*@Override
     public String toString() {
-        return code;
-    }
+        return this.getCode();
+    }*/
 
     //===== Entity Validator =====//
 
@@ -157,16 +201,21 @@ public class SecurityResource
      * @Description 各个属性的基础校验(注意: 此校验 ≠ 完全校验).
      */
     public enum Validator
-            implements EntityValidator<SecurityResource, Long> {
+            implements EntityValidator<SecurityResource, /*Long*/String> {
         RESOURCE;
 
         @Override
         public boolean validateId(@NotNull SecurityResource entity) {
             return null != entity.id()
-                    && id(entity.id());
+                    && entity_id(entity.id());
         }
 
         @Override
+        public boolean entity_id(@NotNull /*Long*/String entityId) {
+            return null != entityId
+                    && this.code(entityId);
+        }
+
         public boolean id(@NotNull Long id) {
             return null != id
                     && EntityUtil.Regex.validateId(Long.toString(id));
@@ -189,7 +238,12 @@ public class SecurityResource
         }
 
         public boolean name(@NotNull String name) {
-            return EntityUtil.Regex.GeneralRule.englishPhrases(name, null, 20);
+            /*return EntityUtil.Regex.GeneralRule.englishPhrases(name, null, 20);*/
+            if (null == name) return false;
+
+            Map<String, Object> params = new HashMap<>(1);
+            params.put("maxLength", 30);
+            return EntityUtil.Regex.GeneralRule.englishPhrases_Number(name, params);
         }
 
         public boolean parentCode(@Nullable String parentCode) {
@@ -394,25 +448,73 @@ public class SecurityResource
                 , @NotNull github.com.suitelhy.dingding.core.infrastructure.domain.vo.Resource.TypeVo type)
                 throws IllegalArgumentException {
             if (!Validator.RESOURCE.id(id)) {
-                throw new IllegalArgumentException("非法输入: 数据 ID");
+                //-- 非法输入: 数据 ID
+                throw new IllegalArgumentException(this.getClass().getSimpleName()
+                        .concat(" -> 非法输入: 数据 ID"));
             }
             return new SecurityResource(id, code, icon
                     , link, name, parentCode
                     , sort, type);
         }
 
+        /**
+         * 更新
+         *
+         * @Description 更新所必要的匹配条件: 被替换的 Entity 与 替换的 Entity 的 <method>id()</method> 必须一致.
+         *
+         * @param oldEntity                     被替换的 Entity
+         * @param newEntity                     替换的 Entity
+         * @return {@link SecurityResource}     可为 null, 此时不满足更新所必要的匹配条件.
+         * @throws IllegalArgumentException
+         */
+        @Nullable
+        public SecurityResource update(@NotNull SecurityResource oldEntity
+                , @NotNull SecurityResource newEntity)
+                throws IllegalArgumentException {
+            if (null == oldEntity || oldEntity.isEmpty()) {
+                //-- 非法输入: <param>oldEntity</param>
+                throw new IllegalArgumentException(this.getClass().getSimpleName()
+                        .concat(" -> 非法输入: <param>oldEntity</param>"));
+            }
+            if (null == newEntity || !newEntity.isEntityLegal()) {
+                //-- 非法输入: <param>newEntity</param>
+                throw new IllegalArgumentException(this.getClass().getSimpleName()
+                        .concat(" -> 非法输入: <param>newEntity</param>"));
+            }
+            if (!Objects.equals(oldEntity.id(), newEntity.id())) {
+                //--- 不满足更新所必要的匹配条件的情况
+                return null;
+            }
+
+            return new SecurityResource(oldEntity.getId()
+                    , oldEntity.getCode()
+                    , newEntity.getIcon()
+                    , newEntity.getLink()
+                    , newEntity.getName()
+                    , newEntity.getParentCode()
+                    , newEntity.getSort()
+                    , newEntity.getType()
+            );
+        }
+
     }
 
     //===== getter & setter =====//
 
+    @Nullable
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    private boolean setId(Long id) {
+        if (Validator.RESOURCE.id(id)) {
+            this.id = id;
+            return true;
+        }
+        return false;
     }
 
+    @NotNull
     public String getCode() {
         return code;
     }

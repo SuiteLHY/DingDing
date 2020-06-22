@@ -1,9 +1,11 @@
 package github.com.suitelhy.dingding.core.infrastructure.domain.model;
 
 import org.springframework.lang.Nullable;
+import org.springframework.util.ObjectUtils;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * 实体设计模板
@@ -17,7 +19,7 @@ public interface EntityModel<ID> extends Serializable {
      *
      * @return The unique identify of the entity.
      */
-    @NotNull
+    /*@NotNull*/
     ID id();
 
     /**
@@ -32,9 +34,11 @@ public interface EntityModel<ID> extends Serializable {
     /**
      * 判断是否相同 <- Entity 对象
      *
-     * @param entity 实体对象
-     * @return
-     * @Description 默认按照 Entity 设计实现, 不应该被重写
+     * @Description 默认按照 Entity 设计实现, 不应该被重写.
+     *
+     * @param entity        实体对象, 必须合法且可未持久化.
+     * @return 判断结果
+     * @see EntityModel#equals(EntityModel, Object)
      */
     default boolean equals(@Nullable EntityModel entity) {
         return EntityModel.equals(this, entity);
@@ -43,16 +47,30 @@ public interface EntityModel<ID> extends Serializable {
     /**
      * 判断是否相同 <- Entity 对象
      *
-     * @param entity
-     * @param obj
+     * @Description Entity模板提供的实现.
+     *
+     * @param entity        必须合法且可未持久化.  {@link T}
+     * @param obj           必须合法且可未持久化.  {@link T}
      * @param <T>
      * @return
-     * @Description Entity模板提供的实现
      */
     static <T extends EntityModel> boolean equals(@Nullable T entity, @Nullable Object obj) {
-        return (null != entity && null != entity.id() && !entity.isEmpty()
+        /*return (null != entity && null != entity.id() && !entity.isEmpty()
                 && obj instanceof EntityModel && null != ((EntityModel) obj).id() && !((EntityModel) obj).isEmpty())
-                && entity.id().equals(((EntityModel) obj).id());
+                && entity.id().equals(((EntityModel) obj).id());*/
+        if ((null == entity || null == entity.id() || /*entity.isEmpty()*/!entity.isEntityLegal())
+                || (!(obj instanceof EntityModel) || null == ((EntityModel) obj).id() || /*((EntityModel) obj).isEmpty())*/!((EntityModel) obj).isEntityLegal())) {
+            return false;
+        }
+
+        if (entity.id().getClass().isArray()
+                && ((EntityModel) obj).id().getClass().isArray()) {
+            if (entity.id() instanceof Object[]
+                    && ((EntityModel) obj).id() instanceof Object[]) {
+                return Arrays.deepEquals((Object[]) entity.id(), (Object[]) ((EntityModel) obj).id());
+            }
+        }
+        return entity.id().equals(((EntityModel) obj).id());
     }
 
     /**
@@ -67,17 +85,28 @@ public interface EntityModel<ID> extends Serializable {
     /**
      * 计算哈希值 <- Entity 对象
      *
+     * @Description Entity模板提供的实现.
+     *->    注意: 避免无限递归调用 <method>hashCode()</method>.
+     *
      * @param entity
      * @param <T>
      * @return 可为 null, 此时 <tt>entity</tt> 或 <tt>entity.id()</tt> 为 null
      * -> , 或者 <tt>entity.isEmpty()</tt> 为 true.
-     * @Description Entity模板提供的实现
      */
     @Nullable
-    static <T extends EntityModel> Integer hashCode(@Nullable T entity) {
-        return (null != entity && null != entity.id() && !entity.isEmpty())
+    static <T extends EntityModel> /*Integer*/int hashCode(@Nullable T entity) {
+        /*return (null != entity && null != entity.id() && !entity.isEmpty())
                 ? entity.id().hashCode()
-                : null;
+                : null;*/
+        if (null == entity) {
+            return ObjectUtils.nullSafeHashCode((Object) null);
+        }
+        if (null == entity.id() || entity.isEmpty()) {
+            // 注意: 避免无限递归调用 <method>hashCode()</method>
+            return /*ObjectUtils.nullSafeHashCode(entity)*/((Object) entity).hashCode();
+        }
+
+        return entity.id().hashCode();
     }
 
     /**
@@ -92,10 +121,11 @@ public interface EntityModel<ID> extends Serializable {
     /**
      * 是否无效 <- Entity 对象
      *
+     * @Description Entity模板提供的实现 -> 仅检验 <tt><method>id()</method> -> nonNull</tt>.
+     *
      * @param entity
      * @param <T>
      * @return
-     * @Description Entity模板提供的实现 -> 仅检验 <tt><method>id()</method> -> nonNull</tt>.
      */
     static <T extends EntityModel> boolean isEmpty(@Nullable T entity) {
         return null == entity
@@ -107,8 +137,9 @@ public interface EntityModel<ID> extends Serializable {
     /**
      * 是否符合业务要求 <- Entity 对象
      *
-     * @return
      * @Description 需要实现类实现该接口
+     *
+     * @return
      */
     boolean isEntityLegal();
 
@@ -131,18 +162,37 @@ public interface EntityModel<ID> extends Serializable {
     /**
      * 转换为字符串 <- Entity 对象
      *
+     * @Description Entity模板提供的实现
+     *
      * @param entity
      * @param <T>
      * @return
-     * @Description Entity模板提供的实现
      */
     @NotNull
-    static <T extends EntityModel> String toString(@NotNull T entity) {
-        return ((entity.id() instanceof EntityModel)
+    static <T extends EntityModel<T_ID>, T_ID> String toString(@NotNull T entity) {
+        /*return ((entity.id() instanceof EntityModel)
                 ? (!((EntityModel) entity.id()).isEmpty())
                 : null != entity.id())
                 ? "{" + entity.id() + "}"
-                : "{}";
+                : "{}";*/
+        if (null == entity || null == entity.id()) {
+            return "{}";
+        }
+
+        T_ID entityId = entity.id();
+        if (entityId instanceof EntityModel) {
+            if (((EntityModel<?>) entityId).isEmpty()) {
+                return "{}";
+            }
+        }
+        if (entityId.getClass().isArray()) {
+            return "{"
+                    .concat(Arrays.toString((Object[]) entityId))
+                    .concat("}");
+        }
+        return "{"
+                .concat(entityId.toString())
+                .concat("}");
     }
 
 }

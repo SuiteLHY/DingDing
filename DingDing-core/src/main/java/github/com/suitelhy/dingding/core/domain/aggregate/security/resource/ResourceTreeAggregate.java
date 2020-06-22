@@ -45,7 +45,7 @@ public class ResourceTreeAggregate
                         if (resource.isEmpty()) {
                             repository.saveAndFlush(resource);
                         }
-                        return repository.existsById(resource.id())
+                        return repository.existsById(resource.getId())
                                 && super.add(resource);
                     } else if (resource.isEntityLegal()) {
                         //--- 判断为非父子节点关系, 设置为父子节点关系
@@ -57,7 +57,7 @@ public class ResourceTreeAggregate
                         if (resource.isEmpty()) {
                             repository.saveAndFlush(resource);
                         }
-                        return repository.existsById(resource.id())
+                        return repository.existsById(resource.getId())
                                 && super.add(resource);
                     }
                 }

@@ -90,7 +90,7 @@ public class UserDto
      * @return The unique identify of the <tt>dtoId()</tt>.
      */
     @Override
-    public String id() {
+    public /*String*/Object[] id() {
         return this.dtoId.id();
     }
 

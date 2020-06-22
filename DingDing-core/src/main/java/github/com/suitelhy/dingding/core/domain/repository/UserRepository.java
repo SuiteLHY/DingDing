@@ -1,14 +1,18 @@
 package github.com.suitelhy.dingding.core.domain.repository;
 
 import github.com.suitelhy.dingding.core.domain.entity.User;
+import github.com.suitelhy.dingding.core.infrastructure.domain.model.EntityRepository;
 import github.com.suitelhy.dingding.core.infrastructure.domain.vo.Account;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
 /**
@@ -26,7 +30,7 @@ import java.util.Optional;
 //-> 然而用了就无法对该接口声明任何 Bean !... (orz)
 /*@NoRepositoryBean*/
 public interface UserRepository
-        extends JpaRepository<User, String> {
+        extends JpaRepository<User, String>, EntityRepository {
 
     //===== Select Data =====//
 
@@ -37,6 +41,17 @@ public interface UserRepository
      */
     @Override
     long count();
+
+    /**
+     * 判断存在
+     *
+     * @param username
+     * @return
+     */
+    @Transactional(isolation  = Isolation.SERIALIZABLE
+            , propagation = Propagation.REQUIRED
+            , timeout = 15)
+    boolean existsByUsername(@NotNull String username);
 
     /**
      * 查询所有用户列表
@@ -54,6 +69,9 @@ public interface UserRepository
      * @return
      */
     /*@Query("select u from User u where u.userid = ?1")*/
+    @Transactional(isolation  = Isolation.SERIALIZABLE
+            , propagation = Propagation.REQUIRED
+            , timeout = 15)
     Optional<User> findById(String userid);
 
     /**
@@ -63,6 +81,9 @@ public interface UserRepository
      * @param status
      * @return
      */
+    @Transactional(isolation  = Isolation.SERIALIZABLE
+            , propagation = Propagation.REQUIRED
+            , timeout = 15)
     Optional<User> findUserByUsernameAndStatus(String username, Account.StatusVo status);
 
     //===== Insert Data =====//
@@ -73,9 +94,10 @@ public interface UserRepository
      * @param user
      * @return
      */
-    @Modifying
     @Override
-    @Transactional
+    @Modifying
+    @Transactional(isolation = Isolation.SERIALIZABLE
+            , propagation = Propagation.REQUIRED)
     User saveAndFlush(User user);
 
     //===== Update Data =====//
@@ -84,14 +106,15 @@ public interface UserRepository
      * 修改指定用户信息
      *
      * @param nickname
-     * @param id
+     * @param userid
      * @param status
      * @return
      */
     @Modifying
     @Query("update User u set u.nickname = ?1 where u.userid = ?2 and u.status = ?3")
-    @Transactional(timeout = 10)
-    int modifyByIdAndStatus(String nickname, String id, Account.StatusVo status);
+    @Transactional(isolation = Isolation.SERIALIZABLE
+            , propagation = Propagation.REQUIRED)
+    int modifyByIdAndStatus(String nickname, String userid, Account.StatusVo status);
 
     //===== Delete Data =====//
 
@@ -102,7 +125,8 @@ public interface UserRepository
 //     */
 //    @Modifying
 //    /*@Query("delete from User where userid = ?1")*/
-//    @Transactional
+//    @Transactional(isolation = Isolation.SERIALIZABLE
+//            , propagation = Propagation.REQUIRED)
 //    void deleteByIdAndStatus(Long id, Integer status);
 
     /**
@@ -119,9 +143,10 @@ public interface UserRepository
      * @throws IllegalArgumentException                               - in case the given entity is null.
      * @throws org.springframework.dao.EmptyResultDataAccessException - in case the given entity is non persistent.
      */
-    @Modifying
     @Override
-    @Transactional
+    @Modifying
+    @Transactional(isolation = Isolation.SERIALIZABLE
+            , propagation = Propagation.REQUIRED)
     void delete(User user);
 
     /**
@@ -137,9 +162,10 @@ public interface UserRepository
      * @throws IllegalArgumentException                               - in case the given id is null.
      * @throws org.springframework.dao.EmptyResultDataAccessException - in case the given id -> entity is non persistent.
      */
-    @Modifying
     @Override
-    @Transactional
+    @Modifying
+    @Transactional(isolation = Isolation.SERIALIZABLE
+            , propagation = Propagation.REQUIRED)
     void deleteById(String id);
 
     //----- !DANGER: 禁止提供基于此类判断条件不够严谨的删除方法的业务接口!

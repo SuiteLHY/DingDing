@@ -9,6 +9,8 @@ import org.springframework.lang.Nullable;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * 角色 - 资源
@@ -18,7 +20,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "SECURITY_ROLE_RESOURCE")
 public class SecurityRoleResource
-        extends AbstractEntityModel<Long> {
+        extends AbstractEntityModel</*Long*/Object[]> {
 
     /**
      * ID
@@ -53,8 +55,10 @@ public class SecurityRoleResource
     //===== Entity Model =====//
 
     @Override
-    public @NotNull Long id() {
-        return this.getId();
+    public @NotNull /*Long*/Object[] id() {
+        return /*this.getId()*/new Object[] {
+                this.getRoleCode(), this.getResourceCode()
+        };
     }
 
     /**
@@ -65,7 +69,8 @@ public class SecurityRoleResource
      */
     @Override
     public boolean isEmpty() {
-        return super.isEmpty();
+        return !Validator.ROLE_RESOURCE.id(this.id)
+                || !this.isEntityLegal();
     }
 
     /**
@@ -88,13 +93,18 @@ public class SecurityRoleResource
      * @return
      */
     @Override
-    protected boolean validateId(@NotNull Long id) {
-        return Validator.ROLE_RESOURCE.id(id);
+    protected boolean validateId(@NotNull /*Long*/Object[] id) {
+        return Validator.ROLE_RESOURCE.entity_id(id);
     }
 
-    @Override
-    public String toString() {
-        return roleCode;
+    public boolean equals(@NotNull SecurityRole role, @NotNull SecurityResource resource) {
+        if ((null == role || role.isEmpty())
+                || (null == resource || resource.isEmpty())) {
+            return false;
+        }
+
+        return !this.isEmpty()
+                && Arrays.deepEquals(this.id(), new Object[]{role.getCode(), resource.getCode()});
     }
 
     //===== Entity Validator =====//
@@ -105,16 +115,28 @@ public class SecurityRoleResource
      * @Description 各个属性的基础校验(注意: 此校验 ≠ 完全校验).
      */
     public enum Validator
-            implements EntityValidator<SecurityRoleResource, Long> {
+            implements EntityValidator<SecurityRoleResource, /*Long*/Object[]> {
         ROLE_RESOURCE;
 
         @Override
         public boolean validateId(@NotNull SecurityRoleResource entity) {
             return null != entity.id()
-                    && id(entity.id());
+                    && entity_id(entity.id());
         }
 
         @Override
+        public boolean entity_id(@NotNull Object[] entityId) {
+            if (null == entityId || entityId.length != 2) {
+                return false;
+            }
+
+            if (Validator.ROLE_RESOURCE.roleCode((String) entityId[0])
+                    && Validator.ROLE_RESOURCE.resourceCode((String) entityId[1]) ) {
+                return true;
+            }
+            return false;
+        }
+
         public boolean id(@NotNull Long id) {
             return null != id
                     && EntityUtil.Regex.validateId(Long.toString(id));
@@ -173,7 +195,7 @@ public class SecurityRoleResource
         }
 
         // 数据ID
-        this.id = id;
+        this.setId(id);
         // 角色编码
         this.setRoleCode(roleCode);
         // 资源编码
@@ -218,15 +240,25 @@ public class SecurityRoleResource
 
     //===== getter & setter =====//
 
+    @Nullable
     public Long getId() {
         return id;
     }
 
+    private boolean setId(@NotNull Long id) {
+        if (Validator.ROLE_RESOURCE.id(id)) {
+            this.id = id;
+            return true;
+        }
+        return false;
+    }
+
+    @NotNull
     public String getRoleCode() {
         return roleCode;
     }
 
-    public boolean setRoleCode(String roleCode) {
+    public boolean setRoleCode(@NotNull String roleCode) {
         if (Validator.ROLE_RESOURCE.roleCode(roleCode)) {
             this.roleCode = roleCode;
             return true;
@@ -234,11 +266,12 @@ public class SecurityRoleResource
         return false;
     }
 
+    @NotNull
     public String getResourceCode() {
         return resourceCode;
     }
 
-    public boolean setResourceCode(String resourceCode) {
+    public boolean setResourceCode(@NotNull String resourceCode) {
         if (Validator.ROLE_RESOURCE.resourceCode(resourceCode)) {
             this.resourceCode = resourceCode;
             return true;

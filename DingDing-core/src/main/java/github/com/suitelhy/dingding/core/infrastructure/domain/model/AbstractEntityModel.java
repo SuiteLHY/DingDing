@@ -25,7 +25,7 @@ public abstract class AbstractEntityModel<ID>
      *
      * @return The unique identify of the entity.
      */
-    @NotNull
+    /*@NotNull*/
     @Override
     public abstract ID id();
 
@@ -44,12 +44,18 @@ public abstract class AbstractEntityModel<ID>
     /**
      * 计算哈希值
      *
-     * @return
      * @Description 如果重写了 <method>equals(Object obj)</method>, 则必须根据 <method>equals(Object obj)</method>
-     * -> 的实现重写 <method>hashCode()</method>.
+     *->    的实现重写 <method>hashCode()</method>.
+     *->    注意: 避免无限递归调用 <method>hashCode()</method>.
+     *
+     * @return
      */
     @Override
     public int hashCode() {
+        if (null == this.id() || this.isEmpty()) {
+            //--- 避免无限递归调用 <method>hashCode()</method>.
+            return super.hashCode();
+        }
         return EntityModel.hashCode(this);
     }
 

@@ -18,25 +18,24 @@ import java.time.LocalDateTime;
 
 /**
  * 用户信息
- * <p>
- * <p>
- * 关于数据脱敏的自定义注解实现, 可参考: <a href="https://blog.csdn.net/liufei198613/article/details/79009015">
+ *
+ * <p>关于数据脱敏的自定义注解实现, 可参考: <a href="https://blog.csdn.net/liufei198613/article/details/79009015">
  * ->     注解实现json序列化的时候自动进行数据脱敏_liufei198613的博客-CSDN博客</a>
- */
-/**
- * 关于数据脱敏的自定义注解实现, 可参考: <a href="https://blog.csdn.net/liufei198613/article/details/79009015">
+ * </p>
+ *
+ * <p>关于数据脱敏的自定义注解实现, 可参考: <a href="https://blog.csdn.net/liufei198613/article/details/79009015">
  *->     注解实现json序列化的时候自动进行数据脱敏_liufei198613的博客-CSDN博客</a>
- */
-
-/**
- * 关于 id 生成策略, 个人倾向于使用"代理键" ———— 所选策略还是应该交由数据库来实现.
+ * </p>
+ *
+ * <p>关于 id 生成策略, 个人倾向于使用"代理键" ———— 所选策略还是应该交由数据库来实现.
  * @Reference <a href="https://dzone.com/articles/persisting-natural-key-entities-with-spring-data-j">
  *->     Persisting Natural Key Entities With Spring Data JPA</a>
+ * </p>
  */
 @Entity
 @Table
 public class User
-        extends AbstractEntityModel<String> {
+        extends AbstractEntityModel</*String*/Object[]> {
 
     private static final long serialVersionUID = 1L;
 
@@ -98,41 +97,50 @@ public class User
     private Account.StatusVo status;
 
     //===== Entity Model =====//
+
     @Override
-    public @NotNull String id() {
-        return this.getUserid();
+    public @NotNull /*String*/Object[] id() {
+        return new Object[]{
+                this.username
+                , this.nickname
+        };
     }
 
     /**
      * 是否无效
      *
-     * @return
      * @Description 保证 User 的基本业务实现中的合法性.
+     *
+     * @return
      */
     @Override
     public boolean isEmpty() {
-        return super.isEmpty()
-                && !Account.StatusVo.NORMAL.equals(this.status);
+        /*return super.isEmpty()
+                && !Account.StatusVo.NORMAL.equals(this.status);*/
+        return !Validator.USER.userid(this.userid)
+                || !this.isEntityLegal()
+                || !Account.StatusVo.NORMAL.equals(this.status);
     }
 
     /**
      * 是否符合基础数据合法性要求
      *
-     * @return
      * @Description 只保证 User 的数据合法, 不保证 User 的业务实现中的合法性.
+     *
+     * @return
      */
     @Override
     public boolean isEntityLegal() {
-        return Validator.USER.age(this.age) // 用户 - 年龄
+        return Validator.USER.age(this.age)                 // 用户 - 年龄
                 && Validator.USER.faceImage(this.faceImage) // 用户 - 头像
                 && Validator.USER.firsttime(this.firsttime) // 注册时间
                 && Validator.USER.introduction(this.introduction) // 用户 - 简介
-                && Validator.USER.ip(this.ip) // 最后登陆IP
-                && Validator.USER.lasttime(this.lasttime) // 最后登录时间
-                && Validator.USER.nickname(this.nickname) // 用户 - 昵称
-                && Validator.USER.password(this.password) // 用户密码
-                && Validator.USER.username(this.username) // 用户名称
-                && Validator.USER.sex(this.sex) // 用户 - 性别
+                && Validator.USER.ip(this.ip)               // 最后登陆IP
+                && Validator.USER.lasttime(this.lasttime)   // 最后登录时间
+                && Validator.USER.nickname(this.nickname)   // 用户 - 昵称
+                && Validator.USER.password(this.password)   // 用户密码
+                && Validator.USER.username(this.username)   // 用户名称
+                && Validator.USER.sex(this.sex)             // 用户 - 性别
                 && Validator.USER.status(this.status)/* 账号状态 */;
     }
 
@@ -140,32 +148,37 @@ public class User
      * 校验 Entity - ID
      *
      * @Description <abstractClass>AbstractEntityModel</abstractClass>提供的模板设计.
-     * @param id <method>id()</method>
+     *
+     * @param entityId      <method>id()</method>
      * @return
      */
     @Override
-    protected boolean validateId(@NotNull String id) {
-        return Validator.USER.id(id);
+    protected boolean validateId(@NotNull /*String*/Object[] entityId) {
+        return Validator.USER.entity_id(entityId);
     }
 
     //===== Entity Validator =====//
 
     /**
      * 用户 - 属性校验器
+     *
      * @Description 各个属性的基础校验(注意 : ≠ 完全校验).
      */
-    public enum Validator implements EntityValidator<User, String> {
+    public enum Validator implements EntityValidator<User, Object[]> {
         USER;
 
         @Override
         public boolean validateId(@NotNull User entity) {
             return null != entity.id()
-                    && userid(entity.id());
+                    && entity_id(entity.id());
         }
 
         @Override
-        public boolean id(@NotNull String id) {
-            return userid(id);
+        public boolean entity_id(@NotNull /*String*/Object[] entityId) {
+            return null != entityId
+                    && entityId.length == 2
+                    && this.username((String) entityId[0])
+                    && this.nickname((String) entityId[1]);
         }
 
         public boolean userid(@NotNull String userid) {
@@ -239,21 +252,21 @@ public class User
     /**
      * 创建/更新用户 -> Entity对象
      *
-     * @Description 添加(< param > id < / param > 为 null) / 更新(<param>id</param>合法)用户.
-     * @param id            用户ID
+     * @Description 添加 (<param>id</param>为 null) / 更新 (<param>id</param>合法) 用户.
+     * @param userid        用户 ID
      * @param age           用户 - 年龄
      * @param firsttime     注册时间
      * @param ip            最后登陆IP
      * @param lasttime      最后登录时间
      * @param nickname      用户 - 昵称
      * @param password      用户密码
-     * @param introduction       用户 - 简介
-     * @param faceImage   用户 - 头像
+     * @param introduction  用户 - 简介
+     * @param faceImage     用户 - 头像
      * @param username      用户名称
      * @param sex           用户 - 性别
      * @throws IllegalArgumentException
      */
-    private User(@NotNull String id
+    private User(@NotNull String userid
             , @Nullable Integer age
             , @NotNull String firsttime
             , @NotNull String ip
@@ -265,53 +278,54 @@ public class User
             , @NotNull String username
             , @Nullable Human.SexVo sex)
             throws IllegalArgumentException {
-        if (null == id) {
+        if (null == userid) {
             //--- 添加用户功能
         } else {
             //--- 更新用户功能
-            if (!Validator.USER.id(id)) {
+            if (!Validator.USER.userid(userid)) {
                 //-- 非法输入: 用户ID
                 throw new IllegalArgumentException(this.getClass().getSimpleName()
-                        + " -> 非法输入: 用户ID");
+                        .concat(" -> 非法输入: 用户ID"));
             }
         }
         if (!Validator.USER.username(username)) {
             //-- 非法输入: 用户名称
             throw new IllegalArgumentException(this.getClass().getSimpleName()
-                    + " -> 非法输入: 用户名称");
+                    .concat(" -> 非法输入: 用户名称"));
         }
         if (!Validator.USER.age(age)) {
             //-- 非法输入: 用户 - 年龄
             throw new IllegalArgumentException(this.getClass().getSimpleName()
-                    + " -> 非法输入: 用户 - 年龄");
+                    .concat(" -> 非法输入: 用户 - 年龄"));
         }
         if (!Validator.USER.firsttime(firsttime)) {
             //-- 非法输入: 注册时间
             throw new IllegalArgumentException(this.getClass().getSimpleName()
-                    + " -> 非法输入: 注册时间");
+                    .concat(" -> 非法输入: 注册时间"));
         }
         if (!Validator.USER.ip(ip)) {
             //-- 非法输入: 最后登陆IP
             throw new IllegalArgumentException(this.getClass().getSimpleName()
-                    + " -> 非法输入: 最后登陆IP");
+                    .concat(" -> 非法输入: 最后登陆IP"));
         }
         if (!Validator.USER.lasttime(lasttime)) {
             //-- 非法输入: 最后登录时间
             throw new IllegalArgumentException(this.getClass().getSimpleName()
-                    + " -> 非法输入: 最后登录时间");
+                    .concat(" -> 非法输入: 最后登录时间"));
         }
         if (!Validator.USER.nickname(nickname)) {
             //-- 非法输入: 用户 - 昵称
             throw new IllegalArgumentException(this.getClass().getSimpleName()
-                    + " -> 非法输入: 用户 - 昵称");
+                    .concat(" -> 非法输入: 用户 - 昵称"));
         }
         if (!Validator.USER.password(password)) {
             //-- 非法输入: 用户密码
             throw new IllegalArgumentException(this.getClass().getSimpleName()
-                    + " -> 非法输入: 用户密码");
+                    .concat(" -> 非法输入: 用户密码"));
         }
+
         // 用户ID
-        this.setUserid(id);
+        this.setUserid(userid);
         // 用户名称
         this.setUsername(username);
         // 用户 - 昵称
@@ -336,11 +350,12 @@ public class User
         this.setStatus(Account.StatusVo.NORMAL);
     }
 
-    public enum Factory implements EntityFactory<User> {
+    public enum Factory
+            implements EntityFactory<User> {
         USER;
 
         /**
-         * 创建用户
+         * 创建
          *
          * @param age           用户 - 年龄
          * @param firsttime     注册时间
@@ -352,6 +367,7 @@ public class User
          * @param faceImage   用户 - 头像
          * @param username      用户名称
          * @param sex           用户 - 性别
+         * @return {@link User}
          * @throws IllegalArgumentException
          */
         public User create(@Nullable Integer age
@@ -372,22 +388,22 @@ public class User
         }
 
         /**
-         * 更新用户
+         * 更新
          *
-         * @param id            用户ID
+         * @param userid            用户 ID
          * @param age           用户 - 年龄
          * @param firsttime     注册时间
          * @param ip            最后登陆IP
          * @param lasttime      最后登录时间
          * @param nickname      用户 - 昵称
          * @param password      用户 - 密码
-         * @param introduction       用户 - 简介
-         * @param faceImage   用户 - 头像
+         * @param introduction  用户 - 简介
+         * @param faceImage     用户 - 头像
          * @param sex           用户 - 性别
-         * @throws IllegalArgumentException 此时 <param>id</param> 非法
-         * @return 可为 null, 此时输入参数非法
+         * @return 可为 null, 此时输入参数非法.
+         * @throws IllegalArgumentException 此时 <param>id</param> 非法.
          */
-        public User update(@NotNull String id
+        public User update(@NotNull String userid
                 , @Nullable Integer age
                 , @NotNull String firsttime
                 , @NotNull String ip
@@ -399,10 +415,10 @@ public class User
                 , @NotNull String username
                 , @Nullable Human.SexVo sex)
                 throws IllegalArgumentException {
-            if (!Validator.USER.id(id)) {
+            if (!Validator.USER.userid(userid)) {
                 throw new IllegalArgumentException("非法输入: 用户ID");
             }
-            return new User(id, age, firsttime
+            return new User(userid, age, firsttime
                     , ip, lasttime, nickname
                     , password, introduction, faceImage
                     , username, sex);
@@ -410,9 +426,9 @@ public class User
 
         /**
          * 销毁 Entity 实例
+         *
          * @param user
-         * @return {<code>true</code> : <b>销毁成功</b>
-         *->      , <code>false</code> : <b>销毁失败; 此时 <param>user</param></b> 无效或无法销毁}
+         * @return {<code>true</code> : <b>销毁成功</b>, <code>false</code> : <b>销毁失败; 此时 <param>user</param></b> 无效或无法销毁}
          */
         public boolean delete(@NotNull User user) {
             if (null != user && !user.isEmpty()) {
@@ -425,12 +441,13 @@ public class User
     }
 
     //===== getter & setter =====//
-    @NotNull
+
+    @Nullable
     public String getUserid() {
         return userid;
     }
 
-    private boolean setUserid(String userid) {
+    private boolean setUserid(@NotNull String userid) {
         if (Validator.USER.userid(userid)) {
             this.userid = userid;
             return true;
@@ -503,7 +520,7 @@ public class User
         return password;
     }
 
-    public boolean setPassword(@NotNull String password) {
+    private boolean setPassword(@NotNull String password) {
         if (Validator.USER.password(password)) {
             this.password = password;
             return true;
@@ -580,7 +597,7 @@ public class User
         return username;
     }
 
-    private boolean setUsername(String username) {
+    private boolean setUsername(@NotNull String username) {
         if (Validator.USER.username(username)) {
             this.username = username;
             return true;

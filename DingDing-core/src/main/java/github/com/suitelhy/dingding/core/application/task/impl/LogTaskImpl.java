@@ -6,6 +6,7 @@ import github.com.suitelhy.dingding.core.domain.entity.User;
 import github.com.suitelhy.dingding.core.domain.service.LogService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -15,7 +16,8 @@ import java.util.List;
  */
 @Service("logTask")
 @Slf4j
-public class LogTaskImpl implements LogTask {
+public class LogTaskImpl
+        implements LogTask {
 
     @Resource
     private LogService logService;
@@ -65,6 +67,7 @@ public class LogTaskImpl implements LogTask {
     }
 
     @Override
+    @Transactional
     public boolean insert(Log log) {
         if (null == log || !log.isEntityLegal()) {
             throw new RuntimeException("非法输入: <param>log</param>");
@@ -73,8 +76,9 @@ public class LogTaskImpl implements LogTask {
     }
 
     @Override
+    @Transactional
     public boolean delete(String id) {
-        if (!User.Validator.USER.id(id)) {
+        if (!Log.Validator.USER.id(id)) {
             throw new RuntimeException("非法输入: 日志记录ID");
         }
         return logService.deleteById(Long.parseLong(id));

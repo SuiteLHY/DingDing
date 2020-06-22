@@ -23,7 +23,7 @@ public interface EntityValidator<E extends EntityModel<ID>, ID> {
     default boolean validateId(@NotNull E entity) {
         return null != entity
                 && null != entity.id()
-                && /*EntityUtil.Regex.validateId(String.valueOf(entity.id()))*/id(entity.id());
+                && /*EntityUtil.Regex.validateId(String.valueOf(entity.id()))*/entity_id(entity.id());
     }
 
     /**
@@ -32,7 +32,7 @@ public interface EntityValidator<E extends EntityModel<ID>, ID> {
      * @param id
      * @return
      */
-    boolean id(@NotNull ID id);
+    boolean entity_id(@NotNull ID id);
 
     /**
      * 校验 Entity - ID
@@ -41,7 +41,7 @@ public interface EntityValidator<E extends EntityModel<ID>, ID> {
      * @return
      * @Description 实体验证器模板提供的默认实现.
      */
-    static boolean id(@NotNull String id) {
+    static boolean entity_id(@NotNull String id) {
         return EntityUtil.Regex.validateId(id);
     }
 
@@ -87,7 +87,7 @@ public interface EntityValidator<E extends EntityModel<ID>, ID> {
             if (null != foreignEntityClazz
                     && null != id
                     && FOREIGN_ENTITY_CLAZZ == foreignEntityClazz) {
-                return FOREIGN_VALIDATOR.id(id);
+                return FOREIGN_VALIDATOR.entity_id(id);
             }
             return false;
         }

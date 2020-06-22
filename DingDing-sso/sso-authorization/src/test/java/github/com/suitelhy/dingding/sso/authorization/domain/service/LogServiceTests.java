@@ -19,6 +19,13 @@ import org.springframework.util.Assert;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+/**
+ * 日志记录 - 业务 <- 测试单元
+ *
+ * @Description 测试单元.
+ *
+ * @see github.com.suitelhy.dingding.core.domain.service.LogService
+ */
 @SpringBootTest
 public class LogServiceTests {
 
@@ -26,7 +33,7 @@ public class LogServiceTests {
     private ObjectMapper toJSONString;
 
     @Autowired
-    private LogService logService;
+    private LogService service;
 
     @Autowired
     private UserService userService;
@@ -41,8 +48,18 @@ public class LogServiceTests {
                 , "test123"
                 , "测试数据"
                 , null
-                , ("测试" + new CalendarController().toString().replaceAll("[-:\\s]", ""))
+                , ("测试".concat(new CalendarController().toString().replaceAll("[-:\\s]", "")))
                 , Human.SexVo.MALE);
+    }
+
+    @NotNull
+    private Log getEntityForTest(@NotNull User user) {
+        return Log.Factory.USER_LOG.create(null
+                , user.getIp()
+                , new CalendarController().toString()
+                , HandleType.LogVo.USER_REGISTRATION
+                , user.getUserid()
+        );
     }
 
     @NotNull
@@ -52,16 +69,18 @@ public class LogServiceTests {
 
     @Test
     public void contextLoads() {
-        Assert.notNull(logService, "获取测试单元失败");
+        Assert.notNull(service, "获取测试单元失败");
+        Assert.notNull(userService, "获取测试单元失败");
     }
 
     @Test
     @Transactional
-    public void selectAll() {
-        Page<Log> result = logService.selectAll(0, 10);
-        Assert.isTrue(result.getSize() > 0
-                , "The result of count() equaled to or less than 0");
-        System.out.println(result);
+    public void selectAll()
+            throws JsonProcessingException {
+        final Page<Log> result = service.selectAll(0, 10);
+        Assert.isTrue(!result.isEmpty()
+                , "The result -> empty");
+        System.out.println(toJSONString.writeValueAsString(result));
         System.out.println(result.getContent());
         System.out.println(result.getNumber());
         System.out.println(result.getTotalPages());
@@ -71,7 +90,7 @@ public class LogServiceTests {
     @Test
     @Transactional
     public void selectCount() {
-        long result = logService.selectCount(10);
+        long result = service.selectCount(10);
         Assert.isTrue(result > 0
                 , "The result of selectCount(int) equaled to or less than 0");
         System.out.println(result);
@@ -80,142 +99,126 @@ public class LogServiceTests {
     @Test
     @Transactional
     public void selectCountByUserid() {
-        //===== userService =====//
-        User newUser = getUserForTest();
+        final Long result;
+
+        //===== 添加测试数据 =====//
+        final Log newEntity;
+
+        final User newUser = getUserForTest();
         Assert.isTrue(newUser.isEntityLegal()
-                , "User.Factory.USER.create(..) -> 无效的 User");
+                , "getUserForTest() -> 无效的 User!");
         Assert.isTrue(userService.insert(newUser)
-                , "===== insert(User) -> unexpected");
+                , "===== insert(User) -> false!");
         Assert.isTrue(!newUser.isEmpty()
-                , "===== insert(User) -> 无效的 User");
+                , "===== insert(User) -> 无效的 User!");
         System.out.println("newUser: " + newUser);
 
-        //===== logService =====//
-        //=== insert(Log log)
-        Log newLog = Log.Factory.USER_LOG.create(null
-                , newUser.getIp()
-                , new CalendarController().toString()
-                , HandleType.LogVo.USER_REGISTRATION
-                , newUser.getUserid()
-        );
-        Assert.isTrue(newLog.isEntityLegal()
-                , "Log.Factory.USER_LOG.create(..) -> 无效的 Log");
-        Assert.isTrue(logService.insert(newLog)
-                , "===== insert(Log log) -> unexpected");
-        Assert.isTrue(!newLog.isEmpty()
-                , "===== insert(Log log) -> 无效的 Log");
-        System.out.println("newLog: " + newLog);
+        newEntity = getEntityForTest(newUser);
+        Assert.isTrue(newEntity.isEntityLegal()
+                , "getEntityForTest(User) -> 无效的 Entity!");
+        Assert.isTrue(service.insert(newEntity)
+                , "===== insert(...) -> false!");
+        Assert.isTrue(!newEntity.isEmpty()
+                , "===== insert(...) -> 无效的 Entity!");
+        System.out.println("newEntity: " + newEntity);
 
-        //=== selectLogByUserid(String userid, int page, int pageSize)
-        Long result = logService.selectCountByUserid(newUser.getUserid()
+        //===== selectCountByUserid(...) =====//
+        result = service.selectCountByUserid(newUser.getUserid()
                 , 10);
-        Assert.isTrue(null != result && result > 0
-                , "===== The result -> null or not enough data");
+        Assert.isTrue((null != result && result > 0)
+                , "===== The result -> null or not enough data!");
         System.out.println(result);
     }
 
     @Test
     @Transactional
     public void selectLogByUserid() {
-        //===== userService =====//
-        User newUser = getUserForTest();
+        final List<Log> result;
+
+        //===== 添加测试数据 =====//
+        final Log newEntity;
+
+        final User newUser = getUserForTest();
         Assert.isTrue(newUser.isEntityLegal()
-                , "User.Factory.USER.create(..) -> 无效的 User");
+                , "getUserForTest() -> 无效的 User!");
         Assert.isTrue(userService.insert(newUser)
-                , "===== insert(User) -> unexpected");
+                , "===== insert(User) -> false!");
         Assert.isTrue(!newUser.isEmpty()
-                , "===== insert(User) -> 无效的 User");
+                , "===== insert(User) -> 无效的 User!");
         System.out.println("newUser: " + newUser);
 
-        //===== logService =====//
-        //=== insert(Log log)
-        Log newLog = Log.Factory.USER_LOG.create(null
-                , newUser.getIp()
-                , new CalendarController().toString()
-                , HandleType.LogVo.USER_REGISTRATION
-                , newUser.getUserid()
-        );
-        Assert.isTrue(newLog.isEntityLegal()
-                , "Log.Factory.USER_LOG.create(..) -> 无效的 Log");
-        Assert.isTrue(logService.insert(newLog)
-                , "===== insert(Log log) -> unexpected");
-        Assert.isTrue(!newLog.isEmpty()
-                , "===== insert(Log log) -> 无效的 Log");
-        System.out.println("newLog: " + newLog);
+        newEntity = getEntityForTest(newUser);
+        Assert.isTrue(newEntity.isEntityLegal()
+                , "getEntityForTest(User) -> 无效的 Entity!");
+        Assert.isTrue(service.insert(newEntity)
+                , "===== insert(...) -> false!");
+        Assert.isTrue(!newEntity.isEmpty()
+                , "===== insert(...) -> 无效的 Entity!");
+        System.out.println("newEntity: " + newEntity);
 
-        //=== selectLogByUserid(String userid, int page, int pageSize)
-        List<Log> result = logService.selectLogByUserid(newUser.getUserid()
+        //=== selectLogByUserid(...)
+        result = service.selectLogByUserid(newUser.getUserid()
                 , 0
                 , 10);
-        Assert.notEmpty(result
-                , "===== The result -> null or not enough data");
+        Assert.isTrue((null != result && result.contains(newEntity))
+                , "===== The result -> null or not enough data!");
         System.out.println(result);
     }
 
     @Test
     @Transactional
     public void insert() {
-        //===== userService =====//
-        User newUser = getUserForTest();
+        final Log newEntity;
+
+        final User newUser = getUserForTest();
         Assert.isTrue(newUser.isEntityLegal()
-                , "User.Factory.USER.create(..) -> 无效的 User");
+                , "getUserForTest() -> 无效的 User!");
         Assert.isTrue(userService.insert(newUser)
-                , "===== insert(User) -> unexpected");
+                , "===== insert(User) -> false!");
         Assert.isTrue(!newUser.isEmpty()
-                , "===== insert(User) -> 无效的 User");
+                , "===== insert(User) -> 无效的 User!");
         System.out.println("newUser: " + newUser);
 
-        //===== logService =====//
-        Log newLog = Log.Factory.USER_LOG.create(null
-                , newUser.getIp()
-                , new CalendarController().toString()
-                , HandleType.LogVo.USER_REGISTRATION
-                , newUser.getUserid()
-        );
-        Assert.isTrue(newLog.isEntityLegal()
-                , "Log.Factory.USER_LOG.create(..) -> 无效的 Log");
-        Assert.isTrue(logService.insert(newLog)
-                , "===== insert(Log log) -> unexpected");
-        Assert.isTrue(!newLog.isEmpty()
-                , "===== insert(Log log) -> 无效的 Log");
-        System.out.println("newLog: " + newLog);
+        newEntity = getEntityForTest(newUser);
+        Assert.isTrue(newEntity.isEntityLegal()
+                , "getEntityForTest(User) -> 无效的 Entity!");
+        Assert.isTrue(service.insert(newEntity)
+                , "===== insert(...) -> false!");
+        Assert.isTrue(!newEntity.isEmpty()
+                , "===== insert(...) -> 无效的 Entity!");
+        System.out.println("newEntity: " + newEntity);
     }
 
     @Test
     @Transactional
     public void deleteById() {
-        //===== userService =====//
-        User newUser = getUserForTest();
+        final boolean result;
+
+        //===== 添加测试数据 =====//
+        final Log newEntity;
+
+        final User newUser = getUserForTest();
         Assert.isTrue(newUser.isEntityLegal()
-                , "User.Factory.USER.create(..) -> 无效的 User");
+                , "getUserForTest() -> 无效的 User!");
         Assert.isTrue(userService.insert(newUser)
-                , "===== insert(User) -> unexpected");
+                , "===== insert(User) -> false!");
         Assert.isTrue(!newUser.isEmpty()
-                , "===== insert(User) -> 无效的 User");
+                , "===== insert(User) -> 无效的 User!");
         System.out.println("newUser: " + newUser);
 
-        //===== logService =====//
-        boolean result;
-        //=== insert(Log log)
-        Log newLog = Log.Factory.USER_LOG.create(null
-                , newUser.getIp()
-                , new CalendarController().toString()
-                , HandleType.LogVo.USER_REGISTRATION
-                , newUser.getUserid()
-        );
-        Assert.isTrue(newLog.isEntityLegal()
-                , "Log.Factory.USER_LOG.create(..) -> 无效的 Log");
-        Assert.isTrue(logService.insert(newLog)
-                , "===== saveAndFlush(Log) -> unexpected");
-        Assert.isTrue(!newLog.isEmpty()
-                , "===== saveAndFlush(Log) -> 无效的 Log");
-        System.out.println("newLog: " + newLog);
+        newEntity = getEntityForTest(newUser);
+        Assert.isTrue(newEntity.isEntityLegal()
+                , "getEntityForTest(User) -> 无效的 Entity!");
+        Assert.isTrue(service.insert(newEntity)
+                , "===== insert(...) -> false!");
+        Assert.isTrue(!newEntity.isEmpty()
+                , "===== insert(...) -> 无效的 Entity!");
+        System.out.println("newEntity: " + newEntity);
 
-        //=== deleteById(String id)
-        Assert.isTrue(result = logService.deleteById(newLog.id())
-                , "");
+        //=== deleteById(...)
+        Assert.isTrue(result = service.deleteById(newEntity.id())
+                , "deleteById(...) -> false");
         System.out.println(result);
-        System.out.println(newLog);
     }
 
 }

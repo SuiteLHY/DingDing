@@ -2,10 +2,17 @@ package github.com.suitelhy.dingding.sso.authorization.domain.repository.securit
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import github.com.suitelhy.dingding.core.domain.entity.security.SecurityResource;
+import github.com.suitelhy.dingding.core.domain.entity.security.SecurityRole;
 import github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser;
 import github.com.suitelhy.dingding.core.domain.repository.security.SecurityUserRepository;
+import github.com.suitelhy.dingding.core.domain.service.security.SecurityResourceService;
+import github.com.suitelhy.dingding.core.domain.service.security.SecurityRoleService;
+import github.com.suitelhy.dingding.core.domain.service.security.SecurityUserService;
 import github.com.suitelhy.dingding.core.infrastructure.domain.util.VoUtil;
 import github.com.suitelhy.dingding.core.infrastructure.domain.vo.Account;
+import github.com.suitelhy.dingding.core.infrastructure.domain.vo.Resource;
+import github.com.suitelhy.dingding.core.infrastructure.util.CalendarController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.lang.Nullable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
@@ -30,29 +38,71 @@ public class SecurityUserRepositoryTests {
     @Autowired
     private SecurityUserRepository repository;
 
+    @Autowired
+    private SecurityUserService service;
+
+    @Autowired
+    private SecurityRoleService roleService;
+
+    @Autowired
+    private SecurityResourceService resourceService;
+
     @NotNull
     private SecurityUser getEntityForTest() {
-        return SecurityUser.Factory.USER.update("402880e56fb72000016fb72014fc0000"
+        return SecurityUser.Factory.USER.create("402880e56fb72000016fb72014fc0000"
                 , "测试20200118132850"
                 , VoUtil.getVoByValue(Account.StatusVo.class, 1));
+    }
+
+    @NotNull
+    private SecurityRole getRoleForTest() {
+        return getRoleForTest(null);
+    }
+
+    @NotNull
+    private SecurityRole getRoleForTest(@Nullable Integer seed) {
+        return SecurityRole.Factory.ROLE.create(
+                "test"
+                        .concat(new CalendarController().toString().replaceAll("[-:\\s]", ""))
+                        .concat((null == seed || seed < 0) ? "" : Integer.toString(seed))
+                , "测试角色"
+                        .concat((null == seed || seed < 0) ? "" : Integer.toString(seed))
+                , "测试用数据");
+    }
+
+    @NotNull
+    private SecurityResource getResourceForTest() {
+        return getResourceForTest(null);
+    }
+
+    @NotNull
+    private SecurityResource getResourceForTest(@Nullable Integer seed) {
+        return SecurityResource.Factory.RESOURCE.create(
+                "test"
+                        .concat(new CalendarController().toString().replaceAll("[-:\\s]", "")
+                                .concat((null == seed || seed < 0) ? "" : Integer.toString(seed)))
+                , null
+                , null
+                , "test".concat((null == seed || seed < 0) ? "" : Integer.toString(seed))
+                , null
+                , 0
+                , Resource.TypeVo.MENU);
     }
 
     @Test
     @Transactional
     public void contextLoads() {
         Assert.notNull(repository, "获取测试单元失败");
-        // 批量添加测试数据
-        for (int i = 0; i < 10; i++) {
-            saveAndFlush();
-        }
     }
 
     @Test
     @Transactional
     public void count() {
-        long result;
+        final long result;
+
         Assert.isTrue((result = repository.count()) > 0
-                , "The result of count() equaled to or less than 0");
+                , "The result equals to or less than 0");
+
         System.out.println(result);
     }
 
@@ -60,15 +110,17 @@ public class SecurityUserRepositoryTests {
     @Transactional
     public void findAllByPage()
             throws JsonProcessingException {
-        Page<SecurityUser> result;
+        final Page<SecurityUser> result;
+
         Sort.TypedSort<SecurityUser> typedSort = Sort.sort(SecurityUser.class);
         Sort sort = typedSort.by(SecurityUser::getUsername).ascending();
         Pageable page = PageRequest.of(0, 10, sort);
 
         Assert.notNull(result = repository.findAll(page)
-                , "The result of findAll(Pageable) equaled to or less than 0");
+                , "The result equals to or less than 0");
         Assert.notEmpty(result.getContent()
-                , "The result of result.getContent() -> empty");
+                , "The result -> empty");
+
         System.out.println(toJSONString.writeValueAsString(result));
         System.out.println(result.getContent());
         System.out.println(result.getTotalElements());
@@ -84,45 +136,51 @@ public class SecurityUserRepositoryTests {
             throws JsonProcessingException {
         List<SecurityUser> result;
         Assert.notEmpty(result = repository.findAll()
-                , "The result of count() equaled to or less than 0");
+                , "The result equals to or less than 0");
         System.out.println(toJSONString.writeValueAsString(result));
     }
 
     @Test
     @Transactional
     public void findById() {
+        //===== 添加测试数据
         SecurityUser newEntity = getEntityForTest();
 
-        //===== saveAndFlush()
         Assert.isTrue(newEntity.isEntityLegal()
-                , "SecurityUser.Factory.USER.create(..) -> 无效的 User");
+                , "===== getEntityForTest() -> 无效的 Entity");
         Assert.notNull(newEntity = repository.saveAndFlush(newEntity)
-                , "===== insert(User) -> unexpected");
+                , "===== 添加测试数据 -> unexpected");
         Assert.isTrue(!newEntity.isEmpty()
-                , "===== insert(User) -> 无效的 User");
+                , "===== 添加测试数据 -> 无效的 Entity");
 
-        //===== findById()
-        Optional<SecurityUser> result = repository.findById(newEntity.id());
+        //===== findById(..)
+        Optional<SecurityUser> result = repository.findById(newEntity.getUserId());
+
         Assert.notNull(result.get()
-                , "The result of findById(String userId) -> empty");
+                , "The result -> empty");
+
         System.out.println(result);
     }
 
     @Test
     @Transactional
     public void findByUsername() {
+        //===== 添加测试数据
         SecurityUser newEntity = getEntityForTest();
-        //===== saveAndFlush()
+
         Assert.isTrue(newEntity.isEntityLegal()
-                , "SecurityUser.Factory.USER.create(..) -> 无效的 User");
+                , "===== getEntityForTest(..) -> 无效的 User");
         Assert.notNull(newEntity = repository.saveAndFlush(newEntity)
-                , "===== insert(User) -> unexpected");
+                , "===== 添加测试数据 -> unexpected");
         Assert.isTrue(!newEntity.isEmpty()
-                , "===== insert(User) -> 无效的 User");
+                , "===== 添加测试数据 -> 无效的 User");
+
         //===== findByUsername()
         Optional<SecurityUser> result = repository.findByUsername(newEntity.getUsername());
+
         Assert.notNull(result.get()
-                , "The result of findByUsername(String username) -> empty");
+                , "The result -> empty");
+
         System.out.println(result);
     }
 
@@ -130,41 +188,78 @@ public class SecurityUserRepositoryTests {
     @Transactional
     public void selectRoleByUsername()
             throws JsonProcessingException {
-        SecurityUser newEntity = getEntityForTest();
-
-        //===== saveAndFlush()
+        //===== 添加测试数据
+        final SecurityUser newEntity = getEntityForTest();
         Assert.isTrue(newEntity.isEntityLegal()
-                , "SecurityUser.Factory.USER.create(..) -> 无效的 User");
-        Assert.notNull(newEntity = repository.saveAndFlush(newEntity)
-                , "===== insert(User) -> unexpected");
+                , "===== getEntityForTest() -> 无效的 Entity");
+        Assert.notNull(repository.saveAndFlush(newEntity)
+                , "===== 添加测试数据 -> unexpected");
         Assert.isTrue(!newEntity.isEmpty()
-                , "===== insert(User) -> 无效的 User");
+                , "===== 添加测试数据 -> 无效的 Entity");
 
-        //===== findByUsername()
+        final SecurityRole newRole = getRoleForTest();
+        Assert.isTrue(newRole.isEntityLegal()
+                , "===== getRoleForTest() -> 无效的 Role");
+        Assert.isTrue(roleService.insert(newRole)
+                , "===== 添加测试数据 -> false");
+        Assert.isTrue(!newRole.isEmpty()
+                , "===== 添加测试数据 -> 无效的 Role");
+
+        Assert.isTrue(service.insertRole(newEntity, newRole)
+                , "===== 添加测试数据 -> {新增 用户 - 角色 关联} 操作失败");
+
+        //===== selectRoleByUsername(..)
         List<Map<String, Object>> result = repository.selectRoleByUsername(newEntity.getUsername());
+
         Assert.isTrue(null != result && !result.isEmpty()
-                , "The result of selectRoleByUsername(String username) -> empty");
+                , "The result -> empty");
+
         System.out.println(toJSONString.writeValueAsString(result));
     }
 
     @Test
     @Transactional
     public void selectResourceByUsername()
-            throws JsonProcessingException {
-        SecurityUser newEntity = getEntityForTest();
+            throws Exception {
+        final List<Map<String, Object>> result;
 
-        //===== saveAndFlush()
+        //===== 添加测试数据
+        final SecurityUser newEntity = getEntityForTest();
         Assert.isTrue(newEntity.isEntityLegal()
-                , "SecurityUser.Factory.USER.create(..) -> 无效的 User");
-        Assert.notNull(newEntity = repository.saveAndFlush(newEntity)
-                , "===== insert(User) -> unexpected");
+                , "===== getEntityForTest() -> 无效的 Entity");
+        Assert.notNull(repository.saveAndFlush(newEntity)
+                , "===== 添加测试数据 -> unexpected");
         Assert.isTrue(!newEntity.isEmpty()
-                , "===== insert(User) -> 无效的 User");
+                , "===== 添加测试数据 -> 无效的 Entity");
 
-        //===== findByUsername()
-        List<Map<String, Object>> result = repository.selectResourceByUsername(newEntity.getUsername());
+        final SecurityRole newRole = getRoleForTest();
+        Assert.isTrue(newRole.isEntityLegal()
+                , "===== getRoleForTest() -> 无效的 Role");
+        Assert.isTrue(roleService.insert(newRole)
+                , "===== 添加测试数据 -> false");
+        Assert.isTrue(!newRole.isEmpty()
+                , "===== 添加测试数据 -> 无效的 Role");
+
+        Assert.isTrue(service.insertRole(newEntity, newRole)
+                , "===== 添加测试数据 -> {新增 用户 - 角色 关联} 操作失败");
+
+        final SecurityResource newResource = getResourceForTest();
+        Assert.isTrue(newResource.isEntityLegal()
+                , "===== getResourceForTest() -> 无效的 Resource");
+        Assert.isTrue(resourceService.insert(newResource)
+                , "===== 添加测试数据 -> false");
+        Assert.isTrue(!newResource.isEmpty()
+                , "===== 添加测试数据 -> 无效的 Resource");
+
+        Assert.isTrue(roleService.insertResource(newRole, newResource)
+                , "===== 添加测试数据 -> {新增 角色 - 资源 关联} 操作失败");
+
+        //===== selectResourceByUsername(..)
+        result = repository.selectResourceByUsername(newEntity.getUsername());
+
         Assert.isTrue(null != result && !result.isEmpty()
-                , "The result of selectResourceByUsername(String username) -> empty");
+                , "The result -> empty");
+
         System.out.println(toJSONString.writeValueAsString(result));
     }
 
@@ -172,20 +267,22 @@ public class SecurityUserRepositoryTests {
     @Transactional
     public void selectURLByUsername()
             throws JsonProcessingException {
+        //===== 添加测试数据
         SecurityUser newEntity = getEntityForTest();
 
-        //===== saveAndFlush()
         Assert.isTrue(newEntity.isEntityLegal()
-                , "SecurityUser.Factory.USER.create(..) -> 无效的 User");
+                , "===== getEntityForTest() -> 无效的 Entity");
         Assert.notNull(newEntity = repository.saveAndFlush(newEntity)
-                , "===== insert(User) -> unexpected");
+                , "===== 添加测试数据 -> unexpected");
         Assert.isTrue(!newEntity.isEmpty()
-                , "===== insert(User) -> 无效的 User");
+                , "===== 添加测试数据 -> 无效的 Entity");
 
-        //===== findByUsername()
+        //===== selectURLByUsername(..)
         List<Map<String, Object>> result = repository.selectURLByUsername(newEntity.getUsername());
+
         Assert.isTrue(null != result && !result.isEmpty()
-                , "The result of selectURLByUsername(String username) -> empty");
+                , "The result -> empty");
+
         System.out.println(toJSONString.writeValueAsString(result));
     }
 
@@ -217,7 +314,7 @@ public class SecurityUserRepositoryTests {
 
         //=== delete
         try {
-            repository.deleteById(newEntity.id());
+            repository.deleteById(newEntity.getUserId());
         } catch (IllegalArgumentException e) {
             Assert.state(false
                     , "===== delete - delete(String id) -> the given entity is null.");

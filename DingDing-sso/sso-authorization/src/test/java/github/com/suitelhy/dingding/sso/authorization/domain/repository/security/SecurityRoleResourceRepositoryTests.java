@@ -36,10 +36,6 @@ public class SecurityRoleResourceRepositoryTests {
     @Transactional
     public void contextLoads() {
         Assert.notNull(repository, "获取测试单元失败");
-        // 批量添加测试数据
-        for (int i = 0; i < 10; i++) {
-            saveAndFlush();
-        }
     }
 
     @Test
@@ -118,7 +114,7 @@ public class SecurityRoleResourceRepositoryTests {
                 , "===== insert(Entity) -> 无效的 Entity");
 
         //===== findById()
-        Optional<SecurityRoleResource> result = repository.findById(newEntity.id());
+        Optional<SecurityRoleResource> result = repository.findById(newEntity.getId());
         Assert.notNull(result.get()
                 , "The result -> empty");
         System.out.println(result);
@@ -189,19 +185,19 @@ public class SecurityRoleResourceRepositoryTests {
     @Test
     @Transactional
     public void deleteById() {
+        //=== 添加测试数据
         SecurityRoleResource newEntity = getEntityForTest();
+
         Assert.isTrue(newEntity.isEntityLegal()
-                , "getEntityForTest() -> 无效的 Entity");
-
-        //=== insert
+                , "===== getEntityForTest() -> 无效的 Entity");
         Assert.notNull(newEntity = repository.saveAndFlush(newEntity)
-                , "===== insert - insert(Entity) -> unexpected");
+                , "===== 添加测试数据 -> unexpected");
         Assert.isTrue(!newEntity.isEmpty()
-                , "===== insert - insert(Entity) -> 无效的 Entity");
+                , "===== 添加测试数据 -> 无效的 Entity");
 
-        //=== delete
+        //=== deleteById(..)
         try {
-            repository.deleteById(newEntity.id());
+            repository.deleteById(newEntity.getId());
         } catch (IllegalArgumentException e) {
             Assert.state(false
                     , "===== delete - deleteById(...) -> the given entity is null.");
@@ -209,23 +205,24 @@ public class SecurityRoleResourceRepositoryTests {
             Assert.state(false
                     , "===== delete - deleteById(...) -> the given entity is non persistent.");
         }
+
         System.out.println(newEntity);
     }
 
     @Test
     @Transactional
     public void removeByResourceCode() {
+        //=== 添加测试数据
         SecurityRoleResource newEntity = getEntityForTest();
+
         Assert.isTrue(newEntity.isEntityLegal()
-                , "getEntityForTest() -> 无效的 Entity");
-
-        //=== insert
+                , "===== getEntityForTest() -> 无效的 Entity");
         Assert.notNull(newEntity = repository.saveAndFlush(newEntity)
-                , "===== insert - insert(Entity) -> unexpected");
+                , "===== 添加测试数据 -> unexpected");
         Assert.isTrue(!newEntity.isEmpty()
-                , "===== insert - insert(Entity) -> 无效的 Entity");
+                , "===== 添加测试数据 -> 无效的 Entity");
 
-        //=== delete
+        //=== removeByResourceCode(..)
         try {
             repository.removeByResourceCode(newEntity.getResourceCode());
         } catch (IllegalArgumentException e) {
@@ -235,59 +232,62 @@ public class SecurityRoleResourceRepositoryTests {
             Assert.state(false
                     , "===== delete - removeByResourceCode(...) -> the given entity is non persistent.");
         }
+
         System.out.println(newEntity);
     }
 
     @Test
     @Transactional
     public void removeByRoleCode() {
+        //=== 添加测试数据
         SecurityRoleResource newEntity = getEntityForTest();
+
         Assert.isTrue(newEntity.isEntityLegal()
-                , "getEntityForTest() -> 无效的 Entity");
-
-        //=== insert
+                , "===== getEntityForTest() -> 无效的 Entity");
         Assert.notNull(newEntity = repository.saveAndFlush(newEntity)
-                , "===== insert - insert(Entity) -> unexpected");
+                , "===== 添加测试数据 -> unexpected");
         Assert.isTrue(!newEntity.isEmpty()
-                , "===== insert - insert(Entity) -> 无效的 Entity");
+                , "===== 添加测试数据 -> 无效的 Entity");
 
-        //=== delete
+        //=== removeByRoleCode(..)
         try {
             repository.removeByRoleCode(newEntity.getRoleCode());
         } catch (IllegalArgumentException e) {
             Assert.state(false
-                    , "===== delete - removeByRoleCode(...) -> the given entity is null.");
+                    , "===== removeByRoleCode(..) -> the given entity is null.");
         } catch (org.springframework.dao.EmptyResultDataAccessException e) {
             Assert.state(false
-                    , "===== delete - removeByRoleCode(...) -> the given entity is non persistent.");
+                    , "===== removeByRoleCode(..) -> the given entity is non persistent.");
         }
+
         System.out.println(newEntity);
     }
 
     @Test
     @Transactional
     public void removeByRoleCodeAndResourceCode() {
+        //=== 添加测试数据
         SecurityRoleResource newEntity = getEntityForTest();
+
         Assert.isTrue(newEntity.isEntityLegal()
-                , "getEntityForTest() -> 无效的 Entity");
-
-        //=== insert
+                , "===== getEntityForTest() -> 无效的 Entity");
         Assert.notNull(newEntity = repository.saveAndFlush(newEntity)
-                , "===== insert - insert(Entity) -> unexpected");
+                , "===== 添加测试数据 -> unexpected");
         Assert.isTrue(!newEntity.isEmpty()
-                , "===== insert - insert(Entity) -> 无效的 Entity");
+                , "===== 添加测试数据 -> 无效的 Entity");
 
-        //=== delete
+        //=== removeByRoleCodeAndResourceCode(...)
         try {
             repository.removeByRoleCodeAndResourceCode(newEntity.getRoleCode()
                     , newEntity.getResourceCode());
         } catch (IllegalArgumentException e) {
             Assert.state(false
-                    , "===== delete - removeByRoleCodeAndResourceCode(...) -> the given entity is null.");
+                    , "===== removeByRoleCodeAndResourceCode(...) -> the given entity is null.");
         } catch (org.springframework.dao.EmptyResultDataAccessException e) {
             Assert.state(false
-                    , "===== delete - removeByRoleCodeAndResourceCode(...) -> the given entity is non persistent.");
+                    , "===== removeByRoleCodeAndResourceCode(...) -> the given entity is non persistent.");
         }
+
         System.out.println(newEntity);
     }
 

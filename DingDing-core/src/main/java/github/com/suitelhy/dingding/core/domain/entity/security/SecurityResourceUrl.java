@@ -18,7 +18,9 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "SECURITY_RESOURCE_URL")
 public class SecurityResourceUrl
-        extends AbstractEntityModel<Long> {
+        extends AbstractEntityModel</*Long*/Object[]> {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * ID
@@ -53,8 +55,11 @@ public class SecurityResourceUrl
     //===== Entity Model =====//
 
     @Override
-    public @NotNull Long id() {
-        return this.getId();
+    public @NotNull /*Long*/Object[] id() {
+        return new Object[] {
+                this.code
+                , this.urlPath
+        };
     }
 
     /**
@@ -84,17 +89,12 @@ public class SecurityResourceUrl
      * 校验 Entity - ID
      *
      * @Description <abstractClass>AbstractEntityModel</abstractClass>提供的模板设计.
-     * @param id <method>id()</method>
+     * @param id        {@link this#id()}
      * @return
      */
     @Override
-    protected boolean validateId(@NotNull Long id) {
-        return Validator.RESOURCE_URL.id(id);
-    }
-
-    @Override
-    public String toString() {
-        return code;
+    protected boolean validateId(@NotNull /*Long*/Object[] id) {
+        return Validator.RESOURCE_URL.entity_id(id);
     }
 
     //===== Entity Validator =====//
@@ -105,16 +105,23 @@ public class SecurityResourceUrl
      * @Description 各个属性的基础校验(注意: 此校验 ≠ 完全校验).
      */
     public enum Validator
-            implements EntityValidator<SecurityResourceUrl, Long> {
+            implements EntityValidator<SecurityResourceUrl, /*Long*/Object[]> {
         RESOURCE_URL;
 
         @Override
         public boolean validateId(@NotNull SecurityResourceUrl entity) {
             return null != entity.id()
-                    && id(entity.id());
+                    && entity_id(entity.id());
         }
 
         @Override
+        public boolean entity_id(@NotNull /*Long*/Object[] entityId) {
+            return null != entityId
+                    && entityId.length == 2
+                    && this.code((String) entityId[0])
+                    && this.urlPath((String) entityId[1]);
+        }
+
         public boolean id(@NotNull Long id) {
             return null != id
                     && EntityUtil.Regex.validateId(Long.toString(id));
@@ -129,7 +136,7 @@ public class SecurityResourceUrl
          *
          * @param urlPath       URL (Path部分)
          * @return 校验结果
-         * @see github.com.suitelhy.dingding.core.infrastructure.domain.util.EntityUtil.Regex.GeneralRule#urlPath(String urlPath)
+         * @see github.com.suitelhy.dingding.core.infrastructure.domain.util.EntityUtil.Regex.GeneralRule#urlPath(String)
          */
         public boolean urlPath(@NotNull String urlPath) {
             return EntityUtil.Regex.GeneralRule.urlPath(urlPath);
@@ -151,12 +158,12 @@ public class SecurityResourceUrl
      *
      * @param id            数据 ID
      * @param code          资源编码
-     * @param urlPath           资源对应的 URL (单个)
+     * @param urlPath       资源对应的 URL (单个)
      * @throws IllegalArgumentException
      */
-    private SecurityResourceUrl(@NotNull Long id
+    private SecurityResourceUrl(@Nullable Long id
             , @NotNull String code
-            , @Nullable String urlPath)
+            , @NotNull String urlPath)
             throws IllegalArgumentException {
         if (null == id) {
             //--- 添加功能
@@ -165,25 +172,25 @@ public class SecurityResourceUrl
             if (!Validator.RESOURCE_URL.id(id)) {
                 //-- 非法输入: 数据ID
                 throw new IllegalArgumentException(this.getClass().getSimpleName()
-                        + " -> 非法输入: 数据ID");
+                        .concat(" -> 非法输入: 数据ID"));
             }
         }
         if (!Validator.RESOURCE_URL.code(code)) {
             //-- 非法输入: 资源编码
             throw new IllegalArgumentException(this.getClass().getSimpleName()
-                    + " -> 非法输入: 资源编码");
+                    .concat(" -> 非法输入: 资源编码"));
         }
         if (!Validator.RESOURCE_URL.urlPath(urlPath)) {
             //-- 非法输入: 资源对应的URL
             throw new IllegalArgumentException(this.getClass().getSimpleName()
-                    + " -> 非法输入: 资源对应的URL");
+                    .concat(" -> 非法输入: 资源对应的URL"));
         }
 
         // 数据ID
-        this.setId(id);
+        this.serId(id);
         // 资源编码
         this.setCode(code);
-        // 资源对应的URL (单个)
+        // 资源对应的 URL (单个)
         this.setUrlPath(urlPath);
     }
 
@@ -195,12 +202,12 @@ public class SecurityResourceUrl
          * 创建
          *
          * @param code          资源编码
-         * @param urls          资源对应的 URL (单个)
+         * @param url           资源对应的 URL (单个)
          * @throws IllegalArgumentException
          */
-        public SecurityResourceUrl create(@NotNull String code, @Nullable String urls)
+        public SecurityResourceUrl create(@NotNull String code, @NotNull String url)
                 throws IllegalArgumentException {
-            return new SecurityResourceUrl(null, code, urls);
+            return new SecurityResourceUrl(null, code, url);
         }
 
         /**
@@ -208,45 +215,64 @@ public class SecurityResourceUrl
          *
          * @param id            数据 ID
          * @param code          资源编码
-         * @param urls          资源对应的 URL (单个)
+         * @param url           资源对应的 URL (单个)
          * @throws IllegalArgumentException
          */
         public SecurityResourceUrl update(@NotNull Long id
                 , @NotNull String code
-                , @Nullable String urls)
+                , @NotNull String url)
                 throws IllegalArgumentException {
             if (!Validator.RESOURCE_URL.id(id)) {
-                throw new IllegalArgumentException("非法输入: 数据 ID");
+                //-- 非法输入: 数据 ID
+                throw new IllegalArgumentException(this.getClass().getSimpleName()
+                        .concat(" -> 非法输入: 数据 ID"));
             }
-            return new SecurityResourceUrl(id, code, urls);
+
+            return new SecurityResourceUrl(id, code, url);
         }
 
     }
 
     //===== getter & setter =====//
 
+    /*@NotNull // 名称为"id"的属性, 在持久化之前会被根据getter方法进行校验; 在新增数据时, 作为ID的字段值由数据库管理填充, 所以此处不应该使用该注解*/
+    @Nullable
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    private boolean serId(@NotNull Long id) {
+        if (!Validator.RESOURCE_URL.id(id)) {
+            this.id = id;
+            return true;
+        }
+        return false;
     }
 
+    @NotNull
     public String getCode() {
         return code;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    private boolean setCode(@NotNull String code) {
+        if (Validator.RESOURCE_URL.code(code)) {
+            this.code = code;
+            return true;
+        }
+        return false;
     }
 
+    @NotNull
     public String getUrlPath() {
         return urlPath;
     }
 
-    public void setUrlPath(String url) {
-        this.urlPath = url;
+    private boolean setUrlPath(@NotNull String urlPath) {
+        if (Validator.RESOURCE_URL.urlPath(urlPath)) {
+            this.urlPath = urlPath;
+            return true;
+        }
+        return false;
     }
 
 }

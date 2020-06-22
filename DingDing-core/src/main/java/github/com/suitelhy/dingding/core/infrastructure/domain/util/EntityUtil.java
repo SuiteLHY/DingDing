@@ -31,6 +31,7 @@ public final class EntityUtil {
              * 英文单词
              *
              * @Description 英文字母集合的简单校验.
+             *
              * @param param         被校验对象
              * @param isUppercase   是否大写
              * @param maxLength     单词的最大长度
@@ -326,7 +327,7 @@ public final class EntityUtil {
         /**
          * 校验 -> 用户名称
          *
-         * @Description 用户名称 <- 规则: <tt>大小写字母 | 数字(无符号) | 中文字符</tt>, 长度范围 [1,18].
+         * @Description 用户名称 <- 规则: <tt>大小写字母 | 数字(无符号) | 中文字符</tt>, 长度范围 [1,30].
          *
          * @param username      被校验对象
          * @return  校验结果
@@ -334,7 +335,10 @@ public final class EntityUtil {
          */
         public static boolean validateUsername(@Nullable String username) {
             return null != username
-                    && RegexUtil.getPattern("^[a-zA-Z0-9\\u4e00-\\u9fa5]{1,18}$").matcher(username).matches();
+                    && RegexUtil
+                            .getPattern("^[a-zA-Z0-9\\u4e00-\\u9fa5]{1,30}$")
+                            .matcher(username)
+                            .matches();
         }
 
         /**

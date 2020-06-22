@@ -101,13 +101,13 @@ public class LogTaskTests {
                 , ip()
                 , new CalendarController().toString()
                 , HandleType.LogVo.USER_REGISTRATION
-                , newUserDto.id()
+                , newUserDto.getUserId()
         );
         Assert.isTrue(logTask.insert(newLog)
                 , "===== insert(Log log) -> false");
 
         //=== selectLogByUserid(String userid, int pageCount, int pageSize)
-        List<Log> result = logTask.selectLogByUserid(newUserDto.id()
+        List<Log> result = logTask.selectLogByUserid(newUserDto.getUserId()
                 , 1
                 , 10);
         Assert.notEmpty(result
@@ -135,13 +135,13 @@ public class LogTaskTests {
                 , ip()
                 , new CalendarController().toString()
                 , HandleType.LogVo.USER_REGISTRATION
-                , newUserDto.id()
+                , newUserDto.getUserId()
         );
         Assert.isTrue(logTask.insert(newLog)
                 , "===== insert(Log log) -> false");
 
         //=== selectCountByUserid(String userid, int pageSize)
-        Long result = logTask.selectCountByUserid(newUserDto.id()
+        Long result = logTask.selectCountByUserid(newUserDto.getUserId()
                 , 10);
         Assert.isTrue(result > 0
                 , "===== selectCountByUserid(String userid, int pageSize) -> equals or less than 0");
@@ -167,12 +167,11 @@ public class LogTaskTests {
                 , ip()
                 , new CalendarController().toString()
                 , HandleType.LogVo.USER_REGISTRATION
-                , newUserDto.id()
+                , newUserDto.getUserId()
         );
-        boolean result;
-        Assert.isTrue(result = logTask.insert(newLog)
-                , "===== insert(Log log) -> false");
-        System.out.println(result);
+        Assert.isTrue(logTask.insert(newLog)
+                , "===== insert(Log) -> false");
+
         System.out.println(newLog);
     }
 
@@ -196,16 +195,15 @@ public class LogTaskTests {
                 , ip()
                 , new CalendarController().toString()
                 , HandleType.LogVo.USER_REGISTRATION
-                , newUserDto.id()
+                , newUserDto.getUserId()
         );
         Assert.isTrue(logTask.insert(newLog)
                 , "===== insert(Log log) -> false");
 
         //=== delete(String id)
-        boolean result;
-        Assert.isTrue(result = logTask.delete(Long.toString(newLog.id()))
+        Assert.isTrue(logTask.delete(Long.toString(newLog.id()))
                 , "===== delete(String id) -> false");
-        System.out.println(result);
+
         System.out.println(newLog);
     }
 

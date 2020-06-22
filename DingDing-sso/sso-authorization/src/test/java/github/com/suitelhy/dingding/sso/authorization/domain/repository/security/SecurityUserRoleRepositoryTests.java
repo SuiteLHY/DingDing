@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import github.com.suitelhy.dingding.core.domain.entity.security.SecurityUserRole;
 import github.com.suitelhy.dingding.core.domain.repository.security.SecurityUserRoleRepository;
+import github.com.suitelhy.dingding.core.infrastructure.util.CalendarController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,17 +31,15 @@ public class SecurityUserRoleRepositoryTests {
 
     @NotNull
     private SecurityUserRole getEntityForTest() {
-        return SecurityUserRole.Factory.USER_ROLE.create("测试20200118132850", "1");
+        return SecurityUserRole.Factory.USER_ROLE.create("测试"
+                        .concat(new CalendarController().toString().replaceAll("[-:\\s]", ""))
+                , "1");
     }
 
     @Test
     @Transactional
     public void contextLoads() {
         Assert.notNull(repository, "获取测试单元失败");
-        // 批量添加测试数据
-        for (int i = 0; i < 10; i++) {
-            saveAndFlush();
-        }
     }
 
     @Test
@@ -55,8 +54,9 @@ public class SecurityUserRoleRepositoryTests {
     @Test
     @Transactional
     public void existsByUsernameAndRoleCode() {
-        SecurityUserRole newEntity = getEntityForTest();
         //===== 添加测试数据
+        SecurityUserRole newEntity = getEntityForTest();
+
         Assert.isTrue(newEntity.isEntityLegal()
                 , "getEntityForTest() -> 无效的 Entity");
         Assert.notNull(newEntity = repository.saveAndFlush(newEntity)
@@ -67,16 +67,15 @@ public class SecurityUserRoleRepositoryTests {
         //===== existsByUsernameAndRoleCode(...)
         boolean result = repository.existsByUsernameAndRoleCode(newEntity.getUsername()
                 , newEntity.getRoleCode());
-        Assert.isTrue(result
-                , "The result -> not true");
-        System.out.println(result);
+
+        Assert.isTrue(result, "The result -> not true");
     }
 
     @Test
     @Transactional
     public void findAll()
             throws JsonProcessingException {
-        List<SecurityUserRole> result;
+        final List<SecurityUserRole> result;
         Assert.notEmpty(result = repository.findAll()
                 , "The result equaled to or less than 0");
         System.out.println(toJSONString.writeValueAsString(result));
@@ -86,7 +85,7 @@ public class SecurityUserRoleRepositoryTests {
     @Transactional
     public void findAllByPage()
             throws JsonProcessingException {
-        Page<SecurityUserRole> result;
+        final Page<SecurityUserRole> result;
 
         Sort.TypedSort<SecurityUserRole> typedSort = Sort.sort(SecurityUserRole.class);
         Sort sort = typedSort.by(SecurityUserRole::getUsername).ascending()
@@ -97,6 +96,7 @@ public class SecurityUserRoleRepositoryTests {
                 , "The result equaled to or less than 0");
         Assert.notEmpty(result.getContent()
                 , "The result -> empty");
+
         System.out.println(toJSONString.writeValueAsString(result));
         System.out.println(result.getContent());
         System.out.println(result.getTotalElements());
@@ -109,57 +109,66 @@ public class SecurityUserRoleRepositoryTests {
     @Test
     @Transactional
     public void findById() {
+        //===== 添加测试数据
         SecurityUserRole newEntity = getEntityForTest();
-        //===== saveAndFlush()
+
         Assert.isTrue(newEntity.isEntityLegal()
-                , "getEntityForTest() -> 无效的 Entity");
+                , "===== getEntityForTest() -> 无效的 Entity");
         Assert.notNull(newEntity = repository.saveAndFlush(newEntity)
-                , "===== insert(Entity) -> unexpected");
+                , "===== 添加测试数据 -> unexpected");
         Assert.isTrue(!newEntity.isEmpty()
-                , "===== insert(Entity) -> 无效的 Entity");
+                , "===== 添加测试数据 -> 无效的 Entity");
 
         //===== findById()
-        Optional<SecurityUserRole> result = repository.findById(newEntity.id());
+        Optional<SecurityUserRole> result = repository.findById(newEntity.getId());
+
         Assert.notNull(result.get()
                 , "The result -> empty");
+
         System.out.println(result);
     }
 
     @Test
     @Transactional
     public void findAllByUsername() {
-        SecurityUserRole newEntity = getEntityForTest();
-        //===== saveAndFlush()
-        Assert.isTrue(newEntity.isEntityLegal()
-                , "SecurityUser.Factory.USER.create(..) -> 无效的 User");
-        Assert.notNull(newEntity = repository.saveAndFlush(newEntity)
-                , "===== insert(User) -> unexpected");
-        Assert.isTrue(!newEntity.isEmpty()
-                , "===== insert(User) -> 无效的 User");
+        final Page<SecurityUserRole> result;
 
-        //===== findByUsername()
+        //===== 添加测试数据
+        SecurityUserRole newEntity = getEntityForTest();
+
+        Assert.isTrue(newEntity.isEntityLegal()
+                , "===== getEntityForTest() -> 无效的 Entity");
+        Assert.notNull(newEntity = repository.saveAndFlush(newEntity)
+                , "===== 添加测试数据 -> unexpected");
+        Assert.isTrue(!newEntity.isEmpty()
+                , "===== 添加测试数据 -> 无效的 Entity");
+
+        //===== findByUsername(...)
         Sort.TypedSort<SecurityUserRole> typedSort = Sort.sort(SecurityUserRole.class);
         Sort sort = typedSort.by(SecurityUserRole::getUsername).ascending()
                 .and(typedSort.by(SecurityUserRole::getRoleCode).ascending());
         Pageable page = PageRequest.of(0, 10, sort);
 
-        Page<SecurityUserRole> result = repository.findAllByUsername(newEntity.getUsername(), page);
+        result = repository.findAllByUsername(newEntity.getUsername(), page);
+
         Assert.isTrue(!result.isEmpty()
-                , "The result of findByUsername(String username) -> empty");
+                , "The result of findByUsername(...) -> empty");
+
         System.out.println(result);
     }
 
     @Test
     @Transactional
     public void findAllByRoleCode() {
+        //===== 添加测试数据
         SecurityUserRole newEntity = getEntityForTest();
-        //===== saveAndFlush()
+
         Assert.isTrue(newEntity.isEntityLegal()
-                , "getEntityForTest() -> 无效的 User");
+                , "===== getEntityForTest() -> 无效的 User");
         Assert.notNull(newEntity = repository.saveAndFlush(newEntity)
-                , "===== insert(Entity) -> unexpected");
+                , "===== 添加测试数据 -> unexpected");
         Assert.isTrue(!newEntity.isEmpty()
-                , "===== insert(Entity) -> 无效的 Entity");
+                , "===== 添加测试数据 -> 无效的 Entity");
 
         //===== findAllByRoleCode(...)
         Sort.TypedSort<SecurityUserRole> typedSort = Sort.sort(SecurityUserRole.class);
@@ -168,8 +177,10 @@ public class SecurityUserRoleRepositoryTests {
         Pageable page = PageRequest.of(0, 10, sort);
 
         Page<SecurityUserRole> result = repository.findAllByRoleCode(newEntity.getRoleCode(), page);
+
         Assert.isTrue(!result.isEmpty()
                 , "The result -> empty");
+
         System.out.println(result);
     }
 
@@ -177,116 +188,122 @@ public class SecurityUserRoleRepositoryTests {
     @Transactional
     public void saveAndFlush() {
         SecurityUserRole newEntity = getEntityForTest();
+
         Assert.isTrue(newEntity.isEntityLegal()
-                , "getEntityForTest() -> 无效的 Entity");
+                , "===== getEntityForTest() -> 无效的 Entity");
         Assert.notNull(newEntity = repository.saveAndFlush(newEntity)
                 , "===== insert(Entity) -> unexpected");
         Assert.isTrue(!newEntity.isEmpty()
                 , "===== insert(Entity) -> 无效的 Entity");
+
         System.out.println(newEntity);
     }
 
     @Test
     @Transactional
     public void deleteById() {
+        //=== 添加测试数据
         SecurityUserRole newEntity = getEntityForTest();
+
         Assert.isTrue(newEntity.isEntityLegal()
-                , "getEntityForTest() -> 无效的 Entity");
-
-        //=== insert
+                , "===== getEntityForTest() -> 无效的 Entity");
         Assert.notNull(newEntity = repository.saveAndFlush(newEntity)
-                , "===== insert - insert(Entity) -> unexpected");
+                , "===== 添加测试数据 -> unexpected");
         Assert.isTrue(!newEntity.isEmpty()
-                , "===== insert - insert(Entity) -> 无效的 Entity");
+                , "===== 添加测试数据 -> 无效的 Entity");
 
-        //=== delete
+        //=== deleteById(..)
         try {
-            repository.deleteById(newEntity.id());
+            repository.deleteById(newEntity.getId());
         } catch (IllegalArgumentException e) {
             Assert.state(false
-                    , "===== delete - deleteById(...) -> the given entity is null.");
+                    , "===== deleteById(..) -> the given entity is null.");
         } catch (org.springframework.dao.EmptyResultDataAccessException e) {
             Assert.state(false
-                    , "===== delete - deleteById(...) -> the given entity is non persistent.");
+                    , "===== deleteById(..) -> the given entity is non persistent.");
         }
+
         System.out.println(newEntity);
     }
 
     @Test
     @Transactional
     public void removeByUsername() {
+        //=== 添加测试数据
         SecurityUserRole newEntity = getEntityForTest();
+
         Assert.isTrue(newEntity.isEntityLegal()
-                , "getEntityForTest() -> 无效的 Entity");
-
-        //=== insert
+                , "===== getEntityForTest() -> 无效的 Entity");
         Assert.notNull(newEntity = repository.saveAndFlush(newEntity)
-                , "===== insert - insert(Entity) -> unexpected");
+                , "===== 添加测试数据 -> unexpected");
         Assert.isTrue(!newEntity.isEmpty()
-                , "===== insert - insert(Entity) -> 无效的 Entity");
+                , "===== 添加测试数据 -> 无效的 Entity");
 
-        //=== delete
+        //=== removeByUsername(..)
         try {
             repository.removeByUsername(newEntity.getUsername());
         } catch (IllegalArgumentException e) {
             Assert.state(false
-                    , "===== delete - removeByUsername(...) -> the given entity is null.");
+                    , "===== removeByUsername(..) -> the given entity is null.");
         } catch (org.springframework.dao.EmptyResultDataAccessException e) {
             Assert.state(false
-                    , "===== delete - removeByUsername(...) -> the given entity is non persistent.");
+                    , "===== removeByUsername(..) -> the given entity is non persistent.");
         }
+
         System.out.println(newEntity);
     }
 
     @Test
     @Transactional
     public void removeByRoleCode() {
+        //=== 添加测试数据
         SecurityUserRole newEntity = getEntityForTest();
+
         Assert.isTrue(newEntity.isEntityLegal()
-                , "getEntityForTest() -> 无效的 Entity");
-
-        //=== insert
+                , "===== getEntityForTest() -> 无效的 Entity");
         Assert.notNull(newEntity = repository.saveAndFlush(newEntity)
-                , "===== insert - insert(Entity) -> unexpected");
+                , "===== 添加测试数据 -> unexpected");
         Assert.isTrue(!newEntity.isEmpty()
-                , "===== insert - insert(Entity) -> 无效的 Entity");
+                , "===== 添加测试数据 -> 无效的 Entity");
 
-        //=== delete
+        //=== removeByRoleCode(..)
         try {
             repository.removeByRoleCode(newEntity.getRoleCode());
         } catch (IllegalArgumentException e) {
             Assert.state(false
-                    , "===== delete - removeByRoleCode(...) -> the given entity is null.");
+                    , "===== removeByRoleCode(..) -> the given entity is null.");
         } catch (org.springframework.dao.EmptyResultDataAccessException e) {
             Assert.state(false
-                    , "===== delete - removeByRoleCode(...) -> the given entity is non persistent.");
+                    , "===== removeByRoleCode(..) -> the given entity is non persistent.");
         }
+
         System.out.println(newEntity);
     }
 
     @Test
     @Transactional
     public void removeByUsernameAndRoleCode() {
+        //=== 添加测试数据
         SecurityUserRole newEntity = getEntityForTest();
+
         Assert.isTrue(newEntity.isEntityLegal()
-                , "getEntityForTest() -> 无效的 Entity");
-
-        //=== insert
+                , "===== getEntityForTest() -> 无效的 Entity");
         Assert.notNull(newEntity = repository.saveAndFlush(newEntity)
-                , "===== insert - insert(Entity) -> unexpected");
+                , "===== 添加测试数据 -> unexpected");
         Assert.isTrue(!newEntity.isEmpty()
-                , "===== insert - insert(Entity) -> 无效的 Entity");
+                , "===== 添加测试数据 -> 无效的 Entity");
 
-        //=== delete
+        //=== removeByUsernameAndRoleCode(...)
         try {
             repository.removeByUsernameAndRoleCode(newEntity.getUsername(), newEntity.getRoleCode());
         } catch (IllegalArgumentException e) {
             Assert.state(false
-                    , "===== delete - removeByUsernameAndRoleCode(...) -> the given entity is null.");
+                    , "===== removeByUsernameAndRoleCode(...) -> the given entity is null.");
         } catch (org.springframework.dao.EmptyResultDataAccessException e) {
             Assert.state(false
-                    , "===== delete - removeByUsernameAndRoleCode(...) -> the given entity is non persistent.");
+                    , "===== removeByUsernameAndRoleCode(...) -> the given entity is non persistent.");
         }
+
         System.out.println(newEntity);
     }
 

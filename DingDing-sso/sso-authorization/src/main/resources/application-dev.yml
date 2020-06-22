@@ -42,10 +42,13 @@ dingding:
       jdbc-url: jdbc:mysql://localhost:3306/test?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false
       username: User
       password: 123456
+  ## Domain 层配置
+  domain:
+    vo:
+      init_persistence: true
 
 # Spring 生态 - 配置
 spring:
-  data:
   ## 开发环境关闭 Thymeleaf 的缓存
   thymeleaf:
     cache: false

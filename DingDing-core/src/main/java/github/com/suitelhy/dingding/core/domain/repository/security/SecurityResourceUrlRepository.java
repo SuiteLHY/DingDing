@@ -1,13 +1,17 @@
 package github.com.suitelhy.dingding.core.domain.repository.security;
 
 import github.com.suitelhy.dingding.core.domain.entity.security.SecurityResourceUrl;
+import github.com.suitelhy.dingding.core.infrastructure.domain.model.EntityRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * 资源 - URL
@@ -15,7 +19,7 @@ import javax.validation.constraints.NotNull;
  * @Description 资源 - URL 关联关系 -> 基础交互业务接口.
  */
 public interface SecurityResourceUrlRepository
-        extends JpaRepository<SecurityResourceUrl, Long> {
+        extends JpaRepository<SecurityResourceUrl, Long>, EntityRepository {
 
     //===== Select Data =====//
 
@@ -28,10 +32,31 @@ public interface SecurityResourceUrlRepository
     long count();
 
     /**
+     * 判断存在
+     *
+     * @param resourceCode
+     * @return
+     */
+    @Transactional(isolation = Isolation.SERIALIZABLE
+            , propagation = Propagation.REQUIRED)
+    boolean existsAllByCode(@NotNull String resourceCode);
+
+    /**
      * 查询所有
      *
      * @param resourceCode  资源编码
      * @return
+     */
+    @Transactional(isolation = Isolation.SERIALIZABLE
+            , propagation = Propagation.REQUIRED)
+    List<SecurityResourceUrl> findAllByCode(@NotNull String resourceCode);
+
+    /**
+     * 查询所有
+     *
+     * @param resourceCode  资源编码
+     * @param pageable      {@link org.springframework.data.domain.Pageable}
+     * @return {@link Page}
      */
     Page<SecurityResourceUrl> findAllByCode(@NotNull String resourceCode, Pageable pageable);
 
@@ -41,6 +66,17 @@ public interface SecurityResourceUrlRepository
      * @param urlPath       资源对应的 URL (Path部分)
      * @return
      */
+    @Transactional(isolation = Isolation.SERIALIZABLE
+            , propagation = Propagation.REQUIRED)
+    List<SecurityResourceUrl> findAllByUrlPath(@NotNull String urlPath);
+
+    /**
+     * 查询所有
+     *
+     * @param urlPath       资源对应的 URL (Path部分)
+     * @param pageable      {@link org.springframework.data.domain.Pageable}
+     * @return {@link Page}
+     */
     Page<SecurityResourceUrl> findAllByUrlPath(@NotNull String urlPath, Pageable pageable);
 
     //===== Insert Data =====//
@@ -48,10 +84,13 @@ public interface SecurityResourceUrlRepository
     /**
      * 新增/更新日志记录
      *
-     * @param entity
-     * @return
+     * @param entity        {@link github.com.suitelhy.dingding.core.domain.entity.security.SecurityResourceUrl}
+     * @return  {@link github.com.suitelhy.dingding.core.domain.entity.security.SecurityResourceUrl}
      */
     @Override
+    @Modifying
+    @Transactional(isolation = Isolation.SERIALIZABLE
+            , propagation = Propagation.REQUIRED)
     SecurityResourceUrl saveAndFlush(SecurityResourceUrl entity);
 
     //===== Delete Data =====//
@@ -62,7 +101,9 @@ public interface SecurityResourceUrlRepository
      * @param id    数据ID
      */
     @Override
-    @Transactional
+    @Modifying
+    @Transactional(isolation = Isolation.SERIALIZABLE
+            , propagation = Propagation.REQUIRED)
     void deleteById(@NotNull Long id);
 
     /**
@@ -72,7 +113,8 @@ public interface SecurityResourceUrlRepository
      * @return
      */
     @Modifying
-    @Transactional
+    @Transactional(isolation = Isolation.SERIALIZABLE
+            , propagation = Propagation.REQUIRED)
     long removeByCode(@NotNull String resourceCode);
 
     /**
@@ -82,7 +124,8 @@ public interface SecurityResourceUrlRepository
      * @return
      */
     @Modifying
-    @Transactional
+    @Transactional(isolation = Isolation.SERIALIZABLE
+            , propagation = Propagation.REQUIRED)
     long removeByUrlPath(@NotNull String urlPath);
 
     /**
@@ -93,7 +136,8 @@ public interface SecurityResourceUrlRepository
      * @return
      */
     @Modifying
-    @Transactional
+    @Transactional(isolation = Isolation.SERIALIZABLE
+            , propagation = Propagation.REQUIRED)
     long removeByCodeAndUrlPath(@NotNull String resourceCode, @NotNull String urlPath);
 
 }

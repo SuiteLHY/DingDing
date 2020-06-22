@@ -1,14 +1,20 @@
 package github.com.suitelhy.dingding.core.domain.repository.security;
 
 import github.com.suitelhy.dingding.core.domain.entity.security.SecurityRole;
+import github.com.suitelhy.dingding.core.infrastructure.domain.model.EntityRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.LockModeType;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -19,7 +25,7 @@ import java.util.Optional;
  * @Description (安全 - 用户) 角色 - 基础交互业务接口.
  */
 public interface SecurityRoleRepository
-        extends JpaRepository<SecurityRole, Long> {
+        extends JpaRepository<SecurityRole, Long>, EntityRepository {
 
     //===== Select Data =====//
 
@@ -40,6 +46,18 @@ public interface SecurityRoleRepository
     long countByName(String name);
 
     /**
+     * 判断存在
+     *
+     * @param entityId      {@link SecurityRole#id()}
+     * @return
+     * @see SecurityRole#id()
+     */
+    /*@Lock(LockModeType.PESSIMISTIC_WRITE)*/
+    @Transactional(isolation = Isolation.SERIALIZABLE
+            , propagation = Propagation.REQUIRED)
+    boolean existsByCode(@NotNull String entityId);
+
+    /**
      * 查询所有
      *
      * @param pageable
@@ -51,10 +69,13 @@ public interface SecurityRoleRepository
     /**
      * 查询指定角色
      *
-     * @param code
-     * @return
+     * @param entityId      {@link SecurityRole#id()}
+     * @return {@link Optional}
+     * @see SecurityRole#id()
      */
-    Optional<SecurityRole> findByCode(String code);
+    @Transactional(isolation = Isolation.SERIALIZABLE
+            , propagation = Propagation.REQUIRED)
+    Optional<SecurityRole> findByCode(String entityId);
 
     /**
      * 查询
@@ -63,6 +84,8 @@ public interface SecurityRoleRepository
      * @param pageable
      * @return
      */
+    @Transactional(isolation = Isolation.SERIALIZABLE
+            , propagation = Propagation.REQUIRED)
     List<SecurityRole> findByName(String name, Pageable pageable);
 
     /**
@@ -108,6 +131,9 @@ public interface SecurityRoleRepository
      * @return
      */
     @Override
+    @Modifying
+    @Transactional(isolation = Isolation.SERIALIZABLE
+            , propagation = Propagation.REQUIRED)
     SecurityRole saveAndFlush(SecurityRole role);
 
     //===== Delete Data =====//
@@ -118,7 +144,9 @@ public interface SecurityRoleRepository
      * @param id    ID
      */
     @Override
-    @Transactional
+    @Modifying
+    @Transactional(isolation = Isolation.SERIALIZABLE
+            , propagation = Propagation.REQUIRED)
     void deleteById(Long id);
 
     /**
@@ -127,7 +155,8 @@ public interface SecurityRoleRepository
      * @param code  角色编码
      */
     @Modifying
-    @Transactional
+    @Transactional(isolation = Isolation.SERIALIZABLE
+            , propagation = Propagation.REQUIRED)
     long removeByCode(String code);
 
 }

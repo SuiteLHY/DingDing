@@ -1,6 +1,7 @@
 package github.com.suitelhy.dingding.core.application.task;
 
 import github.com.suitelhy.dingding.core.domain.entity.Log;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -51,6 +52,7 @@ public interface LogTask {
      * @param log
      * @return
      */
+    @Transactional
     boolean insert(Log log);
 
     /**
@@ -59,6 +61,7 @@ public interface LogTask {
      * @param id - 日志记录 id
      * @return
      */
+    @Transactional
     boolean delete(String id);
 
     // 屏蔽不严谨设计的业务方法

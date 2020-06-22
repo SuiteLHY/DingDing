@@ -3,9 +3,13 @@ package github.com.suitelhy.dingding.sso.authorization.domain.repository.securit
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import github.com.suitelhy.dingding.core.domain.entity.security.SecurityResource;
+import github.com.suitelhy.dingding.core.domain.entity.security.SecurityResourceUrl;
 import github.com.suitelhy.dingding.core.domain.repository.security.SecurityResourceRepository;
+import github.com.suitelhy.dingding.core.domain.repository.security.SecurityResourceUrlRepository;
+import github.com.suitelhy.dingding.core.domain.service.security.SecurityResourceService;
 import github.com.suitelhy.dingding.core.infrastructure.domain.util.VoUtil;
 import github.com.suitelhy.dingding.core.infrastructure.domain.vo.Resource;
+import github.com.suitelhy.dingding.core.infrastructure.util.CalendarController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,21 +35,39 @@ public class SecurityResourceRepositoryTests {
     @Autowired
     private SecurityResourceRepository repository;
 
+    @Autowired
+    private SecurityResourceUrlRepository securityResourceUrlRepository;
+
     @NotNull
     private SecurityResource getEntityForTest() {
-        return SecurityResource.Factory.RESOURCE.create("test001", null, null
-                , "test", null, 0
+        return getEntityForTest(null);
+    }
+
+    @NotNull
+    private SecurityResource getEntityForTest(@Nullable Integer seed) {
+        return SecurityResource.Factory.RESOURCE.create(
+                "test"
+                        .concat(new CalendarController().toString().replaceAll("[-:\\s]", ""))
+                        .concat((null == seed || seed < 0) ? "" : Integer.toString(seed))
+                , null
+                , null
+                , "test"
+                        .concat((null == seed || seed < 0) ? "" : Integer.toString(seed))
+                , null
+                , 0
                 , Resource.TypeVo.MENU);
+    }
+
+    @NotNull
+    private String getUrlForTest() {
+        return "/test/test"
+                .concat(new CalendarController().toString().replaceAll("[-:\\s]", ""));
     }
 
     @Test
     @Transactional
     public void contextLoads() {
         Assert.notNull(repository, "获取测试单元失败");
-        // 批量添加测试数据
-        for (int i = 0; i < 10; i++) {
-            saveAndFlush();
-        }
     }
 
     @Test
@@ -65,16 +87,17 @@ public class SecurityResourceRepositoryTests {
 
         //===== 添加测试数据
         Assert.isTrue((newEntity.setParentCode(parentCode) && newEntity.isEntityLegal())
-                , "getEntityForTest() -> 无效的 Entity");
+                , "===== getEntityForTest() -> 无效的 Entity");
         Assert.notNull(newEntity = repository.saveAndFlush(newEntity)
-                , "===== insert(Entity) -> unexpected");
+                , "===== 添加测试数据 -> unexpected");
         Assert.isTrue(!newEntity.isEmpty()
-                , "===== insert(Entity) -> 无效的 Entity");
+                , "===== 添加测试数据 -> 无效的 Entity");
 
         //===== countByParentCode(...)
         long result;
         Assert.isTrue((result = repository.countByParentCode(parentCode)) > 0
-                , "The result equaled to or less than 0");
+                , "The result equals to or less than 0");
+
         System.out.println(result);
     }
 
@@ -85,27 +108,28 @@ public class SecurityResourceRepositoryTests {
 
         //===== 添加测试数据
         Assert.isTrue(newEntity.isEntityLegal()
-                , "getEntityForTest() -> 无效的 Entity");
+                , "===== getEntityForTest() -> 无效的 Entity");
         Assert.notNull(newEntity = repository.saveAndFlush(newEntity)
-                , "===== insert(Entity) -> unexpected");
+                , "===== 添加测试数据 -> unexpected");
         Assert.isTrue(!newEntity.isEmpty()
-                , "===== insert(Entity) -> 无效的 Entity");
+                , "===== 添加测试数据 -> 无效的 Entity");
 
         //===== existsByCodeAndParentCode(...)
         boolean result = repository.existsByCodeAndParentCode(newEntity.getCode()
                 , newEntity.getParentCode());
         Assert.isTrue(result
                 , "The result -> not true");
-        System.out.println(result);
     }
 
     @Test
     @Transactional
     public void findAll()
             throws JsonProcessingException {
-        List<SecurityResource> result;
+        final List<SecurityResource> result;
+
         Assert.notEmpty(result = repository.findAll()
-                , "The result equaled to or less than 0");
+                , "The result equals to or less than 0");
+
         System.out.println(toJSONString.writeValueAsString(result));
     }
 
@@ -113,7 +137,7 @@ public class SecurityResourceRepositoryTests {
     @Transactional
     public void findAllByPage()
             throws JsonProcessingException {
-        Page<SecurityResource> result;
+        final Page<SecurityResource> result;
 
         Sort.TypedSort<SecurityResource> typedSort = Sort.sort(SecurityResource.class);
         Sort sort = typedSort.by(SecurityResource::getSort).descending()
@@ -121,9 +145,10 @@ public class SecurityResourceRepositoryTests {
         Pageable page = PageRequest.of(0, 10, sort);
 
         Assert.notNull(result = repository.findAll(page)
-                , "The result equaled to or less than 0");
+                , "The result equals to or less than 0");
         Assert.notEmpty(result.getContent()
                 , "The result -> empty");
+
         System.out.println(toJSONString.writeValueAsString(result));
         System.out.println(result.getContent());
         System.out.println(result.getTotalElements());
@@ -136,29 +161,35 @@ public class SecurityResourceRepositoryTests {
     @Test
     @Transactional
     public void findById() {
+        final Optional<SecurityResource> result;
+
+        //===== 添加测试数据
         SecurityResource newEntity = getEntityForTest();
-        //===== saveAndFlush()
+
         Assert.isTrue(newEntity.isEntityLegal()
-                , "getEntityForTest() -> 无效的 Entity");
+                , "===== getEntityForTest() -> 无效的 Entity");
         Assert.notNull(newEntity = repository.saveAndFlush(newEntity)
                 , "===== insert(Entity) -> unexpected");
         Assert.isTrue(!newEntity.isEmpty()
                 , "===== insert(Entity) -> 无效的 Entity");
 
-        //===== findById()
-        Optional<SecurityResource> result = repository.findById(newEntity.id());
+        //===== findById(..)
+        result = repository.findById(newEntity.getId());
+
         Assert.notNull(result.get()
                 , "The result -> empty");
+
         System.out.println(result);
     }
 
     @Test
     @Transactional
     public void findByCode() {
+        //===== 添加测试数据
         SecurityResource newEntity = getEntityForTest();
-        //===== saveAndFlush()
+
         Assert.isTrue(newEntity.isEntityLegal()
-                , "getEntityForTest() -> 无效的 Entity");
+                , "===== getEntityForTest() -> 无效的 Entity");
         Assert.notNull(newEntity = repository.saveAndFlush(newEntity)
                 , "===== insert(Entity) -> unexpected");
         Assert.isTrue(!newEntity.isEmpty()
@@ -166,23 +197,27 @@ public class SecurityResourceRepositoryTests {
 
         //===== findByCode()
         Optional<SecurityResource> result = repository.findByCode(newEntity.getCode());
+
         Assert.notNull(result.get()
                 , "The result -> empty");
+
         System.out.println(result);
     }
 
     @Test
     @Transactional
     public void findAllByParentCode() {
+        final Page<SecurityResource> result;
+
+        //===== 添加测试数据
         SecurityResource newEntity = getEntityForTest();
 
-        //===== saveAndFlush()
         Assert.isTrue(newEntity.isEntityLegal()
-                , "SecurityUser.Factory.USER.create(..) -> 无效的 User");
+                , "===== getEntityForTest() -> 无效的 Entity");
         Assert.notNull(newEntity = repository.saveAndFlush(newEntity)
-                , "===== insert(User) -> unexpected");
+                , "===== 添加测试数据 -> unexpected");
         Assert.isTrue(!newEntity.isEmpty()
-                , "===== insert(User) -> 无效的 User");
+                , "===== 添加测试数据 -> 无效的 Entity");
 
         //===== findAllByParentCode()
         Sort.TypedSort<SecurityResource> typedSort = Sort.sort(SecurityResource.class);
@@ -190,10 +225,11 @@ public class SecurityResourceRepositoryTests {
                 .and(typedSort.by(SecurityResource::getCode).ascending());
         Pageable page = PageRequest.of(0, 10, sort);
 
-        Page<SecurityResource> result = repository.findAllByParentCode(newEntity.getParentCode()
-                , page);
+        result = repository.findAllByParentCode(newEntity.getParentCode(), page);
+
         Assert.isTrue(!result.isEmpty()
                 , "The result -> empty");
+
         System.out.println(result);
     }
 
@@ -201,20 +237,33 @@ public class SecurityResourceRepositoryTests {
     @Transactional
     public void selectUrlByCode()
             throws JsonProcessingException {
-        SecurityResource newEntity = getEntityForTest();
+        final List<Map<String, Object>> result;
 
-        //===== saveAndFlush()
+        //===== 添加测试数据
+        final SecurityResource newEntity = getEntityForTest();
+        final String newUrl = getUrlForTest();
+        final SecurityResourceUrl newSecurityResourceUrl;
+
         Assert.isTrue(newEntity.isEntityLegal()
-                , "getEntityForTest() -> 无效的 User");
-        Assert.notNull(newEntity = repository.saveAndFlush(newEntity)
-                , "===== insert(Entity) -> unexpected");
+                , "===== getEntityForTest() -> 无效的 Entity");
+        Assert.notNull(repository.saveAndFlush(newEntity)
+                , "===== 添加测试数据 -> unexpected");
         Assert.isTrue(!newEntity.isEmpty()
-                , "===== insert(Entity) -> 无效的 Entity");
+                , "===== 添加测试数据 -> 无效的 Entity");
+
+        newSecurityResourceUrl = securityResourceUrlRepository.saveAndFlush(
+                SecurityResourceUrl.Factory.RESOURCE_URL.create(newEntity.getCode(), newUrl)
+        );
+
+        Assert.isTrue(!newSecurityResourceUrl.isEmpty()
+                , "===== 添加测试数据 -> 无效的 SecurityResourceUrl");
 
         //===== selectUrlByCode(...)
-        List<Map<String, Object>> result = repository.selectUrlByCode(newEntity.getCode());
+        result = repository.selectUrlByCode(newSecurityResourceUrl.getCode());
+
         Assert.isTrue(null != result && !result.isEmpty()
                 , "The result -> empty");
+
         System.out.println(toJSONString.writeValueAsString(result));
     }
 
@@ -222,12 +271,14 @@ public class SecurityResourceRepositoryTests {
     @Transactional
     public void saveAndFlush() {
         SecurityResource newEntity = getEntityForTest();
+
         Assert.isTrue(newEntity.isEntityLegal()
-                , "getEntityForTest() -> 无效的 Entity");
+                , "===== getEntityForTest() -> 无效的 Entity");
         Assert.notNull(newEntity = repository.saveAndFlush(newEntity)
                 , "===== insert(Entity) -> unexpected");
         Assert.isTrue(!newEntity.isEmpty()
                 , "===== insert(Entity) -> 无效的 Entity");
+
         System.out.println(newEntity);
     }
 
@@ -236,23 +287,23 @@ public class SecurityResourceRepositoryTests {
     public void deleteById() {
         SecurityResource newEntity = getEntityForTest();
         Assert.isTrue(newEntity.isEntityLegal()
-                , "getEntityForTest() -> 无效的 Entity");
+                , "===== getEntityForTest() -> 无效的 Entity");
 
-        //=== insert
+        //=== 添加测试数据
         Assert.notNull(newEntity = repository.saveAndFlush(newEntity)
-                , "===== insert - insert(Entity) -> unexpected");
+                , "===== 添加测试数据 -> unexpected");
         Assert.isTrue(!newEntity.isEmpty()
-                , "===== insert - insert(Entity) -> 无效的 Entity");
+                , "===== 添加测试数据 -> 无效的 Entity");
 
         //=== delete
         try {
-            repository.deleteById(newEntity.id());
+            repository.deleteById(newEntity.getId());
         } catch (IllegalArgumentException e) {
             Assert.state(false
-                    , "===== delete - deleteById(...) -> the given entity is null.");
+                    , "===== deleteById(...) -> the given entity is null.");
         } catch (org.springframework.dao.EmptyResultDataAccessException e) {
             Assert.state(false
-                    , "===== delete - deleteById(...) -> the given entity is non persistent.");
+                    , "===== deleteById(...) -> the given entity is non persistent.");
         }
         System.out.println(newEntity);
     }
@@ -262,23 +313,23 @@ public class SecurityResourceRepositoryTests {
     public void removeByCode() {
         SecurityResource newEntity = getEntityForTest();
         Assert.isTrue(newEntity.isEntityLegal()
-                , "getEntityForTest() -> 无效的 Entity");
+                , "===== getEntityForTest() -> 无效的 Entity");
 
-        //=== insert
+        //=== 添加测试数据
         Assert.notNull(newEntity = repository.saveAndFlush(newEntity)
-                , "===== insert - insert(Entity) -> unexpected");
+                , "===== 添加测试数据 -> unexpected");
         Assert.isTrue(!newEntity.isEmpty()
-                , "===== insert - insert(Entity) -> 无效的 Entity");
+                , "===== 添加测试数据 -> 无效的 Entity");
 
         //=== removeByCode(...)
         try {
             repository.removeByCode(newEntity.getCode());
         } catch (IllegalArgumentException e) {
             Assert.state(false
-                    , "===== delete - removeByCode(...) -> the given entity is null.");
+                    , "===== removeByCode(...) -> the given entity is null.");
         } catch (org.springframework.dao.EmptyResultDataAccessException e) {
             Assert.state(false
-                    , "===== delete - removeByCode(...) -> the given entity is non persistent.");
+                    , "===== removeByCode(...) -> the given entity is non persistent.");
         }
         System.out.println(newEntity);
     }
@@ -288,13 +339,13 @@ public class SecurityResourceRepositoryTests {
     public void removeByCodeAndParentCode() {
         SecurityResource newEntity = getEntityForTest();
         Assert.isTrue(newEntity.isEntityLegal()
-                , "getEntityForTest() -> 无效的 Entity");
+                , "===== getEntityForTest() -> 无效的 Entity");
 
-        //=== insert
+        //=== 添加测试数据
         Assert.notNull(newEntity = repository.saveAndFlush(newEntity)
-                , "===== insert - insert(Entity) -> unexpected");
+                , "===== 添加测试数据 -> unexpected");
         Assert.isTrue(!newEntity.isEmpty()
-                , "===== insert - insert(Entity) -> 无效的 Entity");
+                , "===== 添加测试数据 -> 无效的 Entity");
 
         //=== removeByCodeAndParentCode(...)
         try {
@@ -302,10 +353,10 @@ public class SecurityResourceRepositoryTests {
                     , newEntity.getParentCode());
         } catch (IllegalArgumentException e) {
             Assert.state(false
-                    , "===== delete - removeByRoleCodeAndResourceCode(...) -> the given entity is null.");
+                    , "===== removeByRoleCodeAndResourceCode(...) -> the given entity is null.");
         } catch (org.springframework.dao.EmptyResultDataAccessException e) {
             Assert.state(false
-                    , "===== delete - removeByRoleCodeAndResourceCode(...) -> the given entity is non persistent.");
+                    , "===== removeByRoleCodeAndResourceCode(...) -> the given entity is non persistent.");
         }
         System.out.println(newEntity);
     }
