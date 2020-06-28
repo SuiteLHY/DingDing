@@ -3,6 +3,7 @@ package github.com.suitelhy.dingding.sso.authorization.application;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import github.com.suitelhy.dingding.core.application.task.UserTask;
 import github.com.suitelhy.dingding.core.domain.entity.User;
+import github.com.suitelhy.dingding.core.domain.service.security.SecurityUserService;
 import github.com.suitelhy.dingding.core.infrastructure.application.dto.BasicUserDto;
 import github.com.suitelhy.dingding.core.infrastructure.application.dto.UserDto;
 import github.com.suitelhy.dingding.core.infrastructure.util.CalendarController;
@@ -29,6 +30,9 @@ public class UserTaskTests {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private SecurityUserService securityUserService;
+
     @NotNull
     private SecurityUser getEntityForTest() {
         /*final User newUser = User.Factory.USER.update(id()
@@ -43,7 +47,9 @@ public class UserTaskTests {
                 , ("测试" + new CalendarController().toString().replaceAll("[-:\\s]", ""))
                 , HumanVo.Sex.MALE);*/
         final UserDto newUser = userTask.selectUserByUserid(id());
-        return new SecurityUser(newUser.dtoId(username(), password()), passwordEncoder);
+        return new SecurityUser(newUser.dtoId(username(), password())
+                , passwordEncoder
+                , securityUserService);
     }
 
     @NotNull

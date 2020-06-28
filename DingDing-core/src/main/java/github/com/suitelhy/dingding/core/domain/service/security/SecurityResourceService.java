@@ -41,6 +41,13 @@ public interface SecurityResourceService
     Page<SecurityResource> selectAll(int pageIndex, int pageSize);
 
     /**
+     * 查询所有 URL - ROLE 权限对应关系
+     *
+     * @return
+     */
+    Map<String, List<Object>> selectAllUrlRoleMap();
+
+    /**
      * 查询总页数
      *
      * @Description 查询数据列表 - 分页 - 总页数.

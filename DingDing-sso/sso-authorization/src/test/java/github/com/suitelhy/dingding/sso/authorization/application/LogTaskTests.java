@@ -3,6 +3,7 @@ package github.com.suitelhy.dingding.sso.authorization.application;
 import github.com.suitelhy.dingding.core.application.task.LogTask;
 import github.com.suitelhy.dingding.core.application.task.UserTask;
 import github.com.suitelhy.dingding.core.domain.entity.Log;
+import github.com.suitelhy.dingding.core.domain.service.security.SecurityUserService;
 import github.com.suitelhy.dingding.core.infrastructure.application.dto.BasicUserDto;
 import github.com.suitelhy.dingding.core.infrastructure.application.dto.UserDto;
 import github.com.suitelhy.dingding.core.infrastructure.domain.vo.HandleType;
@@ -30,10 +31,15 @@ public class LogTaskTests {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private SecurityUserService securityUserService;
+
     @NotNull
     private SecurityUser getUserForTest() {
         final UserDto newUser = userTask.selectUserByUserid(id());
-        return new SecurityUser(newUser.dtoId(username(), password()), passwordEncoder);
+        return new SecurityUser(newUser.dtoId(username(), password())
+                , passwordEncoder
+                , securityUserService);
     }
 
     @NotNull

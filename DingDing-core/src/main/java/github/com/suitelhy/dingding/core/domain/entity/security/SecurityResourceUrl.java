@@ -40,6 +40,14 @@ public class SecurityResourceUrl
     private String code;
 
     /**
+     * 资源对应的 URL (Method部分)
+     *
+     * @Description 单个 URL.
+     */
+    @Column(name = "url_method")
+    private String urlMethod;
+
+    /**
      * 资源对应的 URL (Path部分)
      *
      * @Description 单个 URL.
@@ -129,6 +137,18 @@ public class SecurityResourceUrl
 
         public boolean code(@NotNull String code) {
             return SecurityResource.Validator.RESOURCE.code(code);
+        }
+
+        /**
+         * URL 校验
+         *
+         * @param urlMethod     URL (Method部分)
+         * @return 校验结果
+         * @see github.com.suitelhy.dingding.core.infrastructure.domain.util.EntityUtil.Regex.GeneralRule#urlPath(String)
+         */
+        public boolean urlMethod(@Nullable String urlMethod) {
+            return null == urlMethod
+                    || EntityUtil.Regex.GeneralRule.englishPhrases(urlMethod, null, null);
         }
 
         /**
@@ -257,6 +277,18 @@ public class SecurityResourceUrl
     private boolean setCode(@NotNull String code) {
         if (Validator.RESOURCE_URL.code(code)) {
             this.code = code;
+            return true;
+        }
+        return false;
+    }
+
+    public String getUrlMethod() {
+        return urlMethod;
+    }
+
+    public boolean setUrlMethod(String urlMethod) {
+        if (Validator.RESOURCE_URL.urlMethod(urlMethod)) {
+            this.urlMethod = urlMethod;
             return true;
         }
         return false;

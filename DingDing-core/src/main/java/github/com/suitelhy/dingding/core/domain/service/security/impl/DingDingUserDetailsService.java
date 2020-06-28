@@ -1,6 +1,7 @@
 package github.com.suitelhy.dingding.core.domain.service.security.impl;
 
 import github.com.suitelhy.dingding.core.domain.entity.User;
+import github.com.suitelhy.dingding.core.domain.service.security.SecurityUserService;
 import github.com.suitelhy.dingding.core.infrastructure.web.SecurityUser;
 import github.com.suitelhy.dingding.core.domain.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,11 @@ import javax.validation.constraints.NotNull;
 /**
  * DingDingUserDetailsService
  *
- * @Description Spring Security <- 项目定制化 <interface>UserDetailsService</interface> 实现.
+ * @Description Spring Security <- 项目定制化 {@link UserDetailsService} 实现.
+ *
  * @author Suite
+ *
+ * @see UserDetailsService
  */
 @Component
 @Order(Ordered.LOWEST_PRECEDENCE)
@@ -32,15 +36,20 @@ public class DingDingUserDetailsService
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private SecurityUserService securityUserService;
+
     @NotNull
     @Override
     public UserDetails loadUserByUsername(String username)
             throws AuthenticationException {
-        User user = userService.selectUserByUsername(username);
+        final User user = userService.selectUserByUsername(username);
+
         if (null == user) {
             throw new UsernameNotFoundException("获取不到指定的用户");
         }
-        return new SecurityUser(user, passwordEncoder);
+
+        return new SecurityUser(user, passwordEncoder, securityUserService);
     }
 
 }

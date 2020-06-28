@@ -1,9 +1,11 @@
 package github.com.suitelhy.dingding.core.infrastructure.web;
 
+import github.com.suitelhy.dingding.core.domain.service.security.SecurityUserService;
 import github.com.suitelhy.dingding.core.infrastructure.application.dto.BasicUserDto;
 import github.com.suitelhy.dingding.core.infrastructure.domain.vo.Account;
 import github.com.suitelhy.dingding.core.domain.entity.User;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,11 +15,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 /**
  * UserDetails 定制化实现
  *
- * @Description Spring Security 认证所需 <interface>UserDetails</interface> 实例.
+ * @Description Spring Security 认证所需 {@link UserDetails} 实例.
+ *
+ * @see UserDetails
  */
 @Slf4j
 public class SecurityUser
@@ -26,13 +32,19 @@ public class SecurityUser
     @NotNull
     private final transient PasswordEncoder passwordEncoder;
 
+    private final SecurityUserService securityUserService;
+
     /**
      * 当前用户 Entity
+     *
+     * @see User
      */
     @NotNull
     private final transient User user;
 
-    public SecurityUser(@NotNull User user, @NotNull PasswordEncoder passwordEncoder)
+    public SecurityUser(@NotNull User user
+            , @NotNull PasswordEncoder passwordEncoder
+            , @NotNull SecurityUserService securityUserService)
             throws AccountStatusException, IllegalArgumentException {
         if (null == user) {
             throw new IllegalArgumentException("无效的 User -> null");
@@ -40,6 +52,10 @@ public class SecurityUser
         if (null == passwordEncoder) {
             throw new IllegalArgumentException("无效的 PasswordEncoder -> null");
         }
+        if (null == securityUserService) {
+            throw new IllegalArgumentException("无效的 SecurityUserService -> null");
+        }
+
         if (user.isEmpty()) {
             if (User.Validator.USER.validateId(user)
                     && user.isEntityLegal()
@@ -56,16 +72,25 @@ public class SecurityUser
             }
             throw new IllegalArgumentException("无效的 User -> " + user);
         }
+
         this.passwordEncoder = passwordEncoder;
         this.user = user;
+        this.securityUserService = securityUserService;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new ArrayList<>(1);
+
         // 自定义认证用户 - 权限
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("Admin");
-        authorities.add(authority);
+        /*SimpleGrantedAuthority authority = new SimpleGrantedAuthority("Admin");
+        authorities.add(authority);*/
+
+        List<Map<String, Object>> roleMapList = securityUserService.selectRoleByUsername(this.getUsername());
+        for (Map<String, Object> roleMap : roleMapList) {
+            authorities.add(new SimpleGrantedAuthority((String) roleMap.get("role_code")));
+        }
+
         return authorities;
     }
 

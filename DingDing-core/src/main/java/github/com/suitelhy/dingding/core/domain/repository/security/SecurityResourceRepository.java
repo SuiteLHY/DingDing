@@ -101,6 +101,24 @@ public interface SecurityResourceRepository
     Page<SecurityResource> findAllByParentCode(@NotNull String parentCode, Pageable pageable);
 
     /**
+     *
+     *
+     * @return
+     */
+    @Query(nativeQuery = true
+            , value = "select sru.url_path as url_path "
+                    + ", role.`code` as role_code "
+                    + "from SECURITY_RESOURCE_URL sru "
+                    + "left join SECURITY_RESOURCE resource on resource.code = sru.code "
+                    + "left join SECURITY_ROLE_RESOURCE rr on rr.resource_code = resource.code "
+                    + "left join SECURITY_ROLE role on role.code = rr.role_code "
+                    + "left join SECURITY_USER_ROLE ur on ur.role_code = rr.role_code "
+                    + "left join SECURITY_USER user on user.username = ur.username "
+                    + "where user.username is not null "
+                    + "group by url_path, role_code ")
+    List<Map<String, Object>> selectAllUrlRoleMap();
+
+    /**
      * 查询资源
      *
      * @param code          资源编码    {@link SecurityResource#getCode()}

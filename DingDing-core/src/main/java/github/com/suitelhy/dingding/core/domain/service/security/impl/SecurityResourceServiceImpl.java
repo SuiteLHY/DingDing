@@ -74,6 +74,53 @@ public class SecurityResourceServiceImpl
     }
 
     /**
+     * 查询所有 URL - ROLE 权限对应关系
+     *
+     * @Description {URL - ROLE}, 一对多.
+     *->  [{["url_path", {@link java.lang.String}] : ["role_code", {@link java.util.List<Object>}]}]
+     *
+     * @return {@link java.util.List<java.util.Map<java.lang.String, java.lang.Object>>}
+     */
+    @Override
+    @NotNull
+    public Map<String, List<Object>> selectAllUrlRoleMap() {
+        final Map<String, List<Object>> result = new LinkedHashMap<>(1);
+
+        final List<Map<String, Object>> urlRoleMapList = repository.selectAllUrlRoleMap();
+        for (int i = 0; i < urlRoleMapList.size(); i++) {
+            final Map<String, Object> each = urlRoleMapList.get(i);
+
+            final String urlPath = (String) each.get("url_path");
+
+            final Map<String, Object> urlRoleMap = new LinkedHashMap<>(1);
+            final List<Object> roles = new ArrayList<>(1);
+//            urlRoleMap.put("url_path", urlPath);
+//            urlRoleMap.put("role_code", roles);
+
+            roles.add(each.get("role_code"));
+
+            urlRoleMapList.remove(i);
+
+            if (!urlRoleMapList.isEmpty()) {
+                for (int j = i; j < urlRoleMapList.size(); j++) {
+                    final Map<String, Object> eachTemp = urlRoleMapList.get(j);
+
+                    if (urlPath.equals(eachTemp.get("url_path"))) {
+                        roles.add(eachTemp.get("role_code"));
+
+                        urlRoleMapList.remove(j--);
+                        --i;
+                    }
+                }
+            }
+
+            result.put(urlPath, roles);
+        }
+
+        return result;
+    }
+
+    /**
      * 查询总页数
      *
      * @param pageSize 分页 - 每页容量

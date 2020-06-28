@@ -30,17 +30,18 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 /**
  * 认证服务器配置
  *
+ * @Description
+ *-> 排坑:
+ *->  	{@link <a href="https://github.com/spring-projects/spring-security-oauth/issues/993">ResourceServerProperties DEFAULT filterOrder is not 0. #993</a>}
+ *->  	{@link <a href="https://github.com/spring-projects/spring-boot/issues/5072">non-sensitive actuator endpoints require full authentication when @EnableResourceServer is used (oauth2) #5072</a>}
+ *->  	{@link <description>最后一个雷: 通过 {@link Order} 设置的优先级, 如果不恰当, 会导致必要的过滤器不被调用.</description>}
+ *->  	{@link <solution><a href="https://hacpai.com/article/1579503779901#%E7%B3%BB%E5%88%97%E6%96%87%E7%AB%A0">Spring Security Oauth2 从零到一完整实践（六）踩坑记录 - 黑客派</a></solution>}
+ *
  * @Editor Suite
  */
 @Configuration
 // (认证授权服务器配置注解)
 @EnableAuthorizationServer
-// 排坑: <a href="https://github.com/spring-projects/spring-security-oauth/issues/993">ResourceServerProperties DEFAULT filterOrder is not 0. #993</a>
-//-> , <a href="https://github.com/spring-projects/spring-boot/issues/5072">
-//-> 		non-sensitive actuator endpoints require full authentication when @EnableResourceServer is used (oauth2) #5072</a>
-//-> , <description>最后一个雷: 通过@Order设置的优先级，如果不恰当，会导致必要的过滤器不被调用.</description>
-//-> <solution><a href="https://hacpai.com/article/1579503779901#%E7%B3%BB%E5%88%97%E6%96%87%E7%AB%A0">
-//-> 		Spring Security Oauth2 从零到一完整实践（六）踩坑记录 - 黑客派</a></solution>
 @Order(/*Ordered.HIGHEST_PRECEDENCE*//*0*/3)
 public class SsoAuthorizationServerConfig
 		extends AuthorizationServerConfigurerAdapter {
@@ -70,29 +71,6 @@ public class SsoAuthorizationServerConfig
 	public ApprovalStore approvalStore() {
 		return new InMemoryApprovalStore();
 	}
-
-//	/**
-//	 * JWT 的 token 存储对象
-//	 *
-//	 * @Description 一个具有解码 JWT 并验证其签名的唯一能力的 JwkTokenStore.
-//	 * @return
-//	 */
-//	@Bean
-//	public TokenStore jwtTokenStore() {
-//		/*return new JwtTokenStore(jwtAccessTokenConverter());*/
-//		JwtTokenStore tokenStore = new JwtTokenStore(jwtAccessTokenConverter());
-//		tokenStore.setApprovalStore(approvalStore());
-//		return tokenStore;
-//	}
-
-	/*@Bean
-	public UserApprovalHandler userApprovalHandler() {
-		ApprovalStoreUserApprovalHandler userApprovalHandler = new ApprovalStoreUserApprovalHandler();
-		userApprovalHandler.setApprovalStore(approvalStore());
-		userApprovalHandler.setClientDetailsService(this.clientDetailsService);
-		userApprovalHandler.setRequestFactory(new DefaultOAuth2RequestFactory(this.clientDetailsService));
-		return userApprovalHandler;
-	}*/
 
 	/**
 	 * 客户端服务配置
