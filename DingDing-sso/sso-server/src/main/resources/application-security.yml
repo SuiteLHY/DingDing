@@ -6,6 +6,8 @@ logging:
 
 dingding:
   security:
+    cross:
+      allow-origin-host: http://localhost:8080
     signing-key: dingding
 
 #spring:

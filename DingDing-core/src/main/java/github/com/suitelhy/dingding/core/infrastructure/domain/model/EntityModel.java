@@ -6,13 +6,15 @@ import org.springframework.util.ObjectUtils;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * 实体设计模板
  *
  * @param <ID>      Entity 的唯一标识 (Identify) 的类型
  */
-public interface EntityModel<ID> extends Serializable {
+public interface EntityModel<ID>
+        extends Serializable {
 
     /**
      * 唯一标识 <- Entity 对象
@@ -70,6 +72,7 @@ public interface EntityModel<ID> extends Serializable {
                 return Arrays.deepEquals((Object[]) entity.id(), (Object[]) ((EntityModel) obj).id());
             }
         }
+
         return entity.id().equals(((EntityModel) obj).id());
     }
 
@@ -86,7 +89,7 @@ public interface EntityModel<ID> extends Serializable {
      * 计算哈希值 <- Entity 对象
      *
      * @Description Entity模板提供的实现.
-     *->    注意: 避免无限递归调用 <method>hashCode()</method>.
+     *->    注意: 避免无限递归调用 {@link this#hashCode()}.
      *
      * @param entity
      * @param <T>
@@ -104,6 +107,13 @@ public interface EntityModel<ID> extends Serializable {
         if (null == entity.id() || entity.isEmpty()) {
             // 注意: 避免无限递归调用 <method>hashCode()</method>
             return /*ObjectUtils.nullSafeHashCode(entity)*/((Object) entity).hashCode();
+        }
+
+        // (new)
+        if (entity.id().getClass().isArray()) {
+            if (entity.id() instanceof Object[]) {
+                return ObjectUtils.nullSafeHashCode((Object[]) entity.id());
+            }
         }
 
         return entity.id().hashCode();

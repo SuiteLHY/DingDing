@@ -1,27 +1,21 @@
 package github.com.suitelhy.dingding.core.infrastructure.web;
 
-import github.com.suitelhy.dingding.core.domain.service.security.SecurityUserService;
-import github.com.suitelhy.dingding.core.infrastructure.application.dto.BasicUserDto;
-import github.com.suitelhy.dingding.core.infrastructure.domain.vo.Account;
 import github.com.suitelhy.dingding.core.domain.entity.User;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * UserDetails 定制化实现
  *
  * @Description Spring Security 认证所需 {@link UserDetails} 实例.
+ *
+ * @Solution
+ *-> {@link <a href="https://blog.csdn.net/a1064072510/article/details/103848966">OAuth2  [org.springframework.data.redis.serializer.SerializationException: Cannot serialize_知我饭否-CSDN博客_springcloud oauth2.0 tokenstore serializationexcep</a>}
  *
  * @see UserDetails
  */
@@ -29,34 +23,61 @@ import java.util.Map;
 public class SecurityUser
         implements UserDetails {
 
-    @NotNull
-    private final transient PasswordEncoder passwordEncoder;
+//    @NotNull
+//    private final /*transient */PasswordEncoder passwordEncoder;
 
-    private final SecurityUserService securityUserService;
+    /*// Redis 存储 Token 时会将当前 {@link SecurityUser} 对象进行反序列化, 所以不能持有该引用.
+    private final SecurityUserService securityUserService;*/
+
+//    /**
+//     * 当前用户 Entity
+//     *
+//     * @see User
+//     */
+//    @NotNull
+//    private final /*transient */User user;
 
     /**
-     * 当前用户 Entity
+     * 用户密码
      *
-     * @see User
+     * @Description 密文.
      */
     @NotNull
-    private final transient User user;
+    private final String password;
 
-    public SecurityUser(@NotNull User user
-            , @NotNull PasswordEncoder passwordEncoder
-            , @NotNull SecurityUserService securityUserService)
+    @NotNull
+    private final String username;
+
+    @NotNull
+    private final Set<GrantedAuthority> authorities;
+
+    private final boolean accountNonExpired;
+
+    private final boolean accountNonLocked;
+
+    private final boolean credentialsNonExpired;
+
+    private final boolean enabled;
+
+    public SecurityUser(@NotNull String username
+            , @NotNull String password
+            , @NotNull Collection<? extends GrantedAuthority> authorities
+            , boolean accountNonExpired
+            , boolean accountNonLocked
+            , boolean credentialsNonExpired
+            , boolean enabled)
             throws AccountStatusException, IllegalArgumentException {
-        if (null == user) {
-            throw new IllegalArgumentException("无效的 User -> null");
+        if (!User.Validator.USER.username(username)) {
+            throw new IllegalArgumentException("无效的 username");
         }
-        if (null == passwordEncoder) {
-            throw new IllegalArgumentException("无效的 PasswordEncoder -> null");
+        if (null == password) {
+            throw new IllegalArgumentException("无效的 password -> null");
         }
-        if (null == securityUserService) {
-            throw new IllegalArgumentException("无效的 SecurityUserService -> null");
+        if (null == authorities) {
+            throw new IllegalArgumentException("无效的 authorities -> null");
         }
 
-        if (user.isEmpty()) {
+        /*if (user.isEmpty()) {
             if (User.Validator.USER.validateId(user)
                     && user.isEntityLegal()
                     && !Boolean.FALSE.equals(user.isEntityPersistence())) {
@@ -71,39 +92,33 @@ public class SecurityUser
                 }
             }
             throw new IllegalArgumentException("无效的 User -> " + user);
-        }
+        }*/
 
-        this.passwordEncoder = passwordEncoder;
-        this.user = user;
-        this.securityUserService = securityUserService;
+        this.password = password;
+        this.username = username;
+        this.authorities = (Set<GrantedAuthority>) authorities;
+        this.accountNonExpired = accountNonExpired;
+        this.accountNonLocked = accountNonLocked;
+        this.credentialsNonExpired = credentialsNonExpired;
+        this.enabled = enabled;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<GrantedAuthority> authorities = new ArrayList<>(1);
-
-        // 自定义认证用户 - 权限
-        /*SimpleGrantedAuthority authority = new SimpleGrantedAuthority("Admin");
-        authorities.add(authority);*/
-
-        List<Map<String, Object>> roleMapList = securityUserService.selectRoleByUsername(this.getUsername());
-        for (Map<String, Object> roleMap : roleMapList) {
-            authorities.add(new SimpleGrantedAuthority((String) roleMap.get("role_code")));
-        }
-
         return authorities;
     }
 
     @Override
     public String getPassword() {
-        return null == user.getPassword()
+        /*return null == user.getPassword()
                 ? null
-                : passwordEncoder.encode(user.getPassword());
+                : passwordEncoder.encode(user.getPassword());*/
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return username;
     }
 
     /*@NotNull
@@ -111,10 +126,10 @@ public class SecurityUser
         return UserDto.Factory.USER_DTO.create(this.user);
     }*/
 
-    @NotNull
-    public BasicUserDto getUserInfo() {
-        return BasicUserDto.Factory.USER_DTO.create(this.user);
-    }
+//    @NotNull
+//    public BasicUserDto getUserInfo() {
+//        return BasicUserDto.Factory.USER_DTO.create(this.user);
+//    }
 
     /**
      * 账户是否未过期
@@ -123,7 +138,8 @@ public class SecurityUser
      */
     @Override
     public boolean isAccountNonExpired() {
-        return !Account.StatusVo.DESTRUCTION.equals(user.getStatus());
+//        return !Account.StatusVo.DESTRUCTION.equals(user.getStatus());
+        return accountNonExpired;
     }
 
     /**
@@ -133,7 +149,8 @@ public class SecurityUser
      */
     @Override
     public boolean isAccountNonLocked() {
-        return !Account.StatusVo.LOCKED.equals(user.getStatus());
+//        return !Account.StatusVo.LOCKED.equals(user.getStatus());
+        return accountNonLocked;
     }
 
     /**
@@ -144,7 +161,8 @@ public class SecurityUser
     @Override
     public boolean isCredentialsNonExpired() {
         // 凭证未过期... 暂无业务设计
-        return Account.StatusVo.NORMAL.equals(user.getStatus());
+//        return Account.StatusVo.NORMAL.equals(user.getStatus());
+        return credentialsNonExpired;
     }
 
     /**
@@ -154,7 +172,21 @@ public class SecurityUser
      */
     @Override
     public boolean isEnabled() {
-        return !user.isEmpty();
+//        return !user.isEmpty();
+        return enabled;
+    }
+
+    @Override
+    public String toString() {
+        return "{"
+                .concat("username:").concat(username)
+                .concat(", password:").concat("******")
+                .concat(", authorities:").concat(Arrays.toString(authorities.toArray()))
+                .concat(", accountNonExpired:").concat(Boolean.toString(accountNonExpired))
+                .concat(", accountNonLocked:").concat(Boolean.toString(accountNonLocked))
+                .concat(", credentialsNonExpired:").concat(Boolean.toString(credentialsNonExpired))
+                .concat(", enabled:").concat(Boolean.toString(enabled))
+                .concat("}");
     }
 
 }

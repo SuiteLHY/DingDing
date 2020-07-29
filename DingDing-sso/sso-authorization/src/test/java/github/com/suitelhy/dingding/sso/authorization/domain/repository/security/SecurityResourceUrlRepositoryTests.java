@@ -7,6 +7,7 @@ import github.com.suitelhy.dingding.core.domain.repository.security.SecurityReso
 import github.com.suitelhy.dingding.core.infrastructure.util.CalendarController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,9 +29,17 @@ public class SecurityResourceUrlRepositoryTests {
     @Autowired
     private SecurityResourceUrlRepository repository;
 
+    @Value("${dingding.security.client-id}")
+    private String clientId;
+
+    private String getClientId() {
+        return this.clientId;
+    }
+
     @NotNull
     private SecurityResourceUrl getEntityForTest() {
         return SecurityResourceUrl.Factory.RESOURCE_URL.create("1"
+                , getClientId()
                 , "/test/test"
                         .concat(new CalendarController().toString().replaceAll("[-:\\s]", ""))
         );
@@ -147,7 +156,7 @@ public class SecurityResourceUrlRepositoryTests {
 
     @Test
     @Transactional
-    public void findAllByUrlPath() {
+    public void findAllByClientIdAndUrlPath() {
         //===== 添加测试数据
         SecurityResourceUrl newEntity = getEntityForTest();
 
@@ -158,12 +167,14 @@ public class SecurityResourceUrlRepositoryTests {
         Assert.isTrue(!newEntity.isEmpty()
                 , "===== 添加测试数据 -> 无效的 Entity");
 
-        //===== findAllByUrlPath(...)
+        //===== findAllByClientIdAndUrlPath(...)
         Sort.TypedSort<SecurityResourceUrl> typedSort = Sort.sort(SecurityResourceUrl.class);
         Sort sort = typedSort.by(SecurityResourceUrl::getCode).ascending();
         Pageable page = PageRequest.of(0, 10, sort);
 
-        Page<SecurityResourceUrl> result = repository.findAllByUrlPath(newEntity.getUrlPath(), page);
+        Page<SecurityResourceUrl> result = repository.findAllByClientIdAndUrlPath(getClientId()
+                , newEntity.getUrlPath()
+                , page);
 
         Assert.isTrue(!result.isEmpty()
                 , "The result -> empty");
@@ -255,7 +266,7 @@ public class SecurityResourceUrlRepositoryTests {
 
         //=== removeByUrlPath(..)
         try {
-            repository.removeByUrlPath(newEntity.getUrlPath());
+            repository.removeByClientIdAndUrlPath(getClientId(), newEntity.getUrlPath());
         } catch (IllegalArgumentException e) {
             Assert.state(false
                     , "===== removeByUrlPath(..) -> the given entity is null.");
@@ -282,7 +293,9 @@ public class SecurityResourceUrlRepositoryTests {
 
         //=== removeByCodeAndUrlPath(...)
         try {
-            repository.removeByCodeAndUrlPath(newEntity.getCode(), newEntity.getUrlPath());
+            repository.removeByCodeAndClientIdAndUrlPath(newEntity.getCode()
+                    , getClientId()
+                    , newEntity.getUrlPath());
         } catch (IllegalArgumentException e) {
             Assert.state(false
                     , "===== removeByCodeAndUrlPath(...) -> the given entity is null.");

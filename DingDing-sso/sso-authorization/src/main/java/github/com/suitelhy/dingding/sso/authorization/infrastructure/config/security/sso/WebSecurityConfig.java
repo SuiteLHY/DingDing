@@ -1,5 +1,6 @@
 package github.com.suitelhy.dingding.sso.authorization.infrastructure.config.security.sso;
 
+import github.com.suitelhy.dingding.sso.authorization.web.security.DingDingLogoutSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +18,10 @@ import org.springframework.security.web.access.intercept.FilterSecurityIntercept
 /**
  * 资源服务器 - 安全配置
  *
+ * @Reference
+ *->  {@link <a href="https://www.shuzhiduo.com/A/qVdeW1wrJP/">[权限管理系统篇] (五)-Spring security（授权过程分析）</a>}
+ *->  {@link <a href="https://github.com/ygsama/ipa/blob/master/oauth2-server/src/main/java/io/github/ygsama/oauth2server/config/LoginSecurityInterceptor.java">ipa/LoginSecurityInterceptor.java at master · ygsama/ipa</a>}
+ *
  * @author Suite
  */
 @Configuration
@@ -26,21 +31,15 @@ import org.springframework.security.web.access.intercept.FilterSecurityIntercept
 public class WebSecurityConfig
         extends WebSecurityConfigurerAdapter {
 
-    /*@Autowired
-    @Qualifier("dingDingAccessDecisionManager")
-    private AccessDecisionManager accessDecisionManager;
-
-    @Autowired
-    @Qualifier("dingDingAccessSecurityMetadataSource")
-    private FilterInvocationSecurityMetadataSource filterInvocationSecurityMetadataSource;*/
-
     @Autowired
     @Qualifier("dingDingFilterSecurityInterceptor")
     private FilterSecurityInterceptor filterSecurityInterceptor;
 
+    @Autowired
+    private DingDingLogoutSuccessHandler logoutSuccessHandler;
+
     @Override
-    public AuthenticationManager authenticationManager()
-            throws Exception {
+    public AuthenticationManager authenticationManager() {
         OAuth2AuthenticationManager authManager = new OAuth2AuthenticationManager();
         return authManager;
     }
@@ -51,17 +50,18 @@ public class WebSecurityConfig
         http
                 // 认证请求
                 .authorizeRequests()
-//                .anyRequest()
-//                // RBAC 动态 URL 认证
-//                .access("@rbacService.hasPermission(request,authentication)")
-//                .and()
-                //=== 动态权限配置
+                //=== 权限认证
                 .anyRequest()
                 .authenticated()
-                /*.withObjectPostProcessor(filterSecurityInterceptorObjectPostProcessor())*/
-                /*// 替换上自定义 HTTP 权限认证过滤器
+                //===== 退出登录
                 .and()
-                .addFilterAt(dingDingFilterSecurityInterceptor, FilterSecurityInterceptor.class)*/;
+                    .logout()
+                        .logoutUrl("/logout")
+                        .clearAuthentication(true)
+                        .deleteCookies("JSESSIONID")/* 从 Cookie 中删除 Session ID */
+                        .invalidateHttpSession(true)
+                        /*.addLogoutHandler(logoutHandler)*/
+                        .logoutSuccessHandler(logoutSuccessHandler);
 
         http
                 //=== 自定义权限 Filter

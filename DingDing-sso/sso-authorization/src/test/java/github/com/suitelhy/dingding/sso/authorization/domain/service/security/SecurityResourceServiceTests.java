@@ -2,16 +2,24 @@ package github.com.suitelhy.dingding.sso.authorization.domain.service.security;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import github.com.suitelhy.dingding.core.domain.entity.User;
 import github.com.suitelhy.dingding.core.domain.entity.security.SecurityResource;
 import github.com.suitelhy.dingding.core.domain.entity.security.SecurityResourceUrl;
 import github.com.suitelhy.dingding.core.domain.entity.security.SecurityRole;
+import github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser;
+import github.com.suitelhy.dingding.core.domain.service.UserService;
 import github.com.suitelhy.dingding.core.domain.service.security.SecurityResourceService;
 import github.com.suitelhy.dingding.core.domain.service.security.SecurityRoleService;
+import github.com.suitelhy.dingding.core.domain.service.security.SecurityUserService;
+import github.com.suitelhy.dingding.core.infrastructure.domain.util.ContainArrayHashMap;
+import github.com.suitelhy.dingding.core.infrastructure.domain.util.ContainArrayHashSet;
+import github.com.suitelhy.dingding.core.infrastructure.domain.vo.Human;
 import github.com.suitelhy.dingding.core.infrastructure.domain.vo.Resource;
 import github.com.suitelhy.dingding.core.infrastructure.domain.vo.security.Security;
 import github.com.suitelhy.dingding.core.infrastructure.util.CalendarController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.lang.Nullable;
@@ -19,10 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.validation.constraints.NotNull;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * (安全) 资源 - 业务 <- 测试单元
@@ -42,6 +47,19 @@ public class SecurityResourceServiceTests {
 
     @Autowired
     private SecurityRoleService roleService;
+
+    @Autowired
+    private SecurityUserService securityUserService;
+
+    @Autowired
+    private UserService userService;
+
+    @Value("${dingding.security.client-id}")
+    private String clientId;
+
+    private String getClientId() {
+        return this.clientId;
+    }
 
     @NotNull
     private SecurityResource getEntityForTest() {
@@ -79,6 +97,11 @@ public class SecurityResourceServiceTests {
     }
 
     @NotNull
+    private SecurityUser getSecurityUserForTest(@NotNull User user) {
+        return SecurityUser.Factory.USER.create(user);
+    }
+
+    @NotNull
     private String getUrlForTest() {
         return getUrlForTest(null);
     }
@@ -88,6 +111,34 @@ public class SecurityResourceServiceTests {
         return "/test/test"
                 .concat(new CalendarController().toString().replaceAll("[-:\\s]", ""))
                 .concat((null == seed || seed < 0) ? "" : Integer.toString(seed));
+    }
+
+    @NotNull
+    private User getUserForTest() {
+        return getUserForTest(null);
+    }
+
+    @NotNull
+    private User getUserForTest(Integer seed) {
+        return User.Factory.USER.create(20
+                , new CalendarController().toString()
+                , ip()
+                , new CalendarController().toString()
+                , "测试用户"
+                        .concat(new CalendarController().toString().replaceAll("[-:\\s]", ""))
+                        .concat((null == seed || seed < 0) ? "" : Integer.toString(seed))
+                , "test123"
+                , "测试数据"
+                , null
+                , "测试"
+                        .concat(new CalendarController().toString().replaceAll("[-:\\s]", ""))
+                        .concat((null == seed || seed < 0) ? "" : Integer.toString(seed))
+                , Human.SexVo.MALE);
+    }
+
+    @NotNull
+    private String ip() {
+        return "127.0.0.0";
     }
 
     @Test
@@ -113,6 +164,184 @@ public class SecurityResourceServiceTests {
                 , "The result is empty");
 
         System.out.println(result);
+    }
+
+    @Test
+    @Transactional
+    public void selectAllUrlRoleMap() {
+        final ContainArrayHashMap<String, List<Object>> result;
+
+        //===== 添加测试数据
+        final SecurityResource newEntity = getEntityForTest();
+        final SecurityResource newEntity1 = getEntityForTest(1);
+        final SecurityResource newEntity2 = getEntityForTest(1);
+
+        Assert.isTrue(newEntity.isEntityLegal()
+                , "===== getEntityForTest() -> 无效的 Entity");
+        Assert.isTrue(service.insert(newEntity)
+                , "===== 添加测试数据 -> false");
+        Assert.isTrue(!newEntity.isEmpty()
+                , "===== 添加测试数据 -> 无效的 Entity");
+
+        Assert.isTrue(newEntity1.isEntityLegal()
+                , "===== getEntityForTest() -> 无效的 Entity");
+        Assert.isTrue(service.insert(newEntity1)
+                , "===== 添加测试数据 -> false");
+        Assert.isTrue(!newEntity1.isEmpty()
+                , "===== 添加测试数据 -> 无效的 Entity");
+
+        Assert.isTrue(newEntity2.isEntityLegal()
+                , "===== getEntityForTest() -> 无效的 Entity");
+        Assert.isTrue(service.insert(newEntity2)
+                , "===== 添加测试数据 -> false");
+        Assert.isTrue(!newEntity2.isEmpty() || newEntity2.equals(newEntity1)
+                , "===== 添加测试数据 -> 无效的 Entity");
+
+        final String[] newUrl = new String[] {getClientId(), getUrlForTest()};
+        final String[] newUrl1 = new String[] {getClientId(), getUrlForTest(1)};
+        final String[] newUrl2 = new String[] {getClientId(), getUrlForTest(1)};
+
+        final Set<SecurityResource> resources = new HashSet<>(1);
+        if (!newEntity.isEmpty()) {
+            resources.add(newEntity);
+        }
+        if (!newEntity1.isEmpty()) {
+            resources.add(newEntity1);
+        }
+        if (!newEntity2.isEmpty()) {
+            resources.add(newEntity2);
+        }
+
+        final ContainArrayHashSet<String> urls = new ContainArrayHashSet<>(3);
+        if (SecurityResourceUrl.Validator.RESOURCE_URL.clientId(newUrl[0])
+                && SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(newUrl[1])) {
+            urls.add(newUrl);
+        }
+        if (SecurityResourceUrl.Validator.RESOURCE_URL.clientId(newUrl1[0])
+                && SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(newUrl1[1])) {
+            urls.add(newUrl1);
+        }
+        if (SecurityResourceUrl.Validator.RESOURCE_URL.clientId(newUrl2[0])
+                && SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(newUrl2[1])) {
+            urls.add(newUrl2);
+        }
+
+        Assert.isTrue(service.insertUrl(newEntity, newUrl)
+                , "===== insertUrl(...) -> false");
+        Assert.isTrue(service.insertUrl(resources, newUrl)
+                , "===== insertUrl(...) -> false");
+        Assert.isTrue(service.insertUrl(newEntity, urls)
+                , "===== insertUrl(...) -> false");
+        Assert.isTrue(service.insertUrl(resources, urls)
+                , "===== insertUrl(...) -> false");
+
+        final @NotNull SecurityRole newRole = getRoleForTest();
+        final @NotNull SecurityRole newRole1 = getRoleForTest(1);
+        final @NotNull SecurityRole newRole2 = getRoleForTest(1);
+
+        Assert.isTrue(roleService.insert(newRole)
+                , "===== 添加测试数据 -> false");
+
+        Assert.isTrue(roleService.insert(newRole1)
+                , "===== 添加测试数据 -> false");
+
+        Assert.isTrue(roleService.insert(newRole2)
+                , "===== 添加测试数据 -> false");
+
+        final Set<SecurityRole> roles = new HashSet<>(2);
+        if (!newRole.isEmpty()) {
+            roles.add(newRole);
+        }
+        if (!newRole1.isEmpty()) {
+            roles.add(newRole1);
+        }
+        if (!newRole2.isEmpty()) {
+            roles.add(newRole2);
+        }
+
+        Assert.isTrue(service.insertRole(newEntity, newRole)
+                , "===== insertRole(...) -> false");
+        Assert.isTrue(service.insertRole(resources, newRole)
+                , "===== insertRole(...) -> false");
+        Assert.isTrue(service.insertRole(newEntity, roles)
+                , "===== insertRole(...) -> false");
+        Assert.isTrue(service.insertRole(resources, roles)
+                , "===== insertRole(...) -> false");
+
+        final User newUser = getUserForTest();
+        final User newUser1 = getUserForTest(1);
+        User newUser2 = getUserForTest(1);
+
+        Assert.isTrue(userService.insert(newUser)
+                , "===== 添加测试数据 -> false");
+
+        Assert.isTrue(userService.insert(newUser1)
+                , "===== 添加测试数据 -> false");
+
+        Assert.isTrue(userService.insert(newUser2)
+                , "===== 添加测试数据 -> false");
+
+        if (newUser2.isEmpty() && newUser2.equals(newUser1)) {
+            newUser2 = newUser1;
+        }
+
+        final SecurityUser newSecurityUser = getSecurityUserForTest(newUser);
+        final SecurityUser newSecurityUser1 = getSecurityUserForTest(newUser1);
+        final SecurityUser newSecurityUser2 = getSecurityUserForTest(newUser2);
+
+        Assert.isTrue(securityUserService.insert(newSecurityUser)
+                , "===== 添加测试数据 -> false");
+
+        Assert.isTrue(securityUserService.insert(newSecurityUser1)
+                , "===== 添加测试数据 -> false");
+
+        Assert.isTrue(securityUserService.insert(newSecurityUser2)
+                , "===== 添加测试数据 -> false");
+
+        final Set<SecurityUser> users = new HashSet<>(2);
+        if (!newSecurityUser.isEmpty()) {
+            users.add(newSecurityUser);
+        }
+        if (!newSecurityUser1.isEmpty()) {
+            users.add(newSecurityUser1);
+        }
+        if (!newSecurityUser2.isEmpty()) {
+            users.add(newSecurityUser2);
+        }
+
+        Assert.isTrue(securityUserService.insertRole(newSecurityUser, newRole)
+                , "===== insertRole(...) -> false");
+        Assert.isTrue(securityUserService.insertRole(users, newRole)
+                , "===== insertRole(...) -> false");
+        Assert.isTrue(securityUserService.insertRole(newSecurityUser, roles)
+                , "===== insertRole(...) -> false");
+        Assert.isTrue(securityUserService.insertRole(users, roles)
+                , "===== insertRole(...) -> false");
+
+        //===== selectAllUrlRoleMap()
+        result = service.selectAllUrlRoleMap();
+
+        final Set<String> rolesIds = new HashSet<>(roles.size());
+        for (SecurityRole role : roles) {
+            rolesIds.add(role.id());
+        }
+
+        for (String[] url : urls) {
+            boolean exist = false;
+            for (Map.Entry<String[], List<Object>> entry : result.entrySet()) {
+                if (Arrays.equals(url, entry.getKey())) {
+                    if (null != entry.getValue()
+                            && entry.getValue().containsAll(rolesIds)) {
+                        exist = true;
+                        break;
+                    }
+                }
+            }
+            Assert.isTrue(exist, "===== selectAllUrlRoleMap() <- 非预期结果!");
+        }
+
+        Assert.isTrue(!urls.isEmpty()
+                , "===== The result is empty!");
     }
 
     @Test
@@ -159,8 +388,7 @@ public class SecurityResourceServiceTests {
 
     @Test
     @Transactional
-    public void selectRoleByCode()
-            throws JsonProcessingException {
+    public void selectRoleByCode() {
         //=== 添加测试数据
         final SecurityResource newEntity = getEntityForTest();
         final SecurityResource newEntity1 = getEntityForTest(1);
@@ -279,9 +507,9 @@ public class SecurityResourceServiceTests {
         Assert.isTrue(!newEntity2.isEmpty() || newEntity2.equals(newEntity1)
                 , "===== 添加测试数据 -> 无效的 Entity");
 
-        final String newUrl = getUrlForTest();
-        final String newUrl1 = getUrlForTest(1);
-        final String newUrl2 = getUrlForTest(1);
+        final String[] newUrl = new String[] {getClientId(), getUrlForTest()};
+        final String[] newUrl1 = new String[] {getClientId(), getUrlForTest(1)};
+        final String[] newUrl2 = new String[] {getClientId(), getUrlForTest(1)};
 
         final Set<SecurityResource> resources = new HashSet<>(1);
         if (!newEntity.isEmpty()) {
@@ -294,14 +522,17 @@ public class SecurityResourceServiceTests {
             resources.add(newEntity2);
         }
 
-        final Set<String> urls = new HashSet<>(3);
-        if (SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(newUrl)) {
+        final ContainArrayHashSet<String> urls = new ContainArrayHashSet<>(3);
+        if (SecurityResourceUrl.Validator.RESOURCE_URL.clientId(newUrl[0])
+                && SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(newUrl[1])) {
             urls.add(newUrl);
         }
-        if (SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(newUrl1)) {
+        if (SecurityResourceUrl.Validator.RESOURCE_URL.clientId(newUrl1[0])
+                && SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(newUrl1[1])) {
             urls.add(newUrl1);
         }
-        if (SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(newUrl2)) {
+        if (SecurityResourceUrl.Validator.RESOURCE_URL.clientId(newUrl2[0])
+                && SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(newUrl2[1])) {
             urls.add(newUrl2);
         }
 
@@ -471,9 +702,9 @@ public class SecurityResourceServiceTests {
                 , "===== 添加测试数据 -> 无效的 Entity");
 
         //===== insertUrl(...)
-        final String newUrl = getUrlForTest();
-        final String newUrl1 = getUrlForTest(1);
-        final String newUrl2 = getUrlForTest(1);
+        final String[] newUrl = new String[] {getClientId(), getUrlForTest()};
+        final String[] newUrl1 = new String[] {getClientId(), getUrlForTest(1)};
+        final String[] newUrl2 = new String[] {getClientId(), getUrlForTest(1)};
 
         final Set<SecurityResource> resources = new HashSet<>(1);
         if (!newEntity.isEmpty()) {
@@ -486,14 +717,17 @@ public class SecurityResourceServiceTests {
             resources.add(newEntity2);
         }
 
-        final Set<String> urls = new HashSet<>(3);
-        if (SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(newUrl)) {
+        final ContainArrayHashSet<String> urls = new ContainArrayHashSet<>(3);
+        if (SecurityResourceUrl.Validator.RESOURCE_URL.clientId(newUrl[0])
+                && SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(newUrl[1])) {
             urls.add(newUrl);
         }
-        if (SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(newUrl1)) {
+        if (SecurityResourceUrl.Validator.RESOURCE_URL.clientId(newUrl1[0])
+                && SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(newUrl1[1])) {
             urls.add(newUrl1);
         }
-        if (SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(newUrl2)) {
+        if (SecurityResourceUrl.Validator.RESOURCE_URL.clientId(newUrl2[0])
+                && SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(newUrl2[1])) {
             urls.add(newUrl2);
         }
 
@@ -715,9 +949,9 @@ public class SecurityResourceServiceTests {
                 , "===== 添加测试数据 -> 无效的 Entity");
 
         //===== insertUrl(...)
-        final String newUrl = getUrlForTest();
-        final String newUrl1 = getUrlForTest(1);
-        final String newUrl2 = getUrlForTest(1);
+        final String[] newUrl = new String[] {getClientId(), getUrlForTest()};
+        final String[] newUrl1 = new String[] {getClientId(), getUrlForTest(1)};
+        final String[] newUrl2 = new String[] {getClientId(), getUrlForTest(1)};
 
         final Set<SecurityResource> resources = new HashSet<>(1);
         if (!newEntity.isEmpty()) {
@@ -730,14 +964,17 @@ public class SecurityResourceServiceTests {
             resources.add(newEntity2);
         }
 
-        final Set<String> urls = new HashSet<>(3);
-        if (SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(newUrl)) {
+        final ContainArrayHashSet<String> urls = new ContainArrayHashSet<>(3);
+        if (SecurityResourceUrl.Validator.RESOURCE_URL.clientId(newUrl[0])
+                && SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(newUrl[1])) {
             urls.add(newUrl);
         }
-        if (SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(newUrl1)) {
+        if (SecurityResourceUrl.Validator.RESOURCE_URL.clientId(newUrl1[0])
+                && SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(newUrl1[1])) {
             urls.add(newUrl1);
         }
-        if (SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(newUrl2)) {
+        if (SecurityResourceUrl.Validator.RESOURCE_URL.clientId(newUrl2[0])
+                && SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(newUrl2[1])) {
             urls.add(newUrl2);
         }
 

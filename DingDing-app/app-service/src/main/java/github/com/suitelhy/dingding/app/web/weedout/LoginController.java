@@ -69,6 +69,7 @@ public class LoginController {
         final String ip = NetUtil.getIpAddress(request);
     	/*final UserDto user = userTask.selectUserByUsername(username);*/
         final UserDto user = UserDto.Factory.USER_DTO.create(currentUser);
+
         if (null == user || user.isEmpty()) {
             attributes.addFlashAttribute("error", defined.LOGIN_USERID_ERROR);
             // 重定向 -> 登入 - 页面

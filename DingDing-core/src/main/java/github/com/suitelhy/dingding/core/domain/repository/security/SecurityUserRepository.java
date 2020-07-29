@@ -107,13 +107,15 @@ public interface SecurityUserRepository
      * @return
      */
     @Query(nativeQuery = true
-            , value = "select sru.url_path as url_path "
+            , value = "select sru.client_id as client_id "
+                    + ", sru.url_path as url_path "
                     + "from SECURITY_RESOURCE_URL sru "
                     + "left join SECURITY_ROLE_RESOURCE rr on rr.resource_code = sru.code "
                     + "left join SECURITY_USER_ROLE ur on ur.role_code = rr.role_code "
-                    + "where ur.username = :username "
-                    + "group by url_path")
-    List<Map<String, Object>> selectURLByUsername(@NotNull @Param("username") String username);
+                    + "where ur.username = :username and sru.client_id = :clientId "
+                    + "group by url_path ")
+    List<Map<String, Object>> selectURLByUsernameAndClientId(@NotNull @Param("username") String username
+            , @NotNull @Param("clientId") String clientId);
 
     //===== Insert Data =====//
 

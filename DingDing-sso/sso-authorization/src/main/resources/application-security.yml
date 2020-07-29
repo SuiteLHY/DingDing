@@ -1,6 +1,13 @@
 dingding:
   security:
+    client-id: dingding1
+    client-secret: dingding_secrect1
     signing-key: dingding
+  sso:
+    auth-server:
+      root: http://127.0.0.1:9999/authorization-server
+      endpoint:
+        check_token: ${dingding.sso.auth-server.root}/oauth/check_token
 
 logging:
   level:
@@ -11,14 +18,17 @@ logging:
         security: DEBUG
 
 spring:
-  security:
-    oauth2:
-      # 资源服务器配置: 详见 <class>org.springframework.boot.autoconfigure.security.oauth2.authorization.OAuth2ResourceServerProperties</class>
-      resourceserver:
-        jwt:
-          jwk-set-uri: http://127.0.0.1:9999/authorization-server/oauth/token_key
-#          issuer-uri: http://127.0.0.1:9999/authorization-server
+  redis:
+    host: 127.0.0.1
+    port: 6379
+#  security:
+#    oauth2:
+#      # 资源服务器配置: 详见 <class>org.springframework.boot.autoconfigure.security.oauth2.authorization.OAuth2ResourceServerProperties</class>
+#      resourceserver:
+##        jwt:
+##          jwk-set-uri: ${dingding.sso.auth-server.root}/oauth/token_key
+###          issuer-uri: http://127.0.0.1:9999/authorization-server
 #        opaquetoken:
 #          client-id: dingding1
 #          client-secret: dingding_secrect1
-#          introspection-uri: http://127.0.0.1:9999/authorization-server/oauth/check_token
+#          introspection-uri: ${dingding.sso.auth-server.root}/oauth/check_token

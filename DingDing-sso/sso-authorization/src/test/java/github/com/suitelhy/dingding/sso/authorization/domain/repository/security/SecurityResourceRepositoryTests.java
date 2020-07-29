@@ -12,6 +12,7 @@ import github.com.suitelhy.dingding.core.infrastructure.domain.vo.Resource;
 import github.com.suitelhy.dingding.core.infrastructure.util.CalendarController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -37,6 +38,13 @@ public class SecurityResourceRepositoryTests {
 
     @Autowired
     private SecurityResourceUrlRepository securityResourceUrlRepository;
+
+    @Value("${dingding.security.client-id}")
+    private String clientId;
+
+    private String getClientId() {
+        return this.clientId;
+    }
 
     @NotNull
     private SecurityResource getEntityForTest() {
@@ -252,7 +260,7 @@ public class SecurityResourceRepositoryTests {
                 , "===== 添加测试数据 -> 无效的 Entity");
 
         newSecurityResourceUrl = securityResourceUrlRepository.saveAndFlush(
-                SecurityResourceUrl.Factory.RESOURCE_URL.create(newEntity.getCode(), newUrl)
+                SecurityResourceUrl.Factory.RESOURCE_URL.create(newEntity.getCode(), getClientId(), newUrl)
         );
 
         Assert.isTrue(!newSecurityResourceUrl.isEmpty()

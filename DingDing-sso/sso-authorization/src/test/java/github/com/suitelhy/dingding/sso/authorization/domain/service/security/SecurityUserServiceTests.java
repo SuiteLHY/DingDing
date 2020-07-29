@@ -11,6 +11,7 @@ import github.com.suitelhy.dingding.core.domain.service.UserService;
 import github.com.suitelhy.dingding.core.domain.service.security.SecurityResourceService;
 import github.com.suitelhy.dingding.core.domain.service.security.SecurityRoleService;
 import github.com.suitelhy.dingding.core.domain.service.security.SecurityUserService;
+import github.com.suitelhy.dingding.core.infrastructure.domain.util.ContainArrayHashSet;
 import github.com.suitelhy.dingding.core.infrastructure.domain.util.VoUtil;
 import github.com.suitelhy.dingding.core.infrastructure.domain.vo.Account;
 import github.com.suitelhy.dingding.core.infrastructure.domain.vo.Human;
@@ -19,6 +20,7 @@ import github.com.suitelhy.dingding.core.infrastructure.domain.vo.security.Secur
 import github.com.suitelhy.dingding.core.infrastructure.util.CalendarController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.lang.Nullable;
@@ -55,6 +57,13 @@ public class SecurityUserServiceTests {
 
     @Autowired
     private UserService userService;
+
+    @Value("${dingding.security.client-id}")
+    private String clientId;
+
+    private String getClientId() {
+        return this.clientId;
+    }
 
     @NotNull
     private SecurityUser getEntityForTest() {
@@ -545,18 +554,21 @@ public class SecurityUserServiceTests {
         }
         System.out.println("===> resources:\n" + resources);
 
-        final String newUrl = getUrlForTest();
-        final String newUrl1 = getUrlForTest(1);
-        final String newUrl2 = getUrlForTest(1);
+        final String newUrl[] = new String[] {getClientId(), getUrlForTest()};
+        final String newUrl1[] = new String[] {getClientId(), getUrlForTest(1)};
+        final String newUrl2[] = new String[] {getClientId(), getUrlForTest(1)};
 
-        final Set<String> urls = new HashSet<>(3);
-        if (SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(newUrl)) {
+        final ContainArrayHashSet<String> urls = new ContainArrayHashSet<>(3);
+        if (SecurityResourceUrl.Validator.RESOURCE_URL.clientId(newUrl[0])
+                && SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(newUrl[1])) {
             urls.add(newUrl);
         }
-        if (SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(newUrl1)) {
+        if (SecurityResourceUrl.Validator.RESOURCE_URL.clientId(newUrl1[0])
+                && SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(newUrl1[1])) {
             urls.add(newUrl1);
         }
-        if (SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(newUrl2)) {
+        if (SecurityResourceUrl.Validator.RESOURCE_URL.clientId(newUrl2[0])
+                && SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(newUrl2[1])) {
             urls.add(newUrl2);
         }
 
@@ -581,26 +593,50 @@ public class SecurityUserServiceTests {
         Assert.isTrue(resourceService.insertUrl(resources, urls)
                 , "===== insertUrl(...) -> false");
 
-        //===== selectUrlPathByUsername(..)
-        int existedUrlPathNum = 0;
+        //===== selectUrlPathByUsernameAndClientId(..)
+        /*int existedUrlPathNum = 0;*/
 
         for (SecurityUser each : users) {
-            final List<Map<String, Object>> urlPathDataSet = service.selectUrlPathByUsername(each.getUsername());
+            final List<Map<String, Object>> urlInfoDataSet = service.selectUrlPathByUsernameAndClientId(each.getUsername()
+                    , getClientId());
 
-            Assert.isTrue(null != urlPathDataSet && !urlPathDataSet.isEmpty()
+            Assert.isTrue(null != urlInfoDataSet && !urlInfoDataSet.isEmpty()
                     , "===== 校验结果 <- 非预期结果!");
 
             System.err.println("=> 当前用户" + each
-                    + "关联的 URL 路径:" + toJSONString.writeValueAsString(urlPathDataSet));
+                    + "关联的 URL 路径:" + toJSONString.writeValueAsString(urlInfoDataSet));
 
-            existedUrlPathNum += urlPathDataSet.size();
+            ContainArrayHashSet<String> urlInfoSet = new ContainArrayHashSet<>(urlInfoDataSet.size());
+            for (Map<String, Object> urlInfo : urlInfoDataSet) {
+                final String clientId = (String) urlInfo.get("client_id");
+                final String urlPath = (String) urlInfo.get("url_path");
+
+                Assert.isTrue(SecurityResourceUrl.Validator.RESOURCE_URL.clientId(clientId)
+                            && SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(urlPath)
+                        , "===== selectUrlPathByUsername(..) -> {clientId:"
+                                .concat(clientId)
+                                .concat(", urlPath:")
+                                .concat(urlPath)
+                                .concat("} <- 操作失败, 非预期结果!"));
+
+                urlInfoSet.add(new String[] {clientId, urlPath});
+            }
+
+            Assert.isTrue(urlInfoSet.containsAll(urls)
+                    , "===== selectUrlPathByUsername(..) - {urlInfoSet:"
+                            .concat(toJSONString.writeValueAsString(urlInfoSet))
+                            .concat(", urls:")
+                            .concat(toJSONString.writeValueAsString(urls))
+                            .concat("} <- 操作失败, 非预期结果集!"));
+
+            /*existedUrlPathNum += urlInfoDataSet.size();*/
         }
 
-        Assert.isTrue(existedUrlPathNum == 2 * 2
+        /*Assert.isTrue(existedUrlPathNum == 2 * 2
                         || existedUrlPathNum == 2 * 3
                 , "===== selectUrlPathByUsername(..) -> "
                         .concat(Integer.toString(existedUrlPathNum))
-                        .concat(" <- 操作失败, 非预期结果!"));
+                        .concat(" <- 操作失败, 非预期结果!"));*/
     }
 
     @Test

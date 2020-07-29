@@ -63,21 +63,25 @@ public interface SecurityResourceUrlRepository
     /**
      * 查询所有
      *
+     * @param clientId      资源服务器 ID
      * @param urlPath       资源对应的 URL (Path部分)
      * @return
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED)
-    List<SecurityResourceUrl> findAllByUrlPath(@NotNull String urlPath);
+    List<SecurityResourceUrl> findAllByClientIdAndUrlPath(@NotNull String clientId, @NotNull String urlPath);
 
     /**
      * 查询所有
      *
+     * @param clientId      资源服务器 ID
      * @param urlPath       资源对应的 URL (Path部分)
      * @param pageable      {@link org.springframework.data.domain.Pageable}
      * @return {@link Page}
      */
-    Page<SecurityResourceUrl> findAllByUrlPath(@NotNull String urlPath, Pageable pageable);
+    Page<SecurityResourceUrl> findAllByClientIdAndUrlPath(@NotNull String clientId
+            , @NotNull String urlPath
+            , Pageable pageable);
 
     //===== Insert Data =====//
 
@@ -120,24 +124,26 @@ public interface SecurityResourceUrlRepository
     /**
      * 删除
      *
+     * @param clientId      资源服务器 ID
      * @param urlPath       资源对应的 URL (Path部分)
      * @return
      */
     @Modifying
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED)
-    long removeByUrlPath(@NotNull String urlPath);
+    long removeByClientIdAndUrlPath(@NotNull String clientId, @NotNull String urlPath);
 
     /**
      * 删除
      *
      * @param resourceCode  资源编码
+     * @param clientId      资源服务器 ID
      * @param urlPath       资源对应的 URL (Path部分)
      * @return
      */
     @Modifying
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED)
-    long removeByCodeAndUrlPath(@NotNull String resourceCode, @NotNull String urlPath);
+    long removeByCodeAndClientIdAndUrlPath(@NotNull String resourceCode, @NotNull String clientId, @NotNull String urlPath);
 
 }

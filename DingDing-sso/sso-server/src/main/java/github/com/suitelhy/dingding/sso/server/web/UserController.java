@@ -65,12 +65,12 @@ public class UserController {
     public /*UserDto*/String getUser(@AuthenticationPrincipal SecurityUser securityUser, Principal principal) {
         try {
 //            return toJSONString.writeValueAsString(/*securityUser.getUserDto()*/principal);
-            BasicUserDto userDto = securityUser.getUserInfo();
-            Map<String, String> userInfo = new LinkedHashMap<>();
-            userInfo.put("username", userDto.getUsername());
-            userInfo.put("nickname", userDto.getNickname());
-            return toJSONString.writeValueAsString(userInfo);
-        } catch (JsonProcessingException e) {
+            /*Map<String, String> userInfo = new LinkedHashMap<>(1);
+            userInfo.put("username", securityUser.getUsername());
+
+            return toJSONString.writeValueAsString(userInfo);*/
+            return securityUser.toString();
+        } catch (Exception e) {
             log.error("UserController#getUser", e);
             e.printStackTrace();
         }

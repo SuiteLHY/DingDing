@@ -29,6 +29,7 @@ public class WebchatAuthenticationSuccessHandler
             , HttpServletResponse response
             , Authentication authentication) throws IOException, ServletException {
         log.info("登录成功");
+
         response.setContentType("application/json;charset=UTF-8");
         response.getWriter().write(objectMapper.writeValueAsString(authentication));
     }

@@ -46,7 +46,6 @@ dingding:
 
 # Spring 生态 - 配置
 spring:
-  data:
   ## 开发环境关闭 Thymeleaf 的缓存
   thymeleaf:
     cache: false

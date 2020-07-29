@@ -1,6 +1,7 @@
 package github.com.suitelhy.dingding.sso.authorization.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import github.com.suitelhy.dingding.core.infrastructure.web.SecurityUser;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -8,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,11 +47,14 @@ public class UserController {
             , paramType = "query"
             , required = true)
     })
-    @GetMapping("/login")
-    public String getUser(/*Principal principal, */@AuthenticationPrincipal Authentication authentication) {
+    @GetMapping("/userInfo")
+    public String getUser(@AuthenticationPrincipal /*Authentication*/OAuth2Authentication authentication) {
         try {
-            /*return toJSONString.writeValueAsString(principal);*/
-            return "{" + authentication.getName() + "}";
+            Object oAuth2Details = authentication.getUserAuthentication().getDetails();
+
+            return null != oAuth2Details
+                    ? oAuth2Details.toString()
+                    : "{null}";
         } catch (Exception e) {
             log.error("UserController#getUser", e);
             e.printStackTrace();

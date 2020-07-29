@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,9 +25,14 @@ import org.springframework.security.oauth2.provider.approval.InMemoryApprovalSto
 import org.springframework.security.oauth2.provider.approval.UserApprovalHandler;
 import org.springframework.security.oauth2.provider.request.DefaultOAuth2RequestFactory;
 import org.springframework.security.oauth2.provider.token.AccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import org.springframework.security.oauth2.provider.token.store.redis.JdkSerializationStrategy;
+import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 /**
  * 认证服务器配置
@@ -46,9 +53,9 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 public class SsoAuthorizationServerConfig
 		extends AuthorizationServerConfigurerAdapter {
 
-	@Autowired
+	/*@Autowired
 	@Qualifier("jwtAccessTokenConverter")
-	private AccessTokenConverter accessTokenConverter;
+	private AccessTokenConverter accessTokenConverter;*/
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
@@ -60,7 +67,7 @@ public class SsoAuthorizationServerConfig
 	private PasswordEncoder passwordEncoder;
 
 	@Autowired
-	@Qualifier("jwtTokenStore")
+	/*@Qualifier("jwtTokenStore")*/
 	private TokenStore tokenStore;
 
     @Autowired
@@ -91,8 +98,8 @@ public class SsoAuthorizationServerConfig
 						, "http://127.0.0.1:8080/client1/index.html")
 				.scopes("all") // 允许的授权范围
 				.secret(passwordEncoder.encode("dingding_secret1"))// 客户端密码 (应该是加密后的密文)
-				.accessTokenValiditySeconds(600)
-				.refreshTokenValiditySeconds(6000)
+				.accessTokenValiditySeconds(180)
+				.refreshTokenValiditySeconds(3600 * 24 * 5)
 				.and()
 				//=== 客户端2 ===//
 				.withClient("dingding2")
@@ -112,10 +119,11 @@ public class SsoAuthorizationServerConfig
 	 * @throws Exception
 	 */
 	@Override
-	public void configure(AuthorizationServerEndpointsConfigurer endpoints)
-			throws Exception {
+	public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
+		/*endpoints
+				.allowedTokenEndpointRequestMethods(HttpMethod.GET, HttpMethod.POST);*/
 		endpoints
-				.accessTokenConverter(this.accessTokenConverter) // 设置令牌转换器
+				/*.accessTokenConverter(this.accessTokenConverter) // 设置令牌转换器*/
 				.authenticationManager(this.authenticationManager)
 				.tokenStore(this.tokenStore)// 设置令牌存储
 				/*.userApprovalHandler(userApprovalHandler())*/
@@ -129,9 +137,9 @@ public class SsoAuthorizationServerConfig
 	 * @throws Exception
 	 */
 	@Override
-	public void configure(AuthorizationServerSecurityConfigurer security)
-			throws Exception {
-		security.allowFormAuthenticationForClients()
+	public void configure(AuthorizationServerSecurityConfigurer security)  {
+		security
+				.allowFormAuthenticationForClients()
 				.checkTokenAccess("permitAll()")// <a href="https://stackoverflow.com/questions/26750999/spring-security-oauth2-check-token-endpoint">Spring Security OAuth2 check_token端点</a>
 				.tokenKeyAccess("isAuthenticated()")/* 设置: 获取令牌的校验密钥时, 需要经过身份认证 */;
 	}
@@ -139,45 +147,88 @@ public class SsoAuthorizationServerConfig
 }
 
 /**
- * Token 存储配置
+ * Token 配置
  *
- * @Description JWT.
+ * @Description 弃用 JWT.
+ *-> 当前情景不适合 JWT, 继续使用 Session + Cookie 的 Token 认证方式.
+ *-> {@link <a href="https://juejin.im/entry/59748def518825592c4f9ac0">不要用 JWT 来做 Web 应用的会话管理 - 后端 - 掘金</a>}
+ *
+ * @Reference
+ *-> {@link <a href="https://juejin.im/post/5a45aa44f265da43133d770e">Spring Security TokenStore实现3+1详解 - 掘金</a>}
+ *
  * @author Suite
  */
 @Configuration
 class TokenStoreAccess {
 
-	@Value("${dingding.security.signing-key}")
-	private String signingKey;
+	/*@Value("${dingding.security.signing-key}")
+	private String signingKey;*/
+
+//	/**
+//	 * JWT 的 token 存储对象
+//	 *
+//	 * @Description 一个具有解码 JWT 并验证其签名的唯一能力的 JwkTokenStore.
+//	 * @return
+//	 */
+//	@Bean
+//	@Primary
+//	public TokenStore jwtTokenStore() {
+//		/*return new JwtTokenStore(jwtAccessTokenConverter());*/
+//		JwtTokenStore tokenStore = new JwtTokenStore(jwtAccessTokenConverter());
+//		/*tokenStore.setApprovalStore(approvalStore());*/
+//		return tokenStore;
+//	}
+//
+//	/**
+//	 * JWT 访问 token 转换器
+//	 *
+//	 * @Description 基于 JWT 的 access_token 转换器; 在JwtTokenStore实例中使用它. 用于发行 JWT.
+//	 * @return
+//	 */
+//	@Bean
+//	@Primary
+//	public JwtAccessTokenConverter jwtAccessTokenConverter() {
+//		JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+//		// 签名用的密钥; 资源服务器需要配置此选项方能解密 JWT 的 token
+//		converter.setSigningKey(signingKey);
+//		return converter;
+//	}
 
 	/**
-	 * JWT 的 token 存储对象
-	 *
-	 * @Description 一个具有解码 JWT 并验证其签名的唯一能力的 JwkTokenStore.
-	 * @return
+	 * @Description Redis 连接工厂.
 	 */
+	@Autowired
+	public RedisConnectionFactory redisConnectionFactory;
+
 	@Bean
 	@Primary
-	public TokenStore jwtTokenStore() {
-		/*return new JwtTokenStore(jwtAccessTokenConverter());*/
-		JwtTokenStore tokenStore = new JwtTokenStore(jwtAccessTokenConverter());
-		/*tokenStore.setApprovalStore(approvalStore());*/
-		return tokenStore;
+	public TokenStore tokenStore() {
+		// 使用 redis 存储 token
+		final RedisTokenStore redisTokenStore = new RedisTokenStore(redisConnectionFactory);
+
+		// 设置 redis token 存储中的前缀
+		redisTokenStore.setPrefix("auth-token:");
+
+		return redisTokenStore;
+		/*return new InMemoryTokenStore();*/
 	}
 
-	/**
-	 * JWT 访问 token 转换器
-	 *
-	 * @Description 基于 JWT 的 access_token 转换器; 在JwtTokenStore实例中使用它. 用于发行 JWT.
-	 * @return
-	 */
 	@Bean
-	@Primary
-	public JwtAccessTokenConverter jwtAccessTokenConverter() {
-		JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-		// 签名用的密钥; 资源服务器需要配置此选项方能解密 JWT 的 token
-		converter.setSigningKey(signingKey);
-		return converter;
+	public DefaultTokenServices tokenServices() {
+		DefaultTokenServices tokenServices = new DefaultTokenServices();
+
+		// 配置token存储
+		tokenServices.setTokenStore(this.tokenStore());
+		// 开启支持refresh_token，此处如果之前没有配置，启动服务后再配置重启服务，可能会导致不返回token的问题，解决方式：清除redis对应token存储
+		tokenServices.setSupportRefreshToken(true);
+		// 复用refresh_token
+		tokenServices.setReuseRefreshToken(true);
+		// token有效期，设置12小时
+		tokenServices.setAccessTokenValiditySeconds(/*12 * 60 * 60*/180);
+		// refresh_token有效期，设置五天
+		tokenServices.setRefreshTokenValiditySeconds(5 * 24 * 60 * 60);
+
+		return tokenServices;
 	}
 
 }

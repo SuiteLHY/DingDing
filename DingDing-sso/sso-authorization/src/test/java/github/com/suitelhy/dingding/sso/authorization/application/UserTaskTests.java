@@ -4,19 +4,29 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import github.com.suitelhy.dingding.core.application.task.UserTask;
 import github.com.suitelhy.dingding.core.domain.entity.User;
 import github.com.suitelhy.dingding.core.domain.service.security.SecurityUserService;
+import github.com.suitelhy.dingding.core.domain.service.security.impl.DingDingUserDetailsService;
 import github.com.suitelhy.dingding.core.infrastructure.application.dto.BasicUserDto;
 import github.com.suitelhy.dingding.core.infrastructure.application.dto.UserDto;
+import github.com.suitelhy.dingding.core.infrastructure.domain.vo.Account;
 import github.com.suitelhy.dingding.core.infrastructure.util.CalendarController;
 import github.com.suitelhy.dingding.core.infrastructure.web.SecurityUser;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.lang.Nullable;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.validation.constraints.NotNull;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 @SpringBootTest
 public class UserTaskTests {
@@ -33,6 +43,10 @@ public class UserTaskTests {
     @Autowired
     private SecurityUserService securityUserService;
 
+    @Autowired
+    @Qualifier("dingDingUserDetailsService")
+    private DingDingUserDetailsService userDetailsService;
+
     @NotNull
     private SecurityUser getEntityForTest() {
         /*final User newUser = User.Factory.USER.update(id()
@@ -46,10 +60,12 @@ public class UserTaskTests {
                 , null
                 , ("测试" + new CalendarController().toString().replaceAll("[-:\\s]", ""))
                 , HumanVo.Sex.MALE);*/
-        final UserDto newUser = userTask.selectUserByUserid(id());
-        return new SecurityUser(newUser.dtoId(username(), password())
-                , passwordEncoder
-                , securityUserService);
+        return (SecurityUser) userDetailsService.loadUserByUsername(username());
+    }
+
+    @Nullable
+    private BasicUserDto getUserInfo(@NotNull SecurityUser user) {
+        return userDetailsService.getUserInfo(user);
     }
 
     @NotNull
@@ -94,7 +110,7 @@ public class UserTaskTests {
 
         //=== 添加测试数据
         final SecurityUser newEntity = getEntityForTest();
-        final BasicUserDto newUserDto = newEntity.getUserInfo();
+        final BasicUserDto newUserDto = getUserInfo(newEntity);
 
         Assert.notNull(newEntity
                 , "===== getEntityForTest() -> null");
@@ -126,7 +142,7 @@ public class UserTaskTests {
     @Transactional
     public void insert() {
         final SecurityUser newUser = getEntityForTest();
-        final BasicUserDto newUserDto = newUser.getUserInfo();
+        final BasicUserDto newUserDto = getUserInfo(newUser);
 
         Assert.notNull(newUser
                 , "User.Factory.USER -> create(..) -> null");
@@ -142,7 +158,7 @@ public class UserTaskTests {
     public void update() {
         //=== 添加测试数据
         final SecurityUser newEntity = getEntityForTest();
-        final BasicUserDto newUserDto = newEntity.getUserInfo();
+        final BasicUserDto newUserDto = getUserInfo(newEntity);
 
         Assert.notNull(newEntity
                 , "===== getEntityForTest() -> null");
@@ -173,7 +189,7 @@ public class UserTaskTests {
     public void delete() {
         //=== 添加测试数据
         final SecurityUser newSecurityUser = getEntityForTest();
-        final BasicUserDto newUserDto = newSecurityUser.getUserInfo();
+        final BasicUserDto newUserDto = getUserInfo(newSecurityUser);
 
         Assert.isTrue(userTask.insert(newUserDto
                     , password()

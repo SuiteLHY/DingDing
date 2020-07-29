@@ -13,6 +13,7 @@ import github.com.suitelhy.dingding.core.infrastructure.domain.vo.Resource;
 import github.com.suitelhy.dingding.core.infrastructure.util.CalendarController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -46,6 +47,13 @@ public class SecurityRoleRepositoryTests {
 
     @Autowired
     private SecurityResourceService securityResourceService;
+
+    @Value("${dingding.security.client-id}")
+    private String clientId;
+
+    private String getClientId() {
+        return this.clientId;
+    }
 
     @NotNull
     private SecurityRole getEntityForTest() {
@@ -270,7 +278,9 @@ public class SecurityRoleRepositoryTests {
                 , "===== 添加测试数据 -> {新增 角色 - 资源 关联} 操作失败!");
 
         final SecurityResourceUrl newResourceUrl = securityResourceUrlRepository.saveAndFlush(
-                SecurityResourceUrl.Factory.RESOURCE_URL.create(newResource.getCode(), getUrlForTest())
+                SecurityResourceUrl.Factory.RESOURCE_URL.create(newResource.getCode()
+                        , getClientId()
+                        , getUrlForTest())
         );
         Assert.isTrue(!newResourceUrl.isEmpty()
                 , "===== 添加测试数据 -> {新增资源 - URL 关联} 操作失败!");

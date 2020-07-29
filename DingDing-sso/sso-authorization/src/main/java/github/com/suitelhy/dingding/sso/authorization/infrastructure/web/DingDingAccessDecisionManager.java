@@ -25,7 +25,8 @@ import java.util.Collection;
  *->  框架默认实现是 {@link UnanimousBased}.
  *
  * @Reference
- *->  {@link <a href="https://blog.csdn.net/zimou5581/article/details/89511381">SpringSecurity实现自定义登录认证、权限验证、鉴权_紫眸的博客-CSDN博客_spring security 自定义token</a>}
+ *->  {@link <a href="https://www.shuzhiduo.com/A/qVdeW1wrJP/">[权限管理系统篇] (五)-Spring security（授权过程分析）</a>}
+ *->  {@link <a href="https://github.com/ygsama/ipa/blob/master/oauth2-server/src/main/java/io/github/ygsama/oauth2server/config/LoginSecurityInterceptor.java">ipa/LoginSecurityInterceptor.java at master · ygsama/ipa</a>}
  *->  {@link AccessDecisionManager}
  *->  {@link DingDingAccessSecurityMetadataSource}
  */
@@ -47,14 +48,13 @@ public class DingDingAccessDecisionManager
             , @NotNull Collection<ConfigAttribute> configAttributes)
             throws AccessDeniedException, InsufficientAuthenticationException {
 
-        log.info("[资源权限]: {}", configAttributes);
-        log.info("[用户权限]: {}", authentication.getAuthorities());
+//        log.info("[资源权限]: {}", configAttributes);
+//        log.info("[用户权限]: {}", authentication.getAuthorities());
 
         // 获取已定义的资源权限配置
         for (ConfigAttribute resourceAttr : configAttributes) {
             // 资源的权限
-            String resourceRole = /*"ROLE_"
-                    .concat(resourceAttr.getAttribute())*/resourceAttr.getAttribute();
+            final String resourceRole = resourceAttr.getAttribute();
 
             // 用户的权限
             for (GrantedAuthority userAuth : authentication.getAuthorities()) {

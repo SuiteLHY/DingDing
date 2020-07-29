@@ -3,21 +3,32 @@ package github.com.suitelhy.dingding.sso.authorization.application;
 import github.com.suitelhy.dingding.core.application.task.LogTask;
 import github.com.suitelhy.dingding.core.application.task.UserTask;
 import github.com.suitelhy.dingding.core.domain.entity.Log;
+import github.com.suitelhy.dingding.core.domain.entity.User;
 import github.com.suitelhy.dingding.core.domain.service.security.SecurityUserService;
+import github.com.suitelhy.dingding.core.domain.service.security.impl.DingDingUserDetailsService;
 import github.com.suitelhy.dingding.core.infrastructure.application.dto.BasicUserDto;
 import github.com.suitelhy.dingding.core.infrastructure.application.dto.UserDto;
+import github.com.suitelhy.dingding.core.infrastructure.domain.vo.Account;
 import github.com.suitelhy.dingding.core.infrastructure.domain.vo.HandleType;
 import github.com.suitelhy.dingding.core.infrastructure.util.CalendarController;
 import github.com.suitelhy.dingding.core.infrastructure.web.SecurityUser;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.lang.Nullable;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.validation.constraints.NotNull;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 @SpringBootTest
 public class LogTaskTests {
@@ -34,12 +45,34 @@ public class LogTaskTests {
     @Autowired
     private SecurityUserService securityUserService;
 
+    @Autowired
+    @Qualifier("dingDingUserDetailsService")
+    private DingDingUserDetailsService userDetailsService;
+
     @NotNull
     private SecurityUser getUserForTest() {
-        final UserDto newUser = userTask.selectUserByUserid(id());
-        return new SecurityUser(newUser.dtoId(username(), password())
-                , passwordEncoder
-                , securityUserService);
+        /*final UserDto newUser = userTask.selectUserByUserid(id());
+        final User user = newUser.dtoId(username(), password());
+        final Collection<GrantedAuthority> authorities = new HashSet<>(1);
+
+        final List<Map<String, Object>> roleMapList = securityUserService.selectRoleByUsername(user.getUsername());
+        for (Map<String, Object> roleMap : roleMapList) {
+            authorities.add(new SimpleGrantedAuthority((String) roleMap.get("role_code")));
+        }
+
+        return new SecurityUser(user.getUsername()
+                , passwordEncoder.encode(user.getPassword())
+                , authorities
+                , !Account.StatusVo.DESTRUCTION.equals(user.getStatus())
+                , !Account.StatusVo.LOCKED.equals(user.getStatus())
+                , Account.StatusVo.NORMAL.equals(user.getStatus())
+                , !user.isEmpty());*/
+        return (SecurityUser) userDetailsService.loadUserByUsername(username());
+    }
+
+    @Nullable
+    private BasicUserDto getUserInfo(@NotNull SecurityUser user) {
+        return userDetailsService.getUserInfo(user);
     }
 
     @NotNull
@@ -92,7 +125,7 @@ public class LogTaskTests {
     public void selectLogByUserid() {
         //===== userTask =====//
         final SecurityUser newUser = getUserForTest();
-        final BasicUserDto newUserDto = newUser.getUserInfo();
+        final BasicUserDto newUserDto = getUserInfo(newUser);
         Assert.notNull(newUser
                 , "User.Factory.USER -> create(..) -> null");
         Assert.isTrue(userTask.insert(newUserDto
@@ -126,7 +159,7 @@ public class LogTaskTests {
     public void selectCountByUserid() {
         //===== userTask =====//
         final SecurityUser newUser = getUserForTest();
-        final BasicUserDto newUserDto = newUser.getUserInfo();
+        final BasicUserDto newUserDto = getUserInfo(newUser);
         Assert.notNull(newUser
                 , "User.Factory.USER -> create(..) -> null");
         Assert.isTrue(userTask.insert(newUserDto
@@ -159,7 +192,7 @@ public class LogTaskTests {
     public void insert() {
         //===== userTask =====//
         final SecurityUser newUser = getUserForTest();
-        final BasicUserDto newUserDto = newUser.getUserInfo();
+        final BasicUserDto newUserDto = getUserInfo(newUser);
         Assert.notNull(newUser
                 , "User.Factory.USER -> create(..) -> null");
         Assert.isTrue(userTask.insert(newUserDto
@@ -186,7 +219,7 @@ public class LogTaskTests {
     public void delete() {
         //===== userTask =====//
         final SecurityUser newUser = getUserForTest();
-        final BasicUserDto newUserDto = newUser.getUserInfo();
+        final BasicUserDto newUserDto = getUserInfo(newUser);
         Assert.notNull(newUser
                 , "User.Factory.USER -> create(..) -> null");
         Assert.isTrue(userTask.insert(newUserDto

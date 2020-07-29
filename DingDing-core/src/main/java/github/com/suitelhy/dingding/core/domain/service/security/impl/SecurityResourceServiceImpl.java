@@ -8,6 +8,8 @@ import github.com.suitelhy.dingding.core.domain.repository.security.SecurityReso
 import github.com.suitelhy.dingding.core.domain.repository.security.SecurityResourceUrlRepository;
 import github.com.suitelhy.dingding.core.domain.repository.security.SecurityRoleResourceRepository;
 import github.com.suitelhy.dingding.core.domain.service.security.SecurityResourceService;
+import github.com.suitelhy.dingding.core.infrastructure.domain.util.ContainArrayHashMap;
+import github.com.suitelhy.dingding.core.infrastructure.domain.util.ContainArrayHashSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -77,25 +79,27 @@ public class SecurityResourceServiceImpl
      * 查询所有 URL - ROLE 权限对应关系
      *
      * @Description {URL - ROLE}, 一对多.
-     *->  [{["url_path", {@link java.lang.String}] : ["role_code", {@link java.util.List<Object>}]}]
+     *-> [
+     *->    {[{"client_id" -> {@link java.lang.String}}, {"url_path" -> {@link java.lang.String}}] : ["role_code", {@link java.util.List<Object>}]}
+     *-> ]
      *
      * @return {@link java.util.List<java.util.Map<java.lang.String, java.lang.Object>>}
      */
     @Override
     @NotNull
-    public Map<String, List<Object>> selectAllUrlRoleMap() {
-        final Map<String, List<Object>> result = new LinkedHashMap<>(1);
+    public ContainArrayHashMap<String, List<Object>> selectAllUrlRoleMap() {
+        /*final Map<String[], List<Object>> result = new LinkedHashMap<>(1);*/
+        final ContainArrayHashMap<String, List<Object>> result = new ContainArrayHashMap<>(1);
 
         final List<Map<String, Object>> urlRoleMapList = repository.selectAllUrlRoleMap();
         for (int i = 0; i < urlRoleMapList.size(); i++) {
             final Map<String, Object> each = urlRoleMapList.get(i);
 
+            final String clientId = (String) each.get("client_id");
             final String urlPath = (String) each.get("url_path");
 
-            final Map<String, Object> urlRoleMap = new LinkedHashMap<>(1);
+            final String[] urlInfo = new String[] {clientId, urlPath};
             final List<Object> roles = new ArrayList<>(1);
-//            urlRoleMap.put("url_path", urlPath);
-//            urlRoleMap.put("role_code", roles);
 
             roles.add(each.get("role_code"));
 
@@ -114,7 +118,58 @@ public class SecurityResourceServiceImpl
                 }
             }
 
-            result.put(urlPath, roles);
+            result.put(urlInfo, roles);
+        }
+
+        return result;
+    }
+
+    /**
+     * 查询所有 URL - ROLE 权限对应关系
+     *
+     * @param clientId 资源服务器 ID; {@link SecurityResourceUrl#getClientId()}
+     *
+     * @return
+     */
+    @Override
+    public ContainArrayHashMap<String, List<Object>> selectUrlRoleMap(@NotNull String clientId) {
+        if (null == clientId
+                || !SecurityResourceUrl.Validator.RESOURCE_URL.clientId(clientId)) {
+            //-- 非法输入: 资源服务器 ID
+            throw new IllegalArgumentException(this.getClass().getSimpleName()
+                    .concat(" -> 非法输入: 资源服务器 ID"));
+        }
+
+        final ContainArrayHashMap<String, List<Object>> result = new ContainArrayHashMap<>(1);
+
+        final List<Map<String, Object>> urlRoleMapList = repository.selectUrlRoleMap(clientId);
+        for (int i = 0; i < urlRoleMapList.size(); i++) {
+            final Map<String, Object> each = urlRoleMapList.get(i);
+
+            final String eachClientId = (String) each.get("client_id");
+            final String eachUrlPath = (String) each.get("url_path");
+
+            final String[] urlInfo = new String[] {eachClientId, eachUrlPath};
+            final List<Object> roles = new ArrayList<>(1);
+
+            roles.add(each.get("role_code"));
+
+            urlRoleMapList.remove(i);
+
+            if (!urlRoleMapList.isEmpty()) {
+                for (int j = i; j < urlRoleMapList.size(); j++) {
+                    final Map<String, Object> eachTemp = urlRoleMapList.get(j);
+
+                    if (eachUrlPath.equals(eachTemp.get("url_path"))) {
+                        roles.add(eachTemp.get("role_code"));
+
+                        urlRoleMapList.remove(j--);
+                        --i;
+                    }
+                }
+            }
+
+            result.put(urlInfo, roles);
         }
 
         return result;
@@ -310,16 +365,16 @@ public class SecurityResourceServiceImpl
      * @Description 将若干资源 (必须合法且已持久化) 与若干 URL (若未持久化则新增) 进行关联.
      *
      * @param resources
-     * @param urls
+     * @param urlInfoSet
      * @return 操作是否成功
      */
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED
             , timeout = 15)
-    public boolean insertUrl(@NotNull Set<SecurityResource> resources, @NotNull Set<String> urls) {
+    public boolean insertUrl(@NotNull Set<SecurityResource> resources, @NotNull ContainArrayHashSet<String> urlInfoSet) {
         if ((null == resources || resources.isEmpty())
-                || (null == urls || urls.isEmpty())) {
+                || (null == urlInfoSet || urlInfoSet.isEmpty())) {
             return false;
         }
         for (SecurityResource each : resources) {
@@ -327,9 +382,11 @@ public class SecurityResourceServiceImpl
                 return false;
             }
         }
-        for (String each : urls) {
+        for (String[] each : urlInfoSet) {
             if (null == each
-                    || !SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(each)) {
+                    || each.length != 2
+                    || !SecurityResourceUrl.Validator.RESOURCE_URL.clientId(each[0])
+                    || !SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(each[1])) {
                 return false;
             }
         }
@@ -339,8 +396,10 @@ public class SecurityResourceServiceImpl
         for (SecurityResource each : resources) {
             if (!resourceUrlRepository.existsAllByCode(each.getCode())) {
                 //--- 当前资源不存在绑定的 URL 的情况
-                for (String url : urls) {
-                    if (resourceUrlRepository.save(SecurityResourceUrl.Factory.RESOURCE_URL.create(each.getCode(), url)).isEmpty()) {
+                for (String[] urlInfo : urlInfoSet) {
+                    if (resourceUrlRepository.save(SecurityResourceUrl.Factory.RESOURCE_URL.create(each.getCode()
+                            , urlInfo[0]
+                            , urlInfo[1])).isEmpty()) {
                         //-- 操作失败: 新增 资源 - URL 关联
                         throw new RuntimeException(this.getClass().getSimpleName()
                                 .concat(" -> 操作失败: 新增 资源 - URL 关联"));
@@ -350,17 +409,20 @@ public class SecurityResourceServiceImpl
                 List<SecurityResourceUrl> existedResourceUrls = resourceUrlRepository.findAllByCode(each.getCode());
 
                 //--- 当前资源存在绑定的 URL 的情况
-                for (String url : urls) {
+                for (String[] urlInfo : urlInfoSet) {
                     boolean exist = false;
                     for (SecurityResourceUrl eachResourceUrl : existedResourceUrls) {
-                        if (eachResourceUrl.getUrlPath().equals(url)) {
+                        if (eachResourceUrl.getClientId().equals(urlInfo[0])
+                                && eachResourceUrl.getUrlPath().equals(urlInfo[1])) {
                             exist = true;
                             break;
                         }
                     }
                     if (exist) continue;
 
-                    if (resourceUrlRepository.save(SecurityResourceUrl.Factory.RESOURCE_URL.create(each.getCode(), url)).isEmpty()) {
+                    if (resourceUrlRepository.save(SecurityResourceUrl.Factory.RESOURCE_URL.create(each.getCode()
+                            , urlInfo[0]
+                            , urlInfo[1])).isEmpty()) {
                         //-- 操作失败: 新增 资源 - URL 关联
                         throw new RuntimeException(this.getClass().getSimpleName()
                                 .concat(" -> 操作失败: 新增 资源 - URL 关联"));
@@ -479,14 +541,14 @@ public class SecurityResourceServiceImpl
      * 删除 URL 关联
      *
      * @param resources
-     * @param urls
+     * @param urlInfoSet
      * @return 操作是否成功
      * @Description 将若干资源 (必须合法且已持久化) 与若干 URL (若未持久化则新增) 的关联进行删除.
      */
     @Override
-    public boolean deleteUrl(@NotNull Set<SecurityResource> resources, @NotNull Set<String> urls) {
+    public boolean deleteUrl(@NotNull Set<SecurityResource> resources, @NotNull ContainArrayHashSet<String> urlInfoSet) {
         if ((null == resources || resources.isEmpty())
-                || (null == urls || urls.isEmpty())) {
+                || (null == urlInfoSet || urlInfoSet.isEmpty())) {
             return false;
         }
         for (SecurityResource each : resources) {
@@ -494,9 +556,11 @@ public class SecurityResourceServiceImpl
                 return false;
             }
         }
-        for (String each : urls) {
+        for (String[] each : urlInfoSet) {
             if (null == each
-                    || !SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(each)) {
+                    || each.length != 2
+                    || !SecurityResourceUrl.Validator.RESOURCE_URL.clientId(each[0])
+                    || !SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(each[1])) {
                 return false;
             }
         }
@@ -510,17 +574,20 @@ public class SecurityResourceServiceImpl
                 List<SecurityResourceUrl> existedResourceUrls = resourceUrlRepository.findAllByCode(each.getCode());
 
                 //--- 当前资源存在绑定的 URL 的情况
-                for (String url : urls) {
+                for (String[] urlInfo : urlInfoSet) {
                     SecurityResourceUrl existedResourceUrl = null;
                     for (SecurityResourceUrl eachResourceUrl : existedResourceUrls) {
-                        if (eachResourceUrl.getUrlPath().equals(url)) {
+                        if (eachResourceUrl.getClientId().equals(urlInfo[0])
+                                && eachResourceUrl.getUrlPath().equals(urlInfo[1])) {
                             existedResourceUrl = eachResourceUrl;
                             break;
                         }
                     }
                     if (null == existedResourceUrl) continue;
 
-                    if (resourceUrlRepository.removeByCodeAndUrlPath(each.getCode(), url) <= 0) {
+                    if (resourceUrlRepository.removeByCodeAndClientIdAndUrlPath(each.getCode()
+                            , urlInfo[0]
+                            , urlInfo[1]) <= 0) {
                         //-- 操作失败: 删除 资源 - URL 关联
                         throw new RuntimeException(this.getClass().getSimpleName()
                                 .concat(" -> 操作失败: 删除 资源 - URL 关联"));

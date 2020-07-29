@@ -1,6 +1,7 @@
 package github.com.suitelhy.dingding.core.domain.service;
 
 import github.com.suitelhy.dingding.core.domain.entity.User;
+import github.com.suitelhy.dingding.core.domain.service.impl.UserServiceImpl;
 import github.com.suitelhy.dingding.core.infrastructure.domain.model.EntityService;
 import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Isolation;
@@ -13,6 +14,7 @@ import javax.validation.constraints.NotNull;
  * 用户 - 业务接口
  *
  * @see User
+ * @see UserServiceImpl
  */
 @Transactional(isolation = Isolation.READ_COMMITTED
         , propagation = Propagation.REQUIRED

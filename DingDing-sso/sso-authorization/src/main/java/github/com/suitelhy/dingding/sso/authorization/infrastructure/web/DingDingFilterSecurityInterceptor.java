@@ -2,10 +2,8 @@ package github.com.suitelhy.dingding.sso.authorization.infrastructure.web;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.SecurityMetadataSource;
-import org.springframework.security.access.intercept.AbstractSecurityInterceptor;
 import org.springframework.security.access.intercept.InterceptorStatusToken;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
@@ -22,6 +20,8 @@ import java.io.IOException;
  * @Description 自定义过滤器.
  *
  * @Reference
+ *->  {@link <a href="https://www.shuzhiduo.com/A/qVdeW1wrJP/">[权限管理系统篇] (五)-Spring security（授权过程分析）</a>}
+ *->  {@link <a href="https://github.com/ygsama/ipa/blob/master/oauth2-server/src/main/java/io/github/ygsama/oauth2server/config/LoginSecurityInterceptor.java">ipa/LoginSecurityInterceptor.java at master · ygsama/ipa</a>}
  *->  {@link org.springframework.security.web.access.intercept.FilterSecurityInterceptor}
  *
  * @see FilterSecurityInterceptor
@@ -32,11 +32,6 @@ public class DingDingFilterSecurityInterceptor
         extends FilterSecurityInterceptor {
 
     //===== Static fields/initializers =====//
-
-//    /**
-//     * @see {@link org.springframework.security.web.access.intercept.FilterSecurityInterceptor#FILTER_APPLIED}
-//     */
-//    private static final String FILTER_APPLIED = "__spring_security_filterSecurityInterceptor_filterApplied";
 
     //===== Instance fields =====//
 
@@ -65,8 +60,7 @@ public class DingDingFilterSecurityInterceptor
     }
 
     /**
-     * Method that is actually called by the filter chain. Simply delegates to the
-     * {@link #invoke(FilterInvocation)} method.
+     * Method that is actually called by the filter chain. Simply delegates to the {@link #invoke(FilterInvocation)} method.
      *
      * @param request the servlet request
      * @param response the servlet response
@@ -121,9 +115,6 @@ public class DingDingFilterSecurityInterceptor
 
             super.afterInvocation(token, null);
         }*/
-
-        log.info("[自定义过滤器]: {}", " doFilter");
-
         InterceptorStatusToken token = super.beforeInvocation(fi);
         try {
             fi.getChain().doFilter(fi.getRequest(), fi.getResponse());

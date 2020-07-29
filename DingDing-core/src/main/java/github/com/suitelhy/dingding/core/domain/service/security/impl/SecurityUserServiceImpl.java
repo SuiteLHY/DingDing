@@ -1,7 +1,6 @@
 package github.com.suitelhy.dingding.core.domain.service.security.impl;
 
 import github.com.suitelhy.dingding.core.domain.entity.security.*;
-import github.com.suitelhy.dingding.core.domain.repository.security.SecurityRoleResourceRepository;
 import github.com.suitelhy.dingding.core.domain.repository.security.SecurityUserRepository;
 import github.com.suitelhy.dingding.core.domain.repository.security.SecurityUserRoleRepository;
 import github.com.suitelhy.dingding.core.domain.service.security.SecurityRoleService;
@@ -35,9 +34,6 @@ public class SecurityUserServiceImpl
 
     @Autowired
     private SecurityUserRepository repository;
-
-    @Autowired
-    private SecurityRoleResourceRepository roleResourceRepository;
 
     @Autowired
     private SecurityUserRoleRepository userRoleRepository;
@@ -182,12 +178,13 @@ public class SecurityUserServiceImpl
      * @return 资源集合         {@link SecurityResource}
      */
     @Override
-    public List<Map<String, Object>> selectUrlPathByUsername(@NotNull String username) {
-        if (!SecurityUser.Validator.USER.username(username)) {
+    public List<Map<String, Object>> selectUrlPathByUsernameAndClientId(@NotNull String username, @NotNull String clientId) {
+        if (!SecurityUser.Validator.USER.username(username)
+                || !SecurityResourceUrl.Validator.RESOURCE_URL.clientId(clientId)) {
             return null;
         }
 
-        return repository.selectURLByUsername(username);
+        return repository.selectURLByUsernameAndClientId(username, clientId);
     }
 
     /**

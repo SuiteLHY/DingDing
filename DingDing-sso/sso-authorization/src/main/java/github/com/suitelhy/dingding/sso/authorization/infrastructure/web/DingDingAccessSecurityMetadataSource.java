@@ -1,8 +1,10 @@
 package github.com.suitelhy.dingding.sso.authorization.infrastructure.web;
 
 import github.com.suitelhy.dingding.core.domain.service.security.SecurityResourceService;
+import github.com.suitelhy.dingding.core.infrastructure.domain.util.ContainArrayHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.web.FilterInvocation;
@@ -11,6 +13,7 @@ import org.springframework.security.web.access.intercept.FilterInvocationSecurit
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
@@ -24,7 +27,8 @@ import java.util.*;
  *->  框架的默认实现是 {@link DefaultFilterInvocationSecurityMetadataSource}.
  *
  * @Reference
- *->  {@link <a href="https://blog.csdn.net/zimou5581/article/details/89511381">SpringSecurity实现自定义登录认证、权限验证、鉴权_紫眸的博客-CSDN博客_spring security 自定义token</a>}
+ *->  {@link <a href="https://www.shuzhiduo.com/A/qVdeW1wrJP/">[权限管理系统篇] (五)-Spring security（授权过程分析）</a>}
+ *->  {@link <a href="https://github.com/ygsama/ipa/blob/master/oauth2-server/src/main/java/io/github/ygsama/oauth2server/config/LoginSecurityInterceptor.java">ipa/LoginSecurityInterceptor.java at master · ygsama/ipa</a>}
  */
 @Slf4j
 @Service
@@ -38,10 +42,16 @@ public class DingDingAccessSecurityMetadataSource
 
     private final SecurityResourceService resourceService;
 
-    @Autowired
-    DingDingAccessSecurityMetadataSource(SecurityResourceService resourceService) {
+    @Value("${dingding.security.client-id}")
+    private String clientId;
+
+    //===== Constructor =====//
+
+    DingDingAccessSecurityMetadataSource(@Autowired SecurityResourceService resourceService) {
         this.resourceService = resourceService;
     }
+
+    //==========//
 
     /**
      * 在 Web 服务器启动时，缓存系统中的所有权限映射
@@ -53,14 +63,21 @@ public class DingDingAccessSecurityMetadataSource
         permissionMap = new LinkedHashMap<>(1);
 
         //===== 需要鉴权的 URL 资源，@needAuth标志 =====//
-        Map<String, List<Object>> permissionMap = resourceService.selectAllUrlRoleMap();
-        for (Map.Entry<String, List<Object>> permission : permissionMap.entrySet()) {
-            final String url = permission.getKey();
+        /*ContainArrayHashMap<String, List<Object>> permissionMap = resourceService.selectAllUrlRoleMap();*/
+        ContainArrayHashMap<String, List<Object>> permissionMap = resourceService.selectUrlRoleMap(this.clientId);
+        for (Map.Entry<String[], List<Object>> permission : permissionMap.entrySet()) {
+            final String[] urlInfo = permission.getKey();
             final List<Object> roles = permission.getValue();
+
+            /*final String clientId = urlInfo[0];*/
+            final String url = urlInfo[1];
+
+            /*if (!ObjectUtils.nullSafeEquals(this.clientId, clientId)) {
+                continue;
+            }*/
+
             final AntPathRequestMatcher requestMatcher = new AntPathRequestMatcher(url);
             final Collection<ConfigAttribute> attributes = new ArrayList<>(1);
-
-            log.info("{}", url);
 
             for (Object role : roles) {
                 attributes.add(new SecurityConfig((String) role));
@@ -83,9 +100,9 @@ public class DingDingAccessSecurityMetadataSource
         }*/
 
         //===== 多余的url资源， @noAuth，所有人都无法访问 =====//
-        /*Collection<ConfigAttribute> attributes = new ArrayList<>(1);
+        Collection<ConfigAttribute> attributes = new ArrayList<>(1);
         attributes.add(new SecurityConfig("@noAuth"));
-        permissionMap.put(new AntPathRequestMatcher("/**", null), attributes);*/
+        DingDingAccessSecurityMetadataSource.permissionMap.put(new AntPathRequestMatcher("/**", null), attributes);
 
         //==========//
         log.info("[全局权限映射集合初始化]: {}", DingDingAccessSecurityMetadataSource.permissionMap.toString());
@@ -99,10 +116,6 @@ public class DingDingAccessSecurityMetadataSource
     @Override
     public Collection<ConfigAttribute> getAttributes(Object object)
             throws IllegalArgumentException {
-        log.info("[资源被访问：根据URL找到权限配置]: {}\n {}"
-                , object
-                , permissionMap);
-
         if (null == permissionMap) {
             loadResourceDefine();
         }
@@ -110,13 +123,9 @@ public class DingDingAccessSecurityMetadataSource
         final HttpServletRequest request = ((FilterInvocation) object).getRequest();
 
         for (Map.Entry<RequestMatcher, Collection<ConfigAttribute>> entry : permissionMap.entrySet()) {
-            if (entry.getKey().matches(request)) {
-                log.info("[找到的Key]: {}", entry.getKey());
-                log.info("[找到的Value]: {}", entry.getValue());
-
-                if (entry.getValue().size() > 0) {
-                    return entry.getValue();
-                }
+            if (entry.getKey().matches(request)
+                    && !entry.getValue().isEmpty()) {
+                return entry.getValue();
             }
         }
 

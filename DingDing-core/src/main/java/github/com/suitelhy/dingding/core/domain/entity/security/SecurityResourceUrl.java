@@ -9,6 +9,8 @@ import org.springframework.lang.Nullable;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 资源 - URL
@@ -40,9 +42,17 @@ public class SecurityResourceUrl
     private String code;
 
     /**
-     * 资源对应的 URL (Method部分)
+     * 资源服务器 ID
      *
-     * @Description 单个 URL.
+     * @Description 对应资源服务器的唯一标识 {clientId}.
+     */
+    @Column(name = "client_id", nullable = false)
+    private String clientId;
+
+    /**
+     * 资源对应的 URL Method
+     *
+     * @Description 单个对象.
      */
     @Column(name = "url_method")
     private String urlMethod;
@@ -66,6 +76,7 @@ public class SecurityResourceUrl
     public @NotNull /*Long*/Object[] id() {
         return new Object[] {
                 this.code
+                , this.clientId
                 , this.urlPath
         };
     }
@@ -90,6 +101,7 @@ public class SecurityResourceUrl
     @Override
     public boolean isEntityLegal() {
         return Validator.RESOURCE_URL.code(this.code)
+                && Validator.RESOURCE_URL.clientId(this.clientId)
                 && Validator.RESOURCE_URL.urlPath(this.urlPath);
     }
 
@@ -125,9 +137,10 @@ public class SecurityResourceUrl
         @Override
         public boolean entity_id(@NotNull /*Long*/Object[] entityId) {
             return null != entityId
-                    && entityId.length == 2
+                    && entityId.length == 3
                     && this.code((String) entityId[0])
-                    && this.urlPath((String) entityId[1]);
+                    && this.clientId((String) entityId[1])
+                    && this.urlPath((String) entityId[2]);
         }
 
         public boolean id(@NotNull Long id) {
@@ -137,6 +150,12 @@ public class SecurityResourceUrl
 
         public boolean code(@NotNull String code) {
             return SecurityResource.Validator.RESOURCE.code(code);
+        }
+
+        public boolean clientId(@NotNull String clientId) {
+            Map<String, Object> param_rule = new HashMap<>(1);
+            param_rule.put("maxLength", 50);
+            return EntityUtil.Regex.GeneralRule.englishPhrases_Number(clientId, param_rule);
         }
 
         /**
@@ -178,11 +197,13 @@ public class SecurityResourceUrl
      *
      * @param id            数据 ID
      * @param code          资源编码
+     * @param clientId      资源服务器 ID
      * @param urlPath       资源对应的 URL (单个)
      * @throws IllegalArgumentException
      */
     private SecurityResourceUrl(@Nullable Long id
             , @NotNull String code
+            , @NotNull String clientId
             , @NotNull String urlPath)
             throws IllegalArgumentException {
         if (null == id) {
@@ -200,6 +221,11 @@ public class SecurityResourceUrl
             throw new IllegalArgumentException(this.getClass().getSimpleName()
                     .concat(" -> 非法输入: 资源编码"));
         }
+        if (!Validator.RESOURCE_URL.clientId(clientId)) {
+            //-- 非法输入: 资源服务器 ID
+            throw new IllegalArgumentException(this.getClass().getSimpleName()
+                    .concat(" -> 非法输入: 资源服务器 ID"));
+        }
         if (!Validator.RESOURCE_URL.urlPath(urlPath)) {
             //-- 非法输入: 资源对应的URL
             throw new IllegalArgumentException(this.getClass().getSimpleName()
@@ -210,7 +236,9 @@ public class SecurityResourceUrl
         this.serId(id);
         // 资源编码
         this.setCode(code);
-        // 资源对应的 URL (单个)
+        // 资源服务器 ID
+        this.setClientId(clientId);
+        // 资源对应的 URL
         this.setUrlPath(urlPath);
     }
 
@@ -222,12 +250,15 @@ public class SecurityResourceUrl
          * 创建
          *
          * @param code          资源编码
+         * @param clientId      资源服务器 ID
          * @param url           资源对应的 URL (单个)
          * @throws IllegalArgumentException
          */
-        public SecurityResourceUrl create(@NotNull String code, @NotNull String url)
+        public SecurityResourceUrl create(@NotNull String code
+                , @NotNull String clientId
+                , @NotNull String url)
                 throws IllegalArgumentException {
-            return new SecurityResourceUrl(null, code, url);
+            return new SecurityResourceUrl(null, code, clientId, url);
         }
 
         /**
@@ -235,11 +266,13 @@ public class SecurityResourceUrl
          *
          * @param id            数据 ID
          * @param code          资源编码
+         * @param clientId      资源服务器 ID
          * @param url           资源对应的 URL (单个)
          * @throws IllegalArgumentException
          */
         public SecurityResourceUrl update(@NotNull Long id
                 , @NotNull String code
+                , @NotNull String clientId
                 , @NotNull String url)
                 throws IllegalArgumentException {
             if (!Validator.RESOURCE_URL.id(id)) {
@@ -248,7 +281,8 @@ public class SecurityResourceUrl
                         .concat(" -> 非法输入: 数据 ID"));
             }
 
-            return new SecurityResourceUrl(id, code, url);
+            return new SecurityResourceUrl(id, code, clientId
+                    , url);
         }
 
     }
@@ -277,6 +311,19 @@ public class SecurityResourceUrl
     private boolean setCode(@NotNull String code) {
         if (Validator.RESOURCE_URL.code(code)) {
             this.code = code;
+            return true;
+        }
+        return false;
+    }
+
+    @NotNull
+    public String getClientId() {
+        return clientId;
+    }
+
+    public boolean setClientId(@NotNull String clientId) {
+        if (Validator.RESOURCE_URL.clientId(clientId)) {
+            this.clientId = clientId;
             return true;
         }
         return false;

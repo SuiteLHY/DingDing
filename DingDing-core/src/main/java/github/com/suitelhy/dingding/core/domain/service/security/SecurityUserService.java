@@ -1,10 +1,8 @@
 package github.com.suitelhy.dingding.core.domain.service.security;
 
-import github.com.suitelhy.dingding.core.domain.entity.security.SecurityResource;
-import github.com.suitelhy.dingding.core.domain.entity.security.SecurityRole;
-import github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser;
-import github.com.suitelhy.dingding.core.domain.entity.security.SecurityUserRole;
+import github.com.suitelhy.dingding.core.domain.entity.security.*;
 import github.com.suitelhy.dingding.core.domain.repository.security.SecurityUserRepository;
+import github.com.suitelhy.dingding.core.domain.service.security.impl.SecurityUserServiceImpl;
 import github.com.suitelhy.dingding.core.infrastructure.domain.model.EntityService;
 import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Isolation;
@@ -24,6 +22,7 @@ import java.util.Set;
  *
  * @see SecurityUser
  * @see SecurityUserRepository
+ * @see SecurityUserServiceImpl
  */
 @Transactional(isolation = Isolation.READ_COMMITTED
         , propagation = Propagation.REQUIRED
@@ -87,9 +86,10 @@ public interface SecurityUserService
      * 查询 (关联的) 角色 -> (关联的) 资源
      *
      * @param username
-     * @return 资源集合         {@link SecurityResource}
+     * @param clientId          资源服务器 ID; {@link SecurityResourceUrl#getClientId()}
+     * @return 资源集合             {@link SecurityResource}
      */
-    List<Map<String, Object>> selectUrlPathByUsername(@NotNull String username);
+    List<Map<String, Object>> selectUrlPathByUsernameAndClientId(@NotNull String username, @NotNull String clientId);
 
     /**
      * 新增一个用户

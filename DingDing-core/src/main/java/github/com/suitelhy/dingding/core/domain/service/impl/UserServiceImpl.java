@@ -25,13 +25,22 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
+
 /**
  * 用户信息 - 业务实现
  *
  * @Description {@link UserService}
+ *
+ * @see github.com.suitelhy.dingding.core.domain.service.UserService
  */
-@Service("userService")
+
 @Order(Ordered.LOWEST_PRECEDENCE)
+@Service("userService")
+@Transactional(isolation = Isolation.READ_COMMITTED
+        , propagation = Propagation.REQUIRED
+        , readOnly = true
+        , rollbackFor = Exception.class
+        , timeout = 15)
 public class UserServiceImpl
         implements UserService {
 

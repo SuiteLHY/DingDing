@@ -45,15 +45,15 @@ public abstract class AbstractEntityModel<ID>
      * 计算哈希值
      *
      * @Description 如果重写了 <method>equals(Object obj)</method>, 则必须根据 <method>equals(Object obj)</method>
-     *->    的实现重写 <method>hashCode()</method>.
-     *->    注意: 避免无限递归调用 <method>hashCode()</method>.
+     *-> 的实现重写 <method>hashCode()</method>.
+     *-> · 注意: 避免无限递归调用 {@link this#hashCode()}.
      *
      * @return
      */
     @Override
     public int hashCode() {
         if (null == this.id() || this.isEmpty()) {
-            //--- 避免无限递归调用 <method>hashCode()</method>.
+            //--- 避免无限递归调用 {@link this#hashCode()}
             return super.hashCode();
         }
         return EntityModel.hashCode(this);
