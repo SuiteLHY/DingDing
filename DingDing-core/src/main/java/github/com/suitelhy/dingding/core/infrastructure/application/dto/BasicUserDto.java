@@ -1,47 +1,93 @@
 package github.com.suitelhy.dingding.core.infrastructure.application.dto;
 
 import github.com.suitelhy.dingding.core.domain.entity.User;
+import github.com.suitelhy.dingding.core.infrastructure.application.model.DtoFactoryModel;
 import github.com.suitelhy.dingding.core.infrastructure.application.model.DtoModel;
-import github.com.suitelhy.dingding.core.infrastructure.domain.model.EntityFactory;
-import github.com.suitelhy.dingding.core.infrastructure.domain.util.VoUtil;
-import github.com.suitelhy.dingding.core.infrastructure.domain.vo.Human;
+import github.com.suitelhy.dingding.core.infrastructure.domain.model.EntityFactoryModel;
+import github.com.suitelhy.dingding.core.infrastructure.web.AbstractSecurityUser;
+import github.com.suitelhy.dingding.core.infrastructure.web.OAuth2AuthenticationInfo;
 import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotNull;
 
+/**
+ * 用户基础信息
+ *
+ * @see DtoModel
+ */
 public class BasicUserDto
-        implements DtoModel<User, /*String*/Object[]> {
+        implements DtoModel<User, String> {
 
     private static final long serialVersionUID = 1L;
 
-    // 用户 - 昵称
+    // 用户 ID
     protected String userId;
-
-    // 用户 - 昵称
-    protected String nickname;
-
-    /*// 用户 - 头像
-    protected String faceImage;*/
 
     // 用户名称
     protected String username;
 
     //===== DtoModel =====//
-    @NotNull
-    private final transient User dtoId;
 
+    private final transient @NotNull User dtoId;
+
+    /**
+     * (Constructor)
+     *
+     * @Description 用于构造空对象.
+     */
+    protected BasicUserDto() {
+        this.dtoId = User.Factory.USER.createDefault();
+    }
+
+    /**
+     * (Constructor)
+     *
+     * @param dtoId {@link User}
+     *
+     * @throws IllegalArgumentException 此时 {@param dtoId} 非法.
+     */
     protected BasicUserDto(@NotNull User dtoId)
-            throws IllegalArgumentException {
+            throws IllegalArgumentException
+    {
         if (null == dtoId || dtoId.isEmpty()) {
             //-- 非法输入: <param>dtoId</param>
-            throw new IllegalArgumentException(this.getClass().getSimpleName()
-                    .concat(" -> 非法输入: <param>dtoId</param>"));
+            throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
+                    , "dtoId"
+                    , dtoId
+                    , this.getClass().getName()
+                    , Thread.currentThread().getStackTrace()[1].getMethodName()
+                    , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
+
         this.dtoId = dtoId;
 
         this.userId = this.dtoId.getUserid();
-        this.nickname = this.dtoId.getNickname();
-        /*this.faceImage = this.dtoId.getFaceImage();*/
+        this.username = this.dtoId.getUsername();
+    }
+
+    /**
+     * (Constructor)
+     *
+     * @param basicUserDto  {@link BasicUserDto}
+     *
+     * @throws IllegalArgumentException 此时 {@param basicUserDto} 非法.
+     */
+    protected BasicUserDto(@NotNull BasicUserDto basicUserDto)
+            throws IllegalArgumentException
+    {
+        if (null == basicUserDto || basicUserDto.isEmpty()) {
+            //-- 非法输入: <param>basicUserDto</param>
+            throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
+                    , "basicUserDto"
+                    , basicUserDto
+                    , this.getClass().getName()
+                    , Thread.currentThread().getStackTrace()[1].getMethodName()
+                    , Thread.currentThread().getStackTrace()[1].getLineNumber()));
+        }
+
+        this.dtoId = basicUserDto.dtoId;
+
+        this.userId = this.dtoId.getUserid();
         this.username = this.dtoId.getUsername();
     }
 
@@ -49,15 +95,16 @@ public class BasicUserDto
      * 唯一标识 <- DTO 对象
      *
      * @param username
-     * @param password
+     * @param password 用户密码（明文或密文）
+     *
      * @return The unique identify of the DTO, or null.
      */
     @Nullable
     public User dtoId(@NotNull String username, @NotNull String password) {
         if (User.Validator.USER.username(username)
-                && User.Validator.USER.password(password)) {
+                && (User.Validator.USER.password(password) || User.Validator.USER.passwordPlaintext(password))) {
             if (this.dtoId.getUsername().equals(username)
-                    && this.dtoId.equalsPassword(password)) {
+                    && (this.dtoId.equalsPassword(password) || this.dtoId.getPassword().equals(password))) {
                 //设计: 用户 Entity 对象的获取需要进行严格地控制.
                 return this.dtoId;
             }
@@ -71,7 +118,7 @@ public class BasicUserDto
      * @return The unique identify of the <tt>dtoId()</tt>.
      */
     @Override
-    public /*String*/Object[] id() {
+    public String id() {
         return this.dtoId.id();
     }
 
@@ -88,8 +135,9 @@ public class BasicUserDto
     /**
      * 是否符合业务要求
      *
-     * @return
-     * @Description 需要实现类实现该接口
+     * @Description 需要实现类实现该接口.
+     *
+     * @return 判断结果
      */
     @Override
     public boolean isEntityLegal() {
@@ -99,106 +147,107 @@ public class BasicUserDto
     /**
      * 是否无效 <- DTO 对象
      *
-     * @return
      * @Description 使用默认实现.
+     *
+     * @return 判断结果
      */
     @Override
     public boolean isEmpty() {
         return DtoModel.isEmpty(this);
     }
 
+    /**
+     * 转换为 JSON 格式的字符串
+     *
+     * @return 转换结果
+     */
+    @Override
+    public @NotNull String toJSONString() {
+        return String.format("{%s}", this.username);
+    }
+
     //===== Factory =====//
-    public enum Factory implements EntityFactory<BasicUserDto> {
+
+    public enum Factory
+            implements DtoFactoryModel<BasicUserDto, String> {
         USER_DTO;
 
         /**
          * 创建用户 DTO
          *
-         * @param user
-         * @return
+         * @param user  {@link User}
+         *
+         * @return {@link BasicUserDto}
          */
-        @NotNull
-        public BasicUserDto create(@NotNull User user) {
+        public @NotNull BasicUserDto create(@NotNull User user)
+                throws IllegalArgumentException
+        {
             return new BasicUserDto(user);
         }
 
         /**
          * 创建用户 DTO
          *
-         * @param age         用户 - 年龄
-         * @param firsttime   注册时间
-         * @param nickname    用户 - 昵称
-         * @param password    用户密码
-         * @param profile     用户 - 简介
-         * @param profilehead 用户 - 头像
-         * @param username    用户名称
-         * @param sex         用户 - 性别
+         * @param username 用户名称
+         * @param password 用户密码
+         *
+         * @return {@link BasicUserDto}
+         *
          * @throws IllegalArgumentException
          */
-        @NotNull
-        public BasicUserDto create(@Nullable Integer age
-                , @NotNull String firsttime
-                , @NotNull String ip
-                , @NotNull String lasttime
-                , @NotNull String nickname
-                , @NotNull String password
-                , @Nullable String profile
-                , @Nullable String profilehead
-                , @NotNull String username
-                , @Nullable String sex) {
-            User newUser = User.Factory.USER.create(age, firsttime, ip
-                    , lasttime, nickname, password
-                    , profile, profilehead, username
-                    , VoUtil.getVoByName(Human.SexVo.class, sex));
+        public @NotNull BasicUserDto create(@NotNull String username, @NotNull String password)
+                throws IllegalArgumentException
+        {
+            final User newUser = User.Factory.USER.create(username, password);
             return new BasicUserDto(newUser);
         }
 
         /**
          * 更新用户 DTO
          *
-         * @param id          用户ID
-         * @param age         用户 - 年龄
-         * @param firsttime   注册时间
-         * @param ip          最后登陆IP
-         * @param lasttime    最后登录时间
-         * @param nickname    用户 - 昵称
-         * @param password    用户 - 密码
-         * @param profile     用户 - 简介
-         * @param profilehead 用户 - 头像
-         * @param sex         用户 - 性别
-         * @return 可为 null, 此时输入参数非法
+         * @param id       用户 ID       {@link User.Validator#userid(String)}
+         * @param username 用户名称       {@link User.Validator#username(String)}
+         * @param password 用户 - 密码    {@link User.Validator#password(String)}
+         *
+         * @return {@link BasicUserDto}
+         *
          * @throws IllegalArgumentException 此时 <param>id</param> 非法
          */
-        public BasicUserDto update(@NotNull String id
-                , @Nullable Integer age
-                , @NotNull String firsttime
-                , @NotNull String ip
-                , @NotNull String lasttime
-                , @NotNull String nickname
-                , @NotNull String password
-                , @Nullable String profile
-                , @Nullable String profilehead
+        public @NotNull BasicUserDto update(@NotNull String id
                 , @NotNull String username
-                , @Nullable String sex) {
-            User user = User.Factory.USER.update(id, age, firsttime
-                    , ip, lasttime, nickname
-                    , password, profile, profilehead
-                    , username, VoUtil.getVoByName(Human.SexVo.class, sex));
+                , @NotNull String password)
+                throws IllegalArgumentException
+        {
+            final User user = User.Factory.USER.update(id, username, password);
             return new BasicUserDto(user);
         }
 
         /**
          * 销毁 DTO
          *
-         * @param userDto
-         * @return {<code>true</code> : <b>销毁成功</b>
-         *->    , <code>false</code> : <b>销毁失败; 此时 <param>user</param></b> 无效或无法销毁}
+         * @param userDto   {@link BasicUserDto}
+         *
+         * @return
+         * {
+         *  {@code true}: <b>销毁成功</b>,
+         *  {@code false}: <b>销毁失败, 此时 {@param userDto} 无效或无法销毁</b>
+         * }
          */
         public boolean delete(@NotNull BasicUserDto userDto) {
             if (null != userDto && !userDto.isEmpty()) {
                 return User.Factory.USER.delete(userDto.dtoId);
             }
             return false;
+        }
+
+        /**
+         * 获取空对象
+         *
+         * @return 非 {@code null}.
+         */
+        @Override
+        public @NotNull BasicUserDto createDefault() {
+            return new BasicUserDto();
         }
 
     }
@@ -213,42 +262,62 @@ public class BasicUserDto
         this.userId = userId;
     }
 
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    /**
-     * 判断密码是否相同
-     *
-     * @param password
-     * @return {true: <tt>密码相同</tt>, false: <tt>密码不相同</tt>, null: <tt>DTO无效</tt>}
-     */
-    @Nullable
-    public Boolean equalsPassword(String password) {
-        if (dtoId().isEmpty()) {
-            return null;
-        }
-        return dtoId().equalsPassword(password);
-    }
-
-    /*public String getFaceImage() {
-        return faceImage;
-    }
-
-    public void setFaceImage(String faceImage) {
-        this.faceImage = faceImage;
-    }*/
-
     public String getUsername() {
         return username;
     }
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    //==========//
+
+    /**
+     * 等效判断
+     *
+     * @param securityUser  {@link AbstractSecurityUser}
+     *
+     * @return 判断结果
+     */
+    public boolean equals(AbstractSecurityUser securityUser) {
+        if (null == securityUser
+                || securityUser.isEmpty()
+                || !this.isDtoLegal())
+        {
+            return false;
+        }
+        return this.username.equals(securityUser.getUsername());
+    }
+
+    /**
+     * 等效判断
+     *
+     * @param userAuthenticationDetails {@link OAuth2AuthenticationInfo.AbstractUserAuthentication.AbstractDetails}
+     *
+     * @return 判断结果
+     */
+    public boolean equals(OAuth2AuthenticationInfo.AbstractUserAuthentication.AbstractDetails userAuthenticationDetails) {
+        if (null == userAuthenticationDetails
+                || !Boolean.TRUE.equals(userAuthenticationDetails.isActive())
+                || !this.isDtoLegal())
+        {
+            return false;
+        }
+        return this.username.equals(userAuthenticationDetails.getUserName());
+    }
+
+    /**
+     * 判断密码是否相同
+     *
+     * @param password
+     *
+     * @return {true: <tt>密码相同</tt>, false: <tt>密码不相同</tt>, null: <tt>DTO无效</tt>}
+     */
+    public @Nullable Boolean equalsPassword(String password) {
+        if (dtoId.isEmpty()) {
+            return null;
+        }
+        return dtoId.equalsPassword(password);
     }
 
 }

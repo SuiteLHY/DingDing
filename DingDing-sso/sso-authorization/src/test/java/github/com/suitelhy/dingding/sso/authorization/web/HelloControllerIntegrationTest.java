@@ -54,35 +54,35 @@ public class HelloControllerIntegrationTest {
         return "http://localhost:" + port;
     }
 
-    @Test
-    public void helloPage() {
-        // act
-        var task = restTemplate.getForObject(webRequestRoot() + "/hello/helloPage"
-                , String.class);
-        // assert
-        assertThat(task).contains("Hello World!");
-    }
+//    @Test
+//    public void helloPage() {
+//        // act
+//        var task = restTemplate.getForObject(webRequestRoot() + "/hello/helloPage"
+//                , String.class);
+//        // assert
+//        assertThat(task).contains("Hello World!");
+//    }
 
-    @Test
-    public void hello() {
-        // act
-        var task = restTemplate.getForObject(webRequestRoot() + "/hello/hello"
-                , String.class);
-        // assert
-        assertThat(task).contains("hello");
-    }
+//    @Test
+//    public void hello() {
+//        // act
+//        var task = restTemplate.getForObject(webRequestRoot() + "/hello/hello"
+//                , String.class);
+//        // assert
+//        assertThat(task).contains("hello");
+//    }
 
-    @Test
-    public void select() {
-        // act
-        Map<String, Object> requestParams = new LinkedHashMap<>(1);
-        requestParams.put("id", "402880e56f88643d016f886449e10000");
-        var task = restTemplate.getForObject(webRequestRoot() + "/hello/select?"
-                        + "id={id}"
-                , String.class
-                , /*requestParamsMap*/requestParams.get("id"));
-        // assert
-        assertThat(task).contains("{" + requestParams.get("id") + "}");
-    }
+//    @Test
+//    public void select() {
+//        // act
+//        Map<String, Object> requestParams = new LinkedHashMap<>(1);
+//        requestParams.put("id", "402880e56f88643d016f886449e10000");
+//        var task = restTemplate.getForObject(webRequestRoot() + "/hello/select?"
+//                        + "id={id}"
+//                , String.class
+//                , /*requestParamsMap*/requestParams.get("id"));
+//        // assert
+//        assertThat(task).contains("{" + requestParams.get("id") + "}");
+//    }
 
 }

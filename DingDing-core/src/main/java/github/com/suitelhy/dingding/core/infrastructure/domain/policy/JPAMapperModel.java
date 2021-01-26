@@ -3,9 +3,9 @@ package github.com.suitelhy.dingding.core.infrastructure.domain.policy;
 import github.com.suitelhy.dingding.core.infrastructure.domain.annotation.AnnotationMethodDefaults;
 import github.com.suitelhy.dingding.core.infrastructure.domain.annotation.SuiteColumn;
 import github.com.suitelhy.dingding.core.infrastructure.domain.annotation.SuiteTable;
-import github.com.suitelhy.dingding.core.infrastructure.domain.model.EntityModel;
 import github.com.suitelhy.dingding.core.infrastructure.domain.util.EntityUtil;
 import github.com.suitelhy.dingding.core.infrastructure.domain.util.SqlUtil;
+import github.com.suitelhy.dingding.core.infrastructure.domain.model.EntityModel;
 import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotNull;

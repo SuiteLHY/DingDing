@@ -1,7 +1,7 @@
 package github.com.suitelhy.dingding.core.infrastructure.domain.vo;
 
-import github.com.suitelhy.dingding.core.infrastructure.domain.model.VoModel;
 import github.com.suitelhy.dingding.core.infrastructure.config.springdata.attribute.converter.VoAttributeConverter;
+import github.com.suitelhy.dingding.core.infrastructure.domain.model.VoModel;
 import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotNull;
@@ -13,9 +13,12 @@ import javax.validation.constraints.NotNull;
  * @param <V>
  * @param <_DESCRIPTION>
  */
-public interface UserAttach<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V extends Number, _DESCRIPTION>
+public interface UserAttach<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V extends Number, _DESCRIPTION>
         extends VoModel<VO, V, _DESCRIPTION> {
 
+    /**
+     * 附件类型
+     */
     enum AttachTypeVo
             implements VoModel<AttachTypeVo, Integer, String> {
         FACE_IMAGE(1
@@ -24,6 +27,31 @@ public interface UserAttach<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V ex
         , QR_CODE(2
                 , "二维码"
                 , "用户二维码。");
+
+        /**
+         * 为持久化类型转换器提供支持
+         */
+        @javax.persistence.Converter(autoApply = true)
+        public static class Converter
+                extends VoAttributeConverter<AttachTypeVo, Integer, String> {
+
+            /**
+             * @Design (单例模式 - 登记式)
+             */
+            private static class Factory {
+                private static final Converter SINGLETON = new Converter();
+            }
+
+            private Converter() {
+                super(AttachTypeVo.class);
+            }
+
+            @NotNull
+            public static Converter getInstance() {
+                return Factory.SINGLETON;
+            }
+
+        }
 
         public final int code;
 
@@ -51,16 +79,15 @@ public interface UserAttach<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V ex
         }
 
         /**
-         * 为持久化类型转换器提供支持
+         * 提供类型转换器
+         *
+         * @Design 为持久化类型转换功能提供支持.
          */
-        @javax.persistence.Converter(autoApply = true)
-        public static class Converter
-                extends VoAttributeConverter<AttachTypeVo, Integer, String> {
-
-            public Converter() {
-                super(AttachTypeVo.class);
-            }
-
+        @Override
+        @NotNull
+        @SuppressWarnings("unchecked")
+        public Converter voAttributeConverter() {
+            return Converter.getInstance();
         }
 
         /**

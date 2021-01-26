@@ -3,6 +3,8 @@ package github.com.suitelhy.dingding.core.infrastructure.domain.vo.config;
 import github.com.suitelhy.dingding.core.domain.entity.security.SecurityRole;
 import github.com.suitelhy.dingding.core.domain.service.security.SecurityRoleService;
 import github.com.suitelhy.dingding.core.infrastructure.domain.vo.security.Security;
+import github.com.suitelhy.dingding.core.infrastructure.exception.BusinessAtomicException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Component;
  * @see github.com.suitelhy.dingding.core.infrastructure.domain.vo
  */
 @Component
+@Slf4j
 public class InitPersistence
         implements ApplicationListener<ContextRefreshedEvent> {
 
@@ -50,9 +53,15 @@ public class InitPersistence
         // 安全模块 VO -> 角色
         for (Security.RoleVo each : Security.RoleVo.class.getEnumConstants()) {
             if (!securityRoleService.existsByCode(each.name())) {
-                securityRoleService.insert(SecurityRole.Factory.ROLE.create(each.name()
-                        , each.name
-                        , each.description));
+                try {
+                    securityRoleService.insert(each);
+                } catch (BusinessAtomicException e) {
+                    log.error("初始持久化失败 -> [安全模块 VO -> 角色]! <- [<class>{}</class> - <method>{}</method> <- 第{}行]"
+                            , this.getClass().getName()
+                            , Thread.currentThread().getStackTrace()[1].getMethodName()
+                            , Thread.currentThread().getStackTrace()[1].getLineNumber()
+                            , e);
+                }
             }
         }
     }

@@ -1,9 +1,9 @@
 package github.com.suitelhy.dingding.core.domain.aggregate.security.user;
 
 import github.com.suitelhy.dingding.core.domain.entity.security.SecurityRole;
+import github.com.suitelhy.dingding.core.domain.repository.security.SecurityUserRoleRepository;
 import github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser;
 import github.com.suitelhy.dingding.core.domain.entity.security.SecurityUserRole;
-import github.com.suitelhy.dingding.core.domain.repository.security.SecurityUserRoleRepository;
 import github.com.suitelhy.dingding.core.infrastructure.domain.model.AbstractAggregateModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ObjectUtils;

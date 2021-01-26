@@ -1,8 +1,8 @@
 package github.com.suitelhy.dingding.core.domain.entity.security;
 
 import github.com.suitelhy.dingding.core.domain.entity.User;
-import github.com.suitelhy.dingding.core.infrastructure.domain.model.AbstractEntityModel;
-import github.com.suitelhy.dingding.core.infrastructure.domain.model.EntityFactory;
+import github.com.suitelhy.dingding.core.infrastructure.domain.model.AbstractEntity;
+import github.com.suitelhy.dingding.core.infrastructure.domain.model.EntityFactoryModel;
 import github.com.suitelhy.dingding.core.infrastructure.domain.model.EntityValidator;
 import github.com.suitelhy.dingding.core.infrastructure.domain.vo.Account;
 import org.hibernate.annotations.GenericGenerator;
@@ -12,24 +12,26 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 /**
- * 用户 - 安全相关信息
+ * （安全认证）用户
  *
- * @Description 关联的安全信息.
+ * @Description 用户关联的安全信息.
  *
  * @author Suite
  */
 @Entity
 @Table(name = "SECURITY_USER")
 public class SecurityUser
-        extends AbstractEntityModel<String> {
+        extends AbstractEntity<String> {
 
     private static final long serialVersionUID = 1L;
 
-    // 用户ID
+    /**
+     * 用户 ID
+     */
     @GeneratedValue(generator = "USER_ID_STRATEGY")
     @GenericGenerator(name = "USER_ID_STRATEGY", strategy = "uuid")
     @Id
-    @Column(name = "user_id")
+    @Column(name = "user_id", length = 64)
     private String userId;
 
     /**
@@ -44,7 +46,7 @@ public class SecurityUser
      *
      * @Description 业务唯一.
      */
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 30)
     private String username;
 
     // 数据更新时间 (由数据库管理)
@@ -56,7 +58,7 @@ public class SecurityUser
 
     @Override
     public @NotNull String id() {
-        return this.getUsername();
+        return this.username;
     }
 
     /**
@@ -158,35 +160,50 @@ public class SecurityUser
     /**
      * 创建/更新用户 -> Entity对象
      *
-     * @Description 添加(<param> id </param>为 null) / 更新(<param>id</param>合法)用户.
-     * @param userid            用户ID
+     * @Description 添加(<param>userid</param>为 null) / 更新(<param>userid</param>合法)用户.
+     *
+     * @param userid            用户 ID
      * @param username          用户名称
      * @param status            账户状态
+     *
      * @throws IllegalArgumentException
      */
     private SecurityUser(@NotNull String userid
             , @NotNull String username
             , @NotNull Account.StatusVo status)
-            throws IllegalArgumentException {
+            throws IllegalArgumentException
+    {
         if (null == userid) {
             //--- 添加用户功能
         } else {
             //--- 更新用户功能
             if (!SecurityUser.Validator.USER.userId(userid)) {
-                //-- 非法输入: 用户ID
-                throw new IllegalArgumentException(this.getClass().getSimpleName()
-                        .concat(" -> 非法输入: 用户ID"));
+                //-- 非法输入: [用户 ID]
+                throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
+                        , "[用户 ID]"
+                        , userid
+                        , this.getClass().getName()
+                        , Thread.currentThread().getStackTrace()[1].getMethodName()
+                        , Thread.currentThread().getStackTrace()[1].getLineNumber()));
             }
         }
         if (!SecurityUser.Validator.USER.username(username)) {
             //-- 非法输入: 用户名称
-            throw new IllegalArgumentException(this.getClass().getSimpleName()
-                    .concat(" -> 非法输入: 用户名称"));
+            throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
+                    , "用户名称"
+                    , username
+                    , this.getClass().getName()
+                    , Thread.currentThread().getStackTrace()[1].getMethodName()
+                    , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
         if (!SecurityUser.Validator.USER.status(status)) {
             //-- 非法输入: 账户状态
-            throw new IllegalArgumentException(this.getClass().getSimpleName()
-                    .concat(" -> 非法输入: 账户状态"));
+            throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
+                    , "账户状态"
+                    , status
+                    , this.getClass().getName()
+                    , Thread.currentThread().getStackTrace()[1].getMethodName()
+                    , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
 
         // 用户ID
@@ -198,7 +215,7 @@ public class SecurityUser
     }
 
     public enum Factory
-            implements EntityFactory<SecurityUser> {
+            implements EntityFactoryModel<SecurityUser> {
         USER;
 
         /**
@@ -207,33 +224,45 @@ public class SecurityUser
          * @param userId        用户ID
          * @param username      用户名称
          * @param status        账户状态
-         * @return 可为 null, 此时输入参数非法.
-         * @see github.com.suitelhy.dingding.core.domain.entity.User
-         * @throws IllegalArgumentException     此时 <param>id</param> 非法.
+         *
+         * @return {@link SecurityUser}
+         *
+         * @see User
+         *
+         * @throws IllegalArgumentException
+         * 此时 {@param userId}/{@param username}/{@param status} 非法.
          */
-        public SecurityUser create(@NotNull String userId
+        public @NotNull SecurityUser create(@NotNull String userId
                 , @NotNull String username
                 , @NotNull Account.StatusVo status)
-                throws IllegalArgumentException {
+                throws IllegalArgumentException
+        {
             return new SecurityUser(userId, username, status);
         }
 
         /**
          * 创建用户
          *
-         * @param user          {@link github.com.suitelhy.dingding.core.domain.entity.User}
-         * @return 可为 null, 此时输入参数非法.
-         * @throws IllegalArgumentException     此时 <param>user</param> 非法.
+         * @param user  {@link User}
+         *
+         * @return {@link SecurityUser}
+         *
+         * @throws IllegalArgumentException 此时 {@param user} 非法.
          */
-        public SecurityUser create(@NotNull User user)
-                throws IllegalArgumentException {
+        public @NotNull SecurityUser create(@NotNull User user)
+                throws IllegalArgumentException
+        {
             if (null == user || user.isEmpty()) {
                 //-- 非法输入: 非法用户
-                throw new IllegalArgumentException(this.getClass().getSimpleName()
-                        .concat(" -> 非法输入: 非法用户"));
+                throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
+                        , "非法用户"
+                        , user
+                        , this.getClass().getName()
+                        , Thread.currentThread().getStackTrace()[1].getMethodName()
+                        , Thread.currentThread().getStackTrace()[1].getLineNumber()));
             }
 
-            return new SecurityUser(user.getUserid()
+            return new SecurityUser(/*user.getUserid()*/null
                     , user.getUsername()
                     , user.getStatus());
         }
@@ -241,20 +270,27 @@ public class SecurityUser
         /**
          * 更新用户
          *
-         * @param userId            用户ID
-         * @param username          用户名称
-         * @param status            账户状态    {@link Account.StatusVo}
-         * @throws IllegalArgumentException 此时 <param>id</param> 非法
-         * @return 可为 null, 此时输入参数非法
+         * @param userId    用户ID
+         * @param username  用户名称
+         * @param status    账户状态    {@link Account.StatusVo}
+         *
+         * @throws IllegalArgumentException 此时 {@param userId} 非法
+         *
+         * @return {@link SecurityUser}
          */
-        public SecurityUser update(@NotNull String userId
+        public @NotNull SecurityUser update(@NotNull String userId
                 , @NotNull String username
                 , @NotNull Account.StatusVo status)
-                throws IllegalArgumentException {
-            if (!Validator.USER.userId(userId)) {
-                //-- 非法输入: 用户ID
-                throw new IllegalArgumentException(this.getClass().getSimpleName()
-                        .concat(" -> 非法输入: 用户ID"));
+                throws IllegalArgumentException
+        {
+            if (! Validator.USER.userId(userId)) {
+                //-- 非法输入: [用户 ID]
+                throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
+                        , "[用户 ID]"
+                        , userId
+                        , this.getClass().getName()
+                        , Thread.currentThread().getStackTrace()[1].getMethodName()
+                        , Thread.currentThread().getStackTrace()[1].getLineNumber()));
             }
 
             return new SecurityUser(userId, username, status);
@@ -263,24 +299,36 @@ public class SecurityUser
         /**
          * 销毁
          *
-         * @param securityUser
-         * @return {<code>true</code> : <b>销毁成功</b>
-         *->      , <code>false</code> : <b>销毁失败; 此时 <param>user</param></b> 无效或无法销毁}
+         * @param securityUser  {@link SecurityUser}
+         *
+         * @return 操作结果
+         * {
+         *    {@code true} : <b>销毁成功</b>,
+         *    {@code false} : <b>销毁失败</b> -> 此时 {@param securityUser} 无效或无法销毁.
+         * }
          */
         public boolean delete(@NotNull SecurityUser securityUser) {
-            if (null != securityUser && !securityUser.isEmpty()) {
-                securityUser.setStatus(Account.StatusVo.DESTRUCTION);
-                return true;
+            if (null != securityUser && ! securityUser.isEmpty()) {
+                return securityUser.setStatus(Account.StatusVo.DESTRUCTION);
             }
             return false;
+        }
+
+        /**
+         * 获取空对象
+         *
+         * @return 非 {@code null}.
+         */
+        @Override
+        public @NotNull SecurityUser createDefault() {
+            return new SecurityUser();
         }
 
     }
 
     //===== getter & setter =====//
 
-    @NotNull
-    public String getUserId() {
+    public @NotNull String getUserId() {
         return userId;
     }
 
@@ -292,7 +340,7 @@ public class SecurityUser
         return false;
     }
 
-    public Account.StatusVo getStatus() {
+    public @NotNull Account.StatusVo getStatus() {
         return status;
     }
 
@@ -304,8 +352,7 @@ public class SecurityUser
         return false;
     }
 
-    @NotNull
-    public String getUsername() {
+    public @NotNull String getUsername() {
         return username;
     }
 

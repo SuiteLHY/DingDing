@@ -12,13 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 日志记录 - 基础业务
  *
  * @Description 日志记录数据 - 基础交互业务接口.
  *
- * @see github.com.suitelhy.dingding.core.domain.entity.Log
+ * @see Log
  */
 /*// 此处选择使用 Mybatis-Spring 的XML文件配置方式实现 mapper, 用来演示复杂SQL情景下的一种设计思路:
 //-> 聚焦于 SQL.
@@ -37,32 +38,68 @@ public interface LogRepository
     long count();
 
     /**
-     * 查询指定用户对应的日志记录数
+     * 查询日志记录数量
      *
-     * @param userid
-     * @return
+     * @param operatorUsername  [操作者 - 用户名称]
+     *
+     * @return {@link Long#TYPE}
      */
-    long countByUserid(@NotNull String userid);
+    long countByOperatorUsername(@NotNull String operatorUsername);
+
+    /**
+     * 查询日志记录数量
+     *
+     * @param targetId  [被操作对象 - 用于日志追踪的 ID]
+     *
+     * @return {@link Long#TYPE}
+     */
+    long countByTargetId(@NotNull String targetId);
 
     /**
      * 查询所有日志记录
      *
      * @param pageable
+     *
      * @return
      */
     @Override
     Page<Log> findAll(Pageable pageable);
 
     /**
-     * 查询指定用户的日志记录
+     * 查询指定的日志记录
      *
-     * @param userid
+     * @param id    [日志记录 - 编号]
+     *
+     * @return {@link Optional}
+     */
+    @NotNull
+    @Transactional(isolation = Isolation.SERIALIZABLE
+            , propagation = Propagation.REQUIRED)
+    Optional<Log> findLogById(@NotNull Long id);
+
+    /**
+     * 查询指定的日志记录
+     *
+     * @param operatorUsername  [操作者 - 用户名称]
      * @param pageable
+     *
+     * @return {@link List}
+     */
+    @Transactional(isolation = Isolation.SERIALIZABLE
+            , propagation = Propagation.REQUIRED)
+    List<Log> findByOperatorUsername(@NotNull String operatorUsername, Pageable pageable);
+
+    /**
+     * 查询指定的日志记录
+     *
+     * @param targetId  [被操作对象 - 用于日志追踪的 ID]
+     * @param pageable
+     *
      * @return
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED)
-    List<Log> findByUserid(@NotNull String userid, Pageable pageable);
+    List<Log> findByTargetId(@NotNull String targetId, Pageable pageable);
 
     //===== Insert Data =====//
 
@@ -70,7 +107,8 @@ public interface LogRepository
      * 新增/更新日志记录
      *
      * @param log
-     * @return
+     *
+     * @return {@link Log}
      */
     @Override
     @Modifying
@@ -94,12 +132,14 @@ public interface LogRepository
     /**
      * 删除指定用户对应的所有日志记录
      *
-     * @param userid
+     * @param operatorUsername  [操作者 - 用户名称]
+     *
+     * @return {@link Long#TYPE}
      */
     @Modifying
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED)
-    long removeByUserid(@NotNull String userid);
+    long removeByOperatorUsername(@NotNull String operatorUsername);
 
     // 参考项目中提供了 deleteAll 业务接口; 如果更深入一些, 在实际生产情景下,
     //-> 不应该提供这类不严谨的业务接口 (...), 删除操作也仅限于用户权限以内.

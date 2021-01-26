@@ -7,7 +7,7 @@ import java.util.*;
  *
  * @param <E>
  *
- * @see github.com.suitelhy.dingding.core.infrastructure.domain.util.HashSet
+ * @see HashSet
  */
 public class ContainArrayHashSet<E>
         extends HashSet<E[]> {
@@ -22,6 +22,13 @@ public class ContainArrayHashSet<E>
         super(c);
     }
 
+    /**
+     * (Constructor)
+     *
+     * @param initialCapacity
+     *
+     * @throws IllegalArgumentException – if the initial capacity is less than zero
+     */
     public ContainArrayHashSet(int initialCapacity) {
         super(initialCapacity);
     }
@@ -257,7 +264,7 @@ public class ContainArrayHashSet<E>
         DemoUtils.show("===== set.contains(urlInfoSet2) -> " + set.contains(urlInfoSet2));
         DemoUtils.show("===== set.contains(urlInfoSet3) -> " + set.contains(urlInfoSet3));
 
-        //===== Put into github.com.suitelhy.dingding.core.infrastructure.domain.util.HashSet =====//
+        //===== Put into HashSet =====//
         HashSet<Object> hashSet = new HashSet<>(3);
 
         hashSet.add(urlInfoSet1);
@@ -265,7 +272,7 @@ public class ContainArrayHashSet<E>
         hashSet.add(urlInfoSet3);
 
         DemoUtils.show(null);
-        DemoUtils.show("//===== Put into github.com.suitelhy.dingding.core.infrastructure.domain.util.HashSet =====//");
+        DemoUtils.show("//===== Put into HashSet =====//");
 
         DemoUtils.show("===== hashSet -> " + hashSet);
         DemoUtils.show("===== hashSet.size() -> " + hashSet.size());

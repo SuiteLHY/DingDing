@@ -19,7 +19,7 @@ public class SqlUtil {
          * @Description 使用正则表达式校验
          */
         public static boolean validateSQL(@NotNull String sql) {
-            return RegexUtil.getPattern("^[A-Za-z0-9.]*.$").matcher(sql).matches();
+            return RegexUtil.getInstance().getPattern("^[A-Za-z0-9.]*.$").matcher(sql).matches();
         }
 
         private Regex() {

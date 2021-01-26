@@ -82,32 +82,35 @@ public class NetUtil {
     /**
      * 校验 IP 地址格式
      *
-     * @param ip
-     * @return {<code>true</code> : <p>符合 IP 地址格式</p>
-     * -> , <code>false</code> : <p>参数 ip 为空或不符合 IP 地址格式</p>}
+     * @param ip    [IP 地址]
+     *
+     * @return {@link Boolean#TYPE}
+     *-> {
+     *->    {@code true}:<p>符合 IP 地址格式</p>
+     *->    , {@code false}:<p>参数 ip 为空或不符合 IP 地址格式</p>
+     *-> }
      */
     public static boolean validateIpAddress(@NotNull String ip) {
         return null != ip
                 && !ip.isEmpty()
-                && RegexUtil.getPattern(NET_UTIL_CONFIG.getRegexIp()).matcher(ip).matches();
+                && RegexUtil.getInstance().getPattern(NET_UTIL_CONFIG.getRegexIp()).matcher(ip).matches();
     }
 
     /**
      * 从 Request 中获取 IP 地址
-     * <p>
-     * 相关资料:
-     * -> <a href="https://juejin.im/post/5dde34bef265da060a52181c">
-     * ->     X-Forward-For 看破红尘，代理 IP 无所遁形 - 掘金</a>,
-     * 相关 Python 爬虫资料:
-     * -> <a href="https://juejin.im/post/5e05a58b6fb9a0164f2955b2">一线大厂在用的反爬虫手段，看我破！ - 掘金</a>
-     * -> <a href="https://l1905.github.io/%E5%85%A5%E9%97%A8/2019/07/16/ip-proxy-01/">IP代理池理解 | 生活的自留地</a>
+     *
+     * · 相关资料:
+     * {@link <a href="https://juejin.im/post/5dde34bef265da060a52181c">X-Forward-For 看破红尘，代理 IP 无所遁形 - 掘金</a>}
+     * · 相关 Python 爬虫资料:
+     * {@link <a href="https://juejin.im/post/5e05a58b6fb9a0164f2955b2">一线大厂在用的反爬虫手段，看我破！ - 掘金</a>}
+     * {@link <a href="https://l1905.github.io/%E5%85%A5%E9%97%A8/2019/07/16/ip-proxy-01/">IP代理池理解 | 生活的自留地</a>}
      *
      * @param request
+     *
      * @return
      */
     // 参考项目中, 此方法的实现过于草率(...), 于是上网查到
-    //-> <a href="https://blog.csdn.net/hhhh222222/article/details/77878510">
-    //->     根据HttpServletRequest获取用户真实IP地址_hhhh222222的博客-CSDN博客</a>
+    //-> <a href="https://blog.csdn.net/hhhh222222/article/details/77878510">根据HttpServletRequest获取用户真实IP地址_hhhh222222的博客-CSDN博客</a>
     // 总之, 黑猫白猫, 能干好活就是好猫, coding after thinking, 避免不必要的错误(...).
     public static String getIpAddress(@NotNull HttpServletRequest request) {
         String ipAddress = null;
@@ -132,10 +135,11 @@ public class NetUtil {
                 }
             } catch (Exception e) {
                 //-- 获取不到 IP 地址的情况
-                throw new RuntimeException(NetUtil.class.getSimpleName()
-                        + " - "
-                        + "getIpAddress(HttpServletRequest request)"
-                        + " -> 从 Request 中获取 IP 地址出错!"
+                throw new RuntimeException(new StringBuilder(NetUtil.class.getSimpleName())
+                        .append(" - ")
+                        .append("getIpAddress(HttpServletRequest request)")
+                        .append(" -> 从 Request 中获取 IP 地址出错!")
+                        .toString()
                         , e);
             }
         }
@@ -145,5 +149,18 @@ public class NetUtil {
         }
         return ipAddress;
     }
+
+    /**
+     * @Design (单例模式 - 登记式)
+     */
+    private static class Factory {
+        private static final NetUtil SINGLETON = new NetUtil();
+    }
+
+    public static @NotNull NetUtil getInstance() {
+        return Factory.SINGLETON;
+    }
+
+    private NetUtil() {}
 
 }

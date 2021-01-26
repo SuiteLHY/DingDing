@@ -1,7 +1,7 @@
 package github.com.suitelhy.dingding.sso.authorization.web.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import github.com.suitelhy.dingding.core.infrastructure.web.SecurityUser;
+import github.com.suitelhy.dingding.core.infrastructure.web.AbstractSecurityUser;
 import github.com.suitelhy.dingding.core.infrastructure.web.model.DingDingResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,9 +47,9 @@ public class DingDingLogoutSuccessHandler
             , Authentication authentication)
             throws IOException, ServletException {
 
-        final SecurityUser user = (null == authentication)
+        final AbstractSecurityUser user = (null == authentication)
                 ? null
-                : (SecurityUser) authentication.getPrincipal();
+                : (AbstractSecurityUser) authentication.getPrincipal();
 
         //===== 设计: 返回 JSON 格式数据
         response.setContentType("application/json;charset=UTF-8");

@@ -17,7 +17,7 @@ logging:
   level:
     com.favorites: DEBUG
     org.hibernate: ERROR
-    org.springframework.web: INFO
+    org.springframework.web: DEBUG
     github.com.suitelhy.dingding.domain.repository.*: DEBUG
   ## @Reference <jar>org.springframework.boot.logging.LogFile</jar>
   file:

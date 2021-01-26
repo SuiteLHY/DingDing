@@ -1,0 +1,1 @@
+package github.com.suitelhy.dingding.core.domain.event.security.impl;

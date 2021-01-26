@@ -1,6 +1,6 @@
 //package github.com.suitelhy.dingding.sso.server.web.security;
 //
-//import github.com.suitelhy.dingding.core.infrastructure.web.SecurityUser;
+//import SecurityUser;
 //import lombok.extern.slf4j.Slf4j;
 //import org.springframework.security.core.Authentication;
 //import org.springframework.security.web.authentication.logout.LogoutHandler;

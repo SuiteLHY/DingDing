@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 资源 - URL
@@ -35,6 +36,7 @@ public interface SecurityResourceUrlRepository
      * 判断存在
      *
      * @param resourceCode
+     *
      * @return
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -42,9 +44,38 @@ public interface SecurityResourceUrlRepository
     boolean existsAllByCode(@NotNull String resourceCode);
 
     /**
+     * 判断存在
+     *
+     * @param clientId
+     * @param urlPath
+     * @param urlMethod
+     *
+     * @return
+     */
+    @Transactional(isolation = Isolation.SERIALIZABLE
+            , propagation = Propagation.REQUIRED)
+    boolean existsAllByClientIdAndUrlPathAndUrlMethod(@NotNull String clientId, @NotNull String urlPath, @NotNull String urlMethod);
+
+    /**
+     * 判断存在
+     *
+     * @param code
+     * @param clientId
+     * @param urlPath
+     * @param urlMethod
+     *
+     * @return
+     */
+    @Transactional(isolation = Isolation.SERIALIZABLE
+            , propagation = Propagation.REQUIRED)
+    boolean existsAllByCodeAndClientIdAndUrlPathAndUrlMethod(@NotNull String code, @NotNull String clientId, @NotNull String urlPath
+            , @NotNull String urlMethod);
+
+    /**
      * 查询所有
      *
      * @param resourceCode  资源编码
+     *
      * @return
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -65,6 +96,7 @@ public interface SecurityResourceUrlRepository
      *
      * @param clientId      资源服务器 ID
      * @param urlPath       资源对应的 URL (Path部分)
+     *
      * @return
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -77,19 +109,78 @@ public interface SecurityResourceUrlRepository
      * @param clientId      资源服务器 ID
      * @param urlPath       资源对应的 URL (Path部分)
      * @param pageable      {@link org.springframework.data.domain.Pageable}
+     *
      * @return {@link Page}
      */
     Page<SecurityResourceUrl> findAllByClientIdAndUrlPath(@NotNull String clientId
             , @NotNull String urlPath
             , Pageable pageable);
 
+    /**
+     * 查询所有
+     *
+     * @param clientId      资源服务器 ID
+     * @param urlPath       资源对应的 URL (Path部分)
+     * @param urlMethod     资源对应的 URL Method
+     *
+     * @return
+     */
+    @Transactional(isolation = Isolation.SERIALIZABLE
+            , propagation = Propagation.REQUIRED)
+    List<SecurityResourceUrl> findAllByClientIdAndUrlPathAndUrlMethod(@NotNull String clientId, @NotNull String urlPath, @NotNull String urlMethod);
+
+    /**
+     * 查询所有
+     *
+     * @param clientId      资源服务器 ID
+     * @param urlPath       资源对应的 URL (Path部分)
+     * @param urlMethod     资源对应的 URL Method
+     * @param pageable      {@link org.springframework.data.domain.Pageable}
+     *
+     * @return {@link Page}
+     */
+    Page<SecurityResourceUrl> findAllByClientIdAndUrlPathAndUrlMethod(@NotNull String clientId, @NotNull String urlPath, @NotNull String urlMethod
+            , Pageable pageable);
+
+    /**
+     * 查询所有
+     *
+     * @param code          资源编码
+     * @param clientId      资源服务器 ID
+     * @param urlPath       资源对应的 URL (Path部分)
+     * @param urlMethod     资源对应的 URL Method
+     *
+     * @return {@link SecurityResourceUrl}
+     */
+    @Transactional(isolation = Isolation.SERIALIZABLE
+            , propagation = Propagation.REQUIRED)
+    @NotNull Optional<SecurityResourceUrl> findSecurityResourceUrlByCodeAndClientIdAndUrlPathAndUrlMethod(@NotNull String code
+            , @NotNull String clientId
+            , @NotNull String urlPath
+            , @NotNull String urlMethod);
+
+    /**
+     * 查询所有
+     *
+     * @param code          资源编码
+     * @param clientId      资源服务器 ID
+     * @param urlPath       资源对应的 URL (Path部分)
+     * @param urlMethod     资源对应的 URL Method
+     * @param pageable      {@link org.springframework.data.domain.Pageable}
+     *
+     * @return {@link Page}
+     */
+    Page<SecurityResourceUrl> findAllByCodeAndClientIdAndUrlPathAndUrlMethod(@NotNull String code, @NotNull String clientId, @NotNull String urlPath
+            , @NotNull String urlMethod, Pageable pageable);
+
     //===== Insert Data =====//
 
     /**
      * 新增/更新日志记录
      *
-     * @param entity        {@link github.com.suitelhy.dingding.core.domain.entity.security.SecurityResourceUrl}
-     * @return  {@link github.com.suitelhy.dingding.core.domain.entity.security.SecurityResourceUrl}
+     * @param entity    {@link SecurityResourceUrl}
+     *
+     * @return  {@link SecurityResourceUrl}
      */
     @Override
     @Modifying
@@ -114,6 +205,7 @@ public interface SecurityResourceUrlRepository
      * 删除
      *
      * @param resourceCode  资源编码
+     *
      * @return
      */
     @Modifying
@@ -126,6 +218,7 @@ public interface SecurityResourceUrlRepository
      *
      * @param clientId      资源服务器 ID
      * @param urlPath       资源对应的 URL (Path部分)
+     *
      * @return
      */
     @Modifying
@@ -139,11 +232,26 @@ public interface SecurityResourceUrlRepository
      * @param resourceCode  资源编码
      * @param clientId      资源服务器 ID
      * @param urlPath       资源对应的 URL (Path部分)
+     *
      * @return
      */
     @Modifying
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED)
-    long removeByCodeAndClientIdAndUrlPath(@NotNull String resourceCode, @NotNull String clientId, @NotNull String urlPath);
+    long removeByCodeAndClientIdAndUrlPathAndUrlMethod(@NotNull String resourceCode, @NotNull String clientId, @NotNull String urlPath, @NotNull String urlMethod);
+
+    /**
+     * 删除
+     *
+     * @param clientId      资源服务器 ID
+     * @param urlPath       资源对应的 URL (Path部分)
+     * @param urlMethod     资源对应的 URL Method
+     *
+     * @return
+     */
+    @Modifying
+    @Transactional(isolation = Isolation.SERIALIZABLE
+            , propagation = Propagation.REQUIRED)
+    long removeByClientIdAndUrlPathAndUrlMethod(@NotNull String clientId, @NotNull String urlPath, @NotNull String urlMethod);
 
 }

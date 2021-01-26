@@ -2,6 +2,8 @@ dingding:
   security:
     client-id: dingding1
     client-secret: dingding_secrect1
+    cross:
+      allow-origin-host: http://localhost:8080
     signing-key: dingding
   sso:
     auth-server:

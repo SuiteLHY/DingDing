@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 public final class VoUtil {
 
     @Nullable
-    public static <VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V extends Number, _DESCRIPTION>
+    public /*static*/ <VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V extends Number, _DESCRIPTION>
     VO getVoByName(@NotNull Class<VO> voClass, @NotNull String name) {
         for (VO each : voClass.getEnumConstants()) {
             if (each.name().equals(name)) {
@@ -22,7 +22,7 @@ public final class VoUtil {
     }
 
     @Nullable
-    public static <VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V extends Number, _DESCRIPTION>
+    public /*static*/ <VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V extends Number, _DESCRIPTION>
     VO getVoByValue(@NotNull Class<VO> voClass, @Nullable V value) {
         for (VO each : voClass.getEnumConstants()) {
             if (each.equalsValue(value)) {
@@ -30,6 +30,20 @@ public final class VoUtil {
             }
         }
         return null;
+    }
+
+    /**
+     * @Design (单例模式 - 登记式)
+     */
+    private static class Factory {
+        private static final VoUtil SINGLETON = new VoUtil();
+    }
+
+    private VoUtil() {}
+
+    @NotNull
+    public static VoUtil getInstance() {
+        return VoUtil.Factory.SINGLETON;
     }
 
 }

@@ -1,7 +1,7 @@
 package github.com.suitelhy.dingding.core.infrastructure.domain.vo;
 
-import github.com.suitelhy.dingding.core.infrastructure.domain.model.VoModel;
 import github.com.suitelhy.dingding.core.infrastructure.config.springdata.attribute.converter.VoAttributeConverter;
+import github.com.suitelhy.dingding.core.infrastructure.domain.model.VoModel;
 
 import javax.validation.constraints.NotNull;
 
@@ -226,7 +226,7 @@ import javax.validation.constraints.NotNull;
  * @param <V>
  * @param <_DESCRIPTION>
  */
-public interface Message<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V extends Number, _DESCRIPTION>
+public interface Message<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V extends Number, _DESCRIPTION>
         extends VoModel<VO, V, _DESCRIPTION> {
 
     enum ChatMessageVo
@@ -234,6 +234,31 @@ public interface Message<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V exten
         CHAT_MESSAGE(1
                 , "聊天消息"
                 , "两个用户之间的聊天消息");
+
+        /**
+         * 为持久化类型转换器提供支持
+         */
+        @javax.persistence.Converter(autoApply = true)
+        public static class Converter
+                extends VoAttributeConverter<ChatMessageVo, Integer, String> {
+
+            /**
+             * @Design (单例模式 - 登记式)
+             */
+            private static class Factory {
+                private static final Converter SINGLETON = new Converter();
+            }
+
+            private Converter() {
+                super(ChatMessageVo.class);
+            }
+
+            @NotNull
+            public static Converter getInstance() {
+                return Factory.SINGLETON;
+            }
+
+        }
 
         private final int code;
 
@@ -296,20 +321,19 @@ public interface Message<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V exten
         }
 
         /**
-         * 为持久化类型转换器提供支持
+         * 提供类型转换器
+         *
+         * @Design 为持久化类型转换功能提供支持.
          */
-        @javax.persistence.Converter(autoApply = true)
-        public static class Converter
-                extends VoAttributeConverter<ChatMessageVo, Integer, String> {
-
-            public Converter() {
-                super(ChatMessageVo.class);
-            }
-
+        @Override
+        @NotNull
+        @SuppressWarnings("unchecked")
+        public Converter voAttributeConverter() {
+            return Converter.getInstance();
         }
 
         //===== 一对多关联 (使用接口管理枚举) =====//
-        public interface Status<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V extends Number, _DESCRIPTION>
+        public interface Status<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V extends Number, _DESCRIPTION>
                 extends VoModel<VO, V, _DESCRIPTION> {
 
             enum AcceptStatusVo
@@ -323,6 +347,29 @@ public interface Message<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V exten
                 , READ(2
                         , "已阅读"
                         , "消息已成功发送，对方已阅读。");
+
+                /**
+                 * 为持久化类型转换器提供支持
+                 */
+                @javax.persistence.Converter(autoApply = true)
+                public static class Converter
+                        extends VoAttributeConverter<AcceptStatusVo, Integer, String> {
+
+                    // (单例模式 - 登记式)
+                    private static class Factory {
+                        private static final Converter SINGLETON = new Converter();
+                    }
+
+                    public Converter() {
+                        super(AcceptStatusVo.class);
+                    }
+
+                    @NotNull
+                    public static Converter getInstance() {
+                        return Converter.Factory.SINGLETON;
+                    }
+
+                }
 
                 private final int code;
 
@@ -385,16 +432,14 @@ public interface Message<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V exten
                 }
 
                 /**
-                 * 为持久化类型转换器提供支持
+                 * 提供类型转换器
+                 *
+                 * @Design 为持久化类型转换功能提供支持.
                  */
-                @javax.persistence.Converter(autoApply = true)
-                public static class Converter
-                        extends VoAttributeConverter<AcceptStatusVo, Integer, String> {
-
-                    public Converter() {
-                        super(AcceptStatusVo.class);
-                    }
-
+                @Override
+                @NotNull
+                public Converter voAttributeConverter() {
+                    return Converter.getInstance();
                 }
 
             }
@@ -409,6 +454,31 @@ public interface Message<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V exten
         GROUP_CHAT_MESSAGE(2
                 , "群聊消息"
                 , "多个用户之间，一对多的聊天消息");
+
+        /**
+         * 为持久化类型转换器提供支持
+         */
+        @javax.persistence.Converter(autoApply = true)
+        public static class Converter
+                extends VoAttributeConverter<GroupChatMessageVo, Integer, String> {
+
+            /**
+             * @Design (单例模式 - 登记式)
+             */
+            private static class Factory {
+                private static final Converter SINGLETON = new Converter();
+            }
+
+            private Converter() {
+                super(GroupChatMessageVo.class);
+            }
+
+            @NotNull
+            public static Converter getInstance() {
+                return Factory.SINGLETON;
+            }
+
+        }
 
         private final int code;
 
@@ -471,19 +541,18 @@ public interface Message<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V exten
         }
 
         /**
-         * 为持久化类型转换器提供支持
+         * 提供类型转换器
+         *
+         * @Design 为持久化类型转换功能提供支持.
          */
-        @javax.persistence.Converter(autoApply = true)
-        public static class Converter
-                extends VoAttributeConverter<GroupChatMessageVo, Integer, String> {
-
-            public Converter() {
-                super(GroupChatMessageVo.class);
-            }
-
+        @Override
+        @NotNull
+        @SuppressWarnings("unchecked")
+        public Converter voAttributeConverter() {
+            return Converter.getInstance();
         }
 
-        public interface Status<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V extends Number, _DESCRIPTION>
+        public interface Status<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V extends Number, _DESCRIPTION>
                 extends VoModel<VO, V, _DESCRIPTION> {
 
             enum AcceptStatusVo
@@ -503,6 +572,29 @@ public interface Message<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V exten
                 , READ(4
                         , "全部已读"
                         , "消息已成功发送，群聊中的所有用户都已阅读此消息。");
+
+                /**
+                 * 为持久化类型转换器提供支持
+                 */
+                @javax.persistence.Converter(autoApply = true)
+                public static class Converter
+                        extends VoAttributeConverter<AcceptStatusVo, Integer, String> {
+
+                    // (单例模式 - 登记式)
+                    private static class Factory {
+                        private static final Converter SINGLETON = new Converter();
+                    }
+
+                    public Converter() {
+                        super(AcceptStatusVo.class);
+                    }
+
+                    @NotNull
+                    public static Converter getInstance() {
+                        return Factory.SINGLETON;
+                    }
+
+                }
 
                 private final int code;
 
@@ -565,16 +657,14 @@ public interface Message<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V exten
                 }
 
                 /**
-                 * 为持久化类型转换器提供支持
+                 * 提供类型转换器
+                 *
+                 * @Design 为持久化类型转换功能提供支持.
                  */
-                @javax.persistence.Converter(autoApply = true)
-                public static class Converter
-                        extends VoAttributeConverter<AcceptStatusVo, Integer, String> {
-
-                    public Converter() {
-                        super(AcceptStatusVo.class);
-                    }
-
+                @Override
+                @NotNull
+                public Converter voAttributeConverter() {
+                    return Converter.getInstance();
                 }
 
             }

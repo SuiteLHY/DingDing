@@ -4,15 +4,33 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>DingDing-sso-resource</artifactId>
-    <name>sso-resource</name>
-    <description>DingDing-sso-resource</description>
-
-    <parent>
+    <!--<parent>
         <groupId>github.com.SuiteLHY</groupId>
         <artifactId>DingDing-sso</artifactId>
         <version>1.0.0-SNAPSHOT</version>
+    </parent>-->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.2.2.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
     </parent>
+
+    <groupId>github.com.SuiteLHY.dingding</groupId>
+    <artifactId>sso-resource</artifactId>
+    <name>sso-resource</name>
+    <description>DingDing-sso-resource</description>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <!-- === (Maven 指定项目 JDK 版本) === -->
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <!-- ====== -->
+        <dingding.core.version>1.0.0-SNAPSHOT</dingding.core.version>
+        <dingding.sso.core.version>1.0.0-SNAPSHOT</dingding.sso.core.version>
+        <spring-cloud.version>Hoxton.SR3</spring-cloud.version>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -60,4 +78,28 @@
             <artifactId>lombok</artifactId>
         </dependency>
     </dependencies>
+
+    <!-- {@Note <p><code><dependencyManagement></code>标签组中声明的依赖项必须显式声明版本号, 故屏蔽不正确的配置项.</p>} -->
+    <dependencyManagement>
+        <dependencies>
+            <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-dependencies -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>

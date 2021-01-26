@@ -1,26 +1,25 @@
 package github.com.suitelhy.dingding.core.domain.entity.security;
 
-import github.com.suitelhy.dingding.core.infrastructure.domain.model.AbstractEntityModel;
-import github.com.suitelhy.dingding.core.infrastructure.domain.model.EntityFactory;
-import github.com.suitelhy.dingding.core.infrastructure.domain.model.EntityValidator;
 import github.com.suitelhy.dingding.core.infrastructure.domain.util.EntityUtil;
+import github.com.suitelhy.dingding.core.infrastructure.domain.model.AbstractEntity;
+import github.com.suitelhy.dingding.core.infrastructure.domain.model.EntityFactoryModel;
+import github.com.suitelhy.dingding.core.infrastructure.domain.model.EntityValidator;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Objects;
 
 /**
- * 角色 - 资源
+ * （安全认证）角色 ←→ 资源
  *
- * @Description 角色 - 资源 关联关系.
+ * @Description [（安全认证）角色 ←→ 资源]关联关系.
  */
 @Entity
 @Table(name = "SECURITY_ROLE_RESOURCE")
 public class SecurityRoleResource
-        extends AbstractEntityModel</*Long*/Object[]> {
+        extends AbstractEntity</*Long*/Object[]> {
 
     /**
      * ID
@@ -29,6 +28,7 @@ public class SecurityRoleResource
      */
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
+    @Column(length = 64)
     private Long id;
 
     /**
@@ -36,7 +36,7 @@ public class SecurityRoleResource
      *
      * @Description 单个.
      */
-    @Column(name = "role_code", nullable = false)
+    @Column(name = "role_code", nullable = false, length = 20)
     private String roleCode;
 
     /**
@@ -44,7 +44,7 @@ public class SecurityRoleResource
      *
      * @Description 单个.
      */
-    @Column(name = "resource_code", nullable = false)
+    @Column(name = "resource_code", nullable = false, length = 20)
     private String resourceCode;
 
     // 数据更新时间 (由数据库管理)
@@ -130,11 +130,8 @@ public class SecurityRoleResource
                 return false;
             }
 
-            if (Validator.ROLE_RESOURCE.roleCode((String) entityId[0])
-                    && Validator.ROLE_RESOURCE.resourceCode((String) entityId[1]) ) {
-                return true;
-            }
-            return false;
+            return Validator.ROLE_RESOURCE.roleCode((String) entityId[0])
+                    && Validator.ROLE_RESOURCE.resourceCode((String) entityId[1]);
         }
 
         public boolean id(@NotNull Long id) {
@@ -143,11 +140,13 @@ public class SecurityRoleResource
         }
 
         public boolean roleCode(@NotNull String roleCode) {
-            return SecurityRole.Validator.ROLE.code(roleCode);
+            return SecurityRole.Validator.ROLE.code(roleCode)
+                    && roleCode.length() < 21;
         }
 
         public boolean resourceCode(@NotNull String resourceCode) {
-            return SecurityResource.Validator.RESOURCE.code(resourceCode);
+            return SecurityResource.Validator.RESOURCE.code(resourceCode)
+                    && resourceCode.length() < 21;
         }
 
     }
@@ -155,7 +154,9 @@ public class SecurityRoleResource
     //===== base constructor =====//
 
     /**
-     * 仅用于持久化注入
+     * (构造器)
+     *
+     * @Description 仅用于持久化注入.
      */
     public SecurityRoleResource() {}
 
@@ -167,31 +168,45 @@ public class SecurityRoleResource
      * @param id            数据 ID
      * @param roleCode      角色编码
      * @param resourceCode  资源编码
+     *
      * @throws IllegalArgumentException
      */
     private SecurityRoleResource(@NotNull Long id
             , @NotNull String roleCode
-            , @Nullable String resourceCode)
-            throws IllegalArgumentException {
+            , @NotNull String resourceCode)
+            throws IllegalArgumentException
+    {
         if (null == id) {
             //--- 添加功能
         } else {
             //--- 更新功能
-            if (!Validator.ROLE_RESOURCE.id(id)) {
-                //-- 非法输入: 数据ID
-                throw new IllegalArgumentException(this.getClass().getSimpleName()
-                        + " -> 非法输入: 数据ID");
+            if (! Validator.ROLE_RESOURCE.id(id)) {
+                //-- 非法输入: [数据 ID]
+                throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
+                        , "[数据 ID]"
+                        , id
+                        , this.getClass().getName()
+                        , Thread.currentThread().getStackTrace()[1].getMethodName()
+                        , Thread.currentThread().getStackTrace()[1].getLineNumber()));
             }
         }
-        if (!Validator.ROLE_RESOURCE.roleCode(roleCode)) {
+        if (! Validator.ROLE_RESOURCE.roleCode(roleCode)) {
             //-- 非法输入: 角色编码
-            throw new IllegalArgumentException(this.getClass().getSimpleName()
-                    + " -> 非法输入: 角色编码");
+            throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
+                    , "角色编码"
+                    , roleCode
+                    , this.getClass().getName()
+                    , Thread.currentThread().getStackTrace()[1].getMethodName()
+                    , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
-        if (!Validator.ROLE_RESOURCE.resourceCode(resourceCode)) {
+        if (! Validator.ROLE_RESOURCE.resourceCode(resourceCode)) {
             //-- 非法输入: 资源编码
-            throw new IllegalArgumentException(this.getClass().getSimpleName()
-                    + " -> 非法输入: 资源编码");
+            throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
+                    , "资源编码"
+                    , resourceCode
+                    , this.getClass().getName()
+                    , Thread.currentThread().getStackTrace()[1].getMethodName()
+                    , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
 
         // 数据ID
@@ -203,7 +218,7 @@ public class SecurityRoleResource
     }
 
     public enum Factory
-            implements EntityFactory<SecurityRoleResource> {
+            implements EntityFactoryModel<SecurityRoleResource> {
         ROLE_RESOURCE;
 
         /**
@@ -211,11 +226,44 @@ public class SecurityRoleResource
          *
          * @param roleCode          角色编码
          * @param resourceCode      资源编码
+         *
          * @throws IllegalArgumentException
          */
-        public SecurityRoleResource create(@NotNull String roleCode, @Nullable String resourceCode)
-                throws IllegalArgumentException {
+        public @NotNull SecurityRoleResource create(@NotNull String roleCode, @NotNull String resourceCode)
+                throws IllegalArgumentException
+        {
             return new SecurityRoleResource(null, roleCode, resourceCode);
+        }
+
+        /**
+         * 创建
+         *
+         * @param role      （安全认证）角色
+         * @param resource  （安全认证）资源
+         *
+         * @throws IllegalArgumentException
+         */
+        public @NotNull SecurityRoleResource create(@NotNull SecurityRole role, @NotNull SecurityResource resource)
+                throws IllegalArgumentException
+        {
+            if (null == role || role.isEmpty()) {
+                throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
+                        , "[（安全认证）角色]"
+                        , role
+                        , this.getClass().getName()
+                        , Thread.currentThread().getStackTrace()[1].getMethodName()
+                        , Thread.currentThread().getStackTrace()[1].getLineNumber()));
+            }
+            if (null == resource || resource.isEmpty()) {
+                throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
+                        , "[（安全认证）资源]"
+                        , resource
+                        , this.getClass().getName()
+                        , Thread.currentThread().getStackTrace()[1].getMethodName()
+                        , Thread.currentThread().getStackTrace()[1].getLineNumber()));
+            }
+
+            return new SecurityRoleResource(null, role.getCode(), resource.getCode());
         }
 
         /**
@@ -224,16 +272,33 @@ public class SecurityRoleResource
          * @param id            数据 ID
          * @param roleCode      角色编码
          * @param resourceCode  资源编码
+         *
          * @throws IllegalArgumentException
          */
-        public SecurityRoleResource update(@NotNull Long id
+        public @NotNull SecurityRoleResource update(@NotNull Long id
                 , @NotNull String roleCode
                 , @Nullable String resourceCode)
-                throws IllegalArgumentException {
+                throws IllegalArgumentException
+        {
             if (!Validator.ROLE_RESOURCE.id(id)) {
-                throw new IllegalArgumentException("非法输入: 数据 ID");
+                throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
+                        , "[数据 ID]"
+                        , id
+                        , this.getClass().getName()
+                        , Thread.currentThread().getStackTrace()[1].getMethodName()
+                        , Thread.currentThread().getStackTrace()[1].getLineNumber()));
             }
             return new SecurityRoleResource(id, roleCode, resourceCode);
+        }
+
+        /**
+         * 获取空对象
+         *
+         * @return 非 {@code null}.
+         */
+        @Override
+        public @NotNull SecurityRoleResource createDefault() {
+            return new SecurityRoleResource();
         }
 
     }

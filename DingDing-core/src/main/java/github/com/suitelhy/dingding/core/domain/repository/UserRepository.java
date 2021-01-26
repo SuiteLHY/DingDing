@@ -14,11 +14,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * 用户信息 - 持久化接口
  *
  * @Description 用户信息 - 实体 (Entity) 持久化接口.
+ *
+ * @see User
  */
 /*// @Mapper 注解: 标记持久化对象 ({ElementType.TYPE, ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER}).
 //-> 需要注意的是: 被 @Mapper 标记的接口不能定义重载方法; 因为通过 @Mapper 注入的实现类, 其所有方法的参数列表一致.
@@ -46,6 +49,7 @@ public interface UserRepository
      * 判断存在
      *
      * @param username
+     *
      * @return
      */
     @Transactional(isolation  = Isolation.SERIALIZABLE
@@ -54,37 +58,77 @@ public interface UserRepository
     boolean existsByUsername(@NotNull String username);
 
     /**
+     * 判断存在
+     *
+     * @param username
+     * @param statusVoSet
+     *
+     * @return
+     */
+    @Transactional(isolation  = Isolation.SERIALIZABLE
+            , propagation = Propagation.REQUIRED
+            , timeout = 15)
+    boolean existsByUsernameAndStatusIn(@NotNull String username, @NotNull Set<Account.StatusVo> statusVoSet);
+
+    /**
      * 查询所有用户列表
      *
      * @param pageable
      * @return
      */
     @Override
-    Page<User> findAll(Pageable pageable);
+    @NotNull Page<User> findAll(Pageable pageable);
 
     /**
      * 查询用户
      *
      * @param userid
-     * @return
+     *
+     * @return {@link Optional}
      */
     /*@Query("select u from User u where u.userid = ?1")*/
     @Transactional(isolation  = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED
             , timeout = 15)
-    Optional<User> findById(String userid);
+    @NotNull Optional<User> findUserByUserid(@NotNull String userid);
+
+    /**
+     * 查询用户
+     *
+     * @param username
+     *
+     * @return
+     */
+    @Transactional(isolation  = Isolation.SERIALIZABLE
+            , propagation = Propagation.REQUIRED
+            , timeout = 15)
+    @NotNull Optional<User> findUserByUsername(@NotNull String username);
 
     /**
      * 查询用户
      *
      * @param username
      * @param status
+     *
      * @return
      */
     @Transactional(isolation  = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED
             , timeout = 15)
-    Optional<User> findUserByUsernameAndStatus(String username, Account.StatusVo status);
+    @NotNull Optional<User> findUserByUsernameAndStatus(@NotNull String username, @NotNull Account.StatusVo status);
+
+    /**
+     * 查询用户
+     *
+     * @param username
+     * @param statusVoSet
+     *
+     * @return
+     */
+    @Transactional(isolation  = Isolation.SERIALIZABLE
+            , propagation = Propagation.REQUIRED
+            , timeout = 15)
+    @NotNull Optional<User> findUserByUsernameAndStatusIn(@NotNull String username, @NotNull Set<Account.StatusVo> statusVoSet);
 
     //===== Insert Data =====//
 
@@ -92,29 +136,30 @@ public interface UserRepository
      * 新增(/修改)用户
      *
      * @param user
+     *
      * @return
      */
     @Override
     @Modifying
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED)
-    User saveAndFlush(User user);
+    User saveAndFlush(@NotNull User user);
 
     //===== Update Data =====//
 
     /**
      * 修改指定用户信息
      *
-     * @param nickname
-     * @param userid
      * @param status
-     * @return
+     * @param username
+     *
+     * @return {@link Integer#TYPE}
      */
     @Modifying
-    @Query("update User u set u.nickname = ?1 where u.userid = ?2 and u.status = ?3")
+    @Query("update User u set u.status = ?1 where u.username = ?2 ")
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED)
-    int modifyByIdAndStatus(String nickname, String userid, Account.StatusVo status);
+    int modifyStatusByUsername(@NotNull Account.StatusVo status, @NotNull String username);
 
     //===== Delete Data =====//
 
@@ -132,10 +177,11 @@ public interface UserRepository
     /**
      * 删除给定的实体
      *
-     * @Description Spring Data JPA 提供的 <method>delete(T entity)</method> 无法保证操作 <b>执行且成功</b> !
-     * -> , 应该换用 <method>deleteById(String id)</method>.
-     * @Reference -> <a href="https://docs.spring.io/spring-data/commons/docs/current/api/org/springframework/data/repository/CrudRepository.html#delete-T-">
-     * ->     CrudRepository (Spring Data Core 2.2.3.RELEASE API) # delete-T-</a>
+     * @Description Spring Data JPA 提供的 <method>delete(T entity)</method> 无法保证操作 <b>执行且成功</b>
+     * , 应该换用 <method>deleteById(String id)</method>.
+     *
+     * @Reference
+     * {@link <a href="https://docs.spring.io/spring-data/commons/docs/current/api/org/springframework/data/repository/CrudRepository.html#delete-T-">CrudRepository (Spring Data Core 2.2.3.RELEASE API) # delete-T-</a>}
      *
      * @Update 不建议使用!
      *
@@ -147,18 +193,19 @@ public interface UserRepository
     @Modifying
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED)
-    void delete(User user);
+    void delete(@NotNull User user);
 
     /**
      * 删除给定的 id 所指定的实体
      *
      * @Description 可以保证删除操作 <b>执行且成功</b>.
-     * @Reference <a href="https://stackoverflow.com/questions/31346356/spring-data-jpa-deleteby-query-not-working?noredirect=1&lq=1">
-     * ->     Spring Data JPA DeleteBy查询不起作用 - Stack Overflow</a>
-     * -> , <a href="https://stackoverflow.com/questions/23723025/spring-data-delete-by-is-supported">
-     * ->      Spring Data: "delete by" is supported? - Stack Overflow</a>
+     *
+     * @Reference
+     * {@link <a href="https://stackoverflow.com/questions/31346356/spring-data-jpa-deleteby-query-not-working?noredirect=1&lq=1">Spring Data JPA DeleteBy查询不起作用 - Stack Overflow</a>}
+     * {@link <a href="https://stackoverflow.com/questions/23723025/spring-data-delete-by-is-supported">Spring Data: "delete by" is supported? - Stack Overflow</a>}
      *
      * @param id
+     *
      * @throws IllegalArgumentException                               - in case the given id is null.
      * @throws org.springframework.dao.EmptyResultDataAccessException - in case the given id -> entity is non persistent.
      */
@@ -166,7 +213,7 @@ public interface UserRepository
     @Modifying
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED)
-    void deleteById(String id);
+    void deleteById(@NotNull String id);
 
     //----- !DANGER: 禁止提供基于此类判断条件不够严谨的删除方法的业务接口!
     //------> 判断条件应该是包含 <method>id()</method> 的交集!

@@ -20,7 +20,7 @@ public final class JPARules {
     public static String camelCaseNameToUnderlined(@NotNull String fieldName) {
         StringBuffer columnNameSB = new StringBuffer();
         /*Matcher matcher = Pattern.compile("[A-Z]").matcher(fieldName);*/
-        Matcher matcher = RegexUtil.getPattern("[A-Z]").matcher(fieldName);
+        Matcher matcher = RegexUtil.getInstance().getPattern("[A-Z]").matcher(fieldName);
         while (matcher.find()) {
             //--- (分组匹配)
             String each = matcher.group();

@@ -1,22 +1,17 @@
 package github.com.suitelhy.dingding.sso.authorization.infrastructure.config.security.sso;
 
-import github.com.suitelhy.dingding.sso.authorization.domain.service.impl.DingDingUserInfoTokenServices;
+import github.com.suitelhy.dingding.core.infrastructure.web.vo.HTTP;
+import github.com.suitelhy.dingding.sso.authorization.domain.service.security.DingDingUserInfoTokenServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoTokenServices;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationProcessingFilter;
-import org.springframework.security.oauth2.provider.token.AccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
 
 /**
@@ -39,17 +34,21 @@ public class ResourceServerConfig
     /**
      * 安全资源的访问规则配置
      *
-     * @param http
+     * @param http  {@link HttpSecurity}
      *
      * @throws Exception
      */
     @Override
     public void configure(HttpSecurity http)
-            throws Exception {
-        http.authorizeRequests()
+            throws Exception
+    {
+        http
+                .authorizeRequests()
                 /*.antMatchers("/messages/**"
                         , "user/**")
                         .access("#oauth2.hasScope('all')")*/
+                .antMatchers(HTTP.MethodVo.OPTIONS.httpMethod, "/**")
+                    .permitAll()
                 .anyRequest()
                     .authenticated();
     }
@@ -57,7 +56,7 @@ public class ResourceServerConfig
     /**
      * 资源服务器的属性配置
      *
-     * @param resources
+     * @param resources {@link ResourceServerSecurityConfigurer}
      *
      * @throws Exception
      */
@@ -74,8 +73,8 @@ public class ResourceServerConfig
  * Token 配置
  *
  * @Description 弃用 JWT.
- *-> 当前情景不适合 JWT, 继续使用 Session + Cookie 的 Token 认证方式.
- *-> {@link <a href="https://juejin.im/entry/59748def518825592c4f9ac0">不要用 JWT 来做 Web 应用的会话管理 - 后端 - 掘金</a>}
+ * · 当前情景不适合 JWT, 继续使用 Session + Cookie 的 Token 认证方式.
+ * {@link <a href="https://juejin.im/entry/59748def518825592c4f9ac0">不要用 JWT 来做 Web 应用的会话管理 - 后端 - 掘金</a>}
  */
 @Configuration
 class TokenStoreAccess {

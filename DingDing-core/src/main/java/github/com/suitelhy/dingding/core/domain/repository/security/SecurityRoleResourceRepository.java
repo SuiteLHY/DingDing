@@ -5,7 +5,6 @@ import github.com.suitelhy.dingding.core.infrastructure.domain.model.EntityRepos
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,10 +12,10 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.LockModeType;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * 角色 - 资源
@@ -63,12 +62,25 @@ public interface SecurityRoleResourceRepository
      *
      * @param roleCode      角色编码
      * @param resourceCode  资源编码
+     *
      * @return
      */
     /*@Lock(LockModeType.PESSIMISTIC_WRITE)*/
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED)
-    boolean existsByRoleCodeAndResourceCode(@NotNull String roleCode, String resourceCode);
+    boolean existsByRoleCodeAndResourceCode(@NotNull String roleCode, @NotNull String resourceCode);
+
+    /**
+     * 查询
+     *
+     * @param roleCode      角色编码
+     * @param resourceCode  资源编码
+     *
+     * @return
+     */
+    @Transactional(isolation = Isolation.SERIALIZABLE
+            , propagation = Propagation.REQUIRED)
+    Optional<SecurityRoleResource> findByRoleCodeAndResourceCode(@NotNull String roleCode, @NotNull String resourceCode);
 
     /**
      * 查询所有

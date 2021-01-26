@@ -1,11 +1,8 @@
 package github.com.suitelhy.dingding.sso.server.web;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import github.com.suitelhy.dingding.core.application.task.LogTask;
 import github.com.suitelhy.dingding.core.application.task.UserTask;
-import github.com.suitelhy.dingding.core.infrastructure.web.SecurityUser;
-import github.com.suitelhy.dingding.core.infrastructure.application.dto.BasicUserDto;
+import github.com.suitelhy.dingding.core.infrastructure.web.AbstractSecurityUser;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -17,18 +14,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 /**
  * 用户业务
  *
  * @Description 用户相关业务.
- * @Issue · 关于 $ref 的 Swagger UI 前端页面输出的问题描述:
- * -> <Docs><a href="https://swagger.io/docs/specification/using-ref/">
- * ->     Using $ref | Swagger</a></Docs>
- * -> , <Solution><a href="https://github.com/springfox/springfox/issues/2563">
- * ->     无法解析指针：/ definitions /列表在文档中不存在·问题＃2563·springfox / springfox</a></Solution>
+ *
+ * @Issue
+ * · 关于 $ref 的 Swagger UI 前端页面输出的问题描述:
+ * {@link <a href="https://swagger.io/docs/specification/using-ref/">Using $ref | Swagger</a>}
+ * {@Solution <a href="https://github.com/springfox/springfox/issues/2563">无法解析指针：/ definitions /列表在文档中不存在·问题＃2563·springfox / springfox</a>}
  */
 @RestController
 @RequestMapping("/user")
@@ -43,8 +38,8 @@ public class UserController {
     @Autowired
     private LogTask logTask;
 
-    @Autowired
-    private ObjectMapper toJSONString;
+//    @Autowired
+//    private ObjectMapper toJSONString;
 
     @ApiOperation(value = "测试接口", httpMethod = "GET")
     @ApiImplicitParams({
@@ -62,7 +57,7 @@ public class UserController {
             , required = true)
     })
     @GetMapping("/login")
-    public /*UserDto*/String getUser(@AuthenticationPrincipal SecurityUser securityUser, Principal principal) {
+    public /*UserDto*/String getUser(@AuthenticationPrincipal final AbstractSecurityUser securityUser, Principal principal) {
         try {
 //            return toJSONString.writeValueAsString(/*securityUser.getUserDto()*/principal);
             /*Map<String, String> userInfo = new LinkedHashMap<>(1);

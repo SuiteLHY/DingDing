@@ -4,15 +4,37 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>DingDing-sso-authorization</artifactId>
-    <name>sso-authorization</name>
-    <description>DingDing-sso-authorization</description>
-
-    <parent>
+    <!--<parent>
         <groupId>github.com.SuiteLHY</groupId>
         <artifactId>DingDing-sso</artifactId>
         <version>1.0.0-SNAPSHOT</version>
+    </parent>-->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.2.2.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
     </parent>
+
+    <groupId>github.com.SuiteLHY.dingding</groupId>
+    <artifactId>sso-authorization</artifactId>
+    <name>sso-authorization</name>
+    <description>DingDing-sso-authorization</description>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <!-- === (Maven 指定项目 JDK 版本) === -->
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <!-- ====== -->
+        <dingding.core.version>1.0.0-SNAPSHOT</dingding.core.version>
+        <dingding.sso.core.version>1.0.0-SNAPSHOT</dingding.sso.core.version>
+        <spring-cloud.version>Hoxton.SR3</spring-cloud.version>
+        <spring.security.version>2.4.0.RELEASE</spring.security.version>
+        <spring.security.oauth2.version>2.4.0.RELEASE</spring.security.oauth2.version>
+        <spring.security.oauth2.autoconfigure.version>2.2.1.RELEASE</spring.security.oauth2.autoconfigure.version>
+        <spring.security.jwt.version>1.1.0.RELEASE</spring.security.jwt.version>
+    </properties>
 
     <dependencies>
         <!-- Spring Data JPA -->
@@ -38,13 +60,56 @@
         </dependency>
 
         <!-- Security -->
-        <dependency>
+        <!--<dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-oauth2</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-security</artifactId>
+        </dependency>-->
+
+        <!-- === Spring Security OAuth2 === -->
+        <dependency>
+            <groupId>org.springframework.security.oauth</groupId>
+            <artifactId>spring-security-oauth2</artifactId>
+            <version>${spring.security.oauth2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security.oauth.boot</groupId>
+            <artifactId>spring-security-oauth2-autoconfigure</artifactId>
+            <version>${spring.security.oauth2.autoconfigure.version}</version>
+        </dependency>
+        <!-- ====== -->
+
+        <!-- === JWT === -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-jwt</artifactId>
+            <version>${spring.security.jwt.version}</version>
+        </dependency>
+
+        <!-- Spring Test -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <!-- 排除 JUnit Vintage(兼容并启用已淘汰的 Junit 4 & 3) -->
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- Spring boot - 热部署(开发)工具 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+            <!-- 仅开发环境下启用 -->
+            <scope>test</scope>
         </dependency>
 
         <!-- MySQL 连接 -->
@@ -65,5 +130,38 @@
             <version>{dingding.security.authorize.version}</version>
             <scope>compile</scope>
         </dependency>-->
+
+        <!-- DingDing-基础配置 -->
+        <dependency>
+            <groupId>github.com.SuiteLHY.dingding</groupId>
+            <artifactId>core</artifactId>
+            <version>${dingding.core.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
     </dependencies>
+
+    <!-- {@Note <p><code><dependencyManagement></code>标签组中声明的依赖项必须显式声明版本号, 故屏蔽不正确的配置项.</p>} -->
+    <dependencyManagement>
+        <dependencies>
+            <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-dependencies -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+    
 </project>

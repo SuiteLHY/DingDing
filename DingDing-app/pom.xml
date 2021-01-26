@@ -58,6 +58,17 @@
         </dependency>
     </dependencies>
 
+    <dependencyManagement>
+        <dependencies>
+            <!-- Netty框架 -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-all</artifactId>
+                <version>${io.netty}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <!--<build>
         <plugins>
             <plugin>

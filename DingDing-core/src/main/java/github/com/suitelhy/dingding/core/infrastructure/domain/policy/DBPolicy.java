@@ -24,14 +24,16 @@ public enum DBPolicy {
     /**
      * 校验符合 <code>uuid()</code> 生成策略的 UUID 字符串
      *
+     * @Reference
+     *-> <a href="https://stackoverflow.com/questions/37615731/java-regex-for-uuid">java regex for UUID - Stack Overflow</a>
+     *
      * @param uuid
-     * @return
-     * @Reference <a href="https://stackoverflow.com/questions/37615731/java-regex-for-uuid">
-     * ->     java regex for UUID - Stack Overflow</a>
+     *
+     * @return {@link Boolean#TYPE}
      */
     public boolean validateUuid(@Nullable String uuid) {
         return null != uuid
-                && RegexUtil.getPattern("([a-f0-9]{32})").matcher(uuid).matches();
+                && RegexUtil.getInstance().getPattern("([a-f0-9]{32})").matcher(uuid).matches();
     }
 
 }

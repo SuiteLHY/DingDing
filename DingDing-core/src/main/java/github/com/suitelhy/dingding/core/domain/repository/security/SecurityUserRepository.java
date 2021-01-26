@@ -40,8 +40,21 @@ public interface SecurityUserRepository
     /**
      * 判断存在
      *
-     * @param entityId      {@link SecurityUser#id()}
+     * @param userId
+     *
      * @return
+     */
+    @Transactional(isolation = Isolation.SERIALIZABLE
+            , propagation = Propagation.REQUIRED)
+    boolean existsByUserId(@NotNull String userId);
+
+    /**
+     * 判断存在
+     *
+     * @param entityId      {@link SecurityUser#id()}
+     *
+     * @return
+     *
      * @see SecurityUser#id()
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -74,9 +87,24 @@ public interface SecurityUserRepository
      * @return
      */
     @Query(nativeQuery = true
-            , value = "select ur.role_code as code, r.name as name from SECURITY_USER_ROLE ur "
+            , value = /*"select r.id as id "
+                    + ", ur.role_code as code "
+                    + ", r.name as name "
+                    + ", r.description as description "
+                    + "from SECURITY_USER_ROLE ur "
                     + "left join SECURITY_ROLE r on ur.role_code = r.code "
-                    + "where ur.username = :username ")
+                    + "where ur.username = :username "*/
+                    "select r.id as id \n" +
+                    ", ur.role_code as code \n" +
+                    ", r.name as name \n" +
+                    ", r.description as description \n" +
+                    "from (\n" +
+                    "\t\tselect role_code \n" +
+                    "\t\t, username \n" +
+                    "\t\tfrom SECURITY_USER_ROLE \n" +
+                    "\t\twhere username = :username \n" +
+                    "\t) ur \n" +
+                    "left join SECURITY_ROLE r on r.code = ur.role_code ")
     List<Map<String, Object>> selectRoleByUsername(@NotNull @Param("username") String username);
 
     /**
@@ -86,17 +114,18 @@ public interface SecurityUserRepository
      * @return
      */
     @Query(nativeQuery = true
-            , value = "select sr.code as code "
-                    + ", sr.icon as icon "
-                    + ", sr.link as link "
-                    + ", sr.name as name "
-                    + ", sr.parent_code as parent_code "
-                    + ", sr.sort as sort "
-                    + ", sr.type as type "
-                    + "from SECURITY_RESOURCE sr "
-                    + "left join SECURITY_ROLE_RESOURCE rr on rr.resource_code = sr.code "
-                    + "left join SECURITY_USER_ROLE ur on ur.role_code = rr.role_code "
-                    + "where ur.username = :username "
+            , value = "select sr.id as id \n"
+                    + ", sr.code as code \n"
+                    + ", sr.icon as icon \n"
+                    + ", sr.link as link \n"
+                    + ", sr.name as name \n"
+                    + ", sr.parent_code as parent_code \n"
+                    + ", sr.sort as sort \n"
+                    + ", sr.type as type \n"
+                    + "from SECURITY_RESOURCE sr \n"
+                    + "left join SECURITY_ROLE_RESOURCE rr on rr.resource_code = sr.code \n"
+                    + "left join SECURITY_USER_ROLE ur on ur.role_code = rr.role_code \n"
+                    + "where ur.username = :username \n"
                     + "group by code, name ")
     List<Map<String, Object>> selectResourceByUsername(@NotNull @Param("username") String username);
 
@@ -109,6 +138,7 @@ public interface SecurityUserRepository
     @Query(nativeQuery = true
             , value = "select sru.client_id as client_id "
                     + ", sru.url_path as url_path "
+                    + ", sru.url_method as url_method "
                     + "from SECURITY_RESOURCE_URL sru "
                     + "left join SECURITY_ROLE_RESOURCE rr on rr.resource_code = sru.code "
                     + "left join SECURITY_USER_ROLE ur on ur.role_code = rr.role_code "

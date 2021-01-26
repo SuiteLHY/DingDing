@@ -1,15 +1,13 @@
 package github.com.suitelhy.dingding.sso.server.infrastructure.config.security.sso;
 
+import github.com.suitelhy.dingding.core.infrastructure.domain.vo.security.Security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,29 +18,20 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.approval.ApprovalStore;
-import org.springframework.security.oauth2.provider.approval.ApprovalStoreUserApprovalHandler;
 import org.springframework.security.oauth2.provider.approval.InMemoryApprovalStore;
-import org.springframework.security.oauth2.provider.approval.UserApprovalHandler;
-import org.springframework.security.oauth2.provider.request.DefaultOAuth2RequestFactory;
-import org.springframework.security.oauth2.provider.token.AccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
-import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
-import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
-import org.springframework.security.oauth2.provider.token.store.redis.JdkSerializationStrategy;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 /**
  * 认证服务器配置
  *
  * @Description
- *-> 排坑:
- *->  	{@link <a href="https://github.com/spring-projects/spring-security-oauth/issues/993">ResourceServerProperties DEFAULT filterOrder is not 0. #993</a>}
- *->  	{@link <a href="https://github.com/spring-projects/spring-boot/issues/5072">non-sensitive actuator endpoints require full authentication when @EnableResourceServer is used (oauth2) #5072</a>}
- *->  	{@link <description>最后一个雷: 通过 {@link Order} 设置的优先级, 如果不恰当, 会导致必要的过滤器不被调用.</description>}
- *->  	{@link <solution><a href="https://hacpai.com/article/1579503779901#%E7%B3%BB%E5%88%97%E6%96%87%E7%AB%A0">Spring Security Oauth2 从零到一完整实践（六）踩坑记录 - 黑客派</a></solution>}
+ * · 排坑:
+ *-> {@link <a href="https://github.com/spring-projects/spring-security-oauth/issues/993">ResourceServerProperties DEFAULT filterOrder is not 0. #993</a>}
+ *-> {@link <a href="https://github.com/spring-projects/spring-boot/issues/5072">non-sensitive actuator endpoints require full authentication when @EnableResourceServer is used (oauth2) #5072</a>}
+ *-> {@Description 最后一个雷: 通过 {@link Order} 设置的优先级, 如果不恰当, 会导致必要的过滤器不被调用.}
+ *-> {@link <solution><a href="https://hacpai.com/article/1579503779901#%E7%B3%BB%E5%88%97%E6%96%87%E7%AB%A0">Spring Security Oauth2 从零到一完整实践（六）踩坑记录 - 黑客派</a></solution>}
  *
  * @Editor Suite
  */
@@ -63,8 +52,8 @@ public class SsoAuthorizationServerConfig
 	@Autowired
 	private ClientDetailsService clientDetailsService;
 
-	@Autowired
-	private PasswordEncoder passwordEncoder;
+	/*@Autowired
+	private PasswordEncoder passwordEncoder;*/
 
 	@Autowired
 	/*@Qualifier("jwtTokenStore")*/
@@ -97,11 +86,12 @@ public class SsoAuthorizationServerConfig
 				.redirectUris("https://www.baidu.com"
 						, "http://127.0.0.1:8080/client1/index.html")
 				.scopes("all") // 允许的授权范围
-				.secret(passwordEncoder.encode("dingding_secret1"))// 客户端密码 (应该是加密后的密文)
-				.accessTokenValiditySeconds(180)
+				/*.secret(passwordEncoder.encode("dingding_secret1"))*/
+				.secret(Security.PasswordEncoderVo.BCrypt.encoder.encode("dingding_secret1"))// 客户端密码 (应该是加密后的密文)
+				.accessTokenValiditySeconds(60 * 60)
 				.refreshTokenValiditySeconds(3600 * 24 * 5)
-				.and()
 				//=== 客户端2 ===//
+				.and()
 				.withClient("dingding2")
 				.authorizedGrantTypes("authorization_code"
 						, "password"
@@ -109,7 +99,17 @@ public class SsoAuthorizationServerConfig
 				.redirectUris("https://www.baidu.com"
 						, "http://127.0.0.1:8060/client2/index.html")
 				.scopes("all")
-				.secret(passwordEncoder.encode("dingding_secret2"));
+				.secret(Security.PasswordEncoderVo.BCrypt.encoder.encode("dingding_secret2"))
+				//=== 客户端3 - 用户基础 CRUD 服务 ===//
+				.and()
+				.withClient("dingding_user")
+				.authorizedGrantTypes("authorization_code"
+						, "password"
+						, "refresh_token") // (授权方式)
+				.redirectUris("https://www.baidu.com"
+						, "http://127.0.0.1:8060/client2/index.html")
+				.scopes("all")
+				.secret(Security.PasswordEncoderVo.BCrypt.encoder.encode("dingding_user_secrect1"));
 	}
 
 	/**
@@ -224,7 +224,7 @@ class TokenStoreAccess {
 		// 复用refresh_token
 		tokenServices.setReuseRefreshToken(true);
 		// token有效期，设置12小时
-		tokenServices.setAccessTokenValiditySeconds(/*12 * 60 * 60*/180);
+		tokenServices.setAccessTokenValiditySeconds(2 * 60 * 60);
 		// refresh_token有效期，设置五天
 		tokenServices.setRefreshTokenValiditySeconds(5 * 24 * 60 * 60);
 

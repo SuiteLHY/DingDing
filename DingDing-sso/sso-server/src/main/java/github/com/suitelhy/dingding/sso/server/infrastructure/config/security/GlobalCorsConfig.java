@@ -37,9 +37,13 @@ public class GlobalCorsConfig {
     public CorsFilter corsFilter() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
 
+        // 是否允许证书
         corsConfiguration.setAllowCredentials(true);
+        // 设置允许跨域请求的域名
         corsConfiguration.setAllowedOrigins(allowOrigins);
+        // 设置允许跨域请求的请求头
         corsConfiguration.addAllowedHeader("*");
+        // 设置允许跨域请求的 HTTP 方法
         corsConfiguration.setAllowedMethods(allowedMethods);
 
         UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();

@@ -53,35 +53,35 @@ public class HelloControllerMockMvcTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Test
-    public void helloPage() throws Exception {
-        this.mockMvc.perform(get("/hello/helloPage"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("Hello World!")));
-    }
+//    @Test
+//    public void helloPage() throws Exception {
+//        this.mockMvc.perform(get("/hello/helloPage"))
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//                .andExpect(content().string(containsString("Hello World!")));
+//    }
 
-    @Test
-    public void hello() throws Exception {
-        this.mockMvc.perform(post("/hello/hello"))
-                .andDo(print())
-                // 验证返回结果
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("hello")));
-    }
+//    @Test
+//    public void hello() throws Exception {
+//        this.mockMvc.perform(post("/hello/hello"))
+//                .andDo(print())
+//                // 验证返回结果
+//                .andExpect(status().isOk())
+//                .andExpect(content().string(containsString("hello")));
+//    }
 
-    @Test
-    public void select() throws Exception {
-        ResultActions resultActions = this.mockMvc
-                .perform(get("/hello/select")
-                        .param("id", "402880e56f88643d016f886449e10000"))
-                .andDo(print())
-                /*// 验证返回结果
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("{admin}")))*/;
-        resultActions.andExpect(status().isOk())
-                .andExpect(content().string(containsString("{402880e56f88643d016f886449e10000}")));
-        resultActions.andReturn();
-    }
+//    @Test
+//    public void select() throws Exception {
+//        ResultActions resultActions = this.mockMvc
+//                .perform(get("/hello/select")
+//                        .param("id", "402880e56f88643d016f886449e10000"))
+//                .andDo(print())
+//                /*// 验证返回结果
+//                .andExpect(status().isOk())
+//                .andExpect(content().string(containsString("{admin}")))*/;
+//        resultActions.andExpect(status().isOk())
+//                .andExpect(content().string(containsString("{402880e56f88643d016f886449e10000}")));
+//        resultActions.andReturn();
+//    }
 
 }

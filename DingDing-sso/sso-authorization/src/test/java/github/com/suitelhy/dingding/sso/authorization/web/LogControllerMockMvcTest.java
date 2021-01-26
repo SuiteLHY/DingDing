@@ -30,21 +30,21 @@ public class LogControllerMockMvcTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Test
-    public void selectAll() throws Exception {
-        Map<String, String> requsrtParams = new LinkedHashMap<>(2);
-        requsrtParams.put("userid", "admin");
-        requsrtParams.put("page", Integer.toString(1));
-
-        ResultActions resultActions = this.mockMvc
-                .perform(get("/log/" + requsrtParams.get("userid") + "/log")
-                        .param("page", requsrtParams.get("page")))
-                .andDo(print());
-        // 验证返回结果
-        resultActions.andExpect(status().isOk())
-                .andExpect(content().string(
-                        containsString(requsrtParams.get("userid"))));
-        resultActions.andReturn();
-    }
+//    @Test
+//    public void selectAll() throws Exception {
+//        Map<String, String> requsrtParams = new LinkedHashMap<>(2);
+//        requsrtParams.put("userid", "admin");
+//        requsrtParams.put("page", Integer.toString(1));
+//
+//        ResultActions resultActions = this.mockMvc
+//                .perform(get("/log/" + requsrtParams.get("userid") + "/log")
+//                        .param("page", requsrtParams.get("page")))
+//                .andDo(print());
+//        // 验证返回结果
+//        resultActions.andExpect(status().isOk())
+//                .andExpect(content().string(
+//                        containsString(requsrtParams.get("userid"))));
+//        resultActions.andReturn();
+//    }
 
 }

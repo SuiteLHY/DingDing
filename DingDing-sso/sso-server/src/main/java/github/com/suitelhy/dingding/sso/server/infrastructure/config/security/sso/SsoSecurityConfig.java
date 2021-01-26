@@ -21,11 +21,11 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
  * Spring Security 配置
  *
  * @Reference
- *-> · 排坑:
- *-> 	{@link <a href="https://github.com/spring-projects/spring-security-oauth/issues/993">ResourceServerProperties DEFAULT filterOrder is not 0. #993</a>}
- *-> 	{@link <a href="https://github.com/spring-projects/spring-boot/issues/5072">non-sensitive actuator endpoints require full authentication when @EnableResourceServer is used (oauth2) #5072</a>}
- *-> 	{@link <description>最后一个雷: 通过 {@link Order} 设置的优先级，如果不恰当，会导致必要的过滤器不被调用.</description>}
- *-> 	{@link <solution><a href="https://hacpai.com/article/1579503779901#%E7%B3%BB%E5%88%97%E6%96%87%E7%AB%A0">Spring Security Oauth2 从零到一完整实践（六）踩坑记录 - 黑客派</a></solution>}
+ * · 排坑:
+ *-> {@link <a href="https://github.com/spring-projects/spring-security-oauth/issues/993">ResourceServerProperties DEFAULT filterOrder is not 0. #993</a>}
+ *-> {@link <a href="https://github.com/spring-projects/spring-boot/issues/5072">non-sensitive actuator endpoints require full authentication when @EnableResourceServer is used (oauth2) #5072</a>}
+ *-> {@Description 最后一个雷: 通过 {@link Order} 设置的优先级，如果不恰当，会导致必要的过滤器不被调用.}
+ *-> {@link <solution><a href="https://hacpai.com/article/1579503779901#%E7%B3%BB%E5%88%97%E6%96%87%E7%AB%A0">Spring Security Oauth2 从零到一完整实践（六）踩坑记录 - 黑客派</a></solution>}
  *
  * @Editor Suite
  *
@@ -50,14 +50,15 @@ public class SsoSecurityConfig
 	 * @Description <a href="https://github.com/jgrandja/spring-security-oauth-2-4-migrate/blob/master/auth-server/src/main/java/org/springframework/security/oauth/samples/config/SecurityConfig.java">
 	 *->     spring-security-oauth-2-4-migrate/SecurityConfig.java at master · jgrandja/spring-security-oauth-2-4-migrate</a>
 	 *
-	 * @return
+	 * @return {@link AuthenticationManager}
 	 *
 	 * @throws Exception
 	 */
 	@Bean
 	@Override
 	public AuthenticationManager authenticationManagerBean()
-			throws Exception {
+			throws Exception
+	{
 		return super.authenticationManagerBean();
 	}
 
@@ -115,7 +116,7 @@ public class SsoSecurityConfig
 					.deleteCookies("JSESSIONID")
 					.invalidateHttpSession(true)
 					.logoutSuccessHandler(logoutSuccessHandler)
-				//===== ...
+				//===== (跨域)...
 				.and()
 				.cors()
 				//===== 跨域攻击防护策略
@@ -124,10 +125,15 @@ public class SsoSecurityConfig
 	}
 
 	/**
+	 * Spring Security ...
+	 *
+	 * @Description Web 策略配置.
+	 *
 	 * @Reference
 	 *-> {@link <a href="https://stackoverflow.com/questions/21696592/disable-spring-security-for-options-http-method">java-为选项Http方法禁用Spring Security-代码日志</a>}
 	 *
 	 * @param web
+	 *
 	 * @throws Exception
 	 */
 	@Override

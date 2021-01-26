@@ -8,7 +8,6 @@ import github.com.suitelhy.dingding.core.infrastructure.domain.model.EntityRepos
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,7 +16,6 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.LockModeType;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
@@ -85,7 +83,7 @@ public interface SecurityResourceRepository
      * @return  {@link org.springframework.data.domain.Page}
      */
     @Override
-    Page<SecurityResource> findAll(Pageable pageable);
+    @NotNull Page<SecurityResource> findAll(Pageable pageable);
 
     /**
      * 查询
@@ -96,7 +94,7 @@ public interface SecurityResourceRepository
      *
      * @see SecurityResource#id()
      */
-    Optional<SecurityResource> findByCode(@NotNull String entityId);
+    @NotNull Optional<SecurityResource> findSecurityResourceByCode(@NotNull String entityId);
 
     /**
      * 查询父节点资源编码对应的资源
@@ -106,7 +104,7 @@ public interface SecurityResourceRepository
      *
      * @return {@link org.springframework.data.domain.Page}
      */
-    Page<SecurityResource> findAllByParentCode(@NotNull String parentCode, Pageable pageable);
+    @NotNull Page<SecurityResource> findAllByParentCode(@NotNull String parentCode, Pageable pageable);
 
     /**
      * 查询所有 URL - ROLE 权限对应关系
@@ -115,6 +113,7 @@ public interface SecurityResourceRepository
      */
     @Query(nativeQuery = true
             , value = "select sru.url_path as url_path "
+                    + ", sru.url_method as url_method "
                     + ", role.`code` as role_code "
                     + ", sru.client_id as client_id "
                     + "from SECURITY_RESOURCE_URL sru "
@@ -124,7 +123,7 @@ public interface SecurityResourceRepository
                     + "left join SECURITY_USER_ROLE ur on ur.role_code = rr.role_code "
                     + "left join SECURITY_USER user on user.username = ur.username "
                     + "where user.username is not null "
-                    + "group by url_path, role_code ")
+                    + "group by url_path, url_method, role_code ")
     List<Map<String, Object>> selectAllUrlRoleMap();
 
     /**
@@ -136,6 +135,7 @@ public interface SecurityResourceRepository
      */
     @Query(nativeQuery = true
             , value = "select sru.url_path as url_path "
+                    + ", sru.url_method as url_method "
                     + ", role.`code` as role_code "
                     + ", sru.client_id as client_id "
                     + "from SECURITY_RESOURCE_URL sru "
@@ -145,7 +145,7 @@ public interface SecurityResourceRepository
                     + "left join SECURITY_USER_ROLE ur on ur.role_code = rr.role_code "
                     + "left join SECURITY_USER user on user.username = ur.username "
                     + "where user.username is not null and sru.client_id = :clientId "
-                    + "group by url_path, role_code ")
+                    + "group by url_path, url_method, role_code ")
     List<Map<String, Object>> selectUrlRoleMap(@NotNull @Param("clientId") String clientId);
 
     /**
@@ -193,7 +193,7 @@ public interface SecurityResourceRepository
      *
      * @param resource
      *
-     * @return {@link github.com.suitelhy.dingding.core.domain.entity.security.SecurityResource}
+     * @return {@link SecurityResource}
      */
     @Override
     @Modifying

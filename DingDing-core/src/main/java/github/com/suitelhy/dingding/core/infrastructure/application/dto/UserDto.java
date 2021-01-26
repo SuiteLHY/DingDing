@@ -1,13 +1,19 @@
 package github.com.suitelhy.dingding.core.infrastructure.application.dto;
 
 import github.com.suitelhy.dingding.core.domain.entity.User;
+import github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo;
+import github.com.suitelhy.dingding.core.domain.entity.UserPersonInfo;
+import github.com.suitelhy.dingding.core.infrastructure.application.model.DtoFactoryModel;
 import github.com.suitelhy.dingding.core.infrastructure.application.model.DtoModel;
-import github.com.suitelhy.dingding.core.infrastructure.domain.model.EntityFactory;
+import github.com.suitelhy.dingding.core.infrastructure.domain.util.HashMap;
 import github.com.suitelhy.dingding.core.infrastructure.domain.util.VoUtil;
+import github.com.suitelhy.dingding.core.infrastructure.domain.model.EntityFactoryModel;
 import github.com.suitelhy.dingding.core.infrastructure.domain.vo.Human;
 import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotNull;
+import java.util.Map;
+import java.util.Objects;
 
 public class UserDto
         extends BasicUserDto {
@@ -18,7 +24,7 @@ public class UserDto
     protected String age;
 
     // 用户注册时间
-    protected String firsttime;
+    protected String registrationTime;
 
     // 用户 - 昵称
     protected String nickname;
@@ -42,46 +48,238 @@ public class UserDto
     protected String username;
 
     //===== DtoModel =====//
+
     @NotNull
     private final transient User dtoId;
 
-    protected UserDto(@NotNull User dtoId)
-            throws IllegalArgumentException {
+    /**
+     * User - 拓展属性
+     *
+     * @Design
+     *-> {
+     *->    userAccountOperationInfo: [用户 -> 账户操作基础记录]
+     *->    , userPersonInfo: [用户 -> 个人信息]
+     *-> }
+     */
+    @NotNull
+    private final transient Map<String, Object> dtoIdExtension;
+
+    private UserDto() {
+        super();
+
+        //=== dtoId 相关 ===//
+        this.dtoId = User.Factory.USER.createDefault();
+        this.dtoIdExtension = new HashMap<>(2);
+        this.dtoIdExtension.put("userAccountOperationInfo", UserAccountOperationInfo.Factory.USER.createDefault());
+        this.dtoIdExtension.put("userPersonInfo", UserPersonInfo.Factory.USER.createDefault());
+        //======//
+    }
+
+    /**
+     * (Constructor)
+     *
+     * @param dtoId                         {@link User}
+     * @param dtoIdAccountOperationInfo     {@link UserAccountOperationInfo}
+     * @param dtoIdPersonInfo               {@link UserPersonInfo}
+     *
+     * @throws IllegalArgumentException
+     */
+    protected UserDto(@NotNull User dtoId, @NotNull UserAccountOperationInfo dtoIdAccountOperationInfo, @NotNull UserPersonInfo dtoIdPersonInfo)
+            throws IllegalArgumentException
+    {
         super(dtoId);
-        if (dtoId.isEmpty()) {
+
+        if (!dtoId.isEntityLegal()) {
             throw new IllegalArgumentException("非法参数: <param>dtoId</param>");
         }
-        this.dtoId = dtoId;
+        if (null == dtoIdAccountOperationInfo
+                || !dtoIdAccountOperationInfo.isEntityLegal()) {
+            throw new IllegalArgumentException("非法参数: <param>dtoIdAccountOperationInfo</param>");
+        }
+        if (null == dtoIdPersonInfo
+                || !dtoIdPersonInfo.isEntityLegal()) {
+            throw new IllegalArgumentException("非法参数: <param>dtoIdPersonInfo</param>");
+        }
 
-        this.age = this.dtoId.getAge() + "岁";
-        this.firsttime = this.dtoId.getFirsttime();
-        this.nickname = this.dtoId.getNickname();
-        this.password = "******************";
-        this.introduction = this.dtoId.getIntroduction();
-        this.faceImage = this.dtoId.getFaceImage();
-        this.sex = this.dtoId.getSex().displayName();
-        this.status = this.dtoId.getStatus().displayName();
+        //=== dtoId 相关 ===//
+        this.dtoId = dtoId;
+        this.dtoIdExtension = new HashMap<>(2);
+        this.dtoIdExtension.put("userAccountOperationInfo", dtoIdAccountOperationInfo);
+        this.dtoIdExtension.put("userPersonInfo", dtoIdPersonInfo);
+        //======//
+
+        this.age = String.format("%d岁"
+                , ((UserPersonInfo) Objects.requireNonNull(dtoIdExtension.get("userPersonInfo"))).getAge());
+        this.registrationTime = ((UserAccountOperationInfo) Objects.requireNonNull(this.dtoIdExtension.get("userAccountOperationInfo")))
+                .getRegistrationTime();
+        this.nickname = ((UserPersonInfo) Objects.requireNonNull(dtoIdExtension.get("userPersonInfo")))
+                .getNickname();
+        this.password = /*"******************"*/this.dtoId.getPassword();
+        this.introduction = ((UserPersonInfo) Objects.requireNonNull(dtoIdExtension.get("userPersonInfo")))
+                .getIntroduction();
+        this.faceImage = ((UserPersonInfo) Objects.requireNonNull(dtoIdExtension.get("userPersonInfo")))
+                .getFaceImage();
+        this.sex = ((UserPersonInfo) Objects.requireNonNull(dtoIdExtension.get("userPersonInfo")))
+                .getSex()
+                .displayName();
+        this.status = this.dtoId.getStatus()
+                .displayName();
+        this.username = this.dtoId.getUsername();
+    }
+
+    /**
+     * (Constructor)
+     *
+     * @param userDto   {@link UserDto}
+     *
+     * @throws IllegalArgumentException
+     */
+    protected UserDto(@NotNull UserDto userDto)
+            throws IllegalArgumentException
+    {
+        super(userDto);
+
+        if (!userDto.isDtoLegal() || !userDto.isEntityLegal()) {
+            //-- 非法输入: <param>userDto</param>
+            throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
+                    , "userDto"
+                    , userDto
+                    , this.getClass().getName()
+                    , Thread.currentThread().getStackTrace()[1].getMethodName()
+                    , Thread.currentThread().getStackTrace()[1].getLineNumber()));
+        }
+        if (null == userDto.dtoIdExtension.get("userAccountOperationInfo")
+                || !((UserAccountOperationInfo) userDto.dtoIdExtension.get("userAccountOperationInfo")).isEntityLegal()) {
+            //-- 非法输入: <param>userDto</param>
+            throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
+                    , "userDto"
+                    , userDto
+                    , this.getClass().getName()
+                    , Thread.currentThread().getStackTrace()[1].getMethodName()
+                    , Thread.currentThread().getStackTrace()[1].getLineNumber()));
+        }
+        if (null == userDto.dtoIdExtension.get("userPersonInfo")
+                || !((UserPersonInfo) userDto.dtoIdExtension.get("userPersonInfo")).isEntityLegal()) {
+            //-- 非法输入: <param>userDto</param>
+            throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
+                    , "userDto"
+                    , userDto
+                    , this.getClass().getName()
+                    , Thread.currentThread().getStackTrace()[1].getMethodName()
+                    , Thread.currentThread().getStackTrace()[1].getLineNumber()));
+        }
+
+        //=== dtoId 相关 ===//
+        this.dtoId = userDto.dtoId;
+        this.dtoIdExtension = new HashMap<>(2);
+        this.dtoIdExtension.put("userAccountOperationInfo", userDto.dtoIdExtension.get("userAccountOperationInfo"));
+        this.dtoIdExtension.put("userPersonInfo", userDto.dtoIdExtension.get("userPersonInfo"));
+        //======//
+
+        this.age = String.format("%d岁"
+                , ((UserPersonInfo) Objects.requireNonNull(dtoIdExtension.get("userPersonInfo"))).getAge());
+        this.registrationTime = ((UserAccountOperationInfo) Objects.requireNonNull(this.dtoIdExtension.get("userAccountOperationInfo")))
+                .getRegistrationTime();
+        this.nickname = ((UserPersonInfo) Objects.requireNonNull(dtoIdExtension.get("userPersonInfo")))
+                .getNickname();
+        this.password = /*"******************"*/this.dtoId.getPassword();
+        this.introduction = ((UserPersonInfo) Objects.requireNonNull(dtoIdExtension.get("userPersonInfo")))
+                .getIntroduction();
+        this.faceImage = ((UserPersonInfo) Objects.requireNonNull(dtoIdExtension.get("userPersonInfo")))
+                .getFaceImage();
+        this.sex = ((UserPersonInfo) Objects.requireNonNull(dtoIdExtension.get("userPersonInfo")))
+                .getSex()
+                .displayName();
+        this.status = this.dtoId.getStatus()
+                .displayName();
         this.username = this.dtoId.getUsername();
     }
 
     /**
      * 唯一标识 <- DTO 对象
      *
-     * @param username
-     * @param password
+     * @param username          用户名
+     * @param passwordPlaintext 用户密码（明文）
+     *
      * @return The unique identify of the DTO, or null.
      */
     @Nullable
-    public User dtoId(@NotNull String username, @NotNull String password) {
+    public User dtoId(@NotNull String username, @NotNull String passwordPlaintext) {
         if (User.Validator.USER.username(username)
-                && User.Validator.USER.password(password)) {
+                && User.Validator.USER.passwordPlaintext(passwordPlaintext)) {
             if (this.dtoId.getUsername().equals(username)
-                    && this.dtoId.equalsPassword(password)) {
+                    && Boolean.TRUE.equals(this.dtoId.equalsPassword(passwordPlaintext))) {
                 //设计: 用户 Entity 对象的获取需要进行严格地控制.
                 return this.dtoId;
             }
         }
+        /*System.err.println(String.format("【%s】【%s】-> false", username, passwordPlaintext));*/
         return null;
+    }
+
+    /**
+     * 唯一标识 <- DTO 对象
+     *
+     * @param dtoId User
+     *
+     * @return The unique identify of the DTO, or null.
+     */
+    @Nullable
+    public User dtoId(@NotNull User dtoId) {
+        if (null == dtoId || dtoId.isEmpty()
+                || !this.dtoId.equals(dtoId)) {
+            return null;
+        }
+
+        return this.dtoId;
+    }
+
+//    /**
+//     * 获取[User - 拓展属性]
+//     *
+//     * @param dtoId User
+//     *
+//     * @return [User - 拓展属性]
+//     */
+//    @Nullable
+//    public Map<String, Object> dtoIdExtension(@NotNull User dtoId) {
+//        if (null == dtoId || !this.dtoId.equals(dtoId)) {
+//            return null;
+//        }
+//
+//        return this.dtoIdExtension;
+//    }
+
+    /**
+     * 获取[用户 -> 账户操作基础记录]
+     *
+     * @param dtoId User
+     *
+     * @return [用户 -> 账户操作基础记录]
+     */
+    @Nullable
+    public UserAccountOperationInfo dtoId_UserAccountOperationInfo(@NotNull User dtoId) {
+        if (null == dtoId || !this.dtoId.equals(dtoId)) {
+            return null;
+        }
+
+        return (UserAccountOperationInfo) this.dtoIdExtension.get("userAccountOperationInfo");
+    }
+
+    /**
+     * 获取[用户 -> 个人信息]
+     *
+     * @param dtoId User
+     *
+     * @return [用户 -> 个人信息]
+     */
+    @Nullable
+    public UserPersonInfo dtoId_UserPersonInfo(@NotNull User dtoId) {
+        if (null == dtoId || !this.dtoId.equals(dtoId)) {
+            return null;
+        }
+
+        return (UserPersonInfo) this.dtoIdExtension.get("userPersonInfo");
     }
 
     /**
@@ -90,7 +288,7 @@ public class UserDto
      * @return The unique identify of the <tt>dtoId()</tt>.
      */
     @Override
-    public /*String*/Object[] id() {
+    public String id() {
         return this.dtoId.id();
     }
 
@@ -107,8 +305,9 @@ public class UserDto
     /**
      * 是否符合业务要求
      *
-     * @return
      * @Description 需要实现类实现该接口
+     *
+     * @return
      */
     @Override
     public boolean isEntityLegal() {
@@ -118,100 +317,245 @@ public class UserDto
     /**
      * 是否无效 <- DTO 对象
      *
-     * @return
      * @Description 使用默认实现.
+     *
+     * @return
      */
     @Override
     public boolean isEmpty() {
         return DtoModel.isEmpty(this);
     }
 
+    @NotNull
+    @Override
+    public String toString() {
+        return this.toJSONString();
+    }
+
     //===== Factory =====//
-    public enum Factory implements EntityFactory<UserDto> {
+
+    public enum Factory
+            implements DtoFactoryModel<UserDto, String> {
         USER_DTO;
 
         /**
          * 创建用户 DTO
          *
-         * @param user
-         * @return
+         * @param age               用户 - 年龄
+         * @param registrationTime  注册时间
+         * @param ip                最后登陆 IP
+         * @param lastLoginTime     最后登录时间
+         * @param nickname          用户 - 昵称
+         * @param password          用户 - 密码
+         * @param introduction      用户 - 简介
+         * @param faceImage         用户 - 头像
+         * @param sex               用户 - 性别
+         *
+         * @return 可为 null, 此时输入参数非法
+         *
+         * @throws IllegalArgumentException 此时 <param>id</param> 非法
          */
-        @NotNull
-        public UserDto create(@NotNull User user) {
-            return new UserDto(user);
+        public UserDto create(@Nullable Integer age
+                , @NotNull String registrationTime
+                , @NotNull String ip
+                , @NotNull String lastLoginTime
+                , @NotNull String nickname
+                , @NotNull String password
+                , @Nullable String introduction
+                , @Nullable String faceImage
+                , @NotNull String username
+                , @Nullable String sex)
+                throws IllegalAccessException
+        {
+            final User user = User.Factory.USER.create(username, password);
+            final UserAccountOperationInfo userAccountOperationInfo = UserAccountOperationInfo.Factory.USER.create(username
+                    , ip
+                    , lastLoginTime
+                    , registrationTime);
+            final UserPersonInfo userPersonInfo = UserPersonInfo.Factory.USER.create(username
+                    , nickname
+                    , age
+                    , faceImage
+                    , introduction
+                    , VoUtil.getInstance().getVoByName(Human.SexVo.class, sex));
+            if (!user.isEntityLegal()) {
+                throw new IllegalAccessException("非法参数: [用户 - 基础信息]");
+            }
+            if (!userAccountOperationInfo.isEntityLegal()
+                    || !userAccountOperationInfo.equals(user)) {
+                throw new IllegalAccessException("非法参数: [用户 -> 账户操作基础记录]");
+            }
+            if (!userPersonInfo.isEntityLegal()
+                    || !userPersonInfo.equals(user)) {
+                throw new IllegalAccessException("非法参数: [用户 -> 个人信息]");
+            }
+
+            return new UserDto(user, userAccountOperationInfo, userPersonInfo);
         }
 
         /**
          * 创建用户 DTO
          *
-         * @param age         用户 - 年龄
-         * @param firsttime   注册时间
-         * @param nickname    用户 - 昵称
-         * @param password    用户密码
-         * @param profile     用户 - 简介
-         * @param profilehead 用户 - 头像
-         * @param username    用户名称
-         * @param sex         用户 - 性别
-         * @throws IllegalArgumentException
+         * @param user                  [用户 - 基础信息]           {@link User}
+         * @param userOperationInfo     [用户 -> 账户操作基础记录]    {@link UserAccountOperationInfo}
+         * @param userPersonInfo        [用户 -> 个人信息]          {@link UserPersonInfo}
+         *
+         * @return {@link UserDto}
          */
         @NotNull
-        public UserDto create(@Nullable Integer age
-                , @NotNull String firsttime
-                , @NotNull String ip
-                , @NotNull String lasttime
-                , @NotNull String nickname
-                , @NotNull String password
-                , @Nullable String profile
-                , @Nullable String profilehead
-                , @NotNull String username
-                , @Nullable String sex) {
-            User newUser = User.Factory.USER.create(age, firsttime, ip
-                    , lasttime, nickname, password
-                    , profile, profilehead, username
-                    , VoUtil.getVoByName(Human.SexVo.class, sex));
-            return new UserDto(newUser);
+        public UserDto create(@NotNull User user, @NotNull UserAccountOperationInfo userOperationInfo, @NotNull UserPersonInfo userPersonInfo)
+                throws IllegalAccessException
+        {
+            if (null == user || !user.isEntityLegal()) {
+                throw new IllegalAccessException("非法参数: 用户基础信息");
+            }
+            if (null == userOperationInfo
+                    || !userOperationInfo.isEntityLegal()
+                    || !userOperationInfo.equals(user))
+            {
+                throw new IllegalAccessException("非法参数: [用户 -> 账户操作基础记录]");
+            }
+            if (null == userPersonInfo
+                    || !userPersonInfo.isEntityLegal()
+                    || !userPersonInfo.equals(user))
+            {
+                throw new IllegalAccessException("非法参数: [用户 -> 个人信息]");
+            }
+
+            return new UserDto(user, userOperationInfo, userPersonInfo);
+        }
+
+//        /**
+//         * 创建用户 DTO
+//         *
+//         * @param age         用户 - 年龄
+//         * @param firsttime   注册时间
+//         * @param nickname    用户 - 昵称
+//         * @param password    用户密码
+//         * @param profile     用户 - 简介
+//         * @param profilehead 用户 - 头像
+//         * @param username    用户名称
+//         * @param sex         用户 - 性别
+//         * @throws IllegalArgumentException
+//         */
+//        @NotNull
+//        public UserDto create(@Nullable Integer age
+//                , @NotNull String firsttime
+//                , @NotNull String ip
+//                , @NotNull String lasttime
+//                , @NotNull String nickname
+//                , @NotNull String password
+//                , @Nullable String profile
+//                , @Nullable String profilehead
+//                , @NotNull String username
+//                , @Nullable String sex) {
+//            User newUser = User.Factory.USER.create(age, firsttime, ip
+//                    , lasttime, nickname, password
+//                    , profile, profilehead, username
+//                    , VoUtil.getVoByName(Human.SexVo.class, sex));
+//            return new UserDto(newUser);
+//        }
+
+        /**
+         * 更新用户 DTO
+         *
+         * @param user                      用户基础信息              {@link User}
+         * @param userAccountOperationInfo  [用户 -> 账户操作基础记录]  {@link UserAccountOperationInfo}
+         * @param userPersonInfo            [用户 -> 个人信息]        {@link UserPersonInfo}
+         *
+         * @return {@link UserDto}
+         *
+         * @throws IllegalAccessException
+         */
+        public UserDto update(@NotNull User user, @NotNull UserAccountOperationInfo userAccountOperationInfo, @NotNull UserPersonInfo userPersonInfo)
+                throws IllegalAccessException
+        {
+            if (null == user || user.isEmpty()) {
+                throw new IllegalAccessException("非法参数: 用户基础信息");
+            }
+            if (userAccountOperationInfo.isEmpty()
+                    || !userAccountOperationInfo.equals(user)) {
+                throw new IllegalAccessException("非法参数: [用户 -> 账户操作基础记录]");
+            }
+            if (userPersonInfo.isEmpty()
+                    || !userPersonInfo.equals(user)) {
+                throw new IllegalAccessException("非法参数: [用户 -> 个人信息]");
+            }
+
+            return new UserDto(user, userAccountOperationInfo, userPersonInfo);
         }
 
         /**
          * 更新用户 DTO
          *
-         * @param id          用户ID
-         * @param age         用户 - 年龄
-         * @param firsttime   注册时间
-         * @param ip          最后登陆IP
-         * @param lasttime    最后登录时间
-         * @param nickname    用户 - 昵称
-         * @param password    用户 - 密码
-         * @param profile     用户 - 简介
-         * @param profilehead 用户 - 头像
-         * @param sex         用户 - 性别
+         * @param id                用户 ID
+         * @param age               用户 - 年龄
+         * @param registrationTime  注册时间
+         * @param ip                最后登陆 IP
+         * @param lastLoginTime     最后登录时间
+         * @param nickname          用户 - 昵称
+         * @param password          用户 - 密码
+         * @param introduction      用户 - 简介
+         * @param faceImage         用户 - 头像
+         * @param sex               用户 - 性别
+         *
          * @return 可为 null, 此时输入参数非法
+         *
          * @throws IllegalArgumentException 此时 <param>id</param> 非法
          */
         public UserDto update(@NotNull String id
                 , @Nullable Integer age
-                , @NotNull String firsttime
+                , @NotNull String registrationTime
                 , @NotNull String ip
-                , @NotNull String lasttime
+                , @NotNull String lastLoginTime
                 , @NotNull String nickname
                 , @NotNull String password
-                , @Nullable String profile
-                , @Nullable String profilehead
+                , @Nullable String introduction
+                , @Nullable String faceImage
                 , @NotNull String username
-                , @Nullable String sex) {
-            User user = User.Factory.USER.update(id, age, firsttime
-                    , ip, lasttime, nickname
-                    , password, profile, profilehead
-                    , username, VoUtil.getVoByName(Human.SexVo.class, sex));
-            return new UserDto(user);
+                , @Nullable String sex)
+                throws IllegalAccessException
+        {
+            if (!User.Validator.USER.entity_id(id)) {
+                throw new IllegalAccessException("非法参数: 用户 ID");
+            }
+
+            final User user = User.Factory.USER.update(id, username, password);
+            final UserAccountOperationInfo userAccountOperationInfo = UserAccountOperationInfo.Factory.USER.create(username
+                    , ip
+                    , lastLoginTime
+                    , registrationTime);
+            final UserPersonInfo userPersonInfo = UserPersonInfo.Factory.USER.create(username
+                    , nickname
+                    , age
+                    , faceImage
+                    , introduction
+                    , VoUtil.getInstance().getVoByName(Human.SexVo.class, sex));
+            if (user.isEmpty()) {
+                throw new IllegalAccessException("非法参数: 用户基础信息");
+            }
+            if (userAccountOperationInfo.isEmpty()
+                    || !userAccountOperationInfo.equals(user)) {
+                throw new IllegalAccessException("非法参数: [用户 -> 账户操作基础记录]");
+            }
+            if (userPersonInfo.isEmpty()
+                    || !userPersonInfo.equals(user)) {
+                throw new IllegalAccessException("非法参数: [用户 -> 个人信息]");
+            }
+
+            return new UserDto(user, userAccountOperationInfo, userPersonInfo);
         }
 
         /**
          * 销毁 DTO
          *
-         * @param userDto
-         * @return {<code>true</code> : <b>销毁成功</b>
-         * ->      , <code>false</code> : <b>销毁失败; 此时 <param>user</param></b> 无效或无法销毁}
+         * @param userDto   {@link UserDto}
+         *
+         * @return
+         *-> {
+         *->    <code>true</code> : <b>销毁成功</b>
+         *->    , <code>false</code> : <b>销毁失败; 此时 <param>user</param></b> 无效或无法销毁
+         *-> }
          */
         public boolean delete(@NotNull UserDto userDto) {
             if (null != userDto && !userDto.isEmpty()) {
@@ -220,9 +564,21 @@ public class UserDto
             return false;
         }
 
+        /**
+         * 获取空对象
+         *
+         * @return 非 {@code null}.
+         */
+        @NotNull
+        @Override
+        public UserDto createDefault() {
+            return new UserDto();
+        }
+
     }
 
-    //===== getter and setter =====//
+    //===== Getter And Setter =====//
+
     public String getAge() {
         return age;
     }
@@ -231,12 +587,12 @@ public class UserDto
         this.age = age;
     }
 
-    public String getFirsttime() {
-        return firsttime;
+    public String getRegistrationTime() {
+        return registrationTime;
     }
 
-    public void setFirsttime(String firsttime) {
-        this.firsttime = firsttime;
+    public void setRegistrationTime(String registrationTime) {
+        this.registrationTime = registrationTime;
     }
 
     public String getNickname() {
@@ -259,13 +615,14 @@ public class UserDto
      * 判断密码是否相同
      *
      * @param password
+     *
      * @return {true: <tt>密码相同</tt>, false: <tt>密码不相同</tt>, null: <tt>DTO无效</tt>}
      */
-    public Boolean equalsPassword(String password) {
-        if (dtoId().isEmpty()) {
+    public Boolean equalsPassword(@NotNull String password) {
+        if (Objects.requireNonNull(dtoId()).isEmpty()) {
             return null;
         }
-        return dtoId().equalsPassword(password);
+        return Objects.requireNonNull(dtoId()).equalsPassword(password);
     }
 
     public String getIntroduction() {

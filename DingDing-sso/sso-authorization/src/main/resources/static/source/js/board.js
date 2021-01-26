@@ -14,17 +14,17 @@ function Board(){
 	var data = new Array(DS);
 	var currentPlayer = 0;
 	var history = [];
-	
+
 	var trogglePlayer = function(){
 		currentPlayer = 3 - currentPlayer;
 	};
-	
+
 	this.init = function(){
 		for(var i=0;i<DS;++i){
 			data[i] = 0;
 		}
 	}
-	
+
 	this.reset = function(){
 		this.init();
 		for(var i=0;i<BS+2;++i){
@@ -34,15 +34,15 @@ function Board(){
 		currentPlayer = WHITE;
 		history = [];
 	};
-	
+
 	this.getChess = function(x,y){
 		return data[pos(x,y)];
 	};
-	
+
 	this.getPlayer = function(){
 		return currentPlayer;
 	};
-	
+
 	var check = function(x,y,dx,dy,chess){
 		var result = 0;
 		for(var i=0;i<4;++i){
@@ -60,7 +60,7 @@ function Board(){
 		}
 		return result;
 	};
-	
+
 	this.isGameOver = function(){
 		if(history.length>0){
 			var chess = (history.length%2==1)?WHITE:BLACK;
@@ -87,7 +87,7 @@ function Board(){
 		}
 		return 3;
 	}
-	
+
 	this.putChess = function(x,y){
 		if(data[pos(x,y)]==0){
 			data[pos(x,y)] = currentPlayer;
@@ -97,11 +97,11 @@ function Board(){
 		}
 		return false;
 	};
-	
+
 	this.getChessCount= function(){
 		return history.length+1;
 	}
-	
+
 	this.undo = function(){
 		if(history.length>0){
 			var step = history.pop();
@@ -111,14 +111,14 @@ function Board(){
 		}
 		return false;
 	};
-	
+
 	this.getHistory = function(){
 		return history.slice(0);
 	}
-	
+
 	this.getData = function(){
 		return data.slice(0);
 	}
-	
+
 	this.init();
 }

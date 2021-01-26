@@ -17,11 +17,12 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
- * 用户 - 角色
+ * （安全认证）用户 ←→ 角色
  *
- * @Description 用户 - 角色 关联关系 -> 基础交互业务接口.
+ * @Description [（安全认证）用户 ←→ 角色]关联关系 -> 基础交互业务接口.
  */
 public interface SecurityUserRoleRepository
         extends JpaRepository<SecurityUserRole, Long>, EntityRepository {
@@ -35,6 +36,18 @@ public interface SecurityUserRoleRepository
      */
     @Override
     long count();
+
+    /**
+     * 判断存在
+     *
+     * @Description Returns whether an entity with the given parameters exists.
+     *
+     * @param roleCode      {@link SecurityUserRole.Validator#roleCode(String)}
+     * @return
+     */
+    @Transactional(isolation = Isolation.SERIALIZABLE
+            , propagation = Propagation.REQUIRED)
+    boolean existsAllByRoleCode(@NotNull String roleCode);
 
     /**
      * 判断存在
@@ -62,10 +75,21 @@ public interface SecurityUserRoleRepository
     boolean existsByUsernameAndRoleCode(@NotNull String username, @NotNull String roleCode);
 
     /**
+     * 查询
+     *
+     * @param username      {@link SecurityUserRole.Validator#username(String)}
+     * @param roleCode      {@link SecurityUserRole.Validator#roleCode(String)}
+     *
+     * @return {@link Page}
+     */
+    Optional<SecurityUserRole> findByUsernameAndRoleCode(@NotNull String username, @NotNull String roleCode);
+
+    /**
      * 查询所有
      *
      * @param username      {@link SecurityUserRole#getUsername()}
      * @param pageable      {@link Pageable}
+     *
      * @return {@link Page}
      */
     Page<SecurityUserRole> findAllByUsername(@NotNull String username, Pageable pageable);
@@ -74,6 +98,7 @@ public interface SecurityUserRoleRepository
      * 查询所有
      *
      * @param username      {@link SecurityUserRole#getUsername()}
+     *
      * @return {@link List}
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -85,6 +110,7 @@ public interface SecurityUserRoleRepository
      *
      * @param rodeCode      {@link SecurityUserRole#getRoleCode()}
      * @param pageable      {@link Pageable}
+     *
      * @return {@link Page}
      */
     Page<SecurityUserRole> findAllByRoleCode(@NotNull String rodeCode, Pageable pageable);
@@ -93,6 +119,7 @@ public interface SecurityUserRoleRepository
      * 查询所有
      *
      * @param rodeCode      {@link SecurityUserRole#getRoleCode()}
+     *
      * @return {@link List}
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -103,16 +130,21 @@ public interface SecurityUserRoleRepository
      * 查询 (关联的) 角色
      *
      * @param username
-     * @return
+     *
+     * @return {@link SecurityRole}, {@link Map}
+     *
      * @see SecurityUser
      * @see SecurityUserRole
      * @see SecurityRole
      */
     @Query(nativeQuery = true
-            , value = "select r.`code` as role_code "
-                    + "from security_user u "
-                    + "left join security_user_role ur on ur.username = u.username "
-                    + "left join security_role r on r.`code` = ur.role_code "
+            , value = "select r.id as role_id \n"
+                    + ", r.`code` as role_code \n"
+                    + ", r.name as role_name \n"
+                    + ", r.description as role_description \n"
+                    + "from security_user u \n"
+                    + "left join security_user_role ur on ur.username = u.username \n"
+                    + "left join security_role r on r.`code` = ur.role_code \n"
                     + "where u.username = :username ")
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED)

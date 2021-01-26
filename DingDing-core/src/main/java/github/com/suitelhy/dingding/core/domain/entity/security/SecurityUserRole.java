@@ -1,9 +1,10 @@
 package github.com.suitelhy.dingding.core.domain.entity.security;
 
-import github.com.suitelhy.dingding.core.infrastructure.domain.model.AbstractEntityModel;
-import github.com.suitelhy.dingding.core.infrastructure.domain.model.EntityFactory;
-import github.com.suitelhy.dingding.core.infrastructure.domain.model.EntityValidator;
 import github.com.suitelhy.dingding.core.infrastructure.domain.util.EntityUtil;
+import github.com.suitelhy.dingding.core.infrastructure.domain.model.AbstractEntity;
+import github.com.suitelhy.dingding.core.infrastructure.domain.model.EntityFactoryModel;
+import github.com.suitelhy.dingding.core.infrastructure.domain.model.EntityValidator;
+import github.com.suitelhy.dingding.core.infrastructure.domain.vo.security.Security;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
@@ -12,14 +13,14 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 
 /**
- * 用户 - 角色
+ * （安全认证）用户 ←→ 角色
  *
- * @Description 用户 - 角色 关联关系.
+ * @Description [（安全认证）用户 ←→ 角色]关联关系.
  */
 @Entity
 @Table(name = "SECURITY_USER_ROLE")
 public class SecurityUserRole
-        extends AbstractEntityModel</*Long*/Object[]> {
+        extends AbstractEntity</*Long*/Object[]> {
 
     /**
      * ID
@@ -28,6 +29,7 @@ public class SecurityUserRole
      */
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
+    @Column(length = 64)
     private Long id;
 
     /**
@@ -35,7 +37,7 @@ public class SecurityUserRole
      *
      * @Description 业务唯一设计的一部分.
      */
-    @Column(name = "username", nullable = false)
+    @Column(name = "username", nullable = false, length = 30)
     private String username;
 
     /**
@@ -43,7 +45,7 @@ public class SecurityUserRole
      *
      * @Description 业务唯一设计的一部分.
      */
-    @Column(name = "role_code", nullable = false)
+    @Column(name = "role_code", nullable = false, length = 20)
     private String roleCode;
 
     // 数据更新时间 (由数据库管理)
@@ -69,8 +71,8 @@ public class SecurityUserRole
      */
     @Override
     public boolean isEmpty() {
-        return !Validator.USER_ROLE.id(this.id)
-                || !this.isEntityLegal();
+        return ! Validator.USER_ROLE.id(this.id)
+                || ! this.isEntityLegal();
     }
 
     /**
@@ -175,26 +177,39 @@ public class SecurityUserRole
     private SecurityUserRole(@Nullable Long id
             , @NotNull String username
             , @NotNull String roleCode)
-            throws IllegalArgumentException {
+            throws IllegalArgumentException
+    {
         if (null == id) {
             //--- 添加功能
         } else {
             //--- 更新功能
             if (!Validator.USER_ROLE.id(id)) {
-                //-- 非法输入: 数据ID
-                throw new IllegalArgumentException(this.getClass().getSimpleName()
-                        .concat(" -> 非法输入: 数据ID"));
+                //-- 非法输入: [数据 ID]
+                throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
+                        , "[数据 ID]"
+                        , id
+                        , this.getClass().getName()
+                        , Thread.currentThread().getStackTrace()[1].getMethodName()
+                        , Thread.currentThread().getStackTrace()[1].getLineNumber()));
             }
         }
         if (!Validator.USER_ROLE.username(username)) {
             //-- 非法输入: 用户名
-            throw new IllegalArgumentException(this.getClass().getSimpleName()
-                    .concat(" -> 非法输入: 用户名"));
+            throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
+                    , "用户名"
+                    , username
+                    , this.getClass().getName()
+                    , Thread.currentThread().getStackTrace()[1].getMethodName()
+                    , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
         if (!Validator.USER_ROLE.roleCode(roleCode)) {
             //-- 非法输入: 角色编码
-            throw new IllegalArgumentException(this.getClass().getSimpleName()
-                    .concat(" -> 非法输入: 角色编码"));
+            throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
+                    , "角色编码"
+                    , roleCode
+                    , this.getClass().getName()
+                    , Thread.currentThread().getStackTrace()[1].getMethodName()
+                    , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
 
         // 数据ID
@@ -206,7 +221,7 @@ public class SecurityUserRole
     }
 
     public enum Factory
-            implements EntityFactory<SecurityUserRole> {
+            implements EntityFactoryModel<SecurityUserRole> {
         USER_ROLE;
 
         /**
@@ -214,11 +229,75 @@ public class SecurityUserRole
          *
          * @param username      用户名
          * @param roleCode      角色编码
+         *
          * @throws IllegalArgumentException
          */
-        public SecurityUserRole create(@NotNull String username, @Nullable String roleCode)
-                throws IllegalArgumentException {
+        public @NotNull SecurityUserRole create(@NotNull String username, @NotNull String roleCode)
+                throws IllegalArgumentException
+        {
             return new SecurityUserRole(null, username, roleCode);
+        }
+
+        /**
+         * 创建
+         *
+         * @param user  （安全认证）用户
+         * @param role  （安全认证）角色
+         *
+         * @throws IllegalArgumentException
+         */
+        public @NotNull SecurityUserRole create(@NotNull SecurityUser user, @NotNull SecurityRole role)
+                throws IllegalArgumentException
+        {
+            if (null == user || user.isEmpty()) {
+                throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
+                        , "[（安全认证）用户]"
+                        , user
+                        , this.getClass().getName()
+                        , Thread.currentThread().getStackTrace()[1].getMethodName()
+                        , Thread.currentThread().getStackTrace()[1].getLineNumber()));
+            }
+            if (null == role || role.isEmpty()) {
+                throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
+                        , "[（安全认证）角色]"
+                        , role
+                        , this.getClass().getName()
+                        , Thread.currentThread().getStackTrace()[1].getMethodName()
+                        , Thread.currentThread().getStackTrace()[1].getLineNumber()));
+            }
+
+            return new SecurityUserRole(null, user.getUsername(), role.getCode());
+        }
+
+        /**
+         * 创建
+         *
+         * @param user      [（安全认证）用户]
+         * @param roleVo    [（安全认证）角色]
+         *
+         * @throws IllegalArgumentException
+         */
+        public @NotNull SecurityUserRole create(@NotNull SecurityUser user, @NotNull Security.RoleVo roleVo)
+                throws IllegalArgumentException
+        {
+            if (null == user || user.isEmpty()) {
+                throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
+                        , "[（安全认证）用户]"
+                        , user
+                        , this.getClass().getName()
+                        , Thread.currentThread().getStackTrace()[1].getMethodName()
+                        , Thread.currentThread().getStackTrace()[1].getLineNumber()));
+            }
+            if (null == roleVo) {
+                throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
+                        , "[（安全认证）角色]"
+                        , roleVo
+                        , this.getClass().getName()
+                        , Thread.currentThread().getStackTrace()[1].getMethodName()
+                        , Thread.currentThread().getStackTrace()[1].getLineNumber()));
+            }
+
+            return new SecurityUserRole(null, user.getUsername(), roleVo.name());
         }
 
         /**
@@ -227,19 +306,35 @@ public class SecurityUserRole
          * @param id          数据 ID
          * @param username    用户名
          * @param roleCode    角色编码
+         *
          * @throws IllegalArgumentException
          */
-        public SecurityUserRole update(@NotNull Long id
+        public @NotNull SecurityUserRole update(@NotNull Long id
                 , @NotNull String username
                 , @Nullable String roleCode)
-                throws IllegalArgumentException {
+                throws IllegalArgumentException
+        {
             if (!Validator.USER_ROLE.id(id)) {
-                //-- 非法输入: 数据 ID
-                throw new IllegalArgumentException(this.getClass().getSimpleName()
-                        .concat(" -> 非法输入: 数据 ID"));
+                //-- 非法输入: [数据 ID]
+                throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
+                        , "[数据 ID]"
+                        , id
+                        , this.getClass().getName()
+                        , Thread.currentThread().getStackTrace()[1].getMethodName()
+                        , Thread.currentThread().getStackTrace()[1].getLineNumber()));
             }
 
             return new SecurityUserRole(id, username, roleCode);
+        }
+
+        /**
+         * 获取空对象
+         *
+         * @return 非 {@code null}.
+         */
+        @Override
+        public @NotNull SecurityUserRole createDefault() {
+            return new SecurityUserRole();
         }
 
     }

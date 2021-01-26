@@ -25,6 +25,13 @@ public class HashSet<E>
         super(c);
     }
 
+    /**
+     * (Constructor)
+     *
+     * @param initialCapacity
+     *
+     * @throws IllegalArgumentException – if the initial capacity is less than zero
+     */
     public HashSet(int initialCapacity) {
         super(initialCapacity);
     }
@@ -54,10 +61,19 @@ public class HashSet<E>
         return super.equals(o) && o.equals(this);
     }
 
+    /**
+     * 等效比较
+     *
+     * @param c
+     * @param <T>
+     * @return
+     */
     <T> boolean equals(@NotNull Collection<T> c) {
         if (null == c) return false;
 
         if (!this.isEmpty() && !c.isEmpty()) {
+            if (this.size() != c.size()) return false;
+
             boolean exist = false;
 
             for (T each : c) {
@@ -130,7 +146,7 @@ public class HashSet<E>
     public boolean contains(Object o) {
         if (null != o) {
             for (E each : this) {
-                if (/*ObjectUtils.nullSafeEquals(each, o)*/ObjectUtils.nullSafeEquals(each, o)
+                if (ObjectUtils.nullSafeEquals(each, o)
                         && ObjectUtils.nullSafeEquals(o, each)) {
                     return true;
                 }
@@ -151,7 +167,7 @@ public class HashSet<E>
     public boolean remove(Object o) {
         if (null != o) {
             for (E each : this) {
-                if (/*ObjectUtils.nullSafeEquals(each, o)*/ObjectUtils.nullSafeEquals(each, o)
+                if (ObjectUtils.nullSafeEquals(each, o)
                         && ObjectUtils.nullSafeEquals(o, each)) {
                     return super.remove(each);
                 }
@@ -270,7 +286,7 @@ public class HashSet<E>
         DemoUtils.show("===== set.contains(urlInfoSet2) -> " + set.contains(urlInfoSet2));
         DemoUtils.show("===== set.contains(urlInfoSet3) -> " + set.contains(urlInfoSet3));
 
-        //===== Put into github.com.suitelhy.dingding.core.infrastructure.domain.util.HashSet =====//
+        //===== Put into HashSet =====//
         HashSet<Object> hashSet = new HashSet<>(3);
 
         hashSet.add(urlInfoSet1);
@@ -278,7 +294,7 @@ public class HashSet<E>
         hashSet.add(urlInfoSet3);
 
         DemoUtils.show(null);
-        DemoUtils.show("//===== Put into github.com.suitelhy.dingding.core.infrastructure.domain.util.HashSet =====//");
+        DemoUtils.show("//===== Put into HashSet =====//");
 
         DemoUtils.show("===== hashSet -> " + hashSet);
         DemoUtils.show("===== hashSet.size() -> " + hashSet.size());

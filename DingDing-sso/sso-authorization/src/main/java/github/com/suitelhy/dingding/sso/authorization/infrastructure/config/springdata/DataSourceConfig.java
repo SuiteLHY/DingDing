@@ -25,13 +25,9 @@ import java.util.Map;
 
 /**
  * Spring boot - version 2.2.2 -> 踩坑(...):
- *-> <a href="https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-2.2-Release-Notes">
- *->     Spring Boot 2.2发行说明·spring-projects / spring-boot Wiki</a>
- * Spring 官方 Docs 链接的官方 Demo: <a href="https://github.com/spring-projects/spring-data-examples">
- *->     spring-projects/spring-data-examples: Spring Data Example Projects</a>, 2019年12月的, 最后只能靠自己
- * Spring Data JPA:
- *-> <a href="https://github.com/spring-projects/spring-data-examples/tree/master/jpa">
- *->     spring-projects/spring-data-examples/jpa/</a>
+ *-> <a href="https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-2.2-Release-Notes">Spring Boot 2.2发行说明·spring-projects / spring-boot Wiki</a>
+ * Spring 官方 Docs 链接的官方 Demo: <a href="https://github.com/spring-projects/spring-data-examples">spring-projects/spring-data-examples: Spring Data Example Projects</a>, 2019年12月的, 最后只能靠自己
+ * Spring Data JPA: <a href="https://github.com/spring-projects/spring-data-examples/tree/master/jpa">spring-projects/spring-data-examples/jpa/</a>
  *
  */
 @Configuration
