@@ -897,8 +897,18 @@ public class SecurityResourceServiceTests {
 
         result = newEntity;
 
-        Assert.isTrue(service.update(result, operator)
+        Assert.isTrue(result.setName(String.format("%s%s", result.getName(), "new"))
+                , "===== 准备测试数据失败!");
+
+        Assert.isTrue(service.update(result, operator, operator_userAccountOperationInfo)
                 , "===== update(Entity) -> false");
+
+        //=== 校验数据
+
+        final @NotNull SecurityResource existedResource = service.selectResourceByCode(result.getCode());
+
+        Assert.isTrue(! existedResource.isEmpty() && existedResource.getName().equals(result.getName())
+                , String.format("===== 校验数据 -> 【%s】&【%s】 <- 非预期结果!", existedResource, result));
     }
 
     @Test
