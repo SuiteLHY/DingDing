@@ -216,7 +216,7 @@ public class SecurityResourceUrlServiceImpl
                 , resourceUrl.getUrlPath()
                 , resourceUrl.getUrlMethod());
         return result
-                .orElse(SecurityResourceUrl.Factory.RESOURCE_URL.createDefault());
+                .orElseGet(SecurityResourceUrl.Factory.RESOURCE_URL::createDefault);
     }
 
     /**
@@ -338,7 +338,7 @@ public class SecurityResourceUrlServiceImpl
                     , resourceUrl.getClientId()
                     , resourceUrl.getUrlPath()
                     , resourceUrl.getUrlMethod())
-                    .orElse(SecurityResourceUrl.Factory.RESOURCE_URL.createDefault())
+                    .orElseGet(SecurityResourceUrl.Factory.RESOURCE_URL::createDefault)
                     .isEmpty();
         }
 

@@ -201,21 +201,14 @@ public class SecurityRoleController {
             , @RequestParam(name = "new_name", required = false) String roleName
             , @RequestParam(name = "new_description", required = false) String roleDescription)
     {
-//        if (StringUtils.isEmpty(roleName)
-//                && StringUtils.isEmpty(roleDescription)) {
-//            result.put("status", false);
-//            result.put("message", "操作失败");
-//            result.put("description", "参数 new_name 和 new_description 不能都为空");
-//            return toJSONString.writeValueAsString(result);
-//        }
         try {
             final OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails userAuthenticationDetails = OAuth2AuthenticationUtil.getInstance().getDetails(authentication);
 
             Map<String, Object> new_role_data = new HashMap<>(1);
-            if (!StringUtils.isEmpty(roleName)) {
+            if (! StringUtils.isEmpty(roleName)) {
                 new_role_data.put("role_name", roleName);
             }
-            if (!StringUtils.isEmpty(roleDescription)) {
+            if (! StringUtils.isEmpty(roleDescription)) {
                 new_role_data.put("role_description", roleDescription);
             }
 

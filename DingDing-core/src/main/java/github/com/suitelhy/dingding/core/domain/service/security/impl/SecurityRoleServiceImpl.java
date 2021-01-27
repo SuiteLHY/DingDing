@@ -151,9 +151,8 @@ public class SecurityRoleServiceImpl
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
 
-        final @NotNull Optional<SecurityRole> result = repository.findByCode(code);
-        return result
-                .orElse(SecurityRole.Factory.ROLE.createDefault());
+        return repository.findByCode(code)
+                .orElseGet(SecurityRole.Factory.ROLE::createDefault);
     }
 
 //    /**
@@ -205,7 +204,9 @@ public class SecurityRoleServiceImpl
 
         if (repository.existsByCode(role.getCode())) {
             //--- 已存在相同数据 (根据 EntityID) 的情况
-            return ! repository.findByCode(role.getCode()).orElse(SecurityRole.Factory.ROLE.createDefault()).isEmpty();
+            return ! repository.findByCode(role.getCode())
+                    .orElseGet(SecurityRole.Factory.ROLE::createDefault)
+                    .isEmpty();
         } else {
             if (repository.saveAndFlush(role).isEmpty()) {
                 throw new BusinessAtomicException(String.format("操作失败:<description>【%s】<-【%s】</description>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -277,7 +278,9 @@ public class SecurityRoleServiceImpl
 
         if (repository.existsByCode(role.getCode())) {
             //--- 已存在相同数据 (根据 EntityID) 的情况
-            return ! repository.findByCode(role.getCode()).orElse(SecurityRole.Factory.ROLE.createDefault()).isEmpty();
+            return ! repository.findByCode(role.getCode())
+                    .orElseGet(SecurityRole.Factory.ROLE::createDefault)
+                    .isEmpty();
         } else {
             if (repository.saveAndFlush(role).isEmpty()) {
                 throw new BusinessAtomicException(String.format("操作失败:<description>【%s】<-【%s】</description>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -681,7 +684,7 @@ public class SecurityRoleServiceImpl
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
 
-        final SecurityRole latest_role = repository.findByCode(old_role.getCode()).orElse(null);
+        final SecurityRole latest_role = repository.findByCode(old_role.getCode()).orElseGet(null);
         if (null == latest_role) {
             throw new BusinessAtomicException(String.format("操作失败:<description>%s!</description>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "原始版本对应数据已被删除"

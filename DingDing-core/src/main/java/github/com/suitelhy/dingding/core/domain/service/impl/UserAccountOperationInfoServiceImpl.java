@@ -122,8 +122,8 @@ public class UserAccountOperationInfoServiceImpl
      * @return {@link UserAccountOperationInfo}
      */
     @Override
-    public UserAccountOperationInfo selectById(@NotNull String id) {
-        if (!UserAccountOperationInfo.Validator.USER.id(id)) {
+    public @NotNull UserAccountOperationInfo selectById(@NotNull String id) {
+        if (! UserAccountOperationInfo.Validator.USER.id(id)) {
             //-- 非法输入: [数据 ID]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                     , "[数据 ID]"
@@ -133,8 +133,8 @@ public class UserAccountOperationInfoServiceImpl
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
 
-        Optional<UserAccountOperationInfo> result = userAccountOperationInfoRepository.findById(id);
-        return result.orElse(null);
+        return userAccountOperationInfoRepository.findById(id)
+                .orElseGet(UserAccountOperationInfo.Factory.USER::createDefault);
     }
 
     /**
@@ -145,8 +145,8 @@ public class UserAccountOperationInfoServiceImpl
      * @return {@link UserAccountOperationInfo}
      */
     @Override
-    public UserAccountOperationInfo selectByUsername(@NotNull String username) {
-        if (!UserAccountOperationInfo.Validator.USER.username(username)) {
+    public @NotNull UserAccountOperationInfo selectByUsername(@NotNull String username) {
+        if (! UserAccountOperationInfo.Validator.USER.username(username)) {
             //-- 非法输入: 用户名称
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                     , "用户名称"
@@ -156,8 +156,8 @@ public class UserAccountOperationInfoServiceImpl
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
 
-        Optional<UserAccountOperationInfo> result = userAccountOperationInfoRepository.findByUsername(username);
-        return result.orElse(null);
+        return userAccountOperationInfoRepository.findByUsername(username)
+                .orElseGet(UserAccountOperationInfo.Factory.USER::createDefault);
     }
 
     /**
@@ -190,7 +190,7 @@ public class UserAccountOperationInfoServiceImpl
                     , Thread.currentThread().getStackTrace()[1].getMethodName()
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
-        final UserAccountOperationInfo operatorOperationInfo = userAccountOperationInfoRepository.findByUsername(operator.getUsername()).orElse(null);
+        final UserAccountOperationInfo operatorOperationInfo = userAccountOperationInfoRepository.findByUsername(operator.getUsername()).orElseGet(null);
         if (null == operatorOperationInfo || operatorOperationInfo.isEmpty()) {
             //-- 非法输入: 操作者 <- 无[有效的账户操作基础户记录]
             throw new IllegalArgumentException(String.format("非法参数:<description>【%s】 <- %s!</description>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
@@ -269,7 +269,7 @@ public class UserAccountOperationInfoServiceImpl
                     , Thread.currentThread().getStackTrace()[1].getMethodName()
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
-        final @NotNull UserAccountOperationInfo operator_userAccountOperationInfo = userAccountOperationInfoRepository.findByUsername(operator.getUsername()).orElse(null);
+        final @NotNull UserAccountOperationInfo operator_userAccountOperationInfo = userAccountOperationInfoRepository.findByUsername(operator.getUsername()).orElseGet(null);
         if (null == operator_userAccountOperationInfo || operator_userAccountOperationInfo.isEmpty()) {
             //-- 非法输入: 操作者 <- 无[有效的账户操作基础户记录]
             throw new IllegalArgumentException(String.format("非法参数:<description>【%s】 <- %s!</description>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
@@ -353,7 +353,7 @@ public class UserAccountOperationInfoServiceImpl
                     , Thread.currentThread().getStackTrace()[1].getMethodName()
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
-        final UserAccountOperationInfo operatorOperationInfo = userAccountOperationInfoRepository.findByUsername(operator.getUsername()).orElse(null);
+        final UserAccountOperationInfo operatorOperationInfo = userAccountOperationInfoRepository.findByUsername(operator.getUsername()).orElseGet(null);
         if (null == operatorOperationInfo || operatorOperationInfo.isEmpty()) {
             //-- 非法输入: 操作者 <- 无[有效的账户操作基础户记录]
             throw new IllegalArgumentException(String.format("非法参数:<description>【%s】 <- %s!</description>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
@@ -423,7 +423,7 @@ public class UserAccountOperationInfoServiceImpl
                     , Thread.currentThread().getStackTrace()[1].getMethodName()
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
-        final UserAccountOperationInfo operatorOperationInfo = userAccountOperationInfoRepository.findByUsername(operator.getUsername()).orElse(null);
+        final UserAccountOperationInfo operatorOperationInfo = userAccountOperationInfoRepository.findByUsername(operator.getUsername()).orElseGet(null);
         if (null == operatorOperationInfo || operatorOperationInfo.isEmpty()) {
             //-- 非法输入: 操作者 <- 无[有效的账户操作基础户记录]
             throw new IllegalArgumentException(String.format("非法参数:<description>【%s】 <- %s!</description>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"

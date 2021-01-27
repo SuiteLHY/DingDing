@@ -82,7 +82,7 @@ public class UserServiceImpl
     public boolean existUserByUsername(@NotNull String username)
             throws IllegalArgumentException
     {
-        if (!User.Validator.USER.username(username)) {
+        if (! User.Validator.USER.username(username)) {
             //-- 非法输入: 用户名称
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                     , "用户名称"
@@ -137,7 +137,7 @@ public class UserServiceImpl
     }
 
     @Override
-    public Long selectCount(int pageSize)
+    public @NotNull Long selectCount(int pageSize)
             throws IllegalArgumentException
     {
         if (pageSize < 1) {
@@ -165,9 +165,8 @@ public class UserServiceImpl
      *
      * @throws IllegalArgumentException
      */
-    @Nullable
     @Override
-    public User selectUserByUserid(@NotNull String userid)
+    public @NotNull User selectUserByUserid(@NotNull String userid)
             throws IllegalArgumentException
     {
         if (! User.Validator.USER.userid(userid)) {
@@ -180,9 +179,8 @@ public class UserServiceImpl
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
 
-        final @NotNull Optional<User> result = userRepository.findUserByUserid(userid);
-        return result
-                .orElse(User.Factory.USER.createDefault());
+        return userRepository.findUserByUserid(userid)
+                .orElseGet(User.Factory.USER::createDefault);
     }
 
     /**
@@ -194,12 +192,11 @@ public class UserServiceImpl
      *
      * @throws IllegalArgumentException
      */
-    @Nullable
     @Override
-    public User selectUserByUsername(@NotNull String username)
+    public @NotNull User selectUserByUsername(@NotNull String username)
             throws IllegalArgumentException
     {
-        if (!User.Validator.USER.username(username)) {
+        if (! User.Validator.USER.username(username)) {
             //-- 非法输入: 用户名称
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                     , "用户名称"
@@ -209,10 +206,8 @@ public class UserServiceImpl
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
 
-        final @NotNull Optional<User> result = userRepository.findUserByUsernameAndStatusIn(username
-                , Account.StatusVo.DATA_EXISTENCE_CERTIFICATE);
-        return result
-                .orElse(User.Factory.USER.createDefault());
+        return userRepository.findUserByUsernameAndStatusIn(username, Account.StatusVo.DATA_EXISTENCE_CERTIFICATE)
+                .orElseGet(User.Factory.USER::createDefault);
     }
 
 //    /**
@@ -494,12 +489,12 @@ public class UserServiceImpl
 
         if (userRepository.existsByUsernameAndStatusIn(user.getUsername(), Account.StatusVo.DATA_EXISTENCE_CERTIFICATE)) {
             //--- 已存在指定用户的情况
-            return !userRepository.findUserByUsernameAndStatusIn(user.getUsername(), Account.StatusVo.DATA_EXISTENCE_CERTIFICATE)
-                    .get()
+            return ! userRepository.findUserByUsernameAndStatusIn(user.getUsername(), Account.StatusVo.DATA_EXISTENCE_CERTIFICATE)
+                    .orElseGet(User.Factory.USER::createDefault)
                     .isEmpty();
         }
 
-        final User newUser = userRepository.saveAndFlush(user);
+        final @NotNull User newUser = userRepository.saveAndFlush(user);
         if (newUser.isEmpty()) {
             throw new BusinessAtomicException(String.format("操作失败:<description>【%s】 <- %s!</description>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                     , HandleType.LogVo.USER__USER__ADD.name
@@ -512,13 +507,13 @@ public class UserServiceImpl
 
         //=== 操作日志记录 ===//
 
-        final Log newLog_User = Log.Factory.User.LOG.create(null
+        final @NotNull Log newLog_User = Log.Factory.User.LOG.create(null
                 , null
                 , HandleType.LogVo.USER__USER__ADD
                 , newUser
                 , operator
                 , operator_OperationInfo);
-        if (!logService.insert(newLog_User)) {
+        if (! logService.insert(newLog_User)) {
             throw new BusinessAtomicException(String.format("操作失败:<description>【%s】 <- %s!</description>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                     , HandleType.LogVo.USER__USER__ADD.name
                     , "生成操作日志记录"
@@ -769,7 +764,8 @@ public class UserServiceImpl
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
         if (! operator.equals(user)
-                && ! securityUserService.existAdminPermission(operator.getUsername())) {
+                && ! securityUserService.existAdminPermission(operator.getUsername()))
+        {
             //-- 非法输入: 操作者 <- 没有所需的操作权限
             throw new IllegalArgumentException(String.format("非法参数:<description>%s</description>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                     , "操作者 <- 没有所需的操作权限"
@@ -803,7 +799,7 @@ public class UserServiceImpl
 
         //=== 日志记录操作 ===//
 
-        final Log newLog_User = Log.Factory.User.LOG.create(null
+        final @NotNull Log newLog_User = Log.Factory.User.LOG.create(null
                 , null
                 , HandleType.LogVo.USER__USER__DATA_DELETION
                 , user

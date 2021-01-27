@@ -101,7 +101,7 @@ public class SecurityResourceServiceImpl
 
         final List<Map<String, Object>> urlRoleMapList = repository.selectAllUrlRoleMap();
         if (null != urlRoleMapList) {
-            for (Map<String, Object> each : urlRoleMapList) {
+            for (@NotNull Map<String, Object> each : urlRoleMapList) {
                 final String clientId = (String) each.get("client_id");
                 final String urlPath = (String) each.get("url_path");
                 final String eachHttpMethod = (String) each.get("url_method");
@@ -145,7 +145,7 @@ public class SecurityResourceServiceImpl
      */
     @Override
     public @NotNull ContainArrayHashMap<String, List<Object>> selectUrlRoleMap(@NotNull String clientId) {
-        if (!SecurityResourceUrl.Validator.RESOURCE_URL.clientId(clientId)) {
+        if (! SecurityResourceUrl.Validator.RESOURCE_URL.clientId(clientId)) {
             //-- 非法输入: [资源服务器 ID]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "[资源服务器 ID]"
@@ -157,9 +157,9 @@ public class SecurityResourceServiceImpl
 
         final @NotNull ContainArrayHashMap<String, List<Object>> result = new ContainArrayHashMap<>(1);
 
-        final List<Map<String, Object>> urlRoleMapList = repository.selectUrlRoleMap(clientId);
+        final @NotNull List<Map<String, Object>> urlRoleMapList = repository.selectUrlRoleMap(clientId);
         if (null != urlRoleMapList) {
-            for (Map<String, Object> each : urlRoleMapList) {
+            for (@NotNull Map<String, Object> each : urlRoleMapList) {
                 final String eachClientId = (String) each.get("client_id");
                 final String eachUrlPath = (String) each.get("url_path");
                 final String eachHttpMethod = (String) each.get("url_method");
@@ -187,7 +187,7 @@ public class SecurityResourceServiceImpl
      * @Description 查询数据列表 - 分页 - 总页数.
      */
     @Override
-    public Long selectCount(int pageSize) {
+    public @NotNull Long selectCount(int pageSize) {
         if (pageSize < 1) {
             //-- 非法输入: <param>pageSize</param>
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -224,7 +224,7 @@ public class SecurityResourceServiceImpl
         }
 
         return repository.findSecurityResourceByCode(code)
-                .orElse(SecurityResource.Factory.RESOURCE.createDefault());
+                .orElseGet(SecurityResource.Factory.RESOURCE::createDefault);
     }
 
 //    /**
@@ -347,7 +347,7 @@ public class SecurityResourceServiceImpl
         if (repository.existsByCode(resource.id())) {
             //--- 已存在相同数据 (根据 EntityID) 的情况
             return ! repository.findSecurityResourceByCode(resource.id())
-                    .orElse(SecurityResource.Factory.RESOURCE.createDefault())
+                    .orElseGet(SecurityResource.Factory.RESOURCE::createDefault)
                     .isEmpty();
         }
 
@@ -889,7 +889,7 @@ public class SecurityResourceServiceImpl
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
 
-        final SecurityResource latest_resource = repository.findSecurityResourceByCode(old_resource.getCode()).orElse(null);
+        final SecurityResource latest_resource = repository.findSecurityResourceByCode(old_resource.getCode()).orElseGet(null);
         if (null == latest_resource) {
             throw new BusinessAtomicException(String.format("操作失败:<description>%s!</description>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "原始版本对应数据已被删除"

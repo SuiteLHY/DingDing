@@ -126,7 +126,7 @@ public class LogServiceImpl
     public Log selectLogById(@NotNull String id)
             throws IllegalArgumentException
     {
-        if (null == id || !Log.Validator.LOG.id(id)) {
+        if (null == id || ! Log.Validator.LOG.id(id)) {
             //-- 非法输入: [日志记录 - 编号]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                     , "[日志记录 - 编号]"
@@ -137,7 +137,7 @@ public class LogServiceImpl
         }
 
         return logRepository.findLogById(Long.parseLong(id))
-                .orElse(null);
+                .orElseGet(Log.Factory.User.LOG::createDefault);
     }
 
     /**

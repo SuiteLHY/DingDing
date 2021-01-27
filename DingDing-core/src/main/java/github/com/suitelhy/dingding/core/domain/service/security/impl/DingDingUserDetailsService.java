@@ -108,7 +108,7 @@ public class DingDingUserDetailsService
 //                , securityUserService.selectRoleByUsername(user.getUsername()));
 
         // 自定义认证用户 - 权限
-        final Collection<GrantedAuthority> authorities = new HashSet<>(1);
+        final @NotNull Collection<GrantedAuthority> authorities = new HashSet<>(1);
         final @NotNull List<SecurityRole> roleList = userEvent.selectRoleOnUserByUsername(user.getUsername());
         for (@NotNull SecurityRole role : roleList) {
             authorities.add(new SimpleGrantedAuthority(role.getCode()));
@@ -117,10 +117,10 @@ public class DingDingUserDetailsService
         return new SecurityUser(user.getUsername()
                 , /*passwordEncoder.encode(user.getPassword())*/user.getPassword()
                 , authorities
-                , !Account.StatusVo.DESTRUCTION.equals(user.getStatus())
-                , !Account.StatusVo.LOCKED.equals(user.getStatus())
+                , ! Account.StatusVo.DESTRUCTION.equals(user.getStatus())
+                , ! Account.StatusVo.LOCKED.equals(user.getStatus())
                 , Account.StatusVo.NORMAL.equals(user.getStatus())
-                , !user.isEmpty());
+                , ! user.isEmpty());
     }
 
     public @Nullable BasicUserDto getUserInfo(@NotNull String username) {

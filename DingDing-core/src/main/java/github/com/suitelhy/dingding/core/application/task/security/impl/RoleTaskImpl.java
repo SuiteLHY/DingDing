@@ -1160,10 +1160,10 @@ public class RoleTaskImpl
         @NotNull TaskResult<RoleDto> taskResult;
         @NotNull RoleDto resultData;
         try {
-            final SecurityRole role = securityRoleService.selectRoleByCode(roleCode);
+            final @NotNull SecurityRole role = securityRoleService.selectRoleByCode(roleCode);
 
             boolean deleteRoleSuccessFlag = false;
-            if (null != role) {
+            if (! role.isEmpty()) {
                 deleteRoleSuccessFlag = securityRoleEvent.deleteRole(role, securityUserService.selectByUsername(operator_username));
             }
 
@@ -1177,7 +1177,7 @@ public class RoleTaskImpl
                         , resultData);
             } else {
                 //--- 业务操作失败
-                if (!securityRoleService.existsByCode(role.getCode())) {
+                if (! securityRoleService.existsByCode(role.getCode())) {
                     resultData = RoleDto.Factory.ROLE_DTO.createDefault();
 
                     taskResult = TaskResult.Factory.DEFAULT.create(TaskResult.Vo.StatusVo.FAILURE_INPUT_PARAMETER
@@ -1234,7 +1234,7 @@ public class RoleTaskImpl
         @NotNull TaskResult<RoleDto> taskResult;
         @NotNull RoleDto resultData;
         try {
-            if (!securityUserService.existAdminPermission(operator.getUsername())) {
+            if (! securityUserService.existAdminPermission(operator.getUsername())) {
                 throw new IllegalArgumentException(String.format("非法参数:<description>【%s】 <- %s</description>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                         , "操作者"
                         , "无足够的操作权限"
@@ -1292,7 +1292,7 @@ public class RoleTaskImpl
                 //-- 非法输入: 身份认证凭证
                 throw new AuthenticationCredentialsNotFoundException("非法的身份认证凭证");
             }
-            if (!Boolean.TRUE.equals(operator.isActive())) {
+            if (! Boolean.TRUE.equals(operator.isActive())) {
                 //-- 非法输入: 身份认证凭证
                 throw new AuthenticationCredentialsNotFoundException("无效的身份认证凭证");
             }
@@ -1300,7 +1300,7 @@ public class RoleTaskImpl
                 throw new AccessDeniedException("权限不足");
             } else {
                 boolean isInsufficientPermissions = false;
-                for (String authority : operator.getAuthorities()) {
+                for (@NotNull String authority : operator.getAuthorities()) {
                     for (Security.RoleVo eachRole : Security.RoleVo.ADMINISTRATOR_ROLE_VO__SET) {
                         if (eachRole.name().equals(authority)) {
                             isInsufficientPermissions = true;
@@ -1308,7 +1308,7 @@ public class RoleTaskImpl
                         }
                     }
                 }
-                if (!isInsufficientPermissions) {
+                if (! isInsufficientPermissions) {
                     throw new AccessDeniedException("权限不足");
                 }
             }

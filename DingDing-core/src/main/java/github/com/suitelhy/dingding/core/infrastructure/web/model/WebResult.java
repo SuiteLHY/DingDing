@@ -779,7 +779,7 @@ public class WebResult<_DATA>
                             String key = e.getKey();
                             Object value = e.getValue();
                             sb.append('\"').append(key).append('\"');
-                            sb.append('=');
+                            sb.append(':');
                             sb.append(value instanceof String ? '\"' : "").append(value).append(value instanceof String ? '\"' : "");
                             if (! i.hasNext()) {
                                 return sb.append('}').toString();
@@ -792,8 +792,38 @@ public class WebResult<_DATA>
 
         this.message = (null == message) ? statusVo.name : message;
 
-        if (!this.isSuccess()) {
-            Map<String, Object> error = new HashMap<>(5);
+        if (! this.isSuccess()) {
+            final @NotNull Map<String, Object> error = new HashMap<String, Object>(5) {
+                /**
+                 * 转换为字符串
+                 *
+                 * @return 转换结果
+                 *
+                 * @see super#toString()
+                 */
+                @Override
+                public @NotNull String toString() {
+                    Iterator<Entry<String,Object>> i = entrySet().iterator();
+                    if (! i.hasNext()) {
+                        return "{}";
+                    }
+
+                    StringBuilder sb = new StringBuilder();
+                    sb.append('{');
+                    for (;;) {
+                        Entry<String,Object> e = i.next();
+                        String key = e.getKey();
+                        Object value = e.getValue();
+                        sb.append('\"').append(key).append('\"');
+                        sb.append(':');
+                        sb.append(value instanceof String ? '\"' : "").append(value).append(value instanceof String ? '\"' : "");
+                        if (! i.hasNext()) {
+                            return sb.append('}').toString();
+                        }
+                        sb.append(',').append(' ');
+                    }
+                }
+            };
 
             error.put("code", (null != errorVo) ? errorVo.code : Vo.ErrorVo.UNKNOWN.code);
             error.put("name", (null != errorVo) ? errorVo.name : Vo.ErrorVo.UNKNOWN.name);

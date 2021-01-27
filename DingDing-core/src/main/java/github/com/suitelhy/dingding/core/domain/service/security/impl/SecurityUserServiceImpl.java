@@ -269,7 +269,7 @@ public class SecurityUserServiceImpl
         }
 
         return repository.findById(userId)
-                .orElse(SecurityUser.Factory.USER.createDefault());
+                .orElseGet(SecurityUser.Factory.USER::createDefault);
     }
 
     /**
@@ -292,7 +292,7 @@ public class SecurityUserServiceImpl
         }
 
         return repository.findByUsername(username)
-                .orElse(SecurityUser.Factory.USER.createDefault());
+                .orElseGet(SecurityUser.Factory.USER::createDefault);
     }
 
 //    /**
@@ -485,7 +485,7 @@ public class SecurityUserServiceImpl
         if (repository.existsByUsername(user.getUsername())) {
             //--- 已存在相同数据 (根据 EntityID 判断) 的情况
             return ! repository.findByUsername(user.getUsername())
-                    .orElse(SecurityUser.Factory.USER.createDefault())
+                    .orElseGet(SecurityUser.Factory.USER::createDefault)
                     .isEmpty();
         }
 
