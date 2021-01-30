@@ -1,0 +1,54 @@
+# security configuration
+#test
+security:
+  test: aaa
+
+# "叮叮" 项目安全配置
+dingding:
+  security:
+    browser:
+      #      signInPage: /demo-signIn.html
+      signInResponseType: REDIRECT
+      #      singInSuccessUrl: /manage.html
+      rememberMeSeconds: 294000
+    #      signOutUrl: /demo-logout.html
+    #      signUpUrl: /demo-signUp.html
+    #    # Session 管理相关配置; 参见SessionProperties
+    #    session:
+    #      maximumSessions: 1
+    #      maxSessionsPreventsLogin: false
+    #      sessionInvalidUrl: /dingding-session-invalid.html
+    #    # 短信验证码配置项，参见SmsCodeProperties
+    #    code:
+    #      sms:
+    #        length: 6
+    #        expireIn: 60
+    #        url: /user/*
+    social:
+      # 社交登录功能拦截的 URL, 参见 SocialProperties
+      filterProcessesUrl: /qqLogin
+      # QQ登录配置; 参见 QQProperties
+      qq:
+        app-id:
+        app-secret:
+        providerId: callback.do
+      # 微信登录配置; 参见 WeiXinProperties
+      weixin:
+        app-id: wxd99431bbff8305a0
+        app-secret: 60f78681d063590a469f1b297feff3c4
+      #        providerId: weixin
+      # 认证服务器注册的第三方应用配置项; 参见 OAuth2ClientProperties
+      oauth2:
+        clients[0]:
+          clientId: dingding
+          clientSecret: dingdingsecret
+          accessTokenValidateSeconds: 3600
+        clients[1]:
+          clientId: test
+          clientSecret: test
+#        # OAuth2 认证服务器的 tokenStore 的类型
+#        #-> 可选值为 redis 和 jwt; 值为 jwt 时, 发出的 token 为 jwt
+#        tokenStore: tokenStore
+#        # 使用 jwt 时, 为 token 签名的秘钥
+#        jwtSigningKey: dingding
+
