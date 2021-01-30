@@ -34,7 +34,7 @@ public class UserTaskImpl implements UserTask {
             for (User each : userList) {
                 result.add(UserDto.Factory.USER_DTO.create(new SecurityUser(each)));
             }
-        }  catch (Exception e) {
+        } catch (Exception e) {
             log.error("<class>{}</class> - <method>{}</method> <- 第{}行"
                     , this.getClass().getName()
                     , Thread.currentThread().getStackTrace()[1].getMethodName()
@@ -52,7 +52,7 @@ public class UserTaskImpl implements UserTask {
         try {
             result = UserDto.Factory.USER_DTO.create(
                     new SecurityUser(userService.selectUserByUserid(userid)));
-        }  catch (Exception e) {
+        } catch (Exception e) {
             log.error("<class>{}</class> - <method>{}</method> <- 第{}行"
                     , this.getClass().getName()
                     , Thread.currentThread().getStackTrace()[1].getMethodName()
@@ -75,7 +75,7 @@ public class UserTaskImpl implements UserTask {
         try {
             result = UserDto.Factory.USER_DTO.create(
                     new SecurityUser(userService.selectUserByUsername(username)));
-        }  catch (Exception e) {
+        } catch (Exception e) {
             log.error("<class>{}</class> - <method>{}</method> <- 第{}行"
                     , this.getClass().getName()
                     , Thread.currentThread().getStackTrace()[1].getMethodName()
@@ -91,7 +91,7 @@ public class UserTaskImpl implements UserTask {
         Long result = null;
         try {
             result = userService.selectCount(pageSize);
-        }  catch (Exception e) {
+        } catch (Exception e) {
             log.error("<class>{}</class> - <method>{}</method> <- 第{}行"
                     , this.getClass().getName()
                     , Thread.currentThread().getStackTrace()[1].getMethodName()
@@ -111,7 +111,7 @@ public class UserTaskImpl implements UserTask {
         try {
             result = userService.insert(userDto.dtoId(userDto.getUsername()
                     , password));
-        }  catch (Exception e) {
+        } catch (Exception e) {
             log.error("<class>{}</class> - <method>{}</method> <- 第{}行"
                     , this.getClass().getName()
                     , Thread.currentThread().getStackTrace()[1].getMethodName()
@@ -143,7 +143,7 @@ public class UserTaskImpl implements UserTask {
                     , Thread.currentThread().getStackTrace()[1].getMethodName()
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()
                     , e);
-        }  catch (Exception e) {
+        } catch (Exception e) {
             log.error("<class>{}</class> - <method>{}</method> <- 第{}行"
                     , this.getClass().getName()
                     , Thread.currentThread().getStackTrace()[1].getMethodName()
@@ -160,7 +160,7 @@ public class UserTaskImpl implements UserTask {
         try {
             result = userService.deleteAndValidate(userDto.dtoId(userDto.getUsername()
                     , password));
-        }  catch (Exception e) {
+        } catch (Exception e) {
             log.error("<class>{}</class> - <method>{}</method> <- 第{}行"
                     , this.getClass().getName()
                     , Thread.currentThread().getStackTrace()[1].getMethodName()

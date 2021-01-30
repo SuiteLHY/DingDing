@@ -30,7 +30,6 @@ import java.util.Set;
  * （安全认证）角色 ←→ 资源
  *
  * @Description [（安全认证）角色 ←→ 资源]关联关系 - 业务接口.
- *
  * @see SecurityUserRole
  * @see SecurityUserRoleRepository
  * @see SecurityRoleResourceServiceImpl
@@ -59,13 +58,12 @@ public class SecurityRoleResourceServiceImpl
     /**
      * 判断是否存在 (关联的) [（安全认证）角色]
      *
-     * @param resourceCode  资源编码    {@link SecurityRoleResource.Validator#resourceCode(String)}
-     *
+     * @param resourceCode 资源编码    {@link SecurityRoleResource.Validator#resourceCode(String)}
      * @return {@link boolean}
      */
     @Override
     public boolean existRoleByResourceCode(@NotNull String resourceCode) {
-        if (! SecurityRoleResource.Validator.ROLE_RESOURCE.resourceCode(resourceCode)) {
+        if (!SecurityRoleResource.Validator.ROLE_RESOURCE.resourceCode(resourceCode)) {
             //-- 非法输入: 资源编码
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                     , "资源编码"
@@ -97,13 +95,12 @@ public class SecurityRoleResourceServiceImpl
     /**
      * 判断[（安全认证）角色]是否存在 (关联的) [（安全认证）资源]
      *
-     * @param roleCode  角色编码    {@link SecurityRoleResource.Validator#roleCode(String)}
-     *
+     * @param roleCode 角色编码    {@link SecurityRoleResource.Validator#roleCode(String)}
      * @return {@link boolean}
      */
     @Override
     public boolean existResourceByRoleCode(@NotNull String roleCode) {
-        if (! SecurityRoleResource.Validator.ROLE_RESOURCE.roleCode(roleCode)) {
+        if (!SecurityRoleResource.Validator.ROLE_RESOURCE.roleCode(roleCode)) {
             //-- 非法输入: 角色编码
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                     , "角色编码"
@@ -135,10 +132,9 @@ public class SecurityRoleResourceServiceImpl
     /**
      * 查询所有
      *
-     * @param pageIndex     分页索引, 从0开始
-     * @param pageSize      分页 - 每页容量
-     *
-     * @return  {@link Page)
+     * @param pageIndex 分页索引, 从0开始
+     * @param pageSize  分页 - 每页容量
+     * @return {@link Page)
      */
     @Override
     public Page<SecurityRoleResource> selectAll(int pageIndex, int pageSize) {
@@ -172,14 +168,13 @@ public class SecurityRoleResourceServiceImpl
     /**
      * 查询总页数
      *
-     * @Description 查询数据列表 - 分页 - 总页数
-     *
      * @param pageSize 分页 - 每页容量
-     *
      * @return 分页 - 总页数
+     * @Description 查询数据列表 - 分页 - 总页数
      */
     @Override
-    public @NotNull Long selectCount(int pageSize) {
+    public @NotNull
+    Long selectCount(int pageSize) {
         if (pageSize < 1) {
             //-- 非法输入: <param>pageSize</param>
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
@@ -199,13 +194,13 @@ public class SecurityRoleResourceServiceImpl
     /**
      * 查询
      *
-     * @param resourceCode  资源编码    {@link SecurityRoleResource.Validator#resourceCode(String)}
-     *
+     * @param resourceCode 资源编码    {@link SecurityRoleResource.Validator#resourceCode(String)}
      * @return {@link SecurityRoleResource}
      */
     @Override
-    public @NotNull List<SecurityRoleResource> selectByResourceCode(@NotNull String resourceCode) {
-        if (! SecurityRoleResource.Validator.ROLE_RESOURCE.resourceCode(resourceCode)) {
+    public @NotNull
+    List<SecurityRoleResource> selectByResourceCode(@NotNull String resourceCode) {
+        if (!SecurityRoleResource.Validator.ROLE_RESOURCE.resourceCode(resourceCode)) {
             //-- 非法输入: 资源编码
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                     , "资源编码"
@@ -221,13 +216,13 @@ public class SecurityRoleResourceServiceImpl
     /**
      * 查询
      *
-     * @param roleCode  角色编码    {@link SecurityRoleResource.Validator#roleCode(String)}
-     *
+     * @param roleCode 角色编码    {@link SecurityRoleResource.Validator#roleCode(String)}
      * @return {@link SecurityRoleResource}
      */
     @Override
-    public @NotNull List<SecurityRoleResource> selectByRoleCode(@NotNull String roleCode) {
-        if (! SecurityRoleResource.Validator.ROLE_RESOURCE.roleCode(roleCode)) {
+    public @NotNull
+    List<SecurityRoleResource> selectByRoleCode(@NotNull String roleCode) {
+        if (!SecurityRoleResource.Validator.ROLE_RESOURCE.roleCode(roleCode)) {
             //-- 非法输入: 角色编码
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                     , "角色编码"
@@ -243,9 +238,8 @@ public class SecurityRoleResourceServiceImpl
     /**
      * 新增一个[（安全认证）角色 ←→ 资源]关联关系
      *
-     * @param roleResource  [（安全认证）角色 ←→ 资源]    {@link SecurityRoleResource}
-     * @param operator      操作者
-     *
+     * @param roleResource [（安全认证）角色 ←→ 资源]    {@link SecurityRoleResource}
+     * @param operator     操作者
      * @return 操作是否成功 / 是否已存在相同的有效数据
      */
     @Override
@@ -254,8 +248,7 @@ public class SecurityRoleResourceServiceImpl
             , rollbackFor = Exception.class
             , timeout = 15)
     public boolean insert(@NotNull SecurityRoleResource roleResource, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if (null == roleResource || !roleResource.isEntityLegal()) {
             //-- 非法输入: [（安全认证）角色 ←→ 资源]关联关系
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
@@ -311,7 +304,7 @@ public class SecurityRoleResourceServiceImpl
                 , roleResource
                 , operator
                 , operatorOperationInfo);
-        if (! logService.insert(newLog_RoleResource)) {
+        if (!logService.insert(newLog_RoleResource)) {
             throw new BusinessAtomicException(String.format("操作失败:<description>【%s】 <- %s!</description>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                     , HandleType.LogVo.SECURITY__SECURITY_ROLE_RESOURCE__ADD.name
                     , "生成操作日志记录"
@@ -479,14 +472,12 @@ public class SecurityRoleResourceServiceImpl
     /**
      * 删除指定的[（安全认证）角色 ←→ 资源]关联关系
      *
-     * @Description 删除成功后校验持久化数据; 主要为了避免在未提交的事务中进行对操作结果的非预期判断.
-     * · 完整业务流程的一部分
-     *
      * @param roleResource                      [（安全认证）角色 ←→ 资源]    {@link SecurityRoleResource}
      * @param operator                          操作者
      * @param operator_userAccountOperationInfo [操作者 - 账户操作基础记录]
-     *
      * @return 操作是否成功
+     * @Description 删除成功后校验持久化数据; 主要为了避免在未提交的事务中进行对操作结果的非预期判断.
+     * · 完整业务流程的一部分
      */
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -494,8 +485,7 @@ public class SecurityRoleResourceServiceImpl
             , rollbackFor = Exception.class
             , timeout = 15)
     public boolean delete(@NotNull SecurityRoleResource roleResource, @NotNull SecurityUser operator, @NotNull UserAccountOperationInfo operator_userAccountOperationInfo)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if (null == roleResource || roleResource.isEmpty()) {
             //-- 非法输入: [（安全认证）角色 ←→ 资源]关联关系
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
@@ -517,8 +507,7 @@ public class SecurityRoleResourceServiceImpl
         /*final UserAccountOperationInfo operator_OperationInfo = userAccountOperationInfoService.selectByUsername(operator.getUsername());*/
         if (null == operator_userAccountOperationInfo
                 || operator_userAccountOperationInfo.isEmpty()
-                || ! operator_userAccountOperationInfo.equals(operator))
-        {
+                || !operator_userAccountOperationInfo.equals(operator)) {
             //-- 非法输入: 操作者 <- 无[有效的账户操作基础记录]
             throw new IllegalArgumentException(String.format("非法参数:<description>【%s】 <- %s!</description>->【%s】&【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                     , "操作者"
@@ -530,7 +519,7 @@ public class SecurityRoleResourceServiceImpl
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
 
-        if (! roleResourceRepository.existsByRoleCodeAndResourceCode(roleResource.getRoleCode(), roleResource.getResourceCode())) {
+        if (!roleResourceRepository.existsByRoleCodeAndResourceCode(roleResource.getRoleCode(), roleResource.getResourceCode())) {
             return true;
         } else {
             roleResourceRepository.removeByRoleCodeAndResourceCode(roleResource.getRoleCode(), roleResource.getResourceCode());
@@ -551,7 +540,7 @@ public class SecurityRoleResourceServiceImpl
                     , roleResource
                     , operator
                     , operator_userAccountOperationInfo);
-            if (! logService.insert(newLog_RoleResource)) {
+            if (!logService.insert(newLog_RoleResource)) {
                 throw new BusinessAtomicException(String.format("操作失败:<description>【%s】 <- %s!</description>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                         , HandleType.LogVo.SECURITY__SECURITY_ROLE_RESOURCE__DELETION.name
                         , "生成操作日志记录"

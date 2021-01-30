@@ -22,9 +22,7 @@ import java.util.Set;
  *
  * @see SecurityResource
  * @see SecurityResourceUrl
- *
  * @see SecurityUrlEventImpl
- *
  * @see SecurityResourceService
  * @see SecurityResourceUrlService
  * @see UserAccountOperationInfoService
@@ -43,11 +41,9 @@ public interface SecurityUrlEvent
     /**
      * 判断[（安全认证）角色]是否存在 (关联的) [（安全认证）资源]
      *
-     * @Description 完整的业务流程.
-     *
-     * @param urlInfo   URL相关信息.    {@link SecurityResourceUrl.Validator#urlInfo(String[])}
-     *
+     * @param urlInfo URL相关信息.    {@link SecurityResourceUrl.Validator#urlInfo(String[])}
      * @return {@link Boolean#TYPE}
+     * @Description 完整的业务流程.
      */
     boolean existResourceOnUrlInfo(@NotNull String[] urlInfo)
             throws IllegalArgumentException;
@@ -55,11 +51,9 @@ public interface SecurityUrlEvent
     /**
      * 判断[（安全认证）资源]是否存在 (关联的) [URL 相关信息]
      *
-     * @Description 完整的业务流程.
-     *
-     * @param resourceCode  资源编码    {@link SecurityResource.Validator#code(String)}
-     *
+     * @param resourceCode 资源编码    {@link SecurityResource.Validator#code(String)}
      * @return {@link Boolean#TYPE}
+     * @Description 完整的业务流程.
      */
     boolean existUrlInfoOnResourceByResourceCode(@NotNull String resourceCode)
             throws IllegalArgumentException;
@@ -67,82 +61,73 @@ public interface SecurityUrlEvent
     /**
      * 查询[URL 相关信息]
      *
-     * @Description 完整的业务流程.
-     *
-     * @param resourceCode  资源编码    {@link SecurityResourceUrl.Validator#code(String)}
-     *
+     * @param resourceCode 资源编码    {@link SecurityResourceUrl.Validator#code(String)}
      * @return {@link SecurityResourceUrl}
-     *
+     * @Description 完整的业务流程.
      * @see github.com.suitelhy.dingding.core.domain.event.security.SecurityResourceEvent#selectUrlInfoOnResourceByResourceCode(String)
      */
-    @NotNull List<SecurityResourceUrl> selectUrlInfoOnResourceByResourceCode(@NotNull String resourceCode)
+    @NotNull
+    List<SecurityResourceUrl> selectUrlInfoOnResourceByResourceCode(@NotNull String resourceCode)
             throws IllegalArgumentException;
 
     /**
      * 查询[用户 -> (关联的) 角色 -> (关联的) 资源 -> URL 相关信息]
      *
-     * @Description 完整的业务流程.
-     *
-     * @param username  用户名称    {@link SecurityUser.Validator#username(String)}
-     *
+     * @param username 用户名称    {@link SecurityUser.Validator#username(String)}
      * @return {@link SecurityResourceUrl}
-     *
+     * @Description 完整的业务流程.
      * @see github.com.suitelhy.dingding.core.domain.event.UserEvent#selectUrlInfoOnUserByUsername(String)
      */
-    @NotNull List<SecurityResourceUrl> selectUrlInfoOnUserByUsername(@NotNull String username)
+    @NotNull
+    List<SecurityResourceUrl> selectUrlInfoOnUserByUsername(@NotNull String username)
             throws IllegalArgumentException;
 
     /**
      * 查询[用户 -> (关联的) 角色 -> (关联的) 资源 -> URL 相关信息]
      *
-     * @Description 完整的业务流程.
-     *
-     * @param username  用户名称         {@link SecurityUser.Validator#username(String)}
-     * @param clientId  [资源服务器 ID]  {@link SecurityResourceUrl#getClientId()}
-     *
+     * @param username 用户名称         {@link SecurityUser.Validator#username(String)}
+     * @param clientId [资源服务器 ID]  {@link SecurityResourceUrl#getClientId()}
      * @return {@link SecurityResourceUrl}
-     *
+     * @Description 完整的业务流程.
      * @see github.com.suitelhy.dingding.core.domain.event.UserEvent#selectUrlInfoOnUserByUsernameAndClientId(String, String)
      */
-    @NotNull List<SecurityResourceUrl> selectUrlInfoOnUserByUsernameAndClientId(@NotNull String username, @NotNull String clientId)
+    @NotNull
+    List<SecurityResourceUrl> selectUrlInfoOnUserByUsernameAndClientId(@NotNull String username, @NotNull String clientId)
             throws IllegalArgumentException;
 
     /**
      * 查询[URL 相关信息]
      *
-     * @Description 完整的业务流程.
-     *
      * @param clientId [资源服务器 ID]             {@link SecurityResourceUrl.Validator#clientId(String)}
      * @param urlPath  [资源对应的 URL (Path部分)] {@link SecurityResourceUrl.Validator#urlPath(String)}
-     *
      * @return {@link SecurityResourceUrl}
+     * @Description 完整的业务流程.
      */
-    @NotNull List<SecurityResourceUrl> selectUrlInfoByClientIdAndUrlPath(@NotNull String clientId, @NotNull String urlPath)
+    @NotNull
+    List<SecurityResourceUrl> selectUrlInfoByClientIdAndUrlPath(@NotNull String clientId, @NotNull String urlPath)
             throws IllegalArgumentException;
 
     /**
      * 查询[（安全认证）资源 ←→ URL]
      *
-     * @Description 完整的业务流程.
-     *
-     * @param resourceCode  资源编码    {@link SecurityResourceUrl.Validator#code(String)}
-     *
+     * @param resourceCode 资源编码    {@link SecurityResourceUrl.Validator#code(String)}
      * @return {@link SecurityResourceUrl}
+     * @Description 完整的业务流程.
      */
-    @NotNull List<SecurityResourceUrl> selectResourceUrlRelationshipOnResourceByResourceCode(@NotNull String resourceCode)
+    @NotNull
+    List<SecurityResourceUrl> selectResourceUrlRelationshipOnResourceByResourceCode(@NotNull String resourceCode)
             throws IllegalArgumentException;
 
     /**
      * 查询[（安全认证）资源 ←→ URL]
      *
-     * @Description 完整的业务流程.
-     *
-     * @param clientId  资源服务器 ID             {@link SecurityResourceUrl.Validator#clientId(String)}
-     * @param urlPath   资源对应的 URL (Path部分)  {@link SecurityResourceUrl.Validator#urlPath(String)}
-     *
+     * @param clientId 资源服务器 ID             {@link SecurityResourceUrl.Validator#clientId(String)}
+     * @param urlPath  资源对应的 URL (Path部分)  {@link SecurityResourceUrl.Validator#urlPath(String)}
      * @return {@link SecurityResourceUrl}
+     * @Description 完整的业务流程.
      */
-    @NotNull List<SecurityResourceUrl> selectResourceUrlRelationshipOnUrlInfoByClientIdAndUrlPath(@NotNull String clientId, @NotNull String urlPath)
+    @NotNull
+    List<SecurityResourceUrl> selectResourceUrlRelationshipOnUrlInfoByClientIdAndUrlPath(@NotNull String clientId, @NotNull String urlPath)
             throws IllegalArgumentException;
 
     //===== 添加操作业务 =====//
@@ -150,13 +135,11 @@ public interface SecurityUrlEvent
     /**
      * 新增一个[URL 相关信息]
      *
-     * @Description 完整的业务流程.
-     *
      * @param resource [（安全认证）资源], 必须合法且已持久化.   {@link SecurityResource}
      * @param urlInfo  [URL 相关信息]                       {@link SecurityResourceUrl.Validator#urlInfo(String[])}
      * @param operator 操作者
-     *
      * @return 操作是否成功
+     * @Description 完整的业务流程.
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED
@@ -170,12 +153,10 @@ public interface SecurityUrlEvent
     /**
      * 新增一个[（安全认证）资源 ←→ URL]关联关系
      *
-     * @Description 完整的业务流程.
-     *
-     * @param resourceUrl   [（安全认证）资源 ←→ URL]   {@link SecurityResourceUrl}
-     * @param operator      操作者
-     *
+     * @param resourceUrl [（安全认证）资源 ←→ URL]   {@link SecurityResourceUrl}
+     * @param operator    操作者
      * @return 操作是否成功 / 是否已存在相同的有效数据
+     * @Description 完整的业务流程.
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED
@@ -187,13 +168,11 @@ public interface SecurityUrlEvent
     /**
      * 新增一个[（安全认证）资源 ←→ URL]关联关系
      *
-     * @Description 完整的业务流程.
-     *
      * @param resource [（安全认证）资源], 必须合法且已持久化.   {@link SecurityResource}
      * @param urlInfo  [URL 相关信息]                       {@link SecurityResourceUrl.Validator#urlInfo(String[])}
      * @param operator 操作者
-     *
      * @return 操作是否成功
+     * @Description 完整的业务流程.
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED
@@ -211,13 +190,10 @@ public interface SecurityUrlEvent
     /**
      * 删除指定的[URL 相关信息]
      *
-     * @Description
-     * · 完整的业务流程.
-     *
-     * @param urlInfo   [URL 相关信息]   {@link SecurityResourceUrl.Validator#urlInfo(String[])}
-     * @param operator  操作者
-     *
+     * @param urlInfo  [URL 相关信息]   {@link SecurityResourceUrl.Validator#urlInfo(String[])}
+     * @param operator 操作者
      * @return 操作是否成功
+     * @Description · 完整的业务流程.
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED
@@ -229,13 +205,10 @@ public interface SecurityUrlEvent
     /**
      * 删除指定的[（安全认证）资源]关联的所有[URL 相关信息]
      *
-     * @Description
-     * · 完整的业务流程.
-     *
-     * @param resource      [（安全认证）资源]  {@link SecurityResource}
-     * @param operator      操作者
-     *
+     * @param resource [（安全认证）资源]  {@link SecurityResource}
+     * @param operator 操作者
      * @return 操作是否成功
+     * @Description · 完整的业务流程.
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED
@@ -247,13 +220,10 @@ public interface SecurityUrlEvent
     /**
      * 删除指定的[（安全认证）资源 ←→ URL]关联关系
      *
-     * @Description
-     * · 完整的业务流程.
-     *
-     * @param resourceUrl                       [（安全认证）资源 ←→ URL]   {@link SecurityResourceUrl}
-     * @param operator                          操作者
-     *
+     * @param resourceUrl [（安全认证）资源 ←→ URL]   {@link SecurityResourceUrl}
+     * @param operator    操作者
      * @return 操作是否成功
+     * @Description · 完整的业务流程.
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED
@@ -265,14 +235,11 @@ public interface SecurityUrlEvent
     /**
      * 删除指定的[（安全认证）资源 ←→ URL]关联关系
      *
-     * @Description
-     * · 完整的业务流程.
-     *
-     * @param resource  [（安全认证）资源], 必须合法且已持久化.  {@link SecurityResource}
-     * @param urlInfo   [URL 相关信息]                      {@link SecurityResourceUrl.Validator#urlInfo(String[])}
-     * @param operator  操作者
-     *
+     * @param resource [（安全认证）资源], 必须合法且已持久化.  {@link SecurityResource}
+     * @param urlInfo  [URL 相关信息]                      {@link SecurityResourceUrl.Validator#urlInfo(String[])}
+     * @param operator 操作者
      * @return 操作是否成功
+     * @Description · 完整的业务流程.
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED
@@ -281,18 +248,15 @@ public interface SecurityUrlEvent
     boolean deleteResourceUrlRelationship(@NotNull SecurityResource resource
             , @NotNull String[] urlInfo
             , @NotNull SecurityUser operator)
-    throws IllegalArgumentException, BusinessAtomicException;
+            throws IllegalArgumentException, BusinessAtomicException;
 
     /**
      * 删除指定的[（安全认证）资源]关联的所有[（安全认证）资源 ←→ URL]关联关系
      *
-     * @Description
-     * · 完整的业务流程.
-     *
-     * @param resource      [（安全认证）资源]  {@link SecurityResource}
-     * @param operator      操作者
-     *
+     * @param resource [（安全认证）资源]  {@link SecurityResource}
+     * @param operator 操作者
      * @return 操作是否成功
+     * @Description · 完整的业务流程.
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED
@@ -304,13 +268,10 @@ public interface SecurityUrlEvent
     /**
      * 删除指定的[URL 信息]关联的所有[（安全认证）资源 ←→ URL]关联关系
      *
-     * @Description
-     * · 完整的业务流程.
-     *
-     * @param urlInfo       [URL 信息]    {@link SecurityResourceUrl.Validator#urlInfo(String[])}
-     * @param operator      操作者
-     *
+     * @param urlInfo  [URL 信息]    {@link SecurityResourceUrl.Validator#urlInfo(String[])}
+     * @param operator 操作者
      * @return 操作是否成功
+     * @Description · 完整的业务流程.
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED

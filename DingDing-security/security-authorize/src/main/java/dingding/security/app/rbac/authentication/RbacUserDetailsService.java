@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package dingding.security.app.rbac.authentication;
 
@@ -22,25 +22,25 @@ import dingding.security.app.rbac.domain.Admin;
 @Component
 @Transactional
 public class RbacUserDetailsService
-		implements UserDetailsService {
+        implements UserDetailsService {
 
-	private Logger logger = LoggerFactory.getLogger(getClass());
-	
-	@Autowired
-	private AdminRepository adminRepository;
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.springframework.security.core.userdetails.UserDetailsService#
-	 * loadUserByUsername(java.lang.String)
-	 */
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		logger.info("表单登录用户名:" + username);
-		Admin admin = adminRepository.findByUsername(username);
-		admin.getUrls();
-		return admin;
-	}
+    @Autowired
+    private AdminRepository adminRepository;
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.springframework.security.core.userdetails.UserDetailsService#
+     * loadUserByUsername(java.lang.String)
+     */
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        logger.info("表单登录用户名:" + username);
+        Admin admin = adminRepository.findByUsername(username);
+        admin.getUrls();
+        return admin;
+    }
 
 }

@@ -15,15 +15,13 @@ public interface Human<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V ext
      * 性别
      *
      * @Description Hibernate 的默认策略仅支持数据库的数字类型映射到 java 的 Integer, 而不包括 Byte 和 Short.
-     *->    org.hibernate.HibernateException: Unknown wrap conversion requested: [B to java.lang.Byte
+     * ->    org.hibernate.HibernateException: Unknown wrap conversion requested: [B to java.lang.Byte
      * @Reference <a href="https://stackoverflow.com/questions/26347443/attributeconverter-fails-after-migration-from-glassfish-4-to-wildfly-8-1">
-     *->    AttributeConverter fails after migration from glassfish 4 to wildfly 8.1</a>
+     * ->    AttributeConverter fails after migration from glassfish 4 to wildfly 8.1</a>
      */
     enum SexVo
             implements VoModel<SexVo, Integer, String> {
-        UNKNOWN(null, "未知")
-        , FEMALE(0, "女")
-        , MALE(1, "男");
+        UNKNOWN(null, "未知"), FEMALE(0, "女"), MALE(1, "男");
 
         /**
          * 为持久化类型转换器提供支持
@@ -75,7 +73,8 @@ public interface Human<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V ext
          * @return
          */
         @Override
-        public @NotNull String displayName() {
+        public @NotNull
+        String displayName() {
             return this.name;
         }
 

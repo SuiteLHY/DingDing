@@ -9,26 +9,25 @@ import org.springframework.stereotype.Component;
 
 /**
  * 表单登录配置
- * 
- * @author zhailiang
  *
+ * @author zhailiang
  */
 @Component
 public class FormAuthenticationConfig {
 
-	@Autowired
-	protected AuthenticationSuccessHandler dingdingAuthenticationSuccessHandler;
-	
-	@Autowired
-	protected AuthenticationFailureHandler dingdingAuthenticationFailureHandler;
-	
-	public void configure(HttpSecurity http)
-			throws Exception {
-		http.formLogin()
-			.loginPage(SecurityConstants.DEFAULT_UNAUTHENTICATED_URL)
-			.loginProcessingUrl(SecurityConstants.DEFAULT_SIGN_IN_PROCESSING_URL_FORM)
-			.successHandler(dingdingAuthenticationSuccessHandler)
-			.failureHandler(dingdingAuthenticationFailureHandler);
-	}
-	
+    @Autowired
+    protected AuthenticationSuccessHandler dingdingAuthenticationSuccessHandler;
+
+    @Autowired
+    protected AuthenticationFailureHandler dingdingAuthenticationFailureHandler;
+
+    public void configure(HttpSecurity http)
+            throws Exception {
+        http.formLogin()
+                .loginPage(SecurityConstants.DEFAULT_UNAUTHENTICATED_URL)
+                .loginProcessingUrl(SecurityConstants.DEFAULT_SIGN_IN_PROCESSING_URL_FORM)
+                .successHandler(dingdingAuthenticationSuccessHandler)
+                .failureHandler(dingdingAuthenticationFailureHandler);
+    }
+
 }

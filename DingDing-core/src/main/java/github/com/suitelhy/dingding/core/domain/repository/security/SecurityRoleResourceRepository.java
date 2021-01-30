@@ -38,7 +38,7 @@ public interface SecurityRoleResourceRepository
     /**
      * 判断存在
      *
-     * @param resourceCode      资源编码
+     * @param resourceCode 资源编码
      * @return
      */
     /*@Lock(LockModeType.PESSIMISTIC_WRITE)*/
@@ -49,7 +49,7 @@ public interface SecurityRoleResourceRepository
     /**
      * 判断存在
      *
-     * @param roleCode      角色编码
+     * @param roleCode 角色编码
      * @return
      */
     /*@Lock(LockModeType.PESSIMISTIC_WRITE)*/
@@ -60,9 +60,8 @@ public interface SecurityRoleResourceRepository
     /**
      * 判断存在
      *
-     * @param roleCode      角色编码
-     * @param resourceCode  资源编码
-     *
+     * @param roleCode     角色编码
+     * @param resourceCode 资源编码
      * @return
      */
     /*@Lock(LockModeType.PESSIMISTIC_WRITE)*/
@@ -73,9 +72,8 @@ public interface SecurityRoleResourceRepository
     /**
      * 查询
      *
-     * @param roleCode      角色编码
-     * @param resourceCode  资源编码
-     *
+     * @param roleCode     角色编码
+     * @param resourceCode 资源编码
      * @return
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -85,7 +83,7 @@ public interface SecurityRoleResourceRepository
     /**
      * 查询所有
      *
-     * @param resourceCode  资源编码
+     * @param resourceCode 资源编码
      * @return
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -95,16 +93,16 @@ public interface SecurityRoleResourceRepository
     /**
      * 查询所有
      *
-     * @param resourceCode  资源编码
-     * @param pageable      {@link Pageable}
-     * @return  {@link Page}
+     * @param resourceCode 资源编码
+     * @param pageable     {@link Pageable}
+     * @return {@link Page}
      */
     Page<SecurityRoleResource> findAllByResourceCode(@NotNull String resourceCode, Pageable pageable);
 
     /**
      * 查询所有
      *
-     * @param roleCode      角色编码
+     * @param roleCode 角色编码
      * @return
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -114,25 +112,25 @@ public interface SecurityRoleResourceRepository
     /**
      * 查询所有
      *
-     * @param roleCode      角色编码
-     * @param pageable      {@link Pageable}
-     * @return  {@link Page}
+     * @param roleCode 角色编码
+     * @param pageable {@link Pageable}
+     * @return {@link Page}
      */
     Page<SecurityRoleResource> findAllByRoleCode(@NotNull String roleCode, Pageable pageable);
 
     /**
      * 查询所有
      *
-     * @param rodeCode      角色编码
+     * @param rodeCode 角色编码
      * @return
      */
     @Query(nativeQuery = true
             , value = "select resource.`code` as `code` "
-                    + ", resource.`name` as `name` "
-                    + "from security_role r "
-                    + "left join security_role_resource rr on rr.role_code = r.code "
-                    + "left join security_resource resource on resource.`code` = rr.resource_code "
-                    + "where r.`code` = :rodeCode ")
+            + ", resource.`name` as `name` "
+            + "from security_role r "
+            + "left join security_role_resource rr on rr.role_code = r.code "
+            + "left join security_resource resource on resource.`code` = rr.resource_code "
+            + "where r.`code` = :rodeCode ")
     List<Map<String, Object>> selectResourceByRoleCode(@Param("rodeCode") String rodeCode);
 
     //===== Insert Data =====//
@@ -140,8 +138,8 @@ public interface SecurityRoleResourceRepository
     /**
      * 新增/更新日志记录
      *
-     * @param entity        {@link SecurityRoleResource}
-     * @return  {@link SecurityRoleResource}
+     * @param entity {@link SecurityRoleResource}
+     * @return {@link SecurityRoleResource}
      */
     @Override
     @Modifying
@@ -154,7 +152,7 @@ public interface SecurityRoleResourceRepository
     /**
      * 删除
      *
-     * @param id    数据ID
+     * @param id 数据ID
      */
     @Override
     @Modifying
@@ -165,7 +163,7 @@ public interface SecurityRoleResourceRepository
     /**
      * 删除
      *
-     * @param resourceCode  资源编码
+     * @param resourceCode 资源编码
      * @return
      */
     @Modifying
@@ -176,7 +174,7 @@ public interface SecurityRoleResourceRepository
     /**
      * 删除
      *
-     * @param roleCode  角色编码
+     * @param roleCode 角色编码
      * @return
      */
     @Modifying
@@ -187,8 +185,8 @@ public interface SecurityRoleResourceRepository
     /**
      * 删除
      *
-     * @param roleCode      角色编码
-     * @param resourceCode  资源编码
+     * @param roleCode     角色编码
+     * @param resourceCode 资源编码
      * @return
      */
     @Modifying

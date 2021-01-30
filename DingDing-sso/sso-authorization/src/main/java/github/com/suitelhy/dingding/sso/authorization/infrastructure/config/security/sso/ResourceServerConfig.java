@@ -34,30 +34,27 @@ public class ResourceServerConfig
     /**
      * 安全资源的访问规则配置
      *
-     * @param http  {@link HttpSecurity}
-     *
+     * @param http {@link HttpSecurity}
      * @throws Exception
      */
     @Override
     public void configure(HttpSecurity http)
-            throws Exception
-    {
+            throws Exception {
         http
                 .authorizeRequests()
                 /*.antMatchers("/messages/**"
                         , "user/**")
                         .access("#oauth2.hasScope('all')")*/
                 .antMatchers(HTTP.MethodVo.OPTIONS.httpMethod, "/**")
-                    .permitAll()
+                .permitAll()
                 .anyRequest()
-                    .authenticated();
+                .authenticated();
     }
 
     /**
      * 资源服务器的属性配置
      *
      * @param resources {@link ResourceServerSecurityConfigurer}
-     *
      * @throws Exception
      */
     @Override

@@ -45,15 +45,12 @@ public class LogTaskTests {
      * 用户（安全认证）基本信息
      *
      * @Description {@link AbstractSecurityUser} 的项目定制化实现.
-     *
      * @Design {@link AbstractSecurityUser}
      * · 【安全设计】使用[静态的嵌套类]能够有效地限制[对 {@link DingDingUserDetailsService.SecurityUser} 的滥用].
-     *
      * @see AbstractSecurityUser
      */
     public static class SecurityUserTestClass
-            extends DingDingUserDetailsService.SecurityUser
-    {
+            extends DingDingUserDetailsService.SecurityUser {
 
         /**
          * (Constructor)
@@ -65,7 +62,6 @@ public class LogTaskTests {
          * @param accountNonLocked      {@link this#isAccountNonLocked()}
          * @param credentialsNonExpired {@link this#isCredentialsNonExpired()}
          * @param enabled               {@link this#isEnabled()}
-         *
          * @throws AccountStatusException
          * @throws IllegalArgumentException
          */
@@ -76,8 +72,7 @@ public class LogTaskTests {
                 , boolean accountNonLocked
                 , boolean credentialsNonExpired
                 , boolean enabled)
-                throws AccountStatusException, IllegalArgumentException
-        {
+                throws AccountStatusException, IllegalArgumentException {
             super(username, password, authorities
                     , accountNonExpired, accountNonLocked, credentialsNonExpired
                     , enabled);
@@ -86,9 +81,8 @@ public class LogTaskTests {
         /**
          * 判断是否正常
          *
-         * @Description 综合判断.
-         *
          * @return {@link Boolean#TYPE}
+         * @Description 综合判断.
          */
         public boolean isNormal() {
             return this.isAccountNonExpired()
@@ -103,10 +97,8 @@ public class LogTaskTests {
      * [用户 - 身份验证令牌信息]
      *
      * @Description {@link github.com.suitelhy.dingding.core.infrastructure.web.OAuth2AuthenticationInfo.AbstractUserAuthentication.AbstractDetails} 的项目定制化实现.
-     *
      * @Design {@link github.com.suitelhy.dingding.core.infrastructure.web.OAuth2AuthenticationInfo.AbstractUserAuthentication.AbstractDetails}
      * · 【安全设计】使用[静态的嵌套类]能够有效地限制[对 {@link github.com.suitelhy.dingding.core.infrastructure.web.OAuth2AuthenticationInfo.AbstractUserAuthentication.AbstractDetails} 的滥用].
-     *
      * @see github.com.suitelhy.dingding.core.infrastructure.web.OAuth2AuthenticationInfo.AbstractUserAuthentication.AbstractDetails
      */
     private static final class OAuth2AuthenticationInfo {
@@ -128,26 +120,25 @@ public class LogTaskTests {
 
                 private final Collection<String> authorities;
 
-                private final @NotNull String clientId;
+                private final @NotNull
+                String clientId;
 
                 private final Collection<String> scope;
 
-                private final @NotNull String userName;
+                private final @NotNull
+                String userName;
 
                 /**
                  * (Constructor)
-                 *
-                 * @Description 限制 {@link github.com.suitelhy.dingding.core.infrastructure.web.OAuth2AuthenticationInfo.AbstractUserAuthentication.AbstractDetails} 实现类的构造.
                  *
                  * @param active      是否处于活动状态
                  * @param authorities 权限集合
                  * @param clientId    (凭证对应的)客户端编号
                  * @param scope       可操作范围
                  * @param userName    (凭证对应的)用户名称
-                 *
                  * @throws BadCredentialsException             非法的凭证参数
                  * @throws InsufficientAuthenticationException 不满足构建[用户认证凭据 - 详细信息]的必要条件
-                 *
+                 * @Description 限制 {@link github.com.suitelhy.dingding.core.infrastructure.web.OAuth2AuthenticationInfo.AbstractUserAuthentication.AbstractDetails} 实现类的构造.
                  * @see this#isActive()
                  * @see this#getAuthorities()
                  * @see this#getClientId()
@@ -156,8 +147,7 @@ public class LogTaskTests {
                  */
                 protected UserDetails(Boolean active, @NotNull Collection<String> authorities, @NotNull String clientId
                         , @NotNull Collection<String> scope, @NotNull String userName)
-                        throws BadCredentialsException, InsufficientAuthenticationException, IllegalArgumentException
-                {
+                        throws BadCredentialsException, InsufficientAuthenticationException, IllegalArgumentException {
                     super(active, authorities, clientId, scope, userName);
 
                     this.active = active;
@@ -173,22 +163,26 @@ public class LogTaskTests {
                 }
 
                 @Override
-                public @NotNull Collection<String> getAuthorities() {
+                public @NotNull
+                Collection<String> getAuthorities() {
                     return this.authorities;
                 }
 
                 @Override
-                public @NotNull String getClientId() {
+                public @NotNull
+                String getClientId() {
                     return this.clientId;
                 }
 
                 @Override
-                public @NotNull Collection<String> getScope() {
+                public @NotNull
+                Collection<String> getScope() {
                     return this.scope;
                 }
 
                 @Override
-                public @NotNull String getUserName() {
+                public @NotNull
+                String getUserName() {
                     return this.userName;
                 }
 
@@ -261,7 +255,8 @@ public class LogTaskTests {
      *
      * @return {@link SecurityUserTestClass}
      */
-    private @NotNull OAuth2AuthenticationInfo.AbstractUserAuthentication.UserDetails operator_OAuth2_UserDetails() {
+    private @NotNull
+    OAuth2AuthenticationInfo.AbstractUserAuthentication.UserDetails operator_OAuth2_UserDetails() {
         final User user = userEvent.selectUserByUsername("admin");
 
         if (null == user) {
@@ -310,16 +305,14 @@ public class LogTaskTests {
     /**
      * 获取测试用的 {@link Log} 对象
      *
-     * @param securityUser              {@link User}
-     * @param operator                  {@link SecurityUser}
-     * @param logVo                     {@link HandleType.LogVo}
-     *
+     * @param securityUser {@link User}
+     * @param operator     {@link SecurityUser}
+     * @param logVo        {@link HandleType.LogVo}
      * @return {@link Log}
      */
     @NotNull
     private Log getEntityForTest(@NotNull /*User*/AbstractSecurityUser securityUser, @NotNull /*SecurityUser*/SecurityUserTestClass operator, @NotNull HandleType.LogVo logVo)
-            throws IllegalArgumentException
-    {
+            throws IllegalArgumentException {
         if (null == securityUser) {
             throw new IllegalArgumentException("非法参数: <param>user</param>");
         }
@@ -359,18 +352,14 @@ public class LogTaskTests {
     /**
      * 获取测试用的用户信息
      *
-     * @param securityUser  {@link AbstractSecurityUser}
-     *
+     * @param securityUser {@link AbstractSecurityUser}
      * @return {@link UserDto}
-     *
-     * @see UserDto
-     *
      * @throws IllegalAccessException
+     * @see UserDto
      */
     @NotNull
     private /*BasicUserDto*/UserDto getUserInfo(@NotNull AbstractSecurityUser securityUser)
-            throws IllegalAccessException
-    {
+            throws IllegalAccessException {
         /*return userDetailsService.getUserInfo(user);*/
         final User user = userEvent.selectUserByUsername(securityUser.getUsername());
         if (null == user || user.isEmpty()) {
@@ -437,8 +426,7 @@ public class LogTaskTests {
     @Test
     @Transactional
     public void selectLogById()
-            throws IllegalAccessException
-    {
+            throws IllegalAccessException {
         // 获取必要的测试用身份信息
         final SecurityUserTestClass operator = operator();
         // 获取必要的测试用[操作者 - 身份验证令牌信息 - 用户认证凭据 - 详细信息]
@@ -471,8 +459,7 @@ public class LogTaskTests {
     @Test
     @Transactional
     public void selectLogByUsername()
-            throws IllegalAccessException
-    {
+            throws IllegalAccessException {
         // 获取必要的测试用身份信息
         final SecurityUserTestClass operator = operator();
         // 获取必要的测试用[操作者 - 身份验证令牌信息 - 用户认证凭据 - 详细信息]
@@ -506,8 +493,7 @@ public class LogTaskTests {
     @Test
     @Transactional
     public void selectCountByUsername()
-            throws IllegalAccessException
-    {
+            throws IllegalAccessException {
         // 获取必要的测试用身份信息
         final SecurityUserTestClass operator = operator();
         // 获取必要的测试用[操作者 - 身份验证令牌信息 - 用户认证凭据 - 详细信息]
@@ -542,8 +528,7 @@ public class LogTaskTests {
     @Test
     @Transactional
     public void insert()
-            throws IllegalAccessException
-    {
+            throws IllegalAccessException {
         // 获取必要的测试用身份信息
         final SecurityUserTestClass operator = operator();
         // 获取必要的测试用[操作者 - 身份验证令牌信息 - 用户认证凭据 - 详细信息]
@@ -570,8 +555,7 @@ public class LogTaskTests {
     @Test
     @Transactional
     public void delete()
-            throws IllegalAccessException
-    {
+            throws IllegalAccessException {
         // 获取必要的测试用身份信息
         final SecurityUserTestClass operator = operator();
         // 获取必要的测试用[操作者 - 身份验证令牌信息 - 用户认证凭据 - 详细信息]

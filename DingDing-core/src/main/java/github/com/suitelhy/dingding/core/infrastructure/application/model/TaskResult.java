@@ -12,10 +12,8 @@ import java.util.Map;
 /**
  * 任务层 (Task) -> 操作结果
  *
+ * @param <_DATA> [操作结果 - 相关数据]的类型
  * @Design 任务层 (Task) 的 {@link AbstractResult} 默认实现类.
- *
- * @param <_DATA>   [操作结果 - 相关数据]的类型
- *
  * @see AbstractResult
  * @see github.com.suitelhy.dingding.core.application.task
  */
@@ -23,8 +21,7 @@ public class TaskResult<_DATA>
         extends AbstractResult<TaskResult.Vo.StatusVo, _DATA, Map> {
 
     public interface Vo<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V extends Number, _DESCRIPTION>
-            extends VoModel<VO, V, _DESCRIPTION>
-    {
+            extends VoModel<VO, V, _DESCRIPTION> {
 
         /**
          * 操作结果 - 状态
@@ -75,14 +72,16 @@ public class TaskResult<_DATA>
 
                 // (单例模式 - 登记式)
                 private static class Factory {
-                    private static final @NotNull Converter SINGLETON = new Converter();
+                    private static final @NotNull
+                    Converter SINGLETON = new Converter();
                 }
 
                 private Converter() {
                     super(StatusVo.class);
                 }
 
-                public static @NotNull Converter getInstance() {
+                public static @NotNull
+                Converter getInstance() {
                     return Converter.Factory.SINGLETON;
                 }
 
@@ -91,28 +90,30 @@ public class TaskResult<_DATA>
             /**
              * 状态 - 编码
              */
-            public final @NotNull Integer code;
+            public final @NotNull
+            Integer code;
 
             /**
              * 状态 - 名称
              */
-            public final @NotNull String name;
+            public final @NotNull
+            String name;
 
             /**
              * 状态 - 描述
              */
-            public final @NotNull String description;
+            public final @NotNull
+            String description;
 
             /**
              * (Constructor)
              *
-             * @param code          [状态 - 编码]
-             * @param name          [状态 - 名称]
-             * @param description   [状态 - 描述]
+             * @param code        [状态 - 编码]
+             * @param name        [状态 - 名称]
+             * @param description [状态 - 描述]
              */
             StatusVo(@NotNull Integer code, @NotNull String name, @NotNull String description)
-                    throws IllegalArgumentException
-            {
+                    throws IllegalArgumentException {
                 if (null == code) {
                     throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                             , "[状态 - 编码]"
@@ -169,7 +170,8 @@ public class TaskResult<_DATA>
              * @return
              */
             @Override
-            public @NotNull String displayName() {
+            public @NotNull
+            String displayName() {
                 return this.name;
             }
 
@@ -177,7 +179,6 @@ public class TaskResult<_DATA>
              * 备注: <method>equals(Object)</method>
              *
              * @param value
-             *
              * @return
              */
             public boolean equals(@Nullable Integer value) {
@@ -195,7 +196,8 @@ public class TaskResult<_DATA>
              * @Design 为持久化类型转换功能提供支持.
              */
             @Override
-            public @NotNull Converter voAttributeConverter() {
+            public @NotNull
+            Converter voAttributeConverter() {
                 return Converter.getInstance();
             }
 
@@ -205,7 +207,6 @@ public class TaskResult<_DATA>
          * 额外拓展 <- 属性
          *
          * @Description 相关属性配置定义.
-         *
          * @Design VO
          */
         enum ExtraPropertyVo
@@ -232,7 +233,8 @@ public class TaskResult<_DATA>
                     super(ExtraPropertyVo.class);
                 }
 
-                public static @NotNull Converter getInstance() {
+                public static @NotNull
+                Converter getInstance() {
                     return Converter.Factory.SINGLETON;
                 }
 
@@ -241,41 +243,45 @@ public class TaskResult<_DATA>
             /**
              * 属性 - 编码
              */
-            public final @NotNull Integer code;
+            public final @NotNull
+            Integer code;
 
             /**
              * 属性 - 名称
              */
-            public final @NotNull String name;
+            public final @NotNull
+            String name;
 
             /**
              * 属性 - 描述
              */
-            public final @NotNull String description;
+            public final @NotNull
+            String description;
 
             /**
              * 属性 -> Key 名称
              */
-            public final @NotNull String key;
+            public final @NotNull
+            String key;
 
             /**
              * 属性 -> Value 类型
              */
-            public final @NotNull Class valueClass;
+            public final @NotNull
+            Class valueClass;
 
             /**
              * (Constructor)
              *
-             * @param code          [属性 - 编码]
-             * @param name          [属性 - 名称]
-             * @param description   [属性 - 描述]
-             * @param key           [属性 -> Key 名称]
-             * @param valueClass    [属性 -> Value 类型]
+             * @param code        [属性 - 编码]
+             * @param name        [属性 - 名称]
+             * @param description [属性 - 描述]
+             * @param key         [属性 -> Key 名称]
+             * @param valueClass  [属性 -> Value 类型]
              */
             ExtraPropertyVo(@NotNull Integer code, @NotNull String name, @NotNull String description
                     , @NotNull String key, @NotNull Class valueClass)
-                    throws IllegalArgumentException
-            {
+                    throws IllegalArgumentException {
                 if (null == code) {
                     throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                             , "[状态 - 编码]"
@@ -350,7 +356,8 @@ public class TaskResult<_DATA>
              * @return
              */
             @Override
-            public @NotNull String displayName() {
+            public @NotNull
+            String displayName() {
                 return this.name;
             }
 
@@ -358,7 +365,6 @@ public class TaskResult<_DATA>
              * 备注: <method>equals(Object)</method>
              *
              * @param value
-             *
              * @return
              */
             public boolean equals(@Nullable Integer value) {
@@ -366,7 +372,8 @@ public class TaskResult<_DATA>
             }
 
             @Override
-            public @NotNull String toString() {
+            public @NotNull
+            String toString() {
                 return VoModel.toString(this);
             }
 
@@ -376,7 +383,8 @@ public class TaskResult<_DATA>
              * @Design 为持久化类型转换功能提供支持.
              */
             @Override
-            public @NotNull Converter voAttributeConverter() {
+            public @NotNull
+            Converter voAttributeConverter() {
                 return Converter.getInstance();
             }
 
@@ -421,11 +429,9 @@ public class TaskResult<_DATA>
         /**
          * 创建
          *
-         * @param statusVo  [操作结果 - 状态]
-         * @param data      [操作结果 - 相关数据]
-         *
+         * @param statusVo [操作结果 - 状态]
+         * @param data     [操作结果 - 相关数据]
          * @param <_DATA>
-         *
          * @return {@link TaskResult}
          */
         public <_DATA> @NotNull TaskResult<_DATA> create(@NotNull TaskResult.Vo.StatusVo statusVo, @NotNull _DATA data) {
@@ -454,12 +460,10 @@ public class TaskResult<_DATA>
         /**
          * 创建
          *
-         * @param statusVo  [操作结果 - 状态]
-         * @param message   [操作结果 - 响应的消息]
-         * @param data      [操作结果 - 相关数据]
-         *
+         * @param statusVo [操作结果 - 状态]
+         * @param message  [操作结果 - 响应的消息]
+         * @param data     [操作结果 - 相关数据]
          * @param <_DATA>
-         *
          * @return {@link TaskResult}
          */
         public <_DATA> @NotNull TaskResult<_DATA> create(@NotNull TaskResult.Vo.StatusVo statusVo, @Nullable String message, @NotNull _DATA data) {
@@ -490,29 +494,31 @@ public class TaskResult<_DATA>
      * 操作结果 - 相关数据
      *
      * @Description {@link super#data}
-     *
      * @Design {@link super#data}
      */
-    public final @NotNull _DATA data = super.data;
+    public final @NotNull
+    _DATA data = super.data;
 
     /**
      * 操作结果 - 响应的消息
      */
-    public final @NotNull String message;
+    public final @NotNull
+    String message;
 
     /**
      * 额外拓展
      *
      * @Description {@link super#extra}
      */
-    public final @NotNull Map<String, Object> extra = super.extra;
+    public final @NotNull
+    Map<String, Object> extra = super.extra;
 
     /**
      * (Constructor)
      *
-     * @param state     [操作结果 - 状态]
-     * @param message   [操作结果 - 响应的消息]
-     * @param data      [操作结果 - 相关数据]
+     * @param state   [操作结果 - 状态]
+     * @param message [操作结果 - 响应的消息]
+     * @param data    [操作结果 - 相关数据]
      */
     protected TaskResult(@NotNull TaskResult.Vo.StatusVo state, @Nullable String message, @NotNull _DATA data) {
         super(state, data, new HashMap<String, Object>(1));
@@ -525,9 +531,8 @@ public class TaskResult<_DATA>
     /**
      * 操作结果 -> 判断是否失败
      *
-     * @Description 操作流程未按照预期执行, 或业务结果不符合预期.
-     *
      * @return 判断结果
+     * @Description 操作流程未按照预期执行, 或业务结果不符合预期.
      */
     public boolean isFailure() {
         switch (this.status) {
@@ -542,9 +547,8 @@ public class TaskResult<_DATA>
     /**
      * 操作结果 -> 判断是否成功
      *
-     * @Description 操作流程完全按照预期执行, 且业务结果完全符合预期.
-     *
      * @return 判断结果
+     * @Description 操作流程完全按照预期执行, 且业务结果完全符合预期.
      */
     public boolean isSuccess() {
         switch (this.status) {
@@ -556,7 +560,8 @@ public class TaskResult<_DATA>
     }
 
     @Override
-    public @NotNull String toJSONString() {
+    public @NotNull
+    String toJSONString() {
         return String.format("{status:%s,message:\"%s\",data:%s,extra:%s}"
                 , status
                 , message
@@ -565,7 +570,8 @@ public class TaskResult<_DATA>
     }
 
     @Override
-    public @NotNull String toString() {
+    public @NotNull
+    String toString() {
         return String.format("%s{status=%s, message=\"%s\", data=%s, extra=%s}"
                 , getClass().getSimpleName()
                 , status

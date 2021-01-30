@@ -39,7 +39,8 @@ public final class VoUtil {
         private static final VoUtil SINGLETON = new VoUtil();
     }
 
-    private VoUtil() {}
+    private VoUtil() {
+    }
 
     @NotNull
     public static VoUtil getInstance() {

@@ -40,6 +40,7 @@ public class FriendRequest
     private LocalDateTime requestDataTime;
 
     //===== AbstractEntityModel =====//
+
     /**
      * 唯一标识 <- Entity 对象
      *
@@ -115,7 +116,8 @@ public class FriendRequest
     }
 
     //===== EntityValidator =====//
-    public FriendRequest() {}
+    public FriendRequest() {
+    }
 
     private FriendRequest(@Nullable String id
             , @NotNull String sendUserId

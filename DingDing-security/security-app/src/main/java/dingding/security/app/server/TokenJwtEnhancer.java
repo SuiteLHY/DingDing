@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package dingding.security.app.server;
 
@@ -21,19 +21,19 @@ import org.springframework.security.oauth2.provider.token.TokenEnhancer;
  *
  */
 public class TokenJwtEnhancer
-		implements TokenEnhancer {
+        implements TokenEnhancer {
 
-	/* (non-Javadoc)
-	 * @see org.springframework.security.oauth2.provider.token.TokenEnhancer#enhance(org.springframework.security.oauth2.common.OAuth2AccessToken, org.springframework.security.oauth2.provider.OAuth2Authentication)
-	 */
-	@Override
-	public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
-		Map<String, Object> info = new HashMap<>();
+    /* (non-Javadoc)
+     * @see org.springframework.security.oauth2.provider.token.TokenEnhancer#enhance(org.springframework.security.oauth2.common.OAuth2AccessToken, org.springframework.security.oauth2.provider.OAuth2Authentication)
+     */
+    @Override
+    public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
+        Map<String, Object> info = new HashMap<>();
 
-		info.put("company", "dingding");
-		
-		((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(info);
-		return accessToken;
-	}
+        info.put("company", "dingding");
+
+        ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(info);
+        return accessToken;
+    }
 
 }

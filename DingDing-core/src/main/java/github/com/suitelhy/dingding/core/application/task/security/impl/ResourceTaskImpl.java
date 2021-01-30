@@ -66,10 +66,10 @@ public class ResourceTaskImpl
      *
      * @param pageIndex 分页索引, 从0开始
      * @param pageSize  分页 - 每页容量
-     *
      * @return {@link TaskResult}
      */
-    private @NotNull TaskResult<List<ResourceDto>> selectAllResource(int pageIndex, int pageSize) {
+    private @NotNull
+    TaskResult<List<ResourceDto>> selectAllResource(int pageIndex, int pageSize) {
         @NotNull TaskResult<List<ResourceDto>> taskResult;
         final @NotNull List<ResourceDto> resultData = new ArrayList<>(0);
         try {
@@ -117,11 +117,11 @@ public class ResourceTaskImpl
      * @param pageIndex 分页索引, 从0开始
      * @param pageSize  分页 - 每页容量
      * @param operator  操作者 {@link AbstractSecurityUser}
-     *
      * @return {@link TaskResult}
      */
     @Override
-    public @NotNull TaskResult<List<ResourceDto>> selectAllResource(int pageIndex, int pageSize, @NotNull AbstractSecurityUser operator) {
+    public @NotNull
+    TaskResult<List<ResourceDto>> selectAllResource(int pageIndex, int pageSize, @NotNull AbstractSecurityUser operator) {
         @NotNull TaskResult<List<ResourceDto>> taskResult;
         final @NotNull List<ResourceDto> resultData = new ArrayList<>(0);
         try {
@@ -168,11 +168,11 @@ public class ResourceTaskImpl
      * @param pageIndex 分页索引, 从0开始
      * @param pageSize  分页 - 每页容量
      * @param operator  操作者
-     *
      * @return {@link TaskResult}
      */
     @Override
-    public @NotNull TaskResult<List<ResourceDto>> selectAllResource(int pageIndex, int pageSize, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
+    public @NotNull
+    TaskResult<List<ResourceDto>> selectAllResource(int pageIndex, int pageSize, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
         @NotNull TaskResult<List<ResourceDto>> taskResult;
         final @NotNull List<ResourceDto> resultData = new ArrayList<>(0);
         try {
@@ -230,10 +230,10 @@ public class ResourceTaskImpl
      * 查询 (指定的) 资源
      *
      * @param resourceCode 资源编码
-     *
      * @return {@link TaskResult}
      */
-    private @NotNull TaskResult<ResourceDto> selectResourceByCode(@NotNull String resourceCode) {
+    private @NotNull
+    TaskResult<ResourceDto> selectResourceByCode(@NotNull String resourceCode) {
         @NotNull TaskResult<ResourceDto> taskResult;
         @NotNull ResourceDto resultData;
         try {
@@ -292,11 +292,11 @@ public class ResourceTaskImpl
      * 查询 (指定的) 资源
      *
      * @param resourceCode 资源编码
-     *
      * @return {@link TaskResult}
      */
     @Override
-    public @NotNull TaskResult<ResourceDto> selectResourceByCode(@NotNull String resourceCode, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
+    public @NotNull
+    TaskResult<ResourceDto> selectResourceByCode(@NotNull String resourceCode, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
         @NotNull TaskResult<ResourceDto> taskResult;
         @NotNull ResourceDto resultData;
         try {
@@ -357,16 +357,16 @@ public class ResourceTaskImpl
     /**
      * 查询 (关联的) 资源
      *
-     * @param roleCode  角色编码
-     *
+     * @param roleCode 角色编码
      * @return {@link ResourceDto} 集合
      */
-    private @NotNull TaskResult<List<ResourceDto>> selectResourceByRoleCode(@NotNull String roleCode) {
+    private @NotNull
+    TaskResult<List<ResourceDto>> selectResourceByRoleCode(@NotNull String roleCode) {
         @NotNull TaskResult<List<ResourceDto>> taskResult;
         final @NotNull List<ResourceDto> resultData = new ArrayList<>(0);
         try {
             final @NotNull List<SecurityResource> resourceList = securityResourceEvent.selectResourceOnRoleByRoleCode(roleCode);
-            if (! resourceList.isEmpty()) {
+            if (!resourceList.isEmpty()) {
                 for (@NotNull SecurityResource eachResource : resourceList) {
                     if (eachResource.isEmpty()) {
                         continue;
@@ -408,12 +408,12 @@ public class ResourceTaskImpl
     /**
      * 查询 (关联的) 资源
      *
-     * @param roleCode  角色编码
-     *
+     * @param roleCode 角色编码
      * @return {@link ResourceDto} 集合
      */
     @Override
-    public @NotNull TaskResult<List<ResourceDto>> selectResourceByRoleCode(@NotNull String roleCode, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
+    public @NotNull
+    TaskResult<List<ResourceDto>> selectResourceByRoleCode(@NotNull String roleCode, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
         @NotNull TaskResult<List<ResourceDto>> taskResult;
         final @NotNull List<ResourceDto> resultData = new ArrayList<>(0);
         try {
@@ -470,11 +470,11 @@ public class ResourceTaskImpl
     /**
      * 查询 (关联的) 资源
      *
-     * @param username  用户名称
-     *
+     * @param username 用户名称
      * @return {@link ResourceDto} 集合
      */
-    private @NotNull TaskResult<List<ResourceDto>> selectResourceByUsername(@NotNull String username) {
+    private @NotNull
+    TaskResult<List<ResourceDto>> selectResourceByUsername(@NotNull String username) {
         @NotNull TaskResult<List<ResourceDto>> taskResult;
         final @NotNull List<ResourceDto> resultData = new ArrayList<>(0);
         try {
@@ -506,15 +506,14 @@ public class ResourceTaskImpl
     /**
      * 查询 (关联的) 资源
      *
-     * @param username  用户名称
-     * @param operator  操作者
-     *
+     * @param username 用户名称
+     * @param operator 操作者
      * @return {@link ResourceDto} 集合
      */
     @Override
-    public @NotNull TaskResult<List<ResourceDto>> selectResourceByUsername(@NotNull String username
-            , OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator)
-    {
+    public @NotNull
+    TaskResult<List<ResourceDto>> selectResourceByUsername(@NotNull String username
+            , OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
         @NotNull TaskResult<List<ResourceDto>> taskResult;
         final @NotNull List<ResourceDto> resultData = new ArrayList<>(0);
         try {
@@ -561,10 +560,10 @@ public class ResourceTaskImpl
      * 查询 (关联的) [URL 信息]
      *
      * @param resourceCode 资源编码
-     *
      * @return {@link TaskResult}
      */
-    private @NotNull TaskResult<ResourceDto> selectUrlInfoByResourceCode(@NotNull String resourceCode) {
+    private @NotNull
+    TaskResult<ResourceDto> selectUrlInfoByResourceCode(@NotNull String resourceCode) {
         @NotNull TaskResult<ResourceDto> taskResult;
         @NotNull ResourceDto resultData;
         try {
@@ -624,7 +623,7 @@ public class ResourceTaskImpl
                     , Thread.currentThread().getStackTrace()[1].getMethodName()
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()
                     , e);
-           /* System.err.println(String.format("===== selectUrlInfoByResourceCode =====\n%s", e.getMessage()));*/
+            /* System.err.println(String.format("===== selectUrlInfoByResourceCode =====\n%s", e.getMessage()));*/
 
             resultData = ResourceDto.Factory.RESOURCE_DTO.createDefault();
 
@@ -652,13 +651,13 @@ public class ResourceTaskImpl
     /**
      * 查询 (关联的) [URL 信息]
      *
-     * @param resourceCode  资源编码
-     * @param operator      操作者
-     *
+     * @param resourceCode 资源编码
+     * @param operator     操作者
      * @return {@link TaskResult}
      */
     @Override
-    public @NotNull TaskResult<ResourceDto> selectUrlInfoByResourceCode(@NotNull String resourceCode, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
+    public @NotNull
+    TaskResult<ResourceDto> selectUrlInfoByResourceCode(@NotNull String resourceCode, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
         @NotNull TaskResult<ResourceDto> taskResult;
         @NotNull ResourceDto resultData;
         try {
@@ -719,28 +718,26 @@ public class ResourceTaskImpl
     /**
      * 添加资源
      *
-     * @Description 添加单个资源.
-     *
-     * @param resourceCode          资源编码              {@link ResourceDto#getCode()}
-     * @param resourceIcon          图标                 {@link ResourceDto#getIcon()}
-     * @param resourceLink          资源链接              {@link ResourceDto#getLink()}
-     * @param resourceName          资源名称              {@link ResourceDto#getName()}
-     * @param resourceParentCode    [父节点 <- 资源编码]   {@link ResourceDto#getParentCode()}
-     * @param resourceSort          序号                 {@link ResourceDto#getSort()}
-     * @param resourceType_Value    [资源类型 -> VO 的值] {@link ResourceDto#getType()}
-     * @param operator_username     [操作者 - 用户名称]
-     *
+     * @param resourceCode       资源编码              {@link ResourceDto#getCode()}
+     * @param resourceIcon       图标                 {@link ResourceDto#getIcon()}
+     * @param resourceLink       资源链接              {@link ResourceDto#getLink()}
+     * @param resourceName       资源名称              {@link ResourceDto#getName()}
+     * @param resourceParentCode [父节点 <- 资源编码]   {@link ResourceDto#getParentCode()}
+     * @param resourceSort       序号                 {@link ResourceDto#getSort()}
+     * @param resourceType_Value [资源类型 -> VO 的值] {@link ResourceDto#getType()}
+     * @param operator_username  [操作者 - 用户名称]
      * @return {@link TaskResult}
+     * @Description 添加单个资源.
      */
-    private @NotNull TaskResult<ResourceDto> addResource(@NotNull String resourceCode
+    private @NotNull
+    TaskResult<ResourceDto> addResource(@NotNull String resourceCode
             , String resourceIcon
             , String resourceLink
             , @NotNull String resourceName
             , String resourceParentCode
             , @NotNull Integer resourceSort
             , Integer resourceType_Value
-            , @NotNull String operator_username)
-    {
+            , @NotNull String operator_username) {
         @NotNull TaskResult<ResourceDto> taskResult;
         @NotNull ResourceDto resultData;
         try {
@@ -801,8 +798,6 @@ public class ResourceTaskImpl
     /**
      * 添加资源
      *
-     * @Description 添加单个资源.
-     *
      * @param resourceCode       资源编码              {@link ResourceDto#getCode()}
      * @param resourceIcon       图标                 {@link ResourceDto#getIcon()}
      * @param resourceLink       资源链接              {@link ResourceDto#getLink()}
@@ -811,19 +806,19 @@ public class ResourceTaskImpl
      * @param resourceSort       序号                 {@link ResourceDto#getSort()}
      * @param resourceType_Value [资源类型 -> VO 的值] {@link ResourceDto#getType()}
      * @param operator           操作者               {@link AbstractSecurityUser}
-     *
      * @return {@link TaskResult}
+     * @Description 添加单个资源.
      */
     @Override
-    public @NotNull TaskResult<ResourceDto> addResource(@NotNull String resourceCode
+    public @NotNull
+    TaskResult<ResourceDto> addResource(@NotNull String resourceCode
             , String resourceIcon
             , String resourceLink
             , @NotNull String resourceName
             , String resourceParentCode
             , @NotNull Integer resourceSort
             , Integer resourceType_Value
-            , @NotNull AbstractSecurityUser operator)
-    {
+            , @NotNull AbstractSecurityUser operator) {
         @NotNull TaskResult<ResourceDto> taskResult;
         @NotNull ResourceDto resultData;
         try {
@@ -876,8 +871,6 @@ public class ResourceTaskImpl
     /**
      * 添加资源
      *
-     * @Description 添加单个资源.
-     *
      * @param resourceCode       资源编码              {@link ResourceDto#getCode()}
      * @param resourceIcon       图标                 {@link ResourceDto#getIcon()}
      * @param resourceLink       资源链接              {@link ResourceDto#getLink()}
@@ -886,19 +879,19 @@ public class ResourceTaskImpl
      * @param resourceSort       序号                 {@link ResourceDto#getSort()}
      * @param resourceType_Value [资源类型 -> VO 的值] {@link ResourceDto#getType()}
      * @param operator           操作者
-     *
      * @return {@link TaskResult}
+     * @Description 添加单个资源.
      */
     @Override
-    public @NotNull TaskResult<ResourceDto> addResource(@NotNull String resourceCode
+    public @NotNull
+    TaskResult<ResourceDto> addResource(@NotNull String resourceCode
             , String resourceIcon
             , String resourceLink
             , @NotNull String resourceName
             , String resourceParentCode
             , @NotNull Integer resourceSort
             , Integer resourceType_Value
-            , OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator)
-    {
+            , OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
         @NotNull TaskResult<ResourceDto> taskResult;
         @NotNull ResourceDto resultData;
         try {
@@ -971,10 +964,10 @@ public class ResourceTaskImpl
      * @param existedResource   (安全) 资源 {@link ResourceDto}
      * @param existedRole       (安全) 角色 {@link RoleDto}
      * @param operator_username [操作者 - 用户名称]
-     *
      * @return {@link TaskResult}
      */
-    private @NotNull TaskResult<Boolean> addResourceToRole(@NotNull ResourceDto existedResource, @NotNull RoleDto existedRole, @NotNull String operator_username) {
+    private @NotNull
+    TaskResult<Boolean> addResourceToRole(@NotNull ResourceDto existedResource, @NotNull RoleDto existedRole, @NotNull String operator_username) {
         @NotNull TaskResult<Boolean> taskResult;
         boolean resultData = false;
         try {
@@ -1038,14 +1031,14 @@ public class ResourceTaskImpl
     /**
      * 添加[资源 - 角色]关联
      *
-     * @param existedResource   (安全) 资源 {@link ResourceDto}
-     * @param existedRole       (安全) 角色 {@link RoleDto}
-     * @param operator          操作者      {@link AbstractSecurityUser}
-     *
+     * @param existedResource (安全) 资源 {@link ResourceDto}
+     * @param existedRole     (安全) 角色 {@link RoleDto}
+     * @param operator        操作者      {@link AbstractSecurityUser}
      * @return {@link TaskResult}
      */
     @Override
-    public @NotNull TaskResult<Boolean> addResourceToRole(@NotNull ResourceDto existedResource, @NotNull RoleDto existedRole, @NotNull AbstractSecurityUser operator) {
+    public @NotNull
+    TaskResult<Boolean> addResourceToRole(@NotNull ResourceDto existedResource, @NotNull RoleDto existedRole, @NotNull AbstractSecurityUser operator) {
         @NotNull TaskResult<Boolean> taskResult;
         boolean resultData = false;
         try {
@@ -1090,17 +1083,16 @@ public class ResourceTaskImpl
     /**
      * 添加[资源 - 角色]关联
      *
-     * @param existedResource   (安全) 资源 {@link ResourceDto}
-     * @param existedRole       (安全) 角色 {@link RoleDto}
-     * @param operator          操作者
-     *
+     * @param existedResource (安全) 资源 {@link ResourceDto}
+     * @param existedRole     (安全) 角色 {@link RoleDto}
+     * @param operator        操作者
      * @return {@link TaskResult}
      */
     @Override
-    public @NotNull TaskResult<Boolean> addResourceToRole(@NotNull ResourceDto existedResource
+    public @NotNull
+    TaskResult<Boolean> addResourceToRole(@NotNull ResourceDto existedResource
             , @NotNull RoleDto existedRole
-            , OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator)
-    {
+            , OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
         @NotNull TaskResult<Boolean> taskResult;
         boolean resultData = false;
         try {
@@ -1162,10 +1154,10 @@ public class ResourceTaskImpl
      * @param existedResource   (安全) 资源         {@link ResourceDto}
      * @param urlInfo           [URL 信息]         {@link RoleDto}
      * @param operator_username [操作者 - 用户名称]
-     *
      * @return {@link TaskResult}
      */
-    private @NotNull TaskResult<Boolean> addUrlToResource(@NotNull ResourceDto existedResource, @NotNull String[] urlInfo, @NotNull String operator_username) {
+    private @NotNull
+    TaskResult<Boolean> addUrlToResource(@NotNull ResourceDto existedResource, @NotNull String[] urlInfo, @NotNull String operator_username) {
         @NotNull TaskResult<Boolean> taskResult;
         boolean resultData = false;
         try {
@@ -1229,14 +1221,14 @@ public class ResourceTaskImpl
     /**
      * 添加[资源 - URL]关联
      *
-     * @param existedResource   (安全) 资源  {@link ResourceDto}
-     * @param urlInfo           [URL 信息]  {@link RoleDto}
-     * @param operator          操作者      {@link AbstractSecurityUser}
-     *
+     * @param existedResource (安全) 资源  {@link ResourceDto}
+     * @param urlInfo         [URL 信息]  {@link RoleDto}
+     * @param operator        操作者      {@link AbstractSecurityUser}
      * @return {@link TaskResult}
      */
     @Override
-    public @NotNull TaskResult<Boolean> addUrlToResource(@NotNull ResourceDto existedResource, @NotNull String[] urlInfo, @NotNull AbstractSecurityUser operator) {
+    public @NotNull
+    TaskResult<Boolean> addUrlToResource(@NotNull ResourceDto existedResource, @NotNull String[] urlInfo, @NotNull AbstractSecurityUser operator) {
         @NotNull TaskResult<Boolean> taskResult;
         boolean resultData = false;
         try {
@@ -1281,17 +1273,16 @@ public class ResourceTaskImpl
     /**
      * 添加[资源 - URL]关联
      *
-     * @param existedResource   (安全) 资源  {@link ResourceDto}
-     * @param urlInfo           [URL 信息]  {@link RoleDto}
-     * @param operator          操作者
-     *
+     * @param existedResource (安全) 资源  {@link ResourceDto}
+     * @param urlInfo         [URL 信息]  {@link RoleDto}
+     * @param operator        操作者
      * @return {@link TaskResult}
      */
     @Override
-    public @NotNull TaskResult<Boolean> addUrlToResource(@NotNull ResourceDto existedResource
+    public @NotNull
+    TaskResult<Boolean> addUrlToResource(@NotNull ResourceDto existedResource
             , @NotNull String[] urlInfo
-            , OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator)
-    {
+            , OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
         @NotNull TaskResult<Boolean> taskResult;
         boolean resultData = false;
         try {
@@ -1350,37 +1341,35 @@ public class ResourceTaskImpl
     /**
      * 更新指定资源
      *
-     * @Description 局部更新.
-     *
      * @param old_resource_data 被替换的资源数据    {@link Map <String, Object>}
-     * · 数据格式:
-     * {
-     *    resource_code : [资源编码],
-     *    resource_icon : [图标],
-     *    resource_link : [资源链接],
-     *    resource_name : [资源名称],
-     *    resource_parentCode : [父节点 <- 资源编码],
-     *    resource_sort : [序号],
-     *    resource_type_value : [资源类型 -> VO 的值]
-     * }
+     *                          · 数据格式:
+     *                          {
+     *                          resource_code : [资源编码],
+     *                          resource_icon : [图标],
+     *                          resource_link : [资源链接],
+     *                          resource_name : [资源名称],
+     *                          resource_parentCode : [父节点 <- 资源编码],
+     *                          resource_sort : [序号],
+     *                          resource_type_value : [资源类型 -> VO 的值]
+     *                          }
      * @param new_resource_data 替换的资源数据     {@link Map <String, Object>}
-     * · 数据格式:
-     * {
-     *    resource_icon : [图标],
-     *    resource_link : [资源链接],
-     *    resource_name : [资源名称],
-     *    resource_parentCode : [父节点 <- 资源编码],
-     *    resource_sort : [序号],
-     *    resource_type_value : [资源类型 -> VO 的值]
-     * }
+     *                          · 数据格式:
+     *                          {
+     *                          resource_icon : [图标],
+     *                          resource_link : [资源链接],
+     *                          resource_name : [资源名称],
+     *                          resource_parentCode : [父节点 <- 资源编码],
+     *                          resource_sort : [序号],
+     *                          resource_type_value : [资源类型 -> VO 的值]
+     *                          }
      * @param operator_username [操作者 - 用户名称]
-     *
      * @return {@link TaskResult}
+     * @Description 局部更新.
      */
-    private @NotNull TaskResult<ResourceDto> updateResource(@NotNull @NotNull Map<String, Object> old_resource_data
+    private @NotNull
+    TaskResult<ResourceDto> updateResource(@NotNull @NotNull Map<String, Object> old_resource_data
             , @NotNull Map<String, Object> new_resource_data
-            , @NotNull String operator_username)
-    {
+            , @NotNull String operator_username) {
         @NotNull TaskResult<ResourceDto> taskResult;
         @NotNull ResourceDto resultData;
         try {
@@ -1468,38 +1457,36 @@ public class ResourceTaskImpl
     /**
      * 更新指定资源
      *
-     * @Description 局部更新.
-     *
      * @param old_resource_data 被替换的资源数据    {@link Map <String, Object>}
-     * · 数据格式:
-     * {
-     *    resource_code : [资源编码],
-     *    resource_icon : [图标],
-     *    resource_link : [资源链接],
-     *    resource_name : [资源名称],
-     *    resource_parentCode : [父节点 <- 资源编码],
-     *    resource_sort : [序号],
-     *    resource_type_value : [资源类型 -> VO 的值]
-     * }
+     *                          · 数据格式:
+     *                          {
+     *                          resource_code : [资源编码],
+     *                          resource_icon : [图标],
+     *                          resource_link : [资源链接],
+     *                          resource_name : [资源名称],
+     *                          resource_parentCode : [父节点 <- 资源编码],
+     *                          resource_sort : [序号],
+     *                          resource_type_value : [资源类型 -> VO 的值]
+     *                          }
      * @param new_resource_data 替换的资源数据     {@link Map <String, Object>}
-     * · 数据格式:
-     * {
-     *    resource_icon : [图标],
-     *    resource_link : [资源链接],
-     *    resource_name : [资源名称],
-     *    resource_parentCode : [父节点 <- 资源编码],
-     *    resource_sort : [序号],
-     *    resource_type_value : [资源类型 -> VO 的值]
-     * }
-     * @param operator  操作者 {@link AbstractSecurityUser}
-     *
+     *                          · 数据格式:
+     *                          {
+     *                          resource_icon : [图标],
+     *                          resource_link : [资源链接],
+     *                          resource_name : [资源名称],
+     *                          resource_parentCode : [父节点 <- 资源编码],
+     *                          resource_sort : [序号],
+     *                          resource_type_value : [资源类型 -> VO 的值]
+     *                          }
+     * @param operator          操作者 {@link AbstractSecurityUser}
      * @return {@link TaskResult}
+     * @Description 局部更新.
      */
     @Override
-    public @NotNull TaskResult<ResourceDto> updateResource(@NotNull @NotNull Map<String, Object> old_resource_data
+    public @NotNull
+    TaskResult<ResourceDto> updateResource(@NotNull @NotNull Map<String, Object> old_resource_data
             , @NotNull Map<String, Object> new_resource_data
-            , @NotNull AbstractSecurityUser operator)
-    {
+            , @NotNull AbstractSecurityUser operator) {
         @NotNull TaskResult<ResourceDto> taskResult;
         @NotNull ResourceDto resultData;
         try {
@@ -1545,38 +1532,36 @@ public class ResourceTaskImpl
     /**
      * 更新指定资源
      *
-     * @Description 局部更新.
-     *
      * @param old_resource_data 被替换的资源数据    {@link Map <String, Object>}
-     * · 数据格式:
-     * {
-     *    resource_code : [资源编码],
-     *    resource_icon : [图标],
-     *    resource_link : [资源链接],
-     *    resource_name : [资源名称],
-     *    resource_parentCode : [父节点 <- 资源编码],
-     *    resource_sort : [序号],
-     *    resource_type_value : [资源类型 -> VO 的值]
-     * }
+     *                          · 数据格式:
+     *                          {
+     *                          resource_code : [资源编码],
+     *                          resource_icon : [图标],
+     *                          resource_link : [资源链接],
+     *                          resource_name : [资源名称],
+     *                          resource_parentCode : [父节点 <- 资源编码],
+     *                          resource_sort : [序号],
+     *                          resource_type_value : [资源类型 -> VO 的值]
+     *                          }
      * @param new_resource_data 替换的资源数据     {@link Map <String, Object>}
-     * · 数据格式:
-     * {
-     *    resource_icon : [图标],
-     *    resource_link : [资源链接],
-     *    resource_name : [资源名称],
-     *    resource_parentCode : [父节点 <- 资源编码],
-     *    resource_sort : [序号],
-     *    resource_type_value : [资源类型 -> VO 的值]
-     * }
-     * @param operator  操作者
-     *
+     *                          · 数据格式:
+     *                          {
+     *                          resource_icon : [图标],
+     *                          resource_link : [资源链接],
+     *                          resource_name : [资源名称],
+     *                          resource_parentCode : [父节点 <- 资源编码],
+     *                          resource_sort : [序号],
+     *                          resource_type_value : [资源类型 -> VO 的值]
+     *                          }
+     * @param operator          操作者
      * @return {@link TaskResult}
+     * @Description 局部更新.
      */
     @Override
-    public @NotNull TaskResult<ResourceDto> updateResource(@NotNull @NotNull Map<String, Object> old_resource_data
+    public @NotNull
+    TaskResult<ResourceDto> updateResource(@NotNull @NotNull Map<String, Object> old_resource_data
             , @NotNull Map<String, Object> new_resource_data
-            , OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator)
-    {
+            , OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
         @NotNull TaskResult<ResourceDto> taskResult;
         @NotNull ResourceDto resultData;
         try {
@@ -1641,10 +1626,10 @@ public class ResourceTaskImpl
      *
      * @param resourceCode      资源编码    {@link SecurityResource#getCode()}
      * @param operator_username [操作者 - 用户名称]
-     *
      * @return {@link TaskResult}
      */
-    private @NotNull TaskResult<ResourceDto> deleteResource(@NotNull String resourceCode, @NotNull String operator_username) {
+    private @NotNull
+    TaskResult<ResourceDto> deleteResource(@NotNull String resourceCode, @NotNull String operator_username) {
         @NotNull TaskResult<ResourceDto> taskResult;
         @NotNull ResourceDto resultData;
         try {
@@ -1718,13 +1703,13 @@ public class ResourceTaskImpl
     /**
      * 删除指定资源
      *
-     * @param resourceCode  资源编码    {@link SecurityResource#getCode()}
-     * @param operator      操作者      {@link AbstractSecurityUser}
-     *
+     * @param resourceCode 资源编码    {@link SecurityResource#getCode()}
+     * @param operator     操作者      {@link AbstractSecurityUser}
      * @return {@link TaskResult}
      */
     @Override
-    public @NotNull TaskResult<ResourceDto> deleteResource(@NotNull String resourceCode, @NotNull AbstractSecurityUser operator) {
+    public @NotNull
+    TaskResult<ResourceDto> deleteResource(@NotNull String resourceCode, @NotNull AbstractSecurityUser operator) {
         @NotNull TaskResult<ResourceDto> taskResult;
         @NotNull ResourceDto resultData;
         try {
@@ -1772,13 +1757,13 @@ public class ResourceTaskImpl
     /**
      * 删除指定资源
      *
-     * @param resourceCode  资源编码    {@link SecurityResource#getCode()}
-     * @param operator      操作者
-     *
+     * @param resourceCode 资源编码    {@link SecurityResource#getCode()}
+     * @param operator     操作者
      * @return {@link TaskResult}
      */
     @Override
-    public @NotNull TaskResult<ResourceDto> deleteResource(@NotNull String resourceCode, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
+    public @NotNull
+    TaskResult<ResourceDto> deleteResource(@NotNull String resourceCode, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
         @NotNull TaskResult<ResourceDto> taskResult;
         @NotNull ResourceDto resultData;
         try {

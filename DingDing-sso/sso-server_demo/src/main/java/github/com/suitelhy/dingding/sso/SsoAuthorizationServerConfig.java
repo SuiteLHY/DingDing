@@ -41,126 +41,126 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 //-> 		Spring Security Oauth2 从零到一完整实践（六）踩坑记录 - 黑客派</a></solution>
 @Order(/*Ordered.HIGHEST_PRECEDENCE*//*0*/3)
 public class SsoAuthorizationServerConfig
-		extends AuthorizationServerConfigurerAdapter {
+        extends AuthorizationServerConfigurerAdapter {
 
-	@Autowired
-	private AuthenticationManager authenticationManager;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
-	@Autowired
-	private ClientDetailsService clientDetailsService;
+    @Autowired
+    private ClientDetailsService clientDetailsService;
 
-	@Autowired
-	private PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     @Qualifier("ssoUserDetailsService"/*"dingDingUserDetailsService"*/)
     private UserDetailsService userDetailsService;
 
-	@Bean
-	public ApprovalStore approvalStore() {
-		return new InMemoryApprovalStore();
-	}
+    @Bean
+    public ApprovalStore approvalStore() {
+        return new InMemoryApprovalStore();
+    }
 
-	/**
-	 * JWT 的 token 存储对象
-	 *
-	 * @Description 一个具有解码 JWT 并验证其签名的唯一能力的 JwkTokenStore.
-	 * 		-> 用于发行 JWT.
-	 * @return
-	 */
-	@Bean
-	public TokenStore jwtTokenStore() {
-		/*return new JwtTokenStore(jwtAccessTokenConverter());*/
-		JwtTokenStore tokenStore = new JwtTokenStore(jwtAccessTokenConverter());
-		tokenStore.setApprovalStore(approvalStore());
-		return tokenStore;
-	}
+    /**
+     * JWT 的 token 存储对象
+     *
+     * @return
+     * @Description 一个具有解码 JWT 并验证其签名的唯一能力的 JwkTokenStore.
+     * -> 用于发行 JWT.
+     */
+    @Bean
+    public TokenStore jwtTokenStore() {
+        /*return new JwtTokenStore(jwtAccessTokenConverter());*/
+        JwtTokenStore tokenStore = new JwtTokenStore(jwtAccessTokenConverter());
+        tokenStore.setApprovalStore(approvalStore());
+        return tokenStore;
+    }
 
-	/**
-	 * JWT 访问 token 转换器
-	 *
-	 * @Description 基于 JWT 的 access_token 转换器; 在JwtTokenStore实例中使用它. 用于发行 JWT.
-	 * @return
-	 */
-	@Bean
-	public JwtAccessTokenConverter jwtAccessTokenConverter() {
-		JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-		// 签名用的密钥; 资源服务器需要配置此选项方能解密 JWT 的 token
-		converter.setSigningKey("dingding");
-		return converter;
-	}
+    /**
+     * JWT 访问 token 转换器
+     *
+     * @return
+     * @Description 基于 JWT 的 access_token 转换器; 在JwtTokenStore实例中使用它. 用于发行 JWT.
+     */
+    @Bean
+    public JwtAccessTokenConverter jwtAccessTokenConverter() {
+        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+        // 签名用的密钥; 资源服务器需要配置此选项方能解密 JWT 的 token
+        converter.setSigningKey("dingding");
+        return converter;
+    }
 
-	@Bean
-	public UserApprovalHandler userApprovalHandler() {
-		ApprovalStoreUserApprovalHandler userApprovalHandler = new ApprovalStoreUserApprovalHandler();
-		userApprovalHandler.setApprovalStore(approvalStore());
-		userApprovalHandler.setClientDetailsService(this.clientDetailsService);
-		userApprovalHandler.setRequestFactory(new DefaultOAuth2RequestFactory(this.clientDetailsService));
-		return userApprovalHandler;
-	}
+    @Bean
+    public UserApprovalHandler userApprovalHandler() {
+        ApprovalStoreUserApprovalHandler userApprovalHandler = new ApprovalStoreUserApprovalHandler();
+        userApprovalHandler.setApprovalStore(approvalStore());
+        userApprovalHandler.setClientDetailsService(this.clientDetailsService);
+        userApprovalHandler.setRequestFactory(new DefaultOAuth2RequestFactory(this.clientDetailsService));
+        return userApprovalHandler;
+    }
 
-	/**
-	 * 客户端服务配置
-	 *
-	 * @param clients
-	 * @throws Exception
-	 */
-	@Override
-	public void configure(ClientDetailsServiceConfigurer clients)
-			throws Exception {
-		clients.inMemory()
-				//=== 客户端1 ===//
-				.withClient("dingding1")
-				.authorizedGrantTypes("authorization_code"/* 授权码模式 */
-						, "password"/* 密码模式 */
-						, "refresh_token"/* 刷新令牌; 不是授权模式, 但是可以使用它来刷新 access_token (在它的有效期内) */) // (授权方式)
-				.redirectUris("https://www.baidu.com"
-						, "http://127.0.0.1:8080/client1/index.html")
-				.scopes("all") // 允许的授权范围
-				.secret(passwordEncoder.encode("dingding_secret1"))// 客户端密码 (应该是加密后的密文)
-				.accessTokenValiditySeconds(600)
-				.refreshTokenValiditySeconds(600)
-				.and()
-				//=== 客户端2 ===//
-				.withClient("dingding2")
-				.authorizedGrantTypes("authorization_code"
-						, "password"
-						, "refresh_token") // (授权方式)
-				.redirectUris("https://www.baidu.com"
-						, "http://127.0.0.1:8060/client2/index.html")
-				.scopes("all")
-				.secret(passwordEncoder.encode("dingding_secret2"));
-	}
+    /**
+     * 客户端服务配置
+     *
+     * @param clients
+     * @throws Exception
+     */
+    @Override
+    public void configure(ClientDetailsServiceConfigurer clients)
+            throws Exception {
+        clients.inMemory()
+                //=== 客户端1 ===//
+                .withClient("dingding1")
+                .authorizedGrantTypes("authorization_code"/* 授权码模式 */
+                        , "password"/* 密码模式 */
+                        , "refresh_token"/* 刷新令牌; 不是授权模式, 但是可以使用它来刷新 access_token (在它的有效期内) */) // (授权方式)
+                .redirectUris("https://www.baidu.com"
+                        , "http://127.0.0.1:8080/client1/index.html")
+                .scopes("all") // 允许的授权范围
+                .secret(passwordEncoder.encode("dingding_secret1"))// 客户端密码 (应该是加密后的密文)
+                .accessTokenValiditySeconds(600)
+                .refreshTokenValiditySeconds(600)
+                .and()
+                //=== 客户端2 ===//
+                .withClient("dingding2")
+                .authorizedGrantTypes("authorization_code"
+                        , "password"
+                        , "refresh_token") // (授权方式)
+                .redirectUris("https://www.baidu.com"
+                        , "http://127.0.0.1:8060/client2/index.html")
+                .scopes("all")
+                .secret(passwordEncoder.encode("dingding_secret2"));
+    }
 
-	/**
-	 * 端点配置
-	 *
-	 * @param endpoints
-	 * @throws Exception
-	 */
-	@Override
-	public void configure(AuthorizationServerEndpointsConfigurer endpoints)
-			throws Exception {
-		endpoints
-				.accessTokenConverter(jwtAccessTokenConverter()) // 设置access_token转换器
-				.authenticationManager(this.authenticationManager)
-				.tokenStore(jwtTokenStore())// 设置 jwtToken 为 tokenStore
-				/*.userApprovalHandler(userApprovalHandler())*/
+    /**
+     * 端点配置
+     *
+     * @param endpoints
+     * @throws Exception
+     */
+    @Override
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints)
+            throws Exception {
+        endpoints
+                .accessTokenConverter(jwtAccessTokenConverter()) // 设置access_token转换器
+                .authenticationManager(this.authenticationManager)
+                .tokenStore(jwtTokenStore())// 设置 jwtToken 为 tokenStore
+                /*.userApprovalHandler(userApprovalHandler())*/
                 .userDetailsService(userDetailsService);
-	}
+    }
 
-	/**
-	 * 认证服务器安全配置
-	 *
-	 * @param security
-	 * @throws Exception
-	 */
-	@Override
-	public void configure(AuthorizationServerSecurityConfigurer security)
-			throws Exception {
-		security.allowFormAuthenticationForClients()
-				.checkTokenAccess(/*"isAuthenticated()"*/"permitAll()")// <a href="https://stackoverflow.com/questions/26750999/spring-security-oauth2-check-token-endpoint">Spring Security OAuth2 check_token端点</a>
-				.tokenKeyAccess("isAuthenticated()")/* 设置: 获取令牌的校验密钥时, 需要经过身份认证 */;
-	}
+    /**
+     * 认证服务器安全配置
+     *
+     * @param security
+     * @throws Exception
+     */
+    @Override
+    public void configure(AuthorizationServerSecurityConfigurer security)
+            throws Exception {
+        security.allowFormAuthenticationForClients()
+                .checkTokenAccess(/*"isAuthenticated()"*/"permitAll()")// <a href="https://stackoverflow.com/questions/26750999/spring-security-oauth2-check-token-endpoint">Spring Security OAuth2 check_token端点</a>
+                .tokenKeyAccess("isAuthenticated()")/* 设置: 获取令牌的校验密钥时, 需要经过身份认证 */;
+    }
 
 }

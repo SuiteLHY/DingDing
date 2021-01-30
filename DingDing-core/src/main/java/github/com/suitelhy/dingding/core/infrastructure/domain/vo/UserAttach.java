@@ -23,8 +23,7 @@ public interface UserAttach<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, 
             implements VoModel<AttachTypeVo, Integer, String> {
         FACE_IMAGE(1
                 , "头像"
-                , "用户头像图片。")
-        , QR_CODE(2
+                , "用户头像图片。"), QR_CODE(2
                 , "二维码"
                 , "用户二维码。");
 
@@ -118,7 +117,8 @@ public interface UserAttach<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, 
          * @return
          */
         @Override
-        public @NotNull String displayName() {
+        public @NotNull
+        String displayName() {
             return this.name;
         }
 

@@ -14,8 +14,8 @@ public interface AggregateModel<A extends AggregateModel<A, ROOT>, ROOT extends 
     /**
      * 根节点
      *
-     * @Description <method>root()</method> 是唯一标识 (之一).
      * @return
+     * @Description <method>root()</method> 是唯一标识 (之一).
      */
     @NotNull
     ROOT root();
@@ -23,11 +23,10 @@ public interface AggregateModel<A extends AggregateModel<A, ROOT>, ROOT extends 
     /**
      * 等效比较
      *
-     * @Description <method>equals(Object obj)</method>
-     *->    应该根据 <method>equals(A aggregate)</method> 的实现来重写.
-     *
      * @param obj
      * @return
+     * @Description <method>equals(Object obj)</method>
+     * ->    应该根据 <method>equals(A aggregate)</method> 的实现来重写.
      */
     boolean equals(Object obj);
 
@@ -64,18 +63,17 @@ public interface AggregateModel<A extends AggregateModel<A, ROOT>, ROOT extends 
     /**
      * 计算哈希值
      *
-     * @Description 如果重写了 <method>equals(Object obj)</method>, 则必须根据
-     *->    <method>equals(Object obj)</method> 的实现来重写 <method>hashCode()</method>.
-     *
      * @return
+     * @Description 如果重写了 <method>equals(Object obj)</method>, 则必须根据
+     * ->    <method>equals(Object obj)</method> 的实现来重写 <method>hashCode()</method>.
      */
     int hashCode();
 
     /**
      * 判断有效性
      *
-     * @Description 缺省则根据 <method>root()</method> 来判断.
      * @return
+     * @Description 缺省则根据 <method>root()</method> 来判断.
      */
     default boolean isEmpty() {
         return root().isEmpty();

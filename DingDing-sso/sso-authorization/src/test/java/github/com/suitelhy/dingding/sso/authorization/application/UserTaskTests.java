@@ -42,15 +42,12 @@ public class UserTaskTests {
      * 用户（安全认证）基本信息
      *
      * @Description {@link AbstractSecurityUser} 的项目定制化实现.
-     *
      * @Design {@link AbstractSecurityUser}
      * · 【安全设计】使用[静态的嵌套类]能够有效地限制[对 {@link DingDingUserDetailsService.SecurityUser} 的滥用].
-     *
      * @see AbstractSecurityUser
      */
     public static class SecurityUserTestClass
-            extends DingDingUserDetailsService.SecurityUser
-    {
+            extends DingDingUserDetailsService.SecurityUser {
 
         /**
          * (Constructor)
@@ -62,7 +59,6 @@ public class UserTaskTests {
          * @param accountNonLocked      {@link this#isAccountNonLocked()}
          * @param credentialsNonExpired {@link this#isCredentialsNonExpired()}
          * @param enabled               {@link this#isEnabled()}
-         *
          * @throws AccountStatusException
          * @throws IllegalArgumentException
          */
@@ -73,8 +69,7 @@ public class UserTaskTests {
                 , boolean accountNonLocked
                 , boolean credentialsNonExpired
                 , boolean enabled)
-                throws AccountStatusException, IllegalArgumentException
-        {
+                throws AccountStatusException, IllegalArgumentException {
             super(username, password, authorities
                     , accountNonExpired, accountNonLocked, credentialsNonExpired
                     , enabled);
@@ -83,9 +78,8 @@ public class UserTaskTests {
         /**
          * 判断是否正常
          *
-         * @Description 综合判断.
-         *
          * @return {@link Boolean#TYPE}
+         * @Description 综合判断.
          */
         public boolean isNormal() {
             return this.isAccountNonExpired()
@@ -100,10 +94,8 @@ public class UserTaskTests {
      * [用户 - 身份验证令牌信息]
      *
      * @Description {@link github.com.suitelhy.dingding.core.infrastructure.web.OAuth2AuthenticationInfo.AbstractUserAuthentication.AbstractDetails} 的项目定制化实现.
-     *
      * @Design {@link github.com.suitelhy.dingding.core.infrastructure.web.OAuth2AuthenticationInfo.AbstractUserAuthentication.AbstractDetails}
      * · 【安全设计】使用[静态的嵌套类]能够有效地限制[对 {@link github.com.suitelhy.dingding.core.infrastructure.web.OAuth2AuthenticationInfo.AbstractUserAuthentication.AbstractDetails} 的滥用].
-     *
      * @see github.com.suitelhy.dingding.core.infrastructure.web.OAuth2AuthenticationInfo.AbstractUserAuthentication.AbstractDetails
      */
     private static final class OAuth2AuthenticationInfo {
@@ -125,26 +117,25 @@ public class UserTaskTests {
 
                 private final Collection<String> authorities;
 
-                private final @NotNull String clientId;
+                private final @NotNull
+                String clientId;
 
                 private final Collection<String> scope;
 
-                private final @NotNull String userName;
+                private final @NotNull
+                String userName;
 
                 /**
                  * (Constructor)
-                 *
-                 * @Description 限制 {@link github.com.suitelhy.dingding.core.infrastructure.web.OAuth2AuthenticationInfo.AbstractUserAuthentication.AbstractDetails} 实现类的构造.
                  *
                  * @param active      是否处于活动状态
                  * @param authorities 权限集合
                  * @param clientId    (凭证对应的)客户端编号
                  * @param scope       可操作范围
                  * @param userName    (凭证对应的)用户名称
-                 *
                  * @throws BadCredentialsException             非法的凭证参数
                  * @throws InsufficientAuthenticationException 不满足构建[用户认证凭据 - 详细信息]的必要条件
-                 *
+                 * @Description 限制 {@link github.com.suitelhy.dingding.core.infrastructure.web.OAuth2AuthenticationInfo.AbstractUserAuthentication.AbstractDetails} 实现类的构造.
                  * @see this#isActive()
                  * @see this#getAuthorities()
                  * @see this#getClientId()
@@ -153,8 +144,7 @@ public class UserTaskTests {
                  */
                 protected UserDetails(Boolean active, @NotNull Collection<String> authorities, @NotNull String clientId
                         , @NotNull Collection<String> scope, @NotNull String userName)
-                        throws BadCredentialsException, InsufficientAuthenticationException, IllegalArgumentException
-                {
+                        throws BadCredentialsException, InsufficientAuthenticationException, IllegalArgumentException {
                     super(active, authorities, clientId, scope, userName);
 
                     this.active = active;
@@ -170,22 +160,26 @@ public class UserTaskTests {
                 }
 
                 @Override
-                public @NotNull Collection<String> getAuthorities() {
+                public @NotNull
+                Collection<String> getAuthorities() {
                     return this.authorities;
                 }
 
                 @Override
-                public @NotNull String getClientId() {
+                public @NotNull
+                String getClientId() {
                     return this.clientId;
                 }
 
                 @Override
-                public @NotNull Collection<String> getScope() {
+                public @NotNull
+                Collection<String> getScope() {
                     return this.scope;
                 }
 
                 @Override
-                public @NotNull String getUserName() {
+                public @NotNull
+                String getUserName() {
                     return this.userName;
                 }
 
@@ -225,7 +219,8 @@ public class UserTaskTests {
      *
      * @return {@link LogTaskTests.SecurityUserTestClass}
      */
-    private @NotNull SecurityUserTestClass operator() {
+    private @NotNull
+    SecurityUserTestClass operator() {
         /*final User user = userTask.selectUserByUsername("admin").data
                 .dtoId("admin", "admin1");*/
         final User user = userEvent.selectUserByUsername("admin");
@@ -255,7 +250,8 @@ public class UserTaskTests {
      *
      * @return {@link LogTaskTests.SecurityUserTestClass}
      */
-    private @NotNull UserTaskTests.OAuth2AuthenticationInfo.AbstractUserAuthentication.UserDetails operator_OAuth2_UserDetails() {
+    private @NotNull
+    UserTaskTests.OAuth2AuthenticationInfo.AbstractUserAuthentication.UserDetails operator_OAuth2_UserDetails() {
         final User user = userEvent.selectUserByUsername("admin");
 
         if (null == user) {
@@ -304,16 +300,13 @@ public class UserTaskTests {
     /**
      * 获取测试用的用户信息
      *
-     * @param securityUser  {@link AbstractSecurityUser}
-     *
+     * @param securityUser {@link AbstractSecurityUser}
      * @return {@link UserDto}
-     *
      * @throws IllegalAccessException
      */
     @NotNull
     private UserDto getUserInfo(@NotNull AbstractSecurityUser securityUser)
-            throws IllegalAccessException
-    {
+            throws IllegalAccessException {
         final @NotNull User user = userEvent.selectUserByUsername(securityUser.getUsername());
         if (null == user || user.isEmpty()) {
             throw new IllegalArgumentException("非法输入:<param>securityUser</param> <- 无效的用户");
@@ -366,8 +359,7 @@ public class UserTaskTests {
     @Test
     @Transactional
     public void selectUserByUserid()
-            throws IllegalAccessException
-    {
+            throws IllegalAccessException {
         final @NotNull TaskResult<UserDto> result;
 
         // 获取必要的测试用身份信息
@@ -404,8 +396,7 @@ public class UserTaskTests {
     @Test
     @Transactional
     public void insert__operator()
-            throws IllegalAccessException
-    {
+            throws IllegalAccessException {
         // 获取必要的测试用身份信息
         final @NotNull SecurityUserTestClass operator = operator();
 
@@ -420,8 +411,7 @@ public class UserTaskTests {
     @Test
     @Transactional
     public void insert__operator_OAuth2_UserDetails()
-            throws IllegalAccessException
-    {
+            throws IllegalAccessException {
         // 获取必要的测试用[操作者 - 身份验证令牌信息 - 用户认证凭据 - 详细信息]
         final OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull UserDetails operator_OAuth2_UserDetails = operator_OAuth2_UserDetails();
 
@@ -436,8 +426,7 @@ public class UserTaskTests {
     @Test
     @Transactional
     public void update__operator()
-            throws IllegalAccessException
-    {
+            throws IllegalAccessException {
         // 获取必要的测试用身份信息
         final @NotNull SecurityUserTestClass operator = operator();
 
@@ -469,8 +458,7 @@ public class UserTaskTests {
     @Test
     @Transactional
     public void update__operator_OAuth2_UserDetails()
-            throws IllegalAccessException
-    {
+            throws IllegalAccessException {
         // 获取必要的测试用[操作者 - 身份验证令牌信息 - 用户认证凭据 - 详细信息]
         final OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull UserDetails operator_OAuth2_UserDetails = operator_OAuth2_UserDetails();
 
@@ -502,8 +490,7 @@ public class UserTaskTests {
     @Test
     @Transactional
     public void delete__operator()
-            throws IllegalAccessException
-    {
+            throws IllegalAccessException {
         // 获取必要的测试用身份信息
         final @NotNull SecurityUserTestClass operator = operator();
 
@@ -525,8 +512,7 @@ public class UserTaskTests {
     @Test
     @Transactional
     public void delete__operator_OAuth2_UserDetails()
-            throws IllegalAccessException
-    {
+            throws IllegalAccessException {
         // 获取必要的测试用[操作者 - 身份验证令牌信息 - 用户认证凭据 - 详细信息]
         final OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull UserDetails operator_OAuth2_UserDetails = operator_OAuth2_UserDetails();
 

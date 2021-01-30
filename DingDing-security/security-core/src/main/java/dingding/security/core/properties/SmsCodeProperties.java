@@ -1,51 +1,49 @@
 package dingding.security.core.properties;
 
 /**
- *
  * @author zhailiang
- *
  */
 public class SmsCodeProperties {
-	
-	/**
-	 * 验证码长度
-	 */
-	private int length = 6;
 
-	/**
-	 * 过期时间
-	 */
-	private int expireIn = 60;
+    /**
+     * 验证码长度
+     */
+    private int length = 6;
 
-	/**
-	 * 要拦截的url，多个url用逗号隔开，ant pattern
-	 */
-	private String url;
+    /**
+     * 过期时间
+     */
+    private int expireIn = 60;
 
-	//===== Getter and Setter =====//
+    /**
+     * 要拦截的url，多个url用逗号隔开，ant pattern
+     */
+    private String url;
 
-	public int getLength() {
-		return length;
-	}
+    //===== Getter and Setter =====//
 
-	public void setLength(int lenght) {
-		this.length = lenght;
-	}
+    public int getLength() {
+        return length;
+    }
 
-	public int getExpireIn() {
-		return expireIn;
-	}
+    public void setLength(int lenght) {
+        this.length = lenght;
+    }
 
-	public void setExpireIn(int expireIn) {
-		this.expireIn = expireIn;
-	}
+    public int getExpireIn() {
+        return expireIn;
+    }
 
-	public String getUrl() {
-		return url;
-	}
+    public void setExpireIn(int expireIn) {
+        this.expireIn = expireIn;
+    }
 
-	public void setUrl(String url) {
-		this.url = url;
-	}
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
 }

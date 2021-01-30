@@ -5,7 +5,7 @@ import org.springframework.lang.Nullable;
 /**
  * {@link R} 的工厂类接口
  *
- * @param <R>   {@link TaskResult}
+ * @param <R> {@link TaskResult}
  */
 public interface TaskResultFactoryModel<R extends TaskResult> {
 

@@ -20,9 +20,7 @@ import javax.validation.constraints.NotNull;
  *
  * @see User
  * @see UserAccountOperationInfo
- *
  * @see UserServiceImpl
- *
  * @see UserPersonInfoService
  * @see SecurityUserService
  * @see UserAccountOperationInfoService
@@ -41,10 +39,8 @@ public interface UserService
     /**
      * 判断存在 -> 指定的用户
      *
-     * @param username  {@link User.Validator#username(String)}
-     *
+     * @param username {@link User.Validator#username(String)}
      * @return {@link Boolean#TYPE}
-     *
      * @throws IllegalArgumentException
      */
     boolean existUserByUsername(@NotNull String username)
@@ -53,11 +49,9 @@ public interface UserService
     /**
      * 查询用户列表
      *
-     * @param pageIndex     分页索引, 从0开始
-     * @param pageSize      分页 - 每页容量
-     *
+     * @param pageIndex 分页索引, 从0开始
+     * @param pageSize  分页 - 每页容量
      * @return {@link org.springframework.data.domain.Page}
-     *
      * @throws IllegalArgumentException
      */
     @NotNull
@@ -67,10 +61,8 @@ public interface UserService
     /**
      * 查询用户列表 - 分页 - 总页数
      *
-     * @param pageSize  分页 - 每页容量
-     *
+     * @param pageSize 分页 - 每页容量
      * @return 分页 - 总页数
-     *
      * @throws IllegalArgumentException
      */
     Long selectCount(int pageSize)
@@ -79,10 +71,8 @@ public interface UserService
     /**
      * 查询指定的用户
      *
-     * @param userid    {@link User.Validator#userid(String)}
-     *
+     * @param userid {@link User.Validator#userid(String)}
      * @return {@link User}
-     *
      * @throws IllegalArgumentException
      */
     User selectUserByUserid(@NotNull String userid)
@@ -91,10 +81,8 @@ public interface UserService
     /**
      * 查询指定的用户
      *
-     * @param username  {@link User.Validator#username(String)}
-     *
+     * @param username {@link User.Validator#username(String)}
      * @return {@link User}
-     *
      * @throws IllegalArgumentException
      */
     User selectUserByUsername(@NotNull String username)
@@ -153,17 +141,13 @@ public interface UserService
     /**
      * 新增一个用户
      *
-     * @Description 完整业务的一部分.
-     *
-     * @param user                      预期新增的用户 -> 用户基础信息
-     * @param operator                  操作者
-     * @param operator_OperationInfo    [操作者 - 账户操作基础记录]
-     *
+     * @param user                   预期新增的用户 -> 用户基础信息
+     * @param operator               操作者
+     * @param operator_OperationInfo [操作者 - 账户操作基础记录]
      * @return 操作是否成功
-     *
      * @throws IllegalArgumentException
      * @throws BusinessAtomicException
-     *
+     * @Description 完整业务的一部分.
      * @see github.com.suitelhy.dingding.core.domain.event.UserEvent#registerUser(User, UserAccountOperationInfo, UserPersonInfo, SecurityUser)
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -177,10 +161,9 @@ public interface UserService
     /**
      * 更新指定的用户
      *
-     * @param user                      被修改的用户
-     * @param operator                  操作者
-     * @param operator_OperationInfo    [操作者 - 账户操作基础记录]
-     *
+     * @param user                   被修改的用户
+     * @param operator               操作者
+     * @param operator_OperationInfo [操作者 - 账户操作基础记录]
      * @return 操作是否成功
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -197,7 +180,6 @@ public interface UserService
      * @param user                              被删除的用户
      * @param operator                          操作者 (与{@param user}一致, 或拥有足够高的权限)
      * @param operator_userAccountOperationInfo [操作者 - 账户操作基础记录]
-     *
      * @return 操作是否成功
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -211,13 +193,11 @@ public interface UserService
     /**
      * 删除指定的用户
      *
-     * @Description 删除成功后校验持久化数据; 主要是避免在未提交的事务中进行对操作结果的非预期判断.
-     *
      * @param user                              被删除的用户
      * @param operator                          操作者 (与{@param user}一致, 或拥有足够高的权限)
      * @param operator_userAccountOperationInfo [操作者 - 账户操作基础记录]
-     *
      * @return 操作是否成功
+     * @Description 删除成功后校验持久化数据; 主要是避免在未提交的事务中进行对操作结果的非预期判断.
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
             , rollbackFor = Exception.class

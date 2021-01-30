@@ -13,7 +13,6 @@ import java.util.Calendar;
 
 /**
  * 日志记录 Entity
- *
  */
 @Entity
 @Table
@@ -39,6 +38,7 @@ public class Log extends AbstractEntityModel<Long> {
 
     /**
      * 操作时间
+     *
      * @Pattern CalendarController.DEFAULT_DATE_FORMAT
      */
     @Column(nullable = false)
@@ -46,7 +46,8 @@ public class Log extends AbstractEntityModel<Long> {
 
     /**
      * 操作类型: {1:用户注册, 2:用户更新, 3:用户异常, 4:用户销毁, 5:用户数据删除
-     *-> , 11:用户登入, 12:用户登出}
+     * -> , 11:用户登入, 12:用户登出}
+     *
      * @Description 操作类型大体上分为: 用户信息操作和用户登录操作.
      */
     @Column
@@ -58,10 +59,12 @@ public class Log extends AbstractEntityModel<Long> {
     private String userid;
 
     //===== base constructor =====//
+
     /**
      * 仅用于 ORM 注入
      */
-    public Log() {}
+    public Log() {
+    }
 
     //===== entity model =====//
     @Override
@@ -98,7 +101,8 @@ public class Log extends AbstractEntityModel<Long> {
      * @Description <abstractClass>AbstractEntityModel</abstractClass>提供的模板设计.
      */
     @Override
-    protected @NotNull boolean validateId(@NotNull Long id) {
+    protected @NotNull
+    boolean validateId(@NotNull Long id) {
         return Validator.LOG.id(id);
     }
 
@@ -237,11 +241,11 @@ public class Log extends AbstractEntityModel<Long> {
         /**
          * 获取 Entity 实例
          *
-         * @param detail    记录的详细信息
-         * @param ip        登录的IP地址
-         * @param time      操作时间
-         * @param type      操作类型
-         * @param userid    用户 - 用户ID
+         * @param detail 记录的详细信息
+         * @param ip     登录的IP地址
+         * @param time   操作时间
+         * @param type   操作类型
+         * @param userid 用户 - 用户ID
          * @return
          */
         @NotNull

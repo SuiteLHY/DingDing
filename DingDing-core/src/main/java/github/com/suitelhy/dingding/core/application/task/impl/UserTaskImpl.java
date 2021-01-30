@@ -63,10 +63,10 @@ public class UserTaskImpl
      *
      * @param pageCount 页码, 从1开始
      * @param pageSize  每页数据容量, 最大值为 20
-     *
      * @return {@link TaskResult}
      */
-    private @NotNull TaskResult<List<UserDto>> selectAll(int pageCount, int pageSize) {
+    private @NotNull
+    TaskResult<List<UserDto>> selectAll(int pageCount, int pageSize) {
         @NotNull TaskResult<List<UserDto>> result;
         @NotNull List<UserDto> resultData = new ArrayList<>(0);
         try {
@@ -152,11 +152,11 @@ public class UserTaskImpl
      * @param pageCount 页码, 从1开始
      * @param pageSize  每页数据容量, 最大值为 20
      * @param operator  操作者
-     *
      * @return 操作结果 {@link TaskResult}
      */
     @Override
-    public @NotNull TaskResult<List<UserDto>> selectAll(int pageCount, int pageSize, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
+    public @NotNull
+    TaskResult<List<UserDto>> selectAll(int pageCount, int pageSize, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
         @NotNull TaskResult<List<UserDto>> result;
         @NotNull List<UserDto> resultData;
         try {
@@ -204,11 +204,11 @@ public class UserTaskImpl
     /**
      * 查询指定的用户
      *
-     * @param userid    用户编码
-     *
+     * @param userid 用户编码
      * @return {@link TaskResult}
      */
-    private @NotNull TaskResult<UserDto> selectUserByUserid(@NotNull String userid) {
+    private @NotNull
+    TaskResult<UserDto> selectUserByUserid(@NotNull String userid) {
         @NotNull TaskResult<UserDto> taskResult;
         @NotNull UserDto resultData;
         try {
@@ -258,11 +258,11 @@ public class UserTaskImpl
      *
      * @param userid
      * @param operator 操作者
-     *
      * @return 操作结果     {@link TaskResult}
      */
     @Override
-    public @NotNull TaskResult<UserDto> selectUserByUserid(@NotNull String userid, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
+    public @NotNull
+    TaskResult<UserDto> selectUserByUserid(@NotNull String userid, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
         @NotNull TaskResult<UserDto> taskResult;
         @NotNull UserDto resultData;
         try {
@@ -310,11 +310,11 @@ public class UserTaskImpl
     /**
      * 查询指定的用户
      *
-     * @param username  用户名称
-     *
+     * @param username 用户名称
      * @return {@link TaskResult}
      */
-    private @NotNull TaskResult<UserDto> selectUserByUsername(@NotNull String username) {
+    private @NotNull
+    TaskResult<UserDto> selectUserByUsername(@NotNull String username) {
         @NotNull TaskResult<UserDto> taskResult;
         @NotNull UserDto resultData;
         try {
@@ -363,11 +363,11 @@ public class UserTaskImpl
      *
      * @param username
      * @param operator 操作者
-     *
      * @return 操作结果     {@link TaskResult}
      */
     @Override
-    public @NotNull TaskResult<UserDto> selectUserByUsername(String username, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
+    public @NotNull
+    TaskResult<UserDto> selectUserByUsername(String username, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
         @NotNull TaskResult<UserDto> taskResult;
         @NotNull UserDto resultData;
         try {
@@ -414,10 +414,10 @@ public class UserTaskImpl
      * 查询用户列表 - 分页 - 总页数
      *
      * @param pageSize 分页 - 每页容量
-     *
      * @return [分页 - 总页数]   {@link TaskResult}
      */
-    private @NotNull TaskResult<Long> selectCount(int pageSize) {
+    private @NotNull
+    TaskResult<Long> selectCount(int pageSize) {
         @NotNull TaskResult<Long> taskResult;
         @NotNull Long resultData;
         try {
@@ -458,11 +458,11 @@ public class UserTaskImpl
      *
      * @param pageSize 分页 - 每页容量
      * @param operator 操作者
-     *
      * @return 操作结果, [分页 - 总页数]   {@link TaskResult}
      */
     @Override
-    public @NotNull TaskResult<Long> selectCount(int pageSize, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
+    public @NotNull
+    TaskResult<Long> selectCount(int pageSize, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
         @NotNull TaskResult<Long> taskResult;
         long resultData;
         try {
@@ -513,11 +513,10 @@ public class UserTaskImpl
      * @param userDto           用户          {@link UserDto}
      * @param passwordPlaintext 用户密码_明文
      * @param operator_username [操作者 -> 用户名称]
-     *
      * @return 操作结果   {@link TaskResult}
      */
-    private @NotNull TaskResult<UserDto> registerUser(@NotNull UserDto userDto, @NotNull String passwordPlaintext, @NotNull String operator_username)
-    {
+    private @NotNull
+    TaskResult<UserDto> registerUser(@NotNull UserDto userDto, @NotNull String passwordPlaintext, @NotNull String operator_username) {
         @NotNull TaskResult<UserDto> taskResult;
         @NotNull UserDto resultData;
         try {
@@ -529,7 +528,7 @@ public class UserTaskImpl
                         , Thread.currentThread().getStackTrace()[1].getMethodName()
                         , Thread.currentThread().getStackTrace()[1].getLineNumber()));
             }
-            if (! User.Validator.USER.passwordPlaintext(passwordPlaintext)) {
+            if (!User.Validator.USER.passwordPlaintext(passwordPlaintext)) {
                 throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                         , "用户密码_明文"
                         , passwordPlaintext
@@ -551,7 +550,7 @@ public class UserTaskImpl
 
             final @NotNull UserAccountOperationInfo newUser_UserAccountOperationInfo = userDto.dtoId_UserAccountOperationInfo(newUser);
             if (null == newUser_UserAccountOperationInfo
-                    || ! newUser_UserAccountOperationInfo.isEntityLegal()) {
+                    || !newUser_UserAccountOperationInfo.isEntityLegal()) {
                 //-- 非法参数: 用户 <- [User - 拓展属性]-[用户 -> 账户操作基础记录]为空
                 throw new IllegalArgumentException(String.format("非法参数:<description>【%s】 <- %s!</description>->【%s】&【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                         , "用户"
@@ -564,7 +563,7 @@ public class UserTaskImpl
             }
             final @NotNull UserPersonInfo newUser_UserPersonInfo = userDto.dtoId_UserPersonInfo(newUser);
             if (null == newUser_UserPersonInfo
-                    || ! newUser_UserPersonInfo.isEntityLegal()) {
+                    || !newUser_UserPersonInfo.isEntityLegal()) {
                 //-- 非法参数: 用户 <- [User - 拓展属性]-[用户 -> 个人信息]为空
                 throw new IllegalArgumentException(String.format("非法参数:<description>【%s】 <- %s!</description>->【%s】&【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                         , "用户"
@@ -614,12 +613,11 @@ public class UserTaskImpl
      * @param userDto           用户          {@link UserDto}
      * @param passwordPlaintext 用户密码_明文
      * @param operator          操作者         {@link AbstractSecurityUser}
-     *
      * @return 操作结果   {@link TaskResult}
      */
     @Override
-    public @NotNull TaskResult<UserDto> registerUser(@NotNull UserDto userDto, @NotNull String passwordPlaintext, @NotNull AbstractSecurityUser operator)
-    {
+    public @NotNull
+    TaskResult<UserDto> registerUser(@NotNull UserDto userDto, @NotNull String passwordPlaintext, @NotNull AbstractSecurityUser operator) {
         @NotNull TaskResult<UserDto> taskResult;
         @NotNull UserDto resultData;
         try {
@@ -676,11 +674,11 @@ public class UserTaskImpl
      * @param userDto           用户          {@link UserDto}
      * @param passwordPlaintext 用户密码_明文
      * @param operator          操作者
-     *
      * @return 操作结果   {@link TaskResult}
      */
     @Override
-    public @NotNull TaskResult<UserDto> registerUser(@NotNull UserDto userDto, @NotNull String passwordPlaintext, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
+    public @NotNull
+    TaskResult<UserDto> registerUser(@NotNull UserDto userDto, @NotNull String passwordPlaintext, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
         @NotNull TaskResult<UserDto> taskResult;
         @NotNull UserDto resultData;
         try {
@@ -728,14 +726,13 @@ public class UserTaskImpl
     /**
      * 更新指定的用户
      *
-     * @Description 更新的数据包括[用户 - 基础信息]和[用户 -> 个人信息].
-     *
      * @param userDto           用户                              {@link UserDto}
      * @param operator_username [操作者（具备管理员权限） - 用户名称]
-     *
      * @return 操作结果   {@link TaskResult}
+     * @Description 更新的数据包括[用户 - 基础信息]和[用户 -> 个人信息].
      */
-    private @NotNull TaskResult<UserDto> update(@NotNull UserDto userDto, @NotNull String operator_username) {
+    private @NotNull
+    TaskResult<UserDto> update(@NotNull UserDto userDto, @NotNull String operator_username) {
         @NotNull TaskResult<UserDto> taskResult;
         @NotNull UserDto resultData;
         try {
@@ -852,12 +849,10 @@ public class UserTaskImpl
     /**
      * 更新指定的用户
      *
-     * @Description 更新的数据包括[用户 - 基础信息]和[用户 -> 个人信息].
-     *
-     * @param userDto   用户                    {@link UserDto}
-     * @param operator  操作者（具备管理员权限）    {@link AbstractSecurityUser}
-     *
+     * @param userDto  用户                    {@link UserDto}
+     * @param operator 操作者（具备管理员权限）    {@link AbstractSecurityUser}
      * @return 操作结果   {@link TaskResult}
+     * @Description 更新的数据包括[用户 - 基础信息]和[用户 -> 个人信息].
      */
     @NotNull
     @Override
@@ -911,15 +906,14 @@ public class UserTaskImpl
     /**
      * 更新指定的用户
      *
-     * @Description 更新的数据包括[用户 - 基础信息]和[用户 -> 个人信息].
-     *
      * @param userDto  用户                    {@link UserDto}
      * @param operator 操作者（具备管理员权限）
-     *
      * @return 操作结果   {@link TaskResult}
+     * @Description 更新的数据包括[用户 - 基础信息]和[用户 -> 个人信息].
      */
     @Override
-    public @NotNull TaskResult<UserDto> update(@NotNull UserDto userDto, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
+    public @NotNull
+    TaskResult<UserDto> update(@NotNull UserDto userDto, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
         @NotNull TaskResult<UserDto> taskResult;
         @NotNull UserDto resultData;
         try {
@@ -984,14 +978,13 @@ public class UserTaskImpl
     /**
      * 更新指定的用户 -> [用户 -> 个人信息]
      *
-     * @Description 更新的数据包括[用户 -> 个人信息].
-     *
      * @param userDto           用户              {@link UserDto}
      * @param operator_username [操作者 - 用户名称]
-     *
      * @return 操作结果   {@link TaskResult}
+     * @Description 更新的数据包括[用户 -> 个人信息].
      */
-    private @NotNull TaskResult<UserDto> updateUserPersonInfo(@NotNull UserDto userDto, @NotNull String operator_username) {
+    private @NotNull
+    TaskResult<UserDto> updateUserPersonInfo(@NotNull UserDto userDto, @NotNull String operator_username) {
         @NotNull TaskResult<UserDto> taskResult;
         @NotNull UserDto resultData;
         try {
@@ -1104,12 +1097,10 @@ public class UserTaskImpl
     /**
      * 更新指定的用户 -> [用户 -> 个人信息]
      *
-     * @Description 更新的数据包括[用户 -> 个人信息].
-     *
-     * @param userDto   用户      {@link UserDto}
-     * @param operator  操作者    {@link AbstractSecurityUser}
-     *
+     * @param userDto  用户      {@link UserDto}
+     * @param operator 操作者    {@link AbstractSecurityUser}
      * @return 操作结果   {@link TaskResult}
+     * @Description 更新的数据包括[用户 -> 个人信息].
      */
     @NotNull
     @Override
@@ -1126,8 +1117,7 @@ public class UserTaskImpl
                         , Thread.currentThread().getStackTrace()[1].getLineNumber()));
             }
             if (!securityUserService.existAdminPermission(operator.getUsername())
-                    && !(null != userDto && userDto.isDtoLegal() && userDto.equals(operator)))
-            {
+                    && !(null != userDto && userDto.isDtoLegal() && userDto.equals(operator))) {
                 throw new IllegalArgumentException(String.format("非法参数:<description>【%s】 <- %s</description>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                         , "操作者"
                         , "无足够的操作权限"
@@ -1173,15 +1163,14 @@ public class UserTaskImpl
     /**
      * 更新指定的用户 -> [用户 -> 个人信息]
      *
-     * @Description 更新的数据包括[用户 -> 个人信息].
-     *
      * @param userDto  用户      {@link UserDto}
      * @param operator 操作者
-     *
      * @return 操作结果   {@link TaskResult}
+     * @Description 更新的数据包括[用户 -> 个人信息].
      */
     @Override
-    public @NotNull TaskResult<UserDto> updateUserPersonInfo(@NotNull UserDto userDto, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
+    public @NotNull
+    TaskResult<UserDto> updateUserPersonInfo(@NotNull UserDto userDto, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
         @NotNull TaskResult<UserDto> taskResult;
         @NotNull UserDto resultData;
         try {
@@ -1256,10 +1245,10 @@ public class UserTaskImpl
      *
      * @param userDto           用户              {@link BasicUserDto}
      * @param operator_username [操作者 - 用户名称]
-     *
      * @return 操作结果   {@link TaskResult}
      */
-    private @NotNull TaskResult<BasicUserDto> delete(@NotNull BasicUserDto userDto, @NotNull String operator_username) {
+    private @NotNull
+    TaskResult<BasicUserDto> delete(@NotNull BasicUserDto userDto, @NotNull String operator_username) {
         @NotNull TaskResult<BasicUserDto> taskResult;
         @NotNull BasicUserDto resultData;
         try {
@@ -1331,13 +1320,13 @@ public class UserTaskImpl
     /**
      * 删除指定的用户
      *
-     * @param userDto   用户      {@link BasicUserDto}
-     * @param operator  操作者    {@link AbstractSecurityUser}
-     *
+     * @param userDto  用户      {@link BasicUserDto}
+     * @param operator 操作者    {@link AbstractSecurityUser}
      * @return 操作结果   {@link TaskResult}
      */
     @Override
-    public @NotNull TaskResult<BasicUserDto> delete(@NotNull BasicUserDto userDto/*, @NotNull String passwordPlaintext*/, @NotNull AbstractSecurityUser operator) {
+    public @NotNull
+    TaskResult<BasicUserDto> delete(@NotNull BasicUserDto userDto/*, @NotNull String passwordPlaintext*/, @NotNull AbstractSecurityUser operator) {
         @NotNull TaskResult<BasicUserDto> taskResult;
         @NotNull BasicUserDto resultData;
         try {
@@ -1388,11 +1377,11 @@ public class UserTaskImpl
      *
      * @param userDto  用户      {@link BasicUserDto}
      * @param operator 操作者
-     *
      * @return 操作结果   {@link TaskResult}
      */
     @Override
-    public @NotNull TaskResult<BasicUserDto> delete(@NotNull BasicUserDto userDto, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
+    public @NotNull
+    TaskResult<BasicUserDto> delete(@NotNull BasicUserDto userDto, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
         @NotNull TaskResult<BasicUserDto> taskResult;
         @NotNull BasicUserDto resultData;
         try {

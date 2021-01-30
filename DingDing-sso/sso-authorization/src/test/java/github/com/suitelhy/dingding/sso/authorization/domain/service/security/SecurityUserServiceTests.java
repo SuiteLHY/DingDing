@@ -40,7 +40,6 @@ import java.util.*;
  * (安全) 用户 - 业务 <- 测试单元
  *
  * @Description 测试单元.
- *
  * @see SecurityUserService
  */
 @SpringBootTest
@@ -254,16 +253,16 @@ public class SecurityUserServiceTests {
      * 获取测试用的用户相关 {@link EntityModel} 集合
      *
      * @param seed
-     *
      * @return {@link Map}
      * · 数据结构:
      * {
-     *    "user": {@link User},
-     *    "userAccountOperationInfo": {@link UserAccountOperationInfo},
-     *    "userPersonInfo": {@link UserPersonInfo}
+     * "user": {@link User},
+     * "userAccountOperationInfo": {@link UserAccountOperationInfo},
+     * "userPersonInfo": {@link UserPersonInfo}
      * }
      */
-    private @NotNull Map<String, EntityModel<?>> getUserForTest(Integer seed) {
+    private @NotNull
+    Map<String, EntityModel<?>> getUserForTest(Integer seed) {
         final @NotNull Map<String, EntityModel<?>> result = new HashMap<>(3);
 
         @NotNull User newUser = User.Factory.USER.create(
@@ -311,8 +310,7 @@ public class SecurityUserServiceTests {
     @Test
     @Transactional
     public void existByUserId()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         final boolean result;
 
         // 获取必要的测试用身份信息
@@ -344,8 +342,7 @@ public class SecurityUserServiceTests {
     @Test
     @Transactional
     public void existByUsername()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         final boolean result;
 
         // 获取必要的测试用身份信息
@@ -377,8 +374,7 @@ public class SecurityUserServiceTests {
     @Test
     @Transactional
     public void existAdminPermission()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         final boolean result;
 
         // 获取必要的测试用身份信息
@@ -414,8 +410,7 @@ public class SecurityUserServiceTests {
     @Test
     @Transactional
     public void existRoleByUsername()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         final boolean result;
 
         // 获取必要的测试用身份信息
@@ -448,7 +443,7 @@ public class SecurityUserServiceTests {
     @Transactional
     public void selectAll() {
         final Page<SecurityUser> result;
-        Assert.isTrue(! (result = service.selectAll(0, 10)).isEmpty()
+        Assert.isTrue(!(result = service.selectAll(0, 10)).isEmpty()
                 , "The result is empty");
         System.out.println(result);
     }
@@ -465,8 +460,7 @@ public class SecurityUserServiceTests {
     @Test
     @Transactional
     public void selectUserByUserId()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         final SecurityUser result;
 
         // 获取必要的测试用身份信息
@@ -499,8 +493,7 @@ public class SecurityUserServiceTests {
     @Test
     @Transactional
     public void selectUserByUsername()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         final SecurityUser result;
 
         // 获取必要的测试用身份信息
@@ -533,8 +526,7 @@ public class SecurityUserServiceTests {
     @Test
     @Transactional
     public void selectRoleOnUserByUsername()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         // 获取必要的测试用身份信息
         final @NotNull SecurityUser operator = operator();
 
@@ -544,24 +536,23 @@ public class SecurityUserServiceTests {
         @NotNull Map<String, EntityModel<?>> newUserData2 = getUserForTest(1);
 
         Assert.isTrue(userEvent.registerUser((User) newUserData.get("user")
-                    , (UserAccountOperationInfo) newUserData.get("userAccountOperationInfo")
-                    , (UserPersonInfo) newUserData.get("userPersonInfo")
-                    , operator)
+                , (UserAccountOperationInfo) newUserData.get("userAccountOperationInfo")
+                , (UserPersonInfo) newUserData.get("userPersonInfo")
+                , operator)
                 , "===== 添加测试数据 -> false");
         Assert.isTrue(userEvent.registerUser((User) newUserData1.get("user")
-                    , (UserAccountOperationInfo) newUserData1.get("userAccountOperationInfo")
-                    , (UserPersonInfo) newUserData1.get("userPersonInfo")
-                    , operator)
+                , (UserAccountOperationInfo) newUserData1.get("userAccountOperationInfo")
+                , (UserPersonInfo) newUserData1.get("userPersonInfo")
+                , operator)
                 , "===== 添加测试数据 -> false");
         Assert.isTrue(userEvent.registerUser((User) newUserData2.get("user")
-                    , (UserAccountOperationInfo) newUserData2.get("userAccountOperationInfo")
-                    , (UserPersonInfo) newUserData2.get("userPersonInfo")
-                    , operator)
+                , (UserAccountOperationInfo) newUserData2.get("userAccountOperationInfo")
+                , (UserPersonInfo) newUserData2.get("userPersonInfo")
+                , operator)
                 , "===== 添加测试数据 -> false");
 
         if (((User) newUserData2.get("user")).isEmpty()
-                && ((User) newUserData2.get("user")).equals((User) newUserData1.get("user")))
-        {
+                && ((User) newUserData2.get("user")).equals((User) newUserData1.get("user"))) {
             newUserData2.put("user", newUserData1.get("user"));
         }
 
@@ -588,24 +579,24 @@ public class SecurityUserServiceTests {
                 , "===== 添加测试数据 -> false");
 
         final @NotNull Set<SecurityUser> users = new HashSet<>(2);
-        if (! newEntity.isEmpty()) {
+        if (!newEntity.isEmpty()) {
             users.add(newEntity);
         }
-        if (! newEntity1.isEmpty()) {
+        if (!newEntity1.isEmpty()) {
             users.add(newEntity1);
         }
-        if (! newEntity2.isEmpty()) {
+        if (!newEntity2.isEmpty()) {
             users.add(newEntity2);
         }
 
         final @NotNull Set<SecurityRole> roles = new HashSet<>(2);
-        if (! newRole.isEmpty()) {
+        if (!newRole.isEmpty()) {
             roles.add(newRole);
         }
-        if (! newRole1.isEmpty()) {
+        if (!newRole1.isEmpty()) {
             roles.add(newRole1);
         }
-        if (! newRole2.isEmpty()) {
+        if (!newRole2.isEmpty()) {
             roles.add(newRole2);
         }
 
@@ -630,8 +621,8 @@ public class SecurityUserServiceTests {
         for (@NotNull SecurityUser eachUser : users) {
             final @NotNull List<SecurityRole> eachUser_roles = userEvent.selectRoleOnUserByUsername(eachUser.getUsername());
 
-            Assert.isTrue(! eachUser_roles.isEmpty()
-                            && ! (eachUser_roles.size() == 1 && Objects.requireNonNull(eachUser_roles.get(0)).equals(Security.RoleVo.USER))
+            Assert.isTrue(!eachUser_roles.isEmpty()
+                            && !(eachUser_roles.size() == 1 && Objects.requireNonNull(eachUser_roles.get(0)).equals(Security.RoleVo.USER))
                     , "===== 校验结果 <- 非预期结果!");
 
             existRoleNum += eachUser_roles.size();
@@ -647,8 +638,7 @@ public class SecurityUserServiceTests {
     @Test
     @Transactional
     public void selectResourceByUsername()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         // 获取必要的测试用身份信息
         final @NotNull SecurityUser operator = operator();
 
@@ -658,29 +648,28 @@ public class SecurityUserServiceTests {
         @NotNull Map<String, EntityModel<?>> newUserData2 = getUserForTest(1);
 
         Assert.isTrue(userEvent.registerUser((User) newUserData.get("user")
-                    , (UserAccountOperationInfo) newUserData.get("userAccountOperationInfo")
-                    , (UserPersonInfo) newUserData.get("userPersonInfo")
-                    , operator)
+                , (UserAccountOperationInfo) newUserData.get("userAccountOperationInfo")
+                , (UserPersonInfo) newUserData.get("userPersonInfo")
+                , operator)
                 , "===== 添加测试数据 -> false");
 
         Assert.isTrue(userEvent.registerUser((User) newUserData1.get("user")
-                    , (UserAccountOperationInfo) newUserData1.get("userAccountOperationInfo")
-                    , (UserPersonInfo) newUserData1.get("userPersonInfo")
-                    , operator)
+                , (UserAccountOperationInfo) newUserData1.get("userAccountOperationInfo")
+                , (UserPersonInfo) newUserData1.get("userPersonInfo")
+                , operator)
                 , "===== 添加测试数据 -> false");
 
         Assert.isTrue(userEvent.registerUser((User) newUserData2.get("user")
-                    , (UserAccountOperationInfo) newUserData2.get("userAccountOperationInfo")
-                    , (UserPersonInfo) newUserData2.get("userPersonInfo")
-                    , operator)
+                , (UserAccountOperationInfo) newUserData2.get("userAccountOperationInfo")
+                , (UserPersonInfo) newUserData2.get("userPersonInfo")
+                , operator)
                 , "===== 添加测试数据 -> false");
 
         /*if (newUserData2.isEmpty() && newUserData2.equals(newUserData1)) {
             newUserData2 = newUserData1;
         }*/
         if (((User) newUserData2.get("user")).isEmpty()
-                && ((User) newUserData2.get("user")).equals((User) newUserData1.get("user")))
-        {
+                && ((User) newUserData2.get("user")).equals((User) newUserData1.get("user"))) {
             newUserData2.put("user", newUserData1.get("user"));
         }
 
@@ -722,37 +711,37 @@ public class SecurityUserServiceTests {
                 , "===== 添加测试数据 -> false");
 
         final @NotNull Set<SecurityUser> users = new HashSet<>(2);
-        if (! newEntity.isEmpty()) {
+        if (!newEntity.isEmpty()) {
             users.add(newEntity);
         }
-        if (! newEntity1.isEmpty()) {
+        if (!newEntity1.isEmpty()) {
             users.add(newEntity1);
         }
-        if (! newEntity2.isEmpty()) {
+        if (!newEntity2.isEmpty()) {
             users.add(newEntity2);
         }
         System.out.println("===> users:\n".concat(users.toString()));
 
         final @NotNull Set<SecurityRole> roles = new HashSet<>(2);
-        if (! newRole.isEmpty()) {
+        if (!newRole.isEmpty()) {
             roles.add(newRole);
         }
-        if (! newRole1.isEmpty()) {
+        if (!newRole1.isEmpty()) {
             roles.add(newRole1);
         }
-        if (! newRole2.isEmpty()) {
+        if (!newRole2.isEmpty()) {
             roles.add(newRole2);
         }
         System.out.println("===> roles:\n".concat(roles.toString()));
 
         final @NotNull Set<SecurityResource> resources = new HashSet<>(2);
-        if (! newResource.isEmpty()) {
+        if (!newResource.isEmpty()) {
             resources.add(newResource);
         }
-        if (! newResource1.isEmpty()) {
+        if (!newResource1.isEmpty()) {
             resources.add(newResource1);
         }
-        if (! newResource2.isEmpty()) {
+        if (!newResource2.isEmpty()) {
             resources.add(newResource2);
         }
         System.out.println("===> resources:\n" + resources);
@@ -779,7 +768,7 @@ public class SecurityUserServiceTests {
         for (@NotNull SecurityUser eachUser : users) {
             final @NotNull List<SecurityResource> resourceList = userEvent.selectResourceOnUserByUsername(eachUser.getUsername());
 
-            Assert.isTrue(null != resourceList && ! resourceList.isEmpty()
+            Assert.isTrue(null != resourceList && !resourceList.isEmpty()
                     , "===== 校验结果 <- 非预期结果!");
 
             System.err.printf("=> 当前用户%s关联的资源:%s%n", eachUser, resourceList);
@@ -800,8 +789,7 @@ public class SecurityUserServiceTests {
     @Test
     @Transactional
     public void selectUrlPathByUsername()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         // 获取必要的测试用身份信息
         final @NotNull SecurityUser operator = operator();
 
@@ -811,29 +799,28 @@ public class SecurityUserServiceTests {
         @NotNull Map<String, EntityModel<?>> newUserData2 = getUserForTest(1);
 
         Assert.isTrue(userEvent.registerUser((User) newUserData.get("user")
-                    , (UserAccountOperationInfo) newUserData.get("userAccountOperationInfo")
-                    , (UserPersonInfo) newUserData.get("userPersonInfo")
-                    , operator)
+                , (UserAccountOperationInfo) newUserData.get("userAccountOperationInfo")
+                , (UserPersonInfo) newUserData.get("userPersonInfo")
+                , operator)
                 , "===== 添加测试数据 -> false");
 
         Assert.isTrue(userEvent.registerUser((User) newUserData1.get("user")
-                    , (UserAccountOperationInfo) newUserData1.get("userAccountOperationInfo")
-                    , (UserPersonInfo) newUserData1.get("userPersonInfo")
-                    , operator)
+                , (UserAccountOperationInfo) newUserData1.get("userAccountOperationInfo")
+                , (UserPersonInfo) newUserData1.get("userPersonInfo")
+                , operator)
                 , "===== 添加测试数据 -> false");
 
         Assert.isTrue(userEvent.registerUser((User) newUserData2.get("user")
-                        , (UserAccountOperationInfo) newUserData2.get("userAccountOperationInfo")
-                        , (UserPersonInfo) newUserData2.get("userPersonInfo")
-                        , operator)
-                        || (! userEvent.selectUserByUsername(((User) newUserData2.get("user")).getUsername()).isEmpty()
-                                && ! userEvent.selectUserAccountOperationInfoByUsername(((UserAccountOperationInfo) newUserData2.get("userAccountOperationInfo")).getUsername()).isEmpty()
-                                && ! userEvent.selectUserPersonInfoByUsername(((UserPersonInfo) newUserData2.get("userPersonInfo")).getUsername()).isEmpty())
+                , (UserAccountOperationInfo) newUserData2.get("userAccountOperationInfo")
+                , (UserPersonInfo) newUserData2.get("userPersonInfo")
+                , operator)
+                        || (!userEvent.selectUserByUsername(((User) newUserData2.get("user")).getUsername()).isEmpty()
+                        && !userEvent.selectUserAccountOperationInfoByUsername(((UserAccountOperationInfo) newUserData2.get("userAccountOperationInfo")).getUsername()).isEmpty()
+                        && !userEvent.selectUserPersonInfoByUsername(((UserPersonInfo) newUserData2.get("userPersonInfo")).getUsername()).isEmpty())
                 , "===== 添加测试数据 -> false");
 
         if (((User) newUserData2.get("user")).isEmpty()
-                && ((User) newUserData2.get("user")).equals((User) newUserData1.get("user")))
-        {
+                && ((User) newUserData2.get("user")).equals((User) newUserData1.get("user"))) {
             newUserData2.put("user", newUserData1.get("user"));
         }
 
@@ -879,44 +866,44 @@ public class SecurityUserServiceTests {
                 , "===== 添加测试数据 -> false");
 
         final @NotNull Set<SecurityUser> users = new HashSet<>(2);
-        if (! newEntity.isEmpty()) {
+        if (!newEntity.isEmpty()) {
             users.add(newEntity);
         }
-        if (! newEntity1.isEmpty()) {
+        if (!newEntity1.isEmpty()) {
             users.add(newEntity1);
         }
-        if (! newEntity2.isEmpty()) {
+        if (!newEntity2.isEmpty()) {
             users.add(newEntity2);
         }
         System.out.println("===> users:\n" + users);
 
         final @NotNull Set<SecurityRole> roles = new HashSet<>(2);
-        if (! newRole.isEmpty()) {
+        if (!newRole.isEmpty()) {
             roles.add(newRole);
         }
-        if (! newRole1.isEmpty()) {
+        if (!newRole1.isEmpty()) {
             roles.add(newRole1);
         }
-        if (! newRole2.isEmpty()) {
+        if (!newRole2.isEmpty()) {
             roles.add(newRole2);
         }
         System.out.println("===> roles:\n" + roles);
 
         final @NotNull Set<SecurityResource> resources = new HashSet<>(2);
-        if (! newResource.isEmpty()) {
+        if (!newResource.isEmpty()) {
             resources.add(newResource);
         }
-        if (! newResource1.isEmpty()) {
+        if (!newResource1.isEmpty()) {
             resources.add(newResource1);
         }
-        if (! newResource2.isEmpty()) {
+        if (!newResource2.isEmpty()) {
             resources.add(newResource2);
         }
         System.out.println("===> resources:\n" + resources);
 
-        final @NotNull String newUrl[] = new String[] {getClientId(), getUrlForTest(), getUrlHttpMethodNameForTest()};
-        final @NotNull String newUrl1[] = new String[] {getClientId(), getUrlForTest(1), getUrlHttpMethodNameForTest()};
-        final @NotNull String newUrl2[] = new String[] {getClientId(), getUrlForTest(1), getUrlHttpMethodNameForTest()};
+        final @NotNull String newUrl[] = new String[]{getClientId(), getUrlForTest(), getUrlHttpMethodNameForTest()};
+        final @NotNull String newUrl1[] = new String[]{getClientId(), getUrlForTest(1), getUrlHttpMethodNameForTest()};
+        final @NotNull String newUrl2[] = new String[]{getClientId(), getUrlForTest(1), getUrlHttpMethodNameForTest()};
 
         final @NotNull ContainArrayHashSet<String> urls = new ContainArrayHashSet<>(3);
         if (SecurityResourceUrl.Validator.RESOURCE_URL.urlInfo(newUrl)) {
@@ -980,15 +967,15 @@ public class SecurityUserServiceTests {
                 final @NotNull String urlMethod = urlInfo.getUrlMethod();
 
                 Assert.isTrue(SecurityResourceUrl.Validator.RESOURCE_URL.clientId(clientId)
-                            && SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(urlPath)
-                            && SecurityResourceUrl.Validator.RESOURCE_URL.urlMethod(urlMethod)
+                                && SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(urlPath)
+                                && SecurityResourceUrl.Validator.RESOURCE_URL.urlMethod(urlMethod)
                         , String.format("===== selectUrlPathByUsername(..) -> {clientId:%s, urlPath:%s, urlMethod:%s} <- 【操作失败, 非预期结果!】"
                                 , clientId
                                 , urlPath
                                 , urlMethod)
                 );
 
-                urlInfoSet.add(new String[] {clientId, urlPath, urlMethod});
+                urlInfoSet.add(new String[]{clientId, urlPath, urlMethod});
             }
 
             Assert.isTrue(urlInfoSet.containsAll(urls)
@@ -1008,8 +995,7 @@ public class SecurityUserServiceTests {
     @Test
     @Transactional
     public void insert()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         // 获取必要的测试用身份信息
         final @NotNull SecurityUser operator = operator();
 
@@ -1019,7 +1005,7 @@ public class SecurityUserServiceTests {
         final @NotNull UserPersonInfo newUserPersonInfo = (UserPersonInfo) newUserData.get("userPersonInfo");
 
         Assert.isTrue(userEvent.registerUser(newUser, newUserAccountOperationInfo, newUserPersonInfo
-                    , operator)
+                , operator)
                 , "===== 添加测试数据失败!");
 
         final @NotNull SecurityUser newEntity = getEntityForTest(newUser);
@@ -1028,7 +1014,7 @@ public class SecurityUserServiceTests {
                 , "getEntityForTest() -> 无效的 Entity");
         Assert.isTrue(service.insert(newEntity, operator, userEvent.selectUserAccountOperationInfoByUsername(operator.getUsername()))
                 , "===== insert(Entity) -> false");
-        Assert.isTrue(! newEntity.isEmpty()
+        Assert.isTrue(!newEntity.isEmpty()
                 , "===== insert(Entity) -> 无效的 Entity");
 
         System.out.println(newEntity);
@@ -1037,8 +1023,7 @@ public class SecurityUserServiceTests {
     @Test
     @Transactional
     public void insertRole()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         // 获取必要的测试用身份信息
         final @NotNull SecurityUser operator = operator();
         final @NotNull UserAccountOperationInfo operator_userAccountOperationInfo = userEvent.selectUserAccountOperationInfoByUsername(operator.getUsername());
@@ -1049,26 +1034,25 @@ public class SecurityUserServiceTests {
         @NotNull Map<String, EntityModel<?>> newUserData2 = getUserForTest(1);
 
         Assert.isTrue(userEvent.registerUser((User) newUserData.get("user")
-                    , (UserAccountOperationInfo) newUserData.get("userAccountOperationInfo")
-                    , (UserPersonInfo) newUserData.get("userPersonInfo")
-                    , operator)
+                , (UserAccountOperationInfo) newUserData.get("userAccountOperationInfo")
+                , (UserPersonInfo) newUserData.get("userPersonInfo")
+                , operator)
                 , "===== 添加测试数据 -> false");
 
         Assert.isTrue(userEvent.registerUser((User) newUserData1.get("user")
-                    , (UserAccountOperationInfo) newUserData1.get("userAccountOperationInfo")
-                    , (UserPersonInfo) newUserData1.get("userPersonInfo")
-                    , operator)
+                , (UserAccountOperationInfo) newUserData1.get("userAccountOperationInfo")
+                , (UserPersonInfo) newUserData1.get("userPersonInfo")
+                , operator)
                 , "===== 添加测试数据 -> false");
 
         Assert.isTrue(userEvent.registerUser((User) newUserData2.get("user")
-                    , (UserAccountOperationInfo) newUserData2.get("userAccountOperationInfo")
-                    , (UserPersonInfo) newUserData2.get("userPersonInfo")
-                    , operator)
+                , (UserAccountOperationInfo) newUserData2.get("userAccountOperationInfo")
+                , (UserPersonInfo) newUserData2.get("userPersonInfo")
+                , operator)
                 , "===== 添加测试数据 -> false");
 
         if (((User) newUserData2.get("user")).isEmpty()
-                && ((User) newUserData2.get("user")).equals((User) newUserData1.get("user")))
-        {
+                && ((User) newUserData2.get("user")).equals((User) newUserData1.get("user"))) {
             newUserData2.put("user", newUserData1.get("user"));
         }
 
@@ -1100,24 +1084,24 @@ public class SecurityUserServiceTests {
                 , "===== 添加测试数据 -> false");
 
         final @NotNull Set<SecurityUser> users = new HashSet<>(2);
-        if (! newEntity.isEmpty()) {
+        if (!newEntity.isEmpty()) {
             users.add(newEntity);
         }
-        if (! newEntity1.isEmpty()) {
+        if (!newEntity1.isEmpty()) {
             users.add(newEntity1);
         }
-        if (! newEntity2.isEmpty()) {
+        if (!newEntity2.isEmpty()) {
             users.add(newEntity2);
         }
 
         final @NotNull Set<SecurityRole> roles = new HashSet<>(2);
-        if (! newRole.isEmpty()) {
+        if (!newRole.isEmpty()) {
             roles.add(newRole);
         }
-        if (! newRole1.isEmpty()) {
+        if (!newRole1.isEmpty()) {
             roles.add(newRole1);
         }
-        if (! newRole2.isEmpty()) {
+        if (!newRole2.isEmpty()) {
             roles.add(newRole2);
         }
 
@@ -1140,8 +1124,8 @@ public class SecurityUserServiceTests {
         for (@NotNull SecurityUser eachUser : users) {
             final @NotNull List<SecurityRole> eachUser_roles = userEvent.selectRoleOnUserByUsername(eachUser.getUsername());
 
-            Assert.isTrue(! eachUser_roles.isEmpty()
-                            && ! (eachUser_roles.size() == 1 && eachUser_roles.get(0).equals(Security.RoleVo.USER))
+            Assert.isTrue(!eachUser_roles.isEmpty()
+                            && !(eachUser_roles.size() == 1 && eachUser_roles.get(0).equals(Security.RoleVo.USER))
                     , "===== 校验结果 <- 非预期结果!");
 
             existRoleNum += eachUser_roles.size();
@@ -1157,8 +1141,7 @@ public class SecurityUserServiceTests {
     @Test
     @Transactional
     public void update()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         final SecurityUser result;
 
         // 获取必要的测试用身份信息
@@ -1186,7 +1169,7 @@ public class SecurityUserServiceTests {
 
         Assert.isTrue(service.update(result, operator, operator_userAccountOperationInfo)
                 , "===== update(...) -> false");
-        Assert.isTrue(! result.isEmpty()
+        Assert.isTrue(!result.isEmpty()
                 , "===== update(...) -> 无效的 Entity");
 
         System.out.println(result);
@@ -1195,8 +1178,7 @@ public class SecurityUserServiceTests {
     @Test
     @Transactional
     public void delete()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         final SecurityUser result;
 
         // 获取必要的测试用身份信息
@@ -1231,8 +1213,7 @@ public class SecurityUserServiceTests {
     @Test
     @Transactional
     public void deleteRole()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         // 获取必要的测试用身份信息
         final @NotNull SecurityUser operator = operator();
         final @NotNull UserAccountOperationInfo operator_userAccountOperationInfo = userEvent.selectUserAccountOperationInfoByUsername(operator.getUsername());
@@ -1243,26 +1224,25 @@ public class SecurityUserServiceTests {
         @NotNull Map<String, EntityModel<?>> newUserData2 = getUserForTest(1);
 
         Assert.isTrue(userEvent.registerUser((User) newUserData.get("user")
-                    , (UserAccountOperationInfo) newUserData.get("userAccountOperationInfo")
-                    , (UserPersonInfo) newUserData.get("userPersonInfo")
-                    , operator)
+                , (UserAccountOperationInfo) newUserData.get("userAccountOperationInfo")
+                , (UserPersonInfo) newUserData.get("userPersonInfo")
+                , operator)
                 , "===== 添加测试数据 -> false");
 
         Assert.isTrue(userEvent.registerUser((User) newUserData1.get("user")
-                    , (UserAccountOperationInfo) newUserData1.get("userAccountOperationInfo")
-                    , (UserPersonInfo) newUserData1.get("userPersonInfo")
-                    , operator)
+                , (UserAccountOperationInfo) newUserData1.get("userAccountOperationInfo")
+                , (UserPersonInfo) newUserData1.get("userPersonInfo")
+                , operator)
                 , "===== 添加测试数据 -> false");
 
         Assert.isTrue(userEvent.registerUser((User) newUserData2.get("user")
-                    , (UserAccountOperationInfo) newUserData2.get("userAccountOperationInfo")
-                    , (UserPersonInfo) newUserData2.get("userPersonInfo")
-                    , operator)
+                , (UserAccountOperationInfo) newUserData2.get("userAccountOperationInfo")
+                , (UserPersonInfo) newUserData2.get("userPersonInfo")
+                , operator)
                 , "===== 添加测试数据 -> false");
 
         if (((User) newUserData2.get("user")).isEmpty()
-                && ((User) newUserData2.get("user")).equals((User) newUserData1.get("user")))
-        {
+                && ((User) newUserData2.get("user")).equals((User) newUserData1.get("user"))) {
             newUserData2.put("user", newUserData1.get("user"));
         }
 
@@ -1290,24 +1270,24 @@ public class SecurityUserServiceTests {
                 , "===== 添加测试数据 -> false");
 
         final @NotNull Set<SecurityUser> users = new HashSet<>(2);
-        if (! newEntity.isEmpty()) {
+        if (!newEntity.isEmpty()) {
             users.add(newEntity);
         }
-        if (! newEntity1.isEmpty()) {
+        if (!newEntity1.isEmpty()) {
             users.add(newEntity1);
         }
-        if (! newEntity2.isEmpty()) {
+        if (!newEntity2.isEmpty()) {
             users.add(newEntity2);
         }
 
         final @NotNull Set<SecurityRole> roles = new HashSet<>(2);
-        if (! newRole.isEmpty()) {
+        if (!newRole.isEmpty()) {
             roles.add(newRole);
         }
-        if (! newRole1.isEmpty()) {
+        if (!newRole1.isEmpty()) {
             roles.add(newRole1);
         }
-        if (! newRole2.isEmpty()) {
+        if (!newRole2.isEmpty()) {
             roles.add(newRole2);
         }
 
@@ -1330,7 +1310,7 @@ public class SecurityUserServiceTests {
         for (@NotNull SecurityUser eachUser : users) {
             final @NotNull List<SecurityRole> roleList = userEvent.selectRoleOnUserByUsername(eachUser.getUsername());
 
-            Assert.isTrue(! roleList.isEmpty()
+            Assert.isTrue(!roleList.isEmpty()
                     , "===== 校验结果 <- 非预期结果!");
 
             existRoleNum += roleList.size();

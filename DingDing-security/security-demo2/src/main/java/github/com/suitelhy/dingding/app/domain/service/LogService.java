@@ -12,6 +12,7 @@ public interface LogService {
 
     /**
      * 查询所有日志记录 (分页)
+     *
      * @param pageIndex 分页索引, 从0开始
      * @param pageSize
      * @return
@@ -20,6 +21,7 @@ public interface LogService {
 
     /**
      * 查询所有日志记录数量
+     *
      * @param pageSize
      * @return
      */
@@ -27,6 +29,7 @@ public interface LogService {
 
     /**
      * 查询指定用户对应的日志记录数量
+     *
      * @param userid
      * @param pageSize
      * @return
@@ -35,8 +38,9 @@ public interface LogService {
 
     /**
      * 查询指定用户对应的日志记录 (分页)
+     *
      * @param userid
-     * @param page      从0开始
+     * @param page     从0开始
      * @param pageSize
      * @return
      */
@@ -44,6 +48,7 @@ public interface LogService {
 
     /**
      * 新增日志记录
+     *
      * @param log
      * @return
      */
@@ -51,6 +56,7 @@ public interface LogService {
 
     /**
      * 删除日志记录
+     *
      * @param id - 日志记录 id
      * @return
      */

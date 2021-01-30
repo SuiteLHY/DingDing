@@ -7,7 +7,6 @@ import javax.validation.constraints.NotNull;
 
 /**
  * VO 层 - 业务辅助工具
- *
  */
 public final class VoUtil {
 

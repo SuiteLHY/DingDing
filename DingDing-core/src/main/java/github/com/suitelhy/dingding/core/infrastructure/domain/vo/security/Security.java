@@ -74,8 +74,7 @@ public interface Security<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V 
         public final String RegexPattern;
 
         PasswordEncoderVo(@NotNull Integer code, @NotNull String name, @NotNull String description
-                , @NotNull PasswordEncoder encoder, @NotNull String RegexPattern)
-        {
+                , @NotNull PasswordEncoder encoder, @NotNull String RegexPattern) {
             this.code = code;
             this.name = name;
             this.description = description;
@@ -86,9 +85,8 @@ public interface Security<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V 
         /**
          * VO 的值
          *
-         * @Description Unique attribute.
-         *
          * @return {@link this#code}
+         * @Description Unique attribute.
          */
         @NotNull
         @Override
@@ -120,12 +118,9 @@ public interface Security<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V 
         /**
          * 等效比较
          *
-         * @Description 备注: <method>equals(Object)</method>
-         *
          * @param value {@link this#equalsValue(Number)}
-         *
          * @return 判断结果
-         *
+         * @Description 备注: <method>equals(Object)</method>
          * @see this#equalsValue(Number)
          */
         public boolean equals(@NotNull Integer value) {
@@ -140,9 +135,8 @@ public interface Security<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V 
         /**
          * 提供类型转换器
          *
-         * @Design 为持久化类型转换功能提供支持.
-         *
          * @return {@link Converter}
+         * @Design 为持久化类型转换功能提供支持.
          */
 
         @Override
@@ -240,7 +234,8 @@ public interface Security<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V 
                 super(RoleVo.class);
             }
 
-            public static @NotNull Converter getInstance() {
+            public static @NotNull
+            Converter getInstance() {
                 return Factory.SINGLETON;
             }
 
@@ -250,12 +245,12 @@ public interface Security<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V 
          * [具有管理员权限的]的角色的集合
          *
          * @Description 业务拓展设计.
-         *
          * @Issue 需要使用限定元素操作的集合.
-         *
          * @Solution 实现限定元素操作的集合（待完善）.
          */
-        public final static @NotNull Set<RoleVo> ADMINISTRATOR_ROLE_VO__SET;
+        public final static @NotNull
+        Set<RoleVo> ADMINISTRATOR_ROLE_VO__SET;
+
         static {
             ADMINISTRATOR_ROLE_VO__SET = new HashSet<>(1);
             for (RoleVo each : RoleVo.class.getEnumConstants()) {
@@ -265,9 +260,11 @@ public interface Security<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V 
             }
         }
 
-        public final @NotNull Integer code;
+        public final @NotNull
+        Integer code;
 
-        public final @NotNull String name;
+        public final @NotNull
+        String name;
 
         public final String description;
 
@@ -277,12 +274,10 @@ public interface Security<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V 
          * @param code
          * @param name
          * @param description
-         *
          * @throws IllegalArgumentException
          */
         RoleVo(@NotNull Integer code, @NotNull String name, @NotNull String description)
-                throws IllegalArgumentException
-        {
+                throws IllegalArgumentException {
             if (null == code) {
                 throw new IllegalArgumentException("非法参数: <param>code</param>");
             }
@@ -322,7 +317,6 @@ public interface Security<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V 
          * (展示)名称
          *
          * @return {@link String}
-         *
          * @see this#name
          */
         @Override
@@ -333,12 +327,9 @@ public interface Security<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V 
         /**
          * 等效比较
          *
-         * @Description 备注: <method>equals(Object)</method>
-         *
          * @param value {@link this#equalsValue(Number)}
-         *
          * @return 判断结果
-         *
+         * @Description 备注: <method>equals(Object)</method>
          * @see this#equalsValue(Number)
          */
         public boolean equals(@NotNull Integer value) {
@@ -353,13 +344,13 @@ public interface Security<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V 
         /**
          * 提供类型转换器
          *
-         * @Design 为持久化类型转换功能提供支持.
-         *
          * @return {@link Converter}
+         * @Design 为持久化类型转换功能提供支持.
          */
         @Override
         @SuppressWarnings("unchecked")
-        public @NotNull Converter voAttributeConverter() {
+        public @NotNull
+        Converter voAttributeConverter() {
             return Converter.getInstance();
         }
 
@@ -368,9 +359,8 @@ public interface Security<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V 
         /**
          * 判断是否属于[具有管理员权限的]角色
          *
-         * @Description (拓展的业务校验)
-         *
          * @return {@link Boolean#TYPE}
+         * @Description (拓展的业务校验)
          */
         public abstract boolean isAdministrator();
 

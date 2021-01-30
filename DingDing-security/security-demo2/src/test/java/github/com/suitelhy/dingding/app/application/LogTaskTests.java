@@ -96,9 +96,9 @@ public class LogTaskTests {
         Assert.notNull(newUser
                 , "User.Factory.USER -> create(..) -> null");
         Assert.isTrue(userTask.insert(newUserDto
-                    , newUser.getPassword()
-                    , ip()
-                    , new CalendarController().toString())
+                , newUser.getPassword()
+                , ip()
+                , new CalendarController().toString())
                 , "insert(User user) -> false");
 
         //===== logTask =====//
@@ -130,9 +130,9 @@ public class LogTaskTests {
         Assert.notNull(newUser
                 , "User.Factory.USER -> create(..) -> null");
         Assert.isTrue(userTask.insert(newUserDto
-                    , newUser.getPassword()
-                    , ip()
-                    , new CalendarController().toString())
+                , newUser.getPassword()
+                , ip()
+                , new CalendarController().toString())
                 , "insert(User user) -> false");
 
         //===== logTask =====//
@@ -163,9 +163,9 @@ public class LogTaskTests {
         Assert.notNull(newUser
                 , "User.Factory.USER -> create(..) -> null");
         Assert.isTrue(userTask.insert(newUserDto
-                    , newUser.getPassword()
-                    , ip()
-                    , new CalendarController().toString())
+                , newUser.getPassword()
+                , ip()
+                , new CalendarController().toString())
                 , "insert(User user) -> false");
 
         //===== logTask =====//
@@ -191,9 +191,9 @@ public class LogTaskTests {
         Assert.notNull(newUser
                 , "User.Factory.USER -> create(..) -> null");
         Assert.isTrue(userTask.insert(newUserDto
-                    , newUser.getPassword()
-                    , ip()
-                    , new CalendarController().toString())
+                , newUser.getPassword()
+                , ip()
+                , new CalendarController().toString())
                 , "insert(User user) -> false");
 
         //===== logTask =====//

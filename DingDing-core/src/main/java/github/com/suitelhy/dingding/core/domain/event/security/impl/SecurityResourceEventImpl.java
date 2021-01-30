@@ -32,9 +32,7 @@ import java.util.Set;
  * @see SecurityRole
  * @see SecurityResourceUrl
  * @see SecurityRoleResource
- *
  * @see SecurityRoleEvent
- *
  * @see SecurityResourceService
  * @see SecurityRoleService
  * @see SecurityResourceUrlService
@@ -78,15 +76,13 @@ public class SecurityResourceEventImpl
     /**
      * 判断[（安全认证）角色]是否存在 (关联的) [（安全认证）资源]
      *
-     * @Description 完整的业务流程.
-     *
      * @param roleCode 角色编码 {@link SecurityRole.Validator#code(String)}
-     *
      * @return {@link Boolean#TYPE}
+     * @Description 完整的业务流程.
      */
     @Override
     public boolean existResourceOnRoleByRoleCode(@NotNull String roleCode) {
-        if (! SecurityRoleResource.Validator.ROLE_RESOURCE.roleCode(roleCode)) {
+        if (!SecurityRoleResource.Validator.ROLE_RESOURCE.roleCode(roleCode)) {
             //-- 非法输入: 角色编码
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "角色编码"
@@ -102,17 +98,14 @@ public class SecurityResourceEventImpl
     /**
      * 判断[（安全认证）角色]是否存在 (关联的) [（安全认证）资源]
      *
-     * @Description 完整的业务流程.
-     *
      * @param urlInfo URL相关信息.    {@link SecurityResourceUrl.Validator#urlInfo(String[])}
-     *
      * @return {@link Boolean#TYPE}
+     * @Description 完整的业务流程.
      */
     @Override
     public boolean existResourceOnUrlInfo(@NotNull String[] urlInfo)
-            throws IllegalArgumentException
-    {
-        if (! SecurityResourceUrl.Validator.RESOURCE_URL.urlInfo(urlInfo)) {
+            throws IllegalArgumentException {
+        if (!SecurityResourceUrl.Validator.RESOURCE_URL.urlInfo(urlInfo)) {
             //-- 非法输入: [URL 相关信息]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "[URL 相关信息]"
@@ -128,15 +121,13 @@ public class SecurityResourceEventImpl
     /**
      * 判断[（安全认证）资源]是否存在 (关联的) [（安全认证）角色]
      *
-     * @Description 完整的业务流程.
-     *
      * @param resourceCode 资源编码 {@link SecurityResource.Validator#code(String)}
-     *
      * @return {@link Boolean#TYPE}
+     * @Description 完整的业务流程.
      */
     @Override
     public boolean existRoleOnResourceByResourceCode(@NotNull String resourceCode) {
-        if (! SecurityRoleResource.Validator.ROLE_RESOURCE.resourceCode(resourceCode)) {
+        if (!SecurityRoleResource.Validator.ROLE_RESOURCE.resourceCode(resourceCode)) {
             //-- 非法输入: 资源编码
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "资源编码"
@@ -152,17 +143,14 @@ public class SecurityResourceEventImpl
     /**
      * 判断[（安全认证）资源]是否存在 (关联的) [URL 相关信息]
      *
-     * @Description 完整的业务流程.
-     *
      * @param resourceCode 资源编码    {@link SecurityResource.Validator#code(String)}
-     *
      * @return {@link Boolean#TYPE}
+     * @Description 完整的业务流程.
      */
     @Override
     public boolean existUrlInfoOnResourceByResourceCode(@NotNull String resourceCode)
-            throws IllegalArgumentException
-    {
-        if (! SecurityResourceUrl.Validator.RESOURCE_URL.code(resourceCode)) {
+            throws IllegalArgumentException {
+        if (!SecurityResourceUrl.Validator.RESOURCE_URL.code(resourceCode)) {
             //-- 非法输入: 资源编码
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "资源编码"
@@ -178,17 +166,15 @@ public class SecurityResourceEventImpl
     /**
      * 查询 (指定角色关联的) 资源
      *
-     * @Description 完整的业务流程.
-     *
      * @param roleCode 角色编码    {@link SecurityRole.Validator#code(String)}
-     *
      * @return {@link SecurityResource}
+     * @Description 完整的业务流程.
      */
     @Override
-    public @NotNull List<SecurityResource> selectResourceOnRoleByRoleCode(@NotNull String roleCode)
-            throws IllegalArgumentException
-    {
-        if (! SecurityRole.Validator.ROLE.code(roleCode)) {
+    public @NotNull
+    List<SecurityResource> selectResourceOnRoleByRoleCode(@NotNull String roleCode)
+            throws IllegalArgumentException {
+        if (!SecurityRole.Validator.ROLE.code(roleCode)) {
             //-- 非法输入: 角色编码
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "角色编码"
@@ -206,7 +192,7 @@ public class SecurityResourceEventImpl
         }
 
         @NotNull List<SecurityRoleResource> role_roleResources = securityRoleResourceService.selectByRoleCode(roleCode);
-        if (! role_roleResources.isEmpty()) {
+        if (!role_roleResources.isEmpty()) {
             for (@NotNull SecurityRoleResource eachRoleResource : role_roleResources) {
                 if (eachRoleResource.isEmpty()) {
                     continue;
@@ -226,19 +212,16 @@ public class SecurityResourceEventImpl
     /**
      * 查询[(关联的) 角色 -> (关联的) 资源]
      *
-     * @Description 完整的业务流程.
-     *
      * @param username 用户名称    {@link SecurityUser.Validator#username(String)}
-     *
      * @return 资源集合 {@link SecurityResource}
-     *
+     * @Description 完整的业务流程.
      * @see UserEvent#selectResourceOnUserByUsername(String)
      */
     @Override
-    public @NotNull List<SecurityResource> selectResourceOnUserByUsername(@NotNull String username)
-            throws IllegalArgumentException
-    {
-        if (! SecurityUser.Validator.USER.username(username)) {
+    public @NotNull
+    List<SecurityResource> selectResourceOnUserByUsername(@NotNull String username)
+            throws IllegalArgumentException {
+        if (!SecurityUser.Validator.USER.username(username)) {
             //-- 非法输入: 用户名称
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "用户名称"
@@ -251,7 +234,7 @@ public class SecurityResourceEventImpl
         final @NotNull List<SecurityResource> result = new ArrayList<>(1);
 
         final @NotNull List<SecurityUserRole> user_userRoles = securityUserRoleService.selectByUsername(username);
-        if (! user_userRoles.isEmpty()) {
+        if (!user_userRoles.isEmpty()) {
             for (@NotNull SecurityUserRole eachUserRole : user_userRoles) {
                 if (eachUserRole.isEmpty()) {
                     continue;
@@ -263,14 +246,14 @@ public class SecurityResourceEventImpl
                 }
 
                 final @NotNull List<SecurityRoleResource> eachRole_roleResources = securityRoleResourceService.selectByRoleCode(eachUserRole_role.getCode());
-                if (! eachRole_roleResources.isEmpty()) {
+                if (!eachRole_roleResources.isEmpty()) {
                     for (@NotNull SecurityRoleResource eachRoleResource : eachRole_roleResources) {
                         if (eachRoleResource.isEmpty()) {
                             continue;
                         }
 
                         final SecurityResource eachRoleResource_resource = securityResourceService.selectResourceByCode(eachRoleResource.getResourceCode());
-                        if (null != eachRoleResource_resource && ! eachRoleResource_resource.isEmpty()) {
+                        if (null != eachRoleResource_resource && !eachRoleResource_resource.isEmpty()) {
                             result.add(eachRoleResource_resource);
                         }
                     }
@@ -284,17 +267,15 @@ public class SecurityResourceEventImpl
     /**
      * 查询 (指定资源关联的) 角色
      *
-     * @Description 完整的业务流程.
-     *
      * @param resourceCode 资源编码    {@link SecurityResource#getCode()}
-     *
      * @return {@link SecurityRole}
+     * @Description 完整的业务流程.
      */
     @Override
-    public @NotNull List<SecurityRole> selectRoleOnResourceByResourceCode(@NotNull String resourceCode)
-            throws IllegalArgumentException
-    {
-        if (! SecurityResource.Validator.RESOURCE.code(resourceCode)) {
+    public @NotNull
+    List<SecurityRole> selectRoleOnResourceByResourceCode(@NotNull String resourceCode)
+            throws IllegalArgumentException {
+        if (!SecurityResource.Validator.RESOURCE.code(resourceCode)) {
             //-- 非法输入: 资源编码
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "资源编码"
@@ -312,7 +293,7 @@ public class SecurityResourceEventImpl
         }
 
         final @NotNull List<SecurityRoleResource> resource_roleResources = securityRoleResourceService.selectByResourceCode(resourceCode);
-        if (! resource_roleResources.isEmpty()) {
+        if (!resource_roleResources.isEmpty()) {
             for (@NotNull SecurityRoleResource eachRoleResource : resource_roleResources) {
                 if (eachRoleResource.isEmpty()) {
                     continue;
@@ -332,19 +313,16 @@ public class SecurityResourceEventImpl
     /**
      * 查询[URL 相关信息]
      *
-     * @Description 完整的业务流程.
-     *
      * @param resourceCode 资源编码    {@link SecurityResourceUrl.Validator#code(String)}
-     *
      * @return {@link SecurityResourceUrl}
-     *
+     * @Description 完整的业务流程.
      * @see github.com.suitelhy.dingding.core.domain.event.security.SecurityUrlEvent#selectUrlInfoOnResourceByResourceCode(String)
      */
     @Override
-    public @NotNull List<SecurityResourceUrl> selectUrlInfoOnResourceByResourceCode(@NotNull String resourceCode)
-            throws IllegalArgumentException
-    {
-        if (! SecurityResourceUrl.Validator.RESOURCE_URL.code(resourceCode)) {
+    public @NotNull
+    List<SecurityResourceUrl> selectUrlInfoOnResourceByResourceCode(@NotNull String resourceCode)
+            throws IllegalArgumentException {
+        if (!SecurityResourceUrl.Validator.RESOURCE_URL.code(resourceCode)) {
             //-- 非法输入: 资源编码
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "资源编码"
@@ -360,18 +338,15 @@ public class SecurityResourceEventImpl
     /**
      * 新增一个[（安全认证）资源]
      *
-     * @Description 完整的业务流程.
-     *
      * @param resource [（安全认证）资源]  {@link SecurityResource}
      * @param operator 操作者
-     *
      * @return 操作是否成功 / 是否已存在相同的有效数据
+     * @Description 完整的业务流程.
      */
     @Override
     public boolean insertResource(@NotNull SecurityResource resource, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
-        if (null == resource || ! resource.isEntityLegal()) {
+            throws IllegalArgumentException, BusinessAtomicException {
+        if (null == resource || !resource.isEntityLegal()) {
             //-- 非法输入: [（安全认证）资源]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "[（安全认证）资源]"
@@ -409,12 +384,10 @@ public class SecurityResourceEventImpl
     /**
      * 新增一个[（安全认证）资源 ←→ URL]关联关系
      *
-     * @Description 完整的业务流程.
-     *
      * @param resourceUrl [（安全认证）资源 ←→ URL]   {@link SecurityResourceUrl}
      * @param operator    操作者
-     *
      * @return 操作是否成功 / 是否已存在相同的有效数据
+     * @Description 完整的业务流程.
      */
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -422,9 +395,8 @@ public class SecurityResourceEventImpl
             , rollbackFor = Exception.class
             , timeout = 15)
     public boolean insertResourceUrlRelationship(@NotNull SecurityResourceUrl resourceUrl, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
-        if (null == resourceUrl || ! resourceUrl.isEntityLegal()) {
+            throws IllegalArgumentException, BusinessAtomicException {
+        if (null == resourceUrl || !resourceUrl.isEntityLegal()) {
             //-- 非法输入: [（安全认证）资源 ←→ URL]关联关系
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "[（安全认证）资源 ←→ URL]关联关系"
@@ -465,7 +437,7 @@ public class SecurityResourceEventImpl
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
 
-        if (! securityResourceUrlService.insert(resourceUrl, operator, operator_userAccountOperationInfo)) {
+        if (!securityResourceUrlService.insert(resourceUrl, operator, operator_userAccountOperationInfo)) {
             throw new BusinessAtomicException(String.format("操作失败:<description>【%s】 <- 【%s】</description>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , HandleType.LogVo.SECURITY__SECURITY_RESOURCE_URL__ADD.name
                     , HandleType.LogVo.SECURITY__SECURITY_RESOURCE_URL__ADD.name
@@ -481,13 +453,11 @@ public class SecurityResourceEventImpl
     /**
      * 新增一个[（安全认证）资源 ←→ URL]关联关系
      *
-     * @Description 完整的业务流程.
-     *
      * @param resource [（安全认证）资源], 必须合法且已持久化.   {@link SecurityResource}
      * @param urlInfo  [URL 相关信息]                       {@link SecurityResourceUrl.Validator#urlInfo(String[])}
      * @param operator 操作者
-     *
      * @return 操作是否成功
+     * @Description 完整的业务流程.
      */
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -497,8 +467,7 @@ public class SecurityResourceEventImpl
     public boolean insertResourceUrlRelationship(@NotNull SecurityResource resource
             , @NotNull String[] urlInfo
             , @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if (null == resource || resource.isEmpty()) {
             //-- 非法输入: [（安全认证）资源]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -508,7 +477,7 @@ public class SecurityResourceEventImpl
                     , Thread.currentThread().getStackTrace()[1].getMethodName()
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
-        if (! SecurityResourceUrl.Validator.RESOURCE_URL.urlInfo(urlInfo)) {
+        if (!SecurityResourceUrl.Validator.RESOURCE_URL.urlInfo(urlInfo)) {
             //-- 非法输入: [URL 相关信息]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "[URL 相关信息]"
@@ -550,7 +519,7 @@ public class SecurityResourceEventImpl
         }
 
         final @NotNull SecurityResourceUrl resourceUrl = SecurityResourceUrl.Factory.RESOURCE_URL.create(resource, urlInfo);
-        if (! securityResourceUrlService.insert(resourceUrl, operator, operator_userAccountOperationInfo)) {
+        if (!securityResourceUrlService.insert(resourceUrl, operator, operator_userAccountOperationInfo)) {
             throw new BusinessAtomicException(String.format("操作失败:<description>【%s】 <- 【%s】</description>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , HandleType.LogVo.SECURITY__SECURITY_RESOURCE_URL__ADD.name
                     , HandleType.LogVo.SECURITY__SECURITY_RESOURCE_URL__ADD.name
@@ -566,20 +535,14 @@ public class SecurityResourceEventImpl
     /**
      * 新增 角色 - 资源 关联
      *
-     * @Description 完整的业务流程.
-     *
-     * @Issue
-     * · 多次单元测试后发现 并发一致性问题 - 读脏数据 的问题 (主要使用成熟方案解决问题, 故没有分配时间进行更多不必要地步进式问题跟踪).
-     * {@link <a href="https://github.com/CyC2018/CS-Notes/blob/master/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86.md#%E8%AF%BB%E8%84%8F%E6%95%B0%E6%8D%AE">CS-Notes/数据库系统原理.md at master · CyC2018/CS-Notes</a>}
-     *
-     * @Solution
-     * · 并发一致性问题解决方案: {@link <a href="https://juejin.im/post/5c1852526fb9a04a0c2e5db6">Spring Boot+SQL/JPA实战悲观锁和乐观锁 - 掘金</a>}
-     *
-     * @param roles         [（安全认证）角色], 必须全部合法且已持久化.    {@link SecurityRole}
-     * @param resources     [（安全认证）资源], 必须全部合法且已持久化.    {@link SecurityResource}
-     * @param operator      操作者
-     *
+     * @param roles     [（安全认证）角色], 必须全部合法且已持久化.    {@link SecurityRole}
+     * @param resources [（安全认证）资源], 必须全部合法且已持久化.    {@link SecurityResource}
+     * @param operator  操作者
      * @return 操作是否成功
+     * @Description 完整的业务流程.
+     * @Issue · 多次单元测试后发现 并发一致性问题 - 读脏数据 的问题 (主要使用成熟方案解决问题, 故没有分配时间进行更多不必要地步进式问题跟踪).
+     * {@link <a href="https://github.com/CyC2018/CS-Notes/blob/master/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86.md#%E8%AF%BB%E8%84%8F%E6%95%B0%E6%8D%AE">CS-Notes/数据库系统原理.md at master · CyC2018/CS-Notes</a>}
+     * @Solution · 并发一致性问题解决方案: {@link <a href="https://juejin.im/post/5c1852526fb9a04a0c2e5db6">Spring Boot+SQL/JPA实战悲观锁和乐观锁 - 掘金</a>}
      */
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -587,8 +550,7 @@ public class SecurityResourceEventImpl
             , rollbackFor = Exception.class
             , timeout = 15)
     public boolean insertRoleResourceRelationship(@NotNull Set<SecurityRole> roles, @NotNull Set<SecurityResource> resources, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if (null == roles || roles.isEmpty()) {
             //-- 非法输入: [（安全认证）角色]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -659,13 +621,13 @@ public class SecurityResourceEventImpl
         boolean result = false;
 
         for (@NotNull SecurityRole each : roles) {
-            if (! securityRoleResourceService.existResourceByRoleCode(each.getCode())) {
+            if (!securityRoleResourceService.existResourceByRoleCode(each.getCode())) {
                 //--- 角色不存在绑定的资源的情况
                 /*System.err.println("角色" + each + "不存在绑定的资源集合");*/
                 for (@NotNull SecurityResource eachResource : resources) {
                     /*System.err.println("== 开始绑定, 资源" + eachResource + "... ==");*/
                     final @NotNull SecurityRoleResource eachRoleResource = SecurityRoleResource.Factory.ROLE_RESOURCE.create(each, eachResource);
-                    if (! securityRoleResourceService.insert(eachRoleResource, operator)) {
+                    if (!securityRoleResourceService.insert(eachRoleResource, operator)) {
                         throw new BusinessAtomicException(String.format("操作失败:<description>%s!</description>->【%s】&【%s】&【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                                 , HandleType.LogVo.SECURITY__SECURITY_ROLE_RESOURCE__ADD.name
                                 , each
@@ -684,7 +646,7 @@ public class SecurityResourceEventImpl
                             , SecurityRoleResource.Factory.ROLE_RESOURCE.create(each.getCode(), eachResource.getCode())
                             , operator
                             , operatorOperationInfo);
-                    if (! logService.insert(newLog_SecurityRoleResource)) {
+                    if (!logService.insert(newLog_SecurityRoleResource)) {
                         throw new BusinessAtomicException(String.format("操作失败:<description>【%s】 <- 【%s】</description>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                                 , HandleType.LogVo.SECURITY__SECURITY_ROLE_RESOURCE__ADD.name
                                 , "生成操作日志记录"
@@ -712,7 +674,7 @@ public class SecurityResourceEventImpl
 
                     /*System.err.println("== 开始绑定, 资源" + eachResource + "... ==");*/
                     final @NotNull SecurityRoleResource eachRoleResource = SecurityRoleResource.Factory.ROLE_RESOURCE.create(each, eachResource);
-                    if (! securityRoleResourceService.insert(eachRoleResource, operator)) {
+                    if (!securityRoleResourceService.insert(eachRoleResource, operator)) {
                         throw new BusinessAtomicException(String.format("操作失败:<description>%s!</description>->【%s】&【%s】&【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                                 , HandleType.LogVo.SECURITY__SECURITY_ROLE_RESOURCE__ADD.name
                                 , each
@@ -731,7 +693,7 @@ public class SecurityResourceEventImpl
                             , SecurityRoleResource.Factory.ROLE_RESOURCE.create(each.getCode(), eachResource.getCode())
                             , operator
                             , operatorOperationInfo);
-                    if (! logService.insert(newLog_SecurityRoleResource)) {
+                    if (!logService.insert(newLog_SecurityRoleResource)) {
                         throw new BusinessAtomicException(String.format("操作失败:<description>【%s】 <- 【%s】</description>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                                 , HandleType.LogVo.SECURITY__SECURITY_ROLE_RESOURCE__ADD.name
                                 , "生成操作日志记录"
@@ -755,18 +717,15 @@ public class SecurityResourceEventImpl
     /**
      * 更新指定的资源
      *
-     * @Description 全量更新.
-     * · 完整的业务流程.
-     *
      * @param resource [（安全认证）资源]  {@link SecurityResource}
      * @param operator 操作者
-     *
      * @return 操作是否成功
+     * @Description 全量更新.
+     * · 完整的业务流程.
      */
     @Override
     public boolean updateResource(@NotNull SecurityResource resource, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if (null == resource || resource.isEmpty()) {
             //-- 非法输入: [（安全认证）资源]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -797,18 +756,14 @@ public class SecurityResourceEventImpl
     /**
      * 删除指定的资源
      *
-     * @Description
-     * · 完整的业务流程.
-     *
      * @param resource [（安全认证）资源]
      * @param operator 操作者
-     *
      * @return 操作是否成功
+     * @Description · 完整的业务流程.
      */
     @Override
     public boolean deleteResource(@NotNull SecurityResource resource, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if (null == resource || resource.isEmpty()) {
             //-- 非法输入: [（安全认证）资源]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -849,9 +804,9 @@ public class SecurityResourceEventImpl
         //===== 删除关联的[（安全认证）资源 ←→ URL]关联关系 =====//
 
         @NotNull List<SecurityResourceUrl> existedResourceUrls = securityResourceUrlService.selectByResourceCode(resource.getCode());
-        if (! existedResourceUrls.isEmpty()) {
+        if (!existedResourceUrls.isEmpty()) {
             for (@NotNull SecurityResourceUrl eachResourceUrl : existedResourceUrls) {
-                if (! securityResourceUrlService.delete(eachResourceUrl, operator, operator_userAccountOperationInfo)) {
+                if (!securityResourceUrlService.delete(eachResourceUrl, operator, operator_userAccountOperationInfo)) {
                     throw new IllegalArgumentException(String.format("操作失败:<description>【%s】 <- 【%s】</description>->【%s】&【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , HandleType.LogVo.SECURITY__SECURITY_RESOURCE__DELETION.name
                             , HandleType.LogVo.SECURITY__SECURITY_RESOURCE_URL__DELETION.name
@@ -867,9 +822,9 @@ public class SecurityResourceEventImpl
         //===== 删除关联的[（安全认证）角色 ←→ 资源]关联关系 =====//
 
         @NotNull List<SecurityRoleResource> existedRoleResources = securityRoleResourceService.selectByResourceCode(resource.getCode());
-        if (! existedRoleResources.isEmpty()) {
+        if (!existedRoleResources.isEmpty()) {
             for (@NotNull SecurityRoleResource eachRoleResource : existedRoleResources) {
-                if (! securityRoleResourceService.delete(eachRoleResource, operator, operator_userAccountOperationInfo)) {
+                if (!securityRoleResourceService.delete(eachRoleResource, operator, operator_userAccountOperationInfo)) {
                     throw new IllegalArgumentException(String.format("操作失败:<description>【%s】 <- 【%s】</description>->【%s】&【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , HandleType.LogVo.SECURITY__SECURITY_RESOURCE__DELETION.name
                             , HandleType.LogVo.SECURITY__SECURITY_ROLE_RESOURCE__DELETION.name
@@ -884,7 +839,7 @@ public class SecurityResourceEventImpl
 
         //==========//
 
-        if (! securityResourceService.delete(resource, operator, operator_userAccountOperationInfo)) {
+        if (!securityResourceService.delete(resource, operator, operator_userAccountOperationInfo)) {
             throw new IllegalArgumentException(String.format("操作失败:<description>【%s】 <- 【%s】</description>->【%s】&【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , HandleType.LogVo.SECURITY__SECURITY_RESOURCE__DELETION.name
                     , HandleType.LogVo.SECURITY__SECURITY_RESOURCE__DELETION.name
@@ -901,12 +856,10 @@ public class SecurityResourceEventImpl
     /**
      * 删除指定的[（安全认证）资源 ←→ URL]关联关系
      *
-     * @Description · 完整的业务流程.
-     *
      * @param resourceUrl [（安全认证）资源 ←→ URL]   {@link SecurityResourceUrl}
      * @param operator    操作者
-     *
      * @return 操作是否成功
+     * @Description · 完整的业务流程.
      */
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -914,9 +867,8 @@ public class SecurityResourceEventImpl
             , rollbackFor = Exception.class
             , timeout = 15)
     public boolean deleteResourceUrlRelationship(@NotNull SecurityResourceUrl resourceUrl, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
-        if (null == resourceUrl || ! resourceUrl.isEmpty()) {
+            throws IllegalArgumentException, BusinessAtomicException {
+        if (null == resourceUrl || !resourceUrl.isEmpty()) {
             //-- 非法输入: [（安全认证）资源 ←→ URL]关联关系
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "[（安全认证）资源 ←→ URL]关联关系"
@@ -945,7 +897,7 @@ public class SecurityResourceEventImpl
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
 
-        if (! securityResourceUrlService.delete(resourceUrl, operator, operator_userAccountOperationInfo)) {
+        if (!securityResourceUrlService.delete(resourceUrl, operator, operator_userAccountOperationInfo)) {
             throw new BusinessAtomicException(String.format("操作失败:<description>【%s】 <- 【%s】</description>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , HandleType.LogVo.SECURITY__SECURITY_RESOURCE_URL__DELETION.name
                     , HandleType.LogVo.SECURITY__SECURITY_RESOURCE_URL__DELETION.name
@@ -961,13 +913,11 @@ public class SecurityResourceEventImpl
     /**
      * 删除指定的[（安全认证）资源 ←→ URL]关联关系
      *
-     * @Description · 完整的业务流程.
-     *
      * @param resource [（安全认证）资源], 必须合法且已持久化.  {@link SecurityResource}
      * @param urlInfo  [URL 相关信息]                      {@link SecurityResourceUrl.Validator#urlInfo(String[])}
      * @param operator 操作者
-     *
      * @return 操作是否成功
+     * @Description · 完整的业务流程.
      */
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -975,8 +925,7 @@ public class SecurityResourceEventImpl
             , rollbackFor = Exception.class
             , timeout = 15)
     public boolean deleteResourceUrlRelationship(@NotNull SecurityResource resource, @NotNull String[] urlInfo, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if (null == resource || resource.isEmpty()) {
             //-- 非法输入: [（安全认证）资源]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -986,7 +935,7 @@ public class SecurityResourceEventImpl
                     , Thread.currentThread().getStackTrace()[1].getMethodName()
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
-        if (! SecurityResourceUrl.Validator.RESOURCE_URL.urlInfo(urlInfo)) {
+        if (!SecurityResourceUrl.Validator.RESOURCE_URL.urlInfo(urlInfo)) {
             //-- 非法输入: [URL 相关信息]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "[URL 相关信息]"
@@ -1022,7 +971,7 @@ public class SecurityResourceEventImpl
                 return true;
             }
 
-            if (! securityResourceUrlService.delete(resourceUrl, operator, operator_userAccountOperationInfo)) {
+            if (!securityResourceUrlService.delete(resourceUrl, operator, operator_userAccountOperationInfo)) {
                 throw new BusinessAtomicException(String.format("操作失败:<description>【%s】 <- 【%s】</description>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                         , HandleType.LogVo.SECURITY__SECURITY_RESOURCE_URL__DELETION.name
                         , HandleType.LogVo.SECURITY__SECURITY_RESOURCE_URL__DELETION.name
@@ -1038,18 +987,15 @@ public class SecurityResourceEventImpl
     /**
      * 删除指定的[（安全认证）资源]关联的所有[（安全认证）资源 ←→ URL]关联关系
      *
-     * @Description · 完整的业务流程.
-     *
      * @param resource [（安全认证）资源]  {@link SecurityResource}
      * @param operator 操作者
-     *
      * @return 操作是否成功
+     * @Description · 完整的业务流程.
      */
     @Override
     public boolean deleteResourceUrlRelationshipOnResource(@NotNull SecurityResource resource, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
-        if (null == resource || ! resource.isEmpty()) {
+            throws IllegalArgumentException, BusinessAtomicException {
+        if (null == resource || !resource.isEmpty()) {
             //-- 非法输入: [（安全认证）资源]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "[（安全认证）资源]"
@@ -1079,9 +1025,9 @@ public class SecurityResourceEventImpl
         }
 
         final @NotNull List<SecurityResourceUrl> existedResourceUrls = securityResourceUrlService.selectByResourceCode(resource.getCode());
-        if (! existedResourceUrls.isEmpty()) {
+        if (!existedResourceUrls.isEmpty()) {
             for (@NotNull SecurityResourceUrl eachResourceUrl : existedResourceUrls) {
-                if (! securityResourceUrlService.delete(eachResourceUrl, operator, operator_userAccountOperationInfo)) {
+                if (!securityResourceUrlService.delete(eachResourceUrl, operator, operator_userAccountOperationInfo)) {
                     throw new BusinessAtomicException(String.format("操作失败:<description>【%s】 <- 【%s】</description>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , HandleType.LogVo.SECURITY__SECURITY_RESOURCE_URL__DELETION.name
                             , HandleType.LogVo.SECURITY__SECURITY_RESOURCE_URL__DELETION.name
@@ -1099,19 +1045,15 @@ public class SecurityResourceEventImpl
     /**
      * 删除指定的[URL 信息]关联的所有[（安全认证）资源 ←→ URL]关联关系
      *
-     * @Description
-     * · 完整的业务流程.
-     *
      * @param urlInfo  [URL 信息]    {@link SecurityResourceUrl.Validator#urlInfo(String[])}
      * @param operator 操作者
-     *
      * @return 操作是否成功
+     * @Description · 完整的业务流程.
      */
     @Override
     public boolean deleteResourceUrlRelationshipOnUrlInfo(@NotNull String[] urlInfo, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
-        if (! SecurityResourceUrl.Validator.RESOURCE_URL.urlInfo(urlInfo)) {
+            throws IllegalArgumentException, BusinessAtomicException {
+        if (!SecurityResourceUrl.Validator.RESOURCE_URL.urlInfo(urlInfo)) {
             //-- 非法输入: [URL 信息]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "[URL 信息]"
@@ -1148,13 +1090,11 @@ public class SecurityResourceEventImpl
     /**
      * 删除[角色 - 资源]关联
      *
-     * @Description 完整的业务流程.
-     *
-     * @param roles         [（安全认证）角色], 必须全部合法且已持久化.    {@link SecurityRole}
-     * @param resources     [（安全认证）资源], 必须全部合法且已持久化.    {@link SecurityResource}
-     * @param operator      操作者
-     *
+     * @param roles     [（安全认证）角色], 必须全部合法且已持久化.    {@link SecurityRole}
+     * @param resources [（安全认证）资源], 必须全部合法且已持久化.    {@link SecurityResource}
+     * @param operator  操作者
      * @return 操作是否成功
+     * @Description 完整的业务流程.
      */
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -1162,8 +1102,7 @@ public class SecurityResourceEventImpl
             , rollbackFor = Exception.class
             , timeout = 15)
     public boolean deleteRoleResourceRelationship(@NotNull Set<SecurityRole> roles, @NotNull Set<SecurityResource> resources, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if ((null == roles || roles.isEmpty())) {
             //-- 非法输入: [（安全认证）角色]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -1231,7 +1170,7 @@ public class SecurityResourceEventImpl
         boolean result = false;
 
         for (@NotNull SecurityRole each : roles) {
-            if (! securityRoleResourceService.existResourceByRoleCode(each.getCode())) {
+            if (!securityRoleResourceService.existResourceByRoleCode(each.getCode())) {
                 //--- 角色不存在绑定的资源的情况
             } else {
                 //--- 角色存在绑定的资源的情况
@@ -1250,7 +1189,7 @@ public class SecurityResourceEventImpl
                     }
 
                     /*if (! securityRoleResourceService.delete(each, eachResource, operator)) {*/
-                    if (! securityRoleResourceService.delete(existedRoleResource, operator, operator_userAccountOperationInfo)) {
+                    if (!securityRoleResourceService.delete(existedRoleResource, operator, operator_userAccountOperationInfo)) {
                         throw new BusinessAtomicException(String.format("操作失败:<description>【%s】 <- 【%s】</description>->【%s】&【%s】&【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                                 , HandleType.LogVo.SECURITY__SECURITY_ROLE_RESOURCE__DELETION.name
                                 , "执行后数据异常"
@@ -1271,15 +1210,14 @@ public class SecurityResourceEventImpl
     }
 
     //
+
     /**
      * 删除指定的 [（安全认证）角色] 的所有[（安全认证）角色 ←→ 资源]关联关系
      *
-     * @Description 完整的业务流程.
-     *
-     * @param role      [（安全认证）角色], 必须合法且已持久化.  {@link SecurityRole}
-     * @param operator  操作者
-     *
+     * @param role     [（安全认证）角色], 必须合法且已持久化.  {@link SecurityRole}
+     * @param operator 操作者
      * @return 操作是否成功
+     * @Description 完整的业务流程.
      */
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -1287,8 +1225,7 @@ public class SecurityResourceEventImpl
             , rollbackFor = Exception.class
             , timeout = 15)
     public boolean deleteRoleResourceRelationshipOnRole(@NotNull SecurityRole role, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if (null == role || role.isEmpty()) {
             //-- 非法输入: [（安全认证）角色]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -1325,7 +1262,7 @@ public class SecurityResourceEventImpl
             return true;
         } else {
             for (@NotNull SecurityRoleResource eachRoleResource : existedRoleResources) {
-                if (! securityRoleResourceService.delete(eachRoleResource, operator, operatorOperationInfo)) {
+                if (!securityRoleResourceService.delete(eachRoleResource, operator, operatorOperationInfo)) {
                     throw new BusinessAtomicException(String.format("操作失败:<description>【%s】 <- 【%s】</description>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , HandleType.LogVo.SECURITY__SECURITY_ROLE_RESOURCE__DELETION.name
                             , "操作失败"
@@ -1343,12 +1280,10 @@ public class SecurityResourceEventImpl
     /**
      * 删除指定的 [（安全认证）资源] 的所有[（安全认证）角色 ←→ 资源]关联关系
      *
-     * @Description 完整的业务流程.
-     *
-     * @param resource      [（安全认证）资源], 必须合法且已持久化.  {@link SecurityResource}
-     * @param operator      操作者
-     *
+     * @param resource [（安全认证）资源], 必须合法且已持久化.  {@link SecurityResource}
+     * @param operator 操作者
      * @return 操作是否成功
+     * @Description 完整的业务流程.
      */
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -1356,8 +1291,7 @@ public class SecurityResourceEventImpl
             , rollbackFor = Exception.class
             , timeout = 15)
     public boolean deleteRoleResourceRelationshipOnResource(@NotNull SecurityResource resource, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if (null == resource || resource.isEmpty()) {
             //-- 非法输入: [（安全认证）资源]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -1392,7 +1326,7 @@ public class SecurityResourceEventImpl
             return true;
         } else {
             for (@NotNull SecurityRoleResource eachRoleResource : existedRoleResources) {
-                if (! securityRoleResourceService.delete(eachRoleResource, operator, operator_userAccountOperationInfo)) {
+                if (!securityRoleResourceService.delete(eachRoleResource, operator, operator_userAccountOperationInfo)) {
                     throw new BusinessAtomicException(String.format("操作失败:<description>【%s】 <- 【%s】</description>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , HandleType.LogVo.SECURITY__SECURITY_ROLE_RESOURCE__DELETION.name
                             , "操作失败"

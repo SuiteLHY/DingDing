@@ -11,6 +11,7 @@ import io.netty.handler.stream.ChunkedWriteHandler;
 
 /**
  * WebSocket Server - 从线程组 <- 子处理器
+ *
  * @Description socket channel 初始化器
  */
 public class WebSocketServerInitializer extends ChannelInitializer<SocketChannel> {

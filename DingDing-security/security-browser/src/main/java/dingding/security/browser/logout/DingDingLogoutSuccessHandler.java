@@ -18,44 +18,42 @@ import dingding.security.core.support.SimpleResponse;
 /**
  * 默认的退出成功处理器
  *
- * @Description 如果设置了【dingding.security.browser.signOutUrl】, 则跳到配置的地址上; 缺省则返回JSON格式的响应。
- * 
  * @author zhailiang
+ * @Description 如果设置了【dingding.security.browser.signOutUrl】, 则跳到配置的地址上; 缺省则返回JSON格式的响应。
  * @Editor Suite
- *
  */
 public class DingDingLogoutSuccessHandler
-		implements LogoutSuccessHandler {
+        implements LogoutSuccessHandler {
 
-	private Logger logger = LoggerFactory.getLogger(getClass());
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
-	public DingDingLogoutSuccessHandler(String signOutSuccessUrl) {
-		this.signOutSuccessUrl = signOutSuccessUrl;
-	}
+    public DingDingLogoutSuccessHandler(String signOutSuccessUrl) {
+        this.signOutSuccessUrl = signOutSuccessUrl;
+    }
 
-	private String signOutSuccessUrl;
-	
-	private ObjectMapper objectMapper = new ObjectMapper();
+    private String signOutSuccessUrl;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.springframework.security.web.authentication.logout.
-	 * LogoutSuccessHandler#onLogoutSuccess(javax.servlet.http.
-	 * HttpServletRequest, javax.servlet.http.HttpServletResponse,
-	 * org.springframework.security.core.Authentication)
-	 */
-	@Override
-	public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
-			throws IOException, ServletException {
-		logger.info("退出成功");
+    private ObjectMapper objectMapper = new ObjectMapper();
 
-		if (StringUtils.isBlank(signOutSuccessUrl)) {
-			response.setContentType("application/json;charset=UTF-8");
-			response.getWriter().write(objectMapper.writeValueAsString(new SimpleResponse("退出成功")));
-		} else {
-			response.sendRedirect(signOutSuccessUrl);
-		}
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.springframework.security.web.authentication.logout.
+     * LogoutSuccessHandler#onLogoutSuccess(javax.servlet.http.
+     * HttpServletRequest, javax.servlet.http.HttpServletResponse,
+     * org.springframework.security.core.Authentication)
+     */
+    @Override
+    public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
+            throws IOException, ServletException {
+        logger.info("退出成功");
+
+        if (StringUtils.isBlank(signOutSuccessUrl)) {
+            response.setContentType("application/json;charset=UTF-8");
+            response.getWriter().write(objectMapper.writeValueAsString(new SimpleResponse("退出成功")));
+        } else {
+            response.sendRedirect(signOutSuccessUrl);
+        }
+    }
 
 }

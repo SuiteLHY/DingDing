@@ -82,13 +82,12 @@ public class NetUtil {
     /**
      * 校验 IP 地址格式
      *
-     * @param ip    [IP 地址]
-     *
+     * @param ip [IP 地址]
      * @return {@link Boolean#TYPE}
-     *-> {
-     *->    {@code true}:<p>符合 IP 地址格式</p>
-     *->    , {@code false}:<p>参数 ip 为空或不符合 IP 地址格式</p>
-     *-> }
+     * -> {
+     * ->    {@code true}:<p>符合 IP 地址格式</p>
+     * ->    , {@code false}:<p>参数 ip 为空或不符合 IP 地址格式</p>
+     * -> }
      */
     public static boolean validateIpAddress(@NotNull String ip) {
         return null != ip
@@ -98,7 +97,7 @@ public class NetUtil {
 
     /**
      * 从 Request 中获取 IP 地址
-     *
+     * <p>
      * · 相关资料:
      * {@link <a href="https://juejin.im/post/5dde34bef265da060a52181c">X-Forward-For 看破红尘，代理 IP 无所遁形 - 掘金</a>}
      * · 相关 Python 爬虫资料:
@@ -106,7 +105,6 @@ public class NetUtil {
      * {@link <a href="https://l1905.github.io/%E5%85%A5%E9%97%A8/2019/07/16/ip-proxy-01/">IP代理池理解 | 生活的自留地</a>}
      *
      * @param request
-     *
      * @return
      */
     // 参考项目中, 此方法的实现过于草率(...), 于是上网查到
@@ -157,10 +155,12 @@ public class NetUtil {
         private static final NetUtil SINGLETON = new NetUtil();
     }
 
-    public static @NotNull NetUtil getInstance() {
+    public static @NotNull
+    NetUtil getInstance() {
         return Factory.SINGLETON;
     }
 
-    private NetUtil() {}
+    private NetUtil() {
+    }
 
 }

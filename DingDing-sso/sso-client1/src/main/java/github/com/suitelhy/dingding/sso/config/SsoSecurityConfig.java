@@ -22,7 +22,6 @@ import java.util.Collections;
  * Spring Security 配置
  *
  * @Editor Suite
- *
  */
 @Configuration
 @EnableOAuth2Sso  // SSo自动配置引用
@@ -35,29 +34,28 @@ import java.util.Collections;
 //-> 		Spring Security Oauth2 从零到一完整实践（六）踩坑记录 - 黑客派</a></solution>
 @Order(/*Ordered.HIGHEST_PRECEDENCE*/100)
 public class SsoSecurityConfig
-		extends WebSecurityConfigurerAdapter {
+        extends WebSecurityConfigurerAdapter {
 
-	@Autowired
-	public OAuth2ClientProperties oAuth2ClientProperties;
+    @Autowired
+    public OAuth2ClientProperties oAuth2ClientProperties;
 
-	/**
-	 *
-	 * @param http
-	 * @throws Exception
-	 */
-	@Override
-	protected void configure(HttpSecurity http)
-			throws Exception {
-		System.err.println(oAuth2ClientProperties.getRegistration());
+    /**
+     * @param http
+     * @throws Exception
+     */
+    @Override
+    protected void configure(HttpSecurity http)
+            throws Exception {
+        System.err.println(oAuth2ClientProperties.getRegistration());
 
-		http/*.formLogin()*//*.httpBasic()*/
-				/*.and()*/.antMatcher("/**")
-				.authorizeRequests()
-					.antMatchers("/"
-                            , "/error*"
-                            , "/login*").permitAll()
-					.anyRequest().authenticated()
+        http/*.formLogin()*//*.httpBasic()*/
+                /*.and()*/.antMatcher("/**")
+                .authorizeRequests()
+                .antMatchers("/"
+                        , "/error*"
+                        , "/login*").permitAll()
+                .anyRequest().authenticated()
                 .and().csrf().disable();
-	}
+    }
 
 }

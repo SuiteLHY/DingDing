@@ -84,7 +84,7 @@ public class ResourceTreeAggregate
     @Override
     public int hashCode() {
         return /*root.hashCode() * childNodes.hashCode()*/
-                ObjectUtils.nullSafeHashCode(new Object[] {this.root(), this.childNodes});
+                ObjectUtils.nullSafeHashCode(new Object[]{this.root(), this.childNodes});
     }
 
 }

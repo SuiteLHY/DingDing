@@ -23,9 +23,7 @@ import java.util.Collection;
  * @Description 自定义鉴权管理器，根据[URL资源权限]和[用户角色权限]进行鉴权.
  * 被鉴权决策管理器 {@link AbstractSecurityInterceptor} 调用进行鉴权;
  * 框架默认实现是 {@link UnanimousBased}.
- *
- * @Reference
- * {@link <a href="https://www.shuzhiduo.com/A/qVdeW1wrJP/">[权限管理系统篇] (五)-Spring security（授权过程分析）</a>}
+ * @Reference {@link <a href="https://www.shuzhiduo.com/A/qVdeW1wrJP/">[权限管理系统篇] (五)-Spring security（授权过程分析）</a>}
  * {@link <a href="https://github.com/ygsama/ipa/blob/master/oauth2-server/src/main/java/io/github/ygsama/oauth2server/config/LoginSecurityInterceptor.java">ipa/LoginSecurityInterceptor.java at master · ygsama/ipa</a>}
  * {@link AccessDecisionManager}
  * {@link DingDingAccessSecurityMetadataSource}
@@ -38,9 +36,9 @@ public class DingDingAccessDecisionManager
     /**
      * 权限鉴定
      *
-     * @param authentication    {@link SecurityContextHolder#getContext()} -> {@link UserDetails#getAuthorities()}
-     * @param object            {@link FilterInvocation}
-     * @param configAttributes  非空 {@link DingDingAccessSecurityMetadataSource#getAttributes(Object)}
+     * @param authentication   {@link SecurityContextHolder#getContext()} -> {@link UserDetails#getAuthorities()}
+     * @param object           {@link FilterInvocation}
+     * @param configAttributes 非空 {@link DingDingAccessSecurityMetadataSource#getAttributes(Object)}
      */
     @Override
     public void decide(@NotNull Authentication authentication

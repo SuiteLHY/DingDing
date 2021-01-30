@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
 
     @Nullable
     @Override
-    public User selectUserByUserid(String userid){
+    public User selectUserByUserid(String userid) {
         if (!User.Validator.USER.userid(userid)) {
             throw new RuntimeException("非法输入: 用户ID");
         }

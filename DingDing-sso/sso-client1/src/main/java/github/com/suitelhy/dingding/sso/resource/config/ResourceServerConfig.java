@@ -25,8 +25,8 @@ public class ResourceServerConfig
     /**
      * JWT 访问 token 转换器
      *
-     * @Description 基于 JWT 的 access_token 转换器.
      * @return
+     * @Description 基于 JWT 的 access_token 转换器.
      */
     @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
@@ -39,8 +39,8 @@ public class ResourceServerConfig
     /**
      * JWT 的 token 存储对象
      *
-     * @Description 一个具有解码 JWT 并验证其签名的唯一能力的 JwkTokenStore.
      * @return
+     * @Description 一个具有解码 JWT 并验证其签名的唯一能力的 JwkTokenStore.
      */
     @Bean
     public TokenStore jwtTokenStore() {
@@ -73,8 +73,8 @@ public class ResourceServerConfig
         http
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) /* 设置创建session策略 */
                 .and()
-                    .authorizeRequests()
-                    .anyRequest().authenticated();
+                .authorizeRequests()
+                .anyRequest().authenticated();
     }
 
     @Override

@@ -93,7 +93,6 @@ public class UserAccountOperationInfoServiceImpl
      * 查询记录列表 - 分页 - 总页数
      *
      * @param pageSize 分页 - 每页容量
-     *
      * @return 分页 - 总页数
      */
     @Override
@@ -117,13 +116,13 @@ public class UserAccountOperationInfoServiceImpl
     /**
      * 查询指定的记录
      *
-     * @param id    [数据 ID]
-     *
+     * @param id [数据 ID]
      * @return {@link UserAccountOperationInfo}
      */
     @Override
-    public @NotNull UserAccountOperationInfo selectById(@NotNull String id) {
-        if (! UserAccountOperationInfo.Validator.USER.id(id)) {
+    public @NotNull
+    UserAccountOperationInfo selectById(@NotNull String id) {
+        if (!UserAccountOperationInfo.Validator.USER.id(id)) {
             //-- 非法输入: [数据 ID]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                     , "[数据 ID]"
@@ -140,13 +139,13 @@ public class UserAccountOperationInfoServiceImpl
     /**
      * 查询指定的记录
      *
-     * @param username  用户名称
-     *
+     * @param username 用户名称
      * @return {@link UserAccountOperationInfo}
      */
     @Override
-    public @NotNull UserAccountOperationInfo selectByUsername(@NotNull String username) {
-        if (! UserAccountOperationInfo.Validator.USER.username(username)) {
+    public @NotNull
+    UserAccountOperationInfo selectByUsername(@NotNull String username) {
+        if (!UserAccountOperationInfo.Validator.USER.username(username)) {
             //-- 非法输入: 用户名称
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                     , "用户名称"
@@ -163,15 +162,13 @@ public class UserAccountOperationInfoServiceImpl
     /**
      * 新增一条记录
      *
-     * @param user      [用户 -> 账户操作基础记录]    {@link UserAccountOperationInfo}
-     * @param operator  操作者                     {@link SecurityUser}
-     *
+     * @param user     [用户 -> 账户操作基础记录]    {@link UserAccountOperationInfo}
+     * @param operator 操作者                     {@link SecurityUser}
      * @return 操作是否成功
      */
     @Override
     public boolean insert(@NotNull UserAccountOperationInfo user, @NotNull SecurityUser operator)
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         if (null == user || !user.isEntityLegal()) {
             //-- 非法输入: [用户 -> 账户操作基础记录]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
@@ -242,15 +239,13 @@ public class UserAccountOperationInfoServiceImpl
     /**
      * 更新指定的记录
      *
-     * @param userAccountOperationInfo  [用户 -> 账户操作基础记录]
-     * @param operator                  操作者
-     *
+     * @param userAccountOperationInfo [用户 -> 账户操作基础记录]
+     * @param operator                 操作者
      * @return 操作是否成功
      */
     @Override
     public boolean update(@NotNull UserAccountOperationInfo userAccountOperationInfo, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if (null == userAccountOperationInfo || userAccountOperationInfo.isEmpty()) {
             //-- 非法输入: [用户 -> 账户操作基础记录]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
@@ -280,8 +275,8 @@ public class UserAccountOperationInfoServiceImpl
                     , Thread.currentThread().getStackTrace()[1].getMethodName()
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
-        if (! operator_userAccountOperationInfo.equals(userAccountOperationInfo)
-                && ! securityUserService.existAdminPermission(userAccountOperationInfo.getUsername())) {
+        if (!operator_userAccountOperationInfo.equals(userAccountOperationInfo)
+                && !securityUserService.existAdminPermission(userAccountOperationInfo.getUsername())) {
             //-- 非法输入: 操作者 <- 无[足够的操作权限]
             throw new IllegalArgumentException(String.format("非法参数:<description>【%s】 <- %s!</description>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                     , "操作者"
@@ -327,9 +322,8 @@ public class UserAccountOperationInfoServiceImpl
     /**
      * 删除指定的记录
      *
-     * @param user      [用户 -> 账户操作基础记录]
-     * @param operator  操作者
-     *
+     * @param user     [用户 -> 账户操作基础记录]
+     * @param operator 操作者
      * @return 操作是否成功
      */
     @Override
@@ -395,12 +389,10 @@ public class UserAccountOperationInfoServiceImpl
     /**
      * 删除指定的记录
      *
-     * @Description 删除成功后校验持久化数据; 主要是避免在未提交的事务中进行对操作结果的非预期判断.
-     *
-     * @param user      [用户 -> 账户操作基础记录]
-     * @param operator  操作者
-     *
+     * @param user     [用户 -> 账户操作基础记录]
+     * @param operator 操作者
      * @return 操作是否成功
+     * @Description 删除成功后校验持久化数据; 主要是避免在未提交的事务中进行对操作结果的非预期判断.
      */
     @Override
     public boolean deleteAndValidate(@NotNull UserAccountOperationInfo user, @NotNull SecurityUser operator)

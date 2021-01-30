@@ -36,10 +36,10 @@ public class LogTaskImpl
      *
      * @param pageCount 页码, 从1开始
      * @param pageSize  每页容量, [5,20]
-     *
      * @return {@link TaskResult}
      */
-    private @NotNull TaskResult<List<Log>> selectAll(int pageCount, int pageSize) {
+    private @NotNull
+    TaskResult<List<Log>> selectAll(int pageCount, int pageSize) {
         @NotNull TaskResult<List<Log>> taskResult;
         final @NotNull List<Log> resultData = new ArrayList<>(0);
         try {
@@ -108,11 +108,11 @@ public class LogTaskImpl
      * @param pageCount 页码, 从1开始
      * @param pageSize  每页容量, [5,20]
      * @param operator  操作者
-     *
      * @return {@link TaskResult}
      */
     @Override
-    public @NotNull TaskResult<List<Log>> selectAll(int pageCount, int pageSize, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
+    public @NotNull
+    TaskResult<List<Log>> selectAll(int pageCount, int pageSize, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
         @NotNull TaskResult<List<Log>> taskResult;
         final @NotNull List<Log> resultData = new ArrayList<>(0);
         try {
@@ -171,11 +171,11 @@ public class LogTaskImpl
     /**
      * 查询日志记录数量 (分页)
      *
-     * @param pageSize  每页容量, [5,20]
-     *
+     * @param pageSize 每页容量, [5,20]
      * @return {@link TaskResult}
      */
-    private @NotNull TaskResult<Long> selectCount(int pageSize) {
+    private @NotNull
+    TaskResult<Long> selectCount(int pageSize) {
         @NotNull TaskResult<Long> taskResult;
         @NotNull Long resultData = 0L;
         try {
@@ -228,13 +228,13 @@ public class LogTaskImpl
     /**
      * 查询日志记录数量 (分页)
      *
-     * @param pageSize  每页容量, [5,20]
-     * @param operator  操作者
-     *
+     * @param pageSize 每页容量, [5,20]
+     * @param operator 操作者
      * @return {@link TaskResult}
      */
     @Override
-    public @NotNull TaskResult<Long> selectCount(int pageSize, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
+    public @NotNull
+    TaskResult<Long> selectCount(int pageSize, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
         @NotNull TaskResult<Long> taskResult;
         @NotNull Long resultData = 0L;
         try {
@@ -294,10 +294,10 @@ public class LogTaskImpl
      * 查询指定的日志记录
      *
      * @param id [日志记录 - 编号]
-     *
      * @return {@link Log}
      */
-    private @NotNull TaskResult<Log> selectLogById(@NotNull String id) {
+    private @NotNull
+    TaskResult<Log> selectLogById(@NotNull String id) {
         @NotNull TaskResult<Log> taskResult;
         @Nullable Log resultData = null;
         try {
@@ -353,13 +353,13 @@ public class LogTaskImpl
     /**
      * 查询指定的日志记录
      *
-     * @param id        [日志记录 - 编号]
-     * @param operator  操作者
-     *
+     * @param id       [日志记录 - 编号]
+     * @param operator 操作者
      * @return {@link Log}
      */
     @Override
-    public @NotNull TaskResult<Log> selectLogById(@NotNull String id, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
+    public @NotNull
+    TaskResult<Log> selectLogById(@NotNull String id, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
         @NotNull TaskResult<Log> taskResult;
         @Nullable Log resultData = null;
         try {
@@ -421,10 +421,10 @@ public class LogTaskImpl
      * @param username  [操作者 - 用户名称]
      * @param pageCount 页码, 从1开始
      * @param pageSize  每页容量, [5,20]
-     *
      * @return {@link TaskResult}
      */
-    private @NotNull TaskResult<List<Log>> selectLogByUsername(@NotNull String username, int pageCount, int pageSize) {
+    private @NotNull
+    TaskResult<List<Log>> selectLogByUsername(@NotNull String username, int pageCount, int pageSize) {
         @NotNull TaskResult<List<Log>> taskResult;
         final @NotNull List<Log> resultData = new ArrayList<>(0);
         try {
@@ -507,13 +507,12 @@ public class LogTaskImpl
      * @param pageCount 页码, 从1开始
      * @param pageSize  每页容量, [5,20]
      * @param operator  操作者
-     *
      * @return {@link TaskResult}
      */
     @Override
-    public @NotNull TaskResult<List<Log>> selectLogByUsername(@NotNull String username, int pageCount, int pageSize
-            , OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator)
-    {
+    public @NotNull
+    TaskResult<List<Log>> selectLogByUsername(@NotNull String username, int pageCount, int pageSize
+            , OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
         @NotNull TaskResult<List<Log>> taskResult;
         final @NotNull List<Log> resultData = new ArrayList<>(0);
         try {
@@ -572,12 +571,12 @@ public class LogTaskImpl
     /**
      * 查询指定用户对应的日志记录数量 (分页)
      *
-     * @param username  [操作者 - 用户名称]
-     * @param pageSize  每页容量, [5,20]
-     *
+     * @param username [操作者 - 用户名称]
+     * @param pageSize 每页容量, [5,20]
      * @return 页数   {@link TaskResult}
      */
-    private @NotNull TaskResult<Long> selectCountByUsername(@NotNull String username, int pageSize) {
+    private @NotNull
+    TaskResult<Long> selectCountByUsername(@NotNull String username, int pageSize) {
         @NotNull TaskResult<Long> taskResult;
         @NotNull Long resultData = 0L;
         try {
@@ -639,14 +638,14 @@ public class LogTaskImpl
     /**
      * 查询指定用户对应的日志记录数量 (分页)
      *
-     * @param username  [操作者 - 用户名称]
-     * @param pageSize  每页容量, [5,20]
-     * @param operator  操作者
-     *
+     * @param username [操作者 - 用户名称]
+     * @param pageSize 每页容量, [5,20]
+     * @param operator 操作者
      * @return 页数   {@link TaskResult}
      */
     @Override
-    public @NotNull TaskResult<Long> selectCountByUsername(@NotNull String username, int pageSize, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
+    public @NotNull
+    TaskResult<Long> selectCountByUsername(@NotNull String username, int pageSize, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
         @NotNull TaskResult<Long> taskResult;
         @NotNull Long resultData = 0L;
         try {
@@ -706,10 +705,10 @@ public class LogTaskImpl
      * 新增日志记录
      *
      * @param param_log 日志记录
-     *
      * @return {@link TaskResult}
      */
-    private @NotNull TaskResult<Log> insert(@NotNull Log param_log) {
+    private @NotNull
+    TaskResult<Log> insert(@NotNull Log param_log) {
         @NotNull TaskResult<Log> taskResult;
         @Nullable Log resultData = null;
         try {
@@ -769,12 +768,12 @@ public class LogTaskImpl
      *
      * @param param_log 日志记录
      * @param operator  操作者
-     *
      * @return {@link TaskResult}
      */
     @Override
     @Transactional
-    public @NotNull TaskResult<Log> insert(@NotNull Log param_log, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
+    public @NotNull
+    TaskResult<Log> insert(@NotNull Log param_log, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
         @NotNull TaskResult<Log> taskResult;
         @Nullable Log resultData = null;
         try {
@@ -835,11 +834,11 @@ public class LogTaskImpl
     /**
      * 删除日志记录
      *
-     * @param id    [日志记录 - 编号]
-     *
+     * @param id [日志记录 - 编号]
      * @return {@link TaskResult}
      */
-    private @NotNull TaskResult<Boolean> delete(@NotNull String id) {
+    private @NotNull
+    TaskResult<Boolean> delete(@NotNull String id) {
         @NotNull TaskResult<Boolean> taskResult;
         boolean resultData = false;
         try {
@@ -895,14 +894,14 @@ public class LogTaskImpl
     /**
      * 删除日志记录
      *
-     * @param id        [日志记录 - 编号]
-     * @param operator  操作者
-     *
+     * @param id       [日志记录 - 编号]
+     * @param operator 操作者
      * @return {@link TaskResult}
      */
     @Override
     @Transactional
-    public @NotNull TaskResult<Boolean> delete(@NotNull String id, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
+    public @NotNull
+    TaskResult<Boolean> delete(@NotNull String id, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
         @NotNull TaskResult<Boolean> taskResult;
         boolean resultData = false;
         try {

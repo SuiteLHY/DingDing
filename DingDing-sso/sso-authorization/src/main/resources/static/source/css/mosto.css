@@ -113,12 +113,13 @@ select {
     width: 220px;
 }
 
-@media screen and (-webkit-min-device-pixel-ratio:0) {
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
     select {
         border: 1px solid #cccccc;
         color: #444;
     }
 }
+
 select,
 input[type="file"] {
     height: 28px;
@@ -279,7 +280,7 @@ label .message.hint {
     -moz-transition: all 0.2s ease-in;
     transition: all 0.2s ease-in;
     opacity: 0;
-    position: static\9;
+    position: static \9;
 }
 
 label.error .message.hint,
@@ -558,6 +559,7 @@ legend {
         display: none;
     }
 }
+
 /*@group buttons*/
 button {
     font-family: inherit;
@@ -583,6 +585,7 @@ button {
     background: -ms-linear-gradient(top, #f5f5f5 0%, #f9f9f9 100%);
     background: linear-gradient(to bottom, #f5f5f5 0%, #f9f9f9 100%);
 }
+
 .button:hover {
     background: #e6e6e6;
     background: -moz-linear-gradient(top, #f9f9f9 0%, #e6e6e6 100%);
@@ -594,6 +597,7 @@ button {
     border: 1px solid rgba(0, 0, 0, 0.2);
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 }
+
 .button:active {
     box-shadow: inset 0 4px 5px rgba(0, 0, 0, 0.1);
 }
@@ -609,6 +613,7 @@ button {
     border: 1px solid rgba(0, 0, 0, 0.3);
     color: #f7f7f7;
 }
+
 .button.primary:hover {
     background: #00aae7;
     background: -moz-linear-gradient(top, #00aae7 0%, #00aae7 100%);
@@ -620,6 +625,7 @@ button {
     color: white;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
 }
+
 .button.primary:active {
     box-shadow: inset 0 4px 5px rgba(0, 0, 0, 0.3);
 }

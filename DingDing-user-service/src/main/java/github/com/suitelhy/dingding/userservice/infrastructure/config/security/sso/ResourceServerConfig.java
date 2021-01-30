@@ -35,7 +35,6 @@ public class ResourceServerConfig
      * 安全资源的访问规则配置
      *
      * @param http
-     *
      * @throws Exception
      */
     @Override
@@ -47,16 +46,15 @@ public class ResourceServerConfig
                         , "user/**")
                         .access("#oauth2.hasScope('all')")*/
                 .antMatchers(HTTP.MethodVo.OPTIONS.httpMethod, "/**")
-                    .permitAll()
+                .permitAll()
                 .anyRequest()
-                    .authenticated();
+                .authenticated();
     }
 
     /**
      * 资源服务器的属性配置
      *
      * @param resources
-     *
      * @throws Exception
      */
     @Override
@@ -72,8 +70,8 @@ public class ResourceServerConfig
  * Token 配置
  *
  * @Description 弃用 JWT.
- *-> 当前情景不适合 JWT, 继续使用 Session + Cookie 的 Token 认证方式.
- *-> {@link <a href="https://juejin.im/entry/59748def518825592c4f9ac0">不要用 JWT 来做 Web 应用的会话管理 - 后端 - 掘金</a>}
+ * -> 当前情景不适合 JWT, 继续使用 Session + Cookie 的 Token 认证方式.
+ * -> {@link <a href="https://juejin.im/entry/59748def518825592c4f9ac0">不要用 JWT 来做 Web 应用的会话管理 - 后端 - 掘金</a>}
  */
 @Configuration
 class TokenStoreAccess {

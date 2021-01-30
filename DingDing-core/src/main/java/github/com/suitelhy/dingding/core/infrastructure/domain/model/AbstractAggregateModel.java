@@ -43,9 +43,8 @@ public abstract class AbstractAggregateModel<A extends AbstractAggregateModel<A,
     /**
      * 根节点
      *
-     * @Description <method>root()</method> 是唯一标识 (之一).
-     *
      * @return
+     * @Description <method>root()</method> 是唯一标识 (之一).
      */
     @NotNull
     @Override
@@ -56,11 +55,10 @@ public abstract class AbstractAggregateModel<A extends AbstractAggregateModel<A,
     /**
      * 等效比较
      *
-     * @Description <method>equals(Object obj)</method>
-     *->    应该根据 <method>equals(A aggregate)</method> 的实现来重写.
-     *
      * @param obj
      * @return
+     * @Description <method>equals(Object obj)</method>
+     * ->    应该根据 <method>equals(A aggregate)</method> 的实现来重写.
      */
     @Override
     public boolean equals(@NotNull Object obj) {
@@ -83,10 +81,9 @@ public abstract class AbstractAggregateModel<A extends AbstractAggregateModel<A,
     /**
      * 计算哈希值
      *
-     * @Description 如果重写了 <method>equals(Object obj)</method>, 则必须根据
-     *->    <method>equals(Object obj)</method> 的实现来重写 <method>hashCode()</method>.
-     *
      * @return
+     * @Description 如果重写了 <method>equals(Object obj)</method>, 则必须根据
+     * ->    <method>equals(Object obj)</method> 的实现来重写 <method>hashCode()</method>.
      */
     @Override
     public abstract int hashCode();
@@ -94,9 +91,8 @@ public abstract class AbstractAggregateModel<A extends AbstractAggregateModel<A,
     /**
      * 转换为字符串
      *
-     * @Description 建议使用 <Object>objectMapper</Object>
-     *
      * @return
+     * @Description 建议使用 <Object>objectMapper</Object>
      */
     @NotNull
     @Override

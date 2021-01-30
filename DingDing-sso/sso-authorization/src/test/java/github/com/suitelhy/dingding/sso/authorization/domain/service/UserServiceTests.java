@@ -26,7 +26,6 @@ import java.util.Map;
  * 用户 - 业务 <- 测试单元
  *
  * @Description 测试单元.
- *
  * @see UserService
  */
 @SpringBootTest
@@ -46,7 +45,8 @@ public class UserServiceTests {
      *
      * @return {@link SecurityUser}
      */
-    private @NotNull SecurityUser operator() {
+    private @NotNull
+    SecurityUser operator() {
         final SecurityUser securityUser = securityUserService.selectByUsername("admin");
 
         System.err.println("【调试用】获取(测试用的)操作者信息 => "
@@ -68,13 +68,12 @@ public class UserServiceTests {
      * 获取测试用的用户相关 {@link EntityModel} 集合
      *
      * @param seed
-     *
      * @return {@link Map}
      * · 数据结构:
      * {
-     *    "user": {@link User},
-     *    "userAccountOperationInfo": {@link UserAccountOperationInfo},
-     *    "userPersonInfo": {@link UserPersonInfo}
+     * "user": {@link User},
+     * "userAccountOperationInfo": {@link UserAccountOperationInfo},
+     * "userPersonInfo": {@link UserPersonInfo}
      * }
      */
     private @NotNull /*User*/Map<String, EntityModel<?>> getEntityForTest(Integer seed) {
@@ -122,7 +121,8 @@ public class UserServiceTests {
         return result;
     }
 
-    private @NotNull String ip() {
+    private @NotNull
+    String ip() {
         return "127.0.0.0";
     }
 
@@ -161,8 +161,7 @@ public class UserServiceTests {
     @Test
     @Transactional
     public void selectUserByUserid()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         final User result;
 
         System.err.println(String.format("===== %s => %s ====="
@@ -176,8 +175,8 @@ public class UserServiceTests {
         final @NotNull Map<String, EntityModel<?>> newEntity = getEntityForTest();
 
         Assert.isTrue(service.insert((User) newEntity.get("user")
-                    , operator
-                    , userEvent.selectUserAccountOperationInfoByUsername(operator.getUsername()))
+                , operator
+                , userEvent.selectUserAccountOperationInfoByUsername(operator.getUsername()))
                 , "===== 添加测试数据失败!");
 
         // selectUserByUserid(...)
@@ -191,15 +190,13 @@ public class UserServiceTests {
     }
 
     /**
-     * @see UserService#insert(User, SecurityUser, UserAccountOperationInfo)
-     *
      * @throws BusinessAtomicException
+     * @see UserService#insert(User, SecurityUser, UserAccountOperationInfo)
      */
     @Test
     @Transactional
     public void insert()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         System.err.println(String.format("===== %s => %s ====="
                 , this.getClass().getName()
                 , Thread.currentThread().getStackTrace()[1].getMethodName()));
@@ -213,8 +210,8 @@ public class UserServiceTests {
         Assert.isTrue(((User) newEntity.get("user")).isEntityLegal()
                 , "getEntityForTest() -> 无效的 Entity");
         Assert.isTrue(service.insert((User) newEntity.get("user")
-                    , operator
-                    , userEvent.selectUserAccountOperationInfoByUsername(operator().getUsername()))
+                , operator
+                , userEvent.selectUserAccountOperationInfoByUsername(operator().getUsername()))
                 , "===== insert(Entity...) -> false");
         Assert.isTrue(!newEntity.isEmpty()
                 , "===== insert(Entity...) -> 无效的 Entity");
@@ -225,15 +222,13 @@ public class UserServiceTests {
     }
 
     /**
-     * @see UserService#update(User, SecurityUser, UserAccountOperationInfo)
-     *
      * @throws BusinessAtomicException
+     * @see UserService#update(User, SecurityUser, UserAccountOperationInfo)
      */
     @Test
     @Transactional
     public void update()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         /*final User result;*/
 
         System.err.println(String.format("===== %s => %s ====="
@@ -249,8 +244,8 @@ public class UserServiceTests {
         Assert.isTrue(((User) newEntity.get("user")).isEntityLegal()
                 , "===== getEntityForTest() -> 无效的 Entity");
         Assert.isTrue(service.insert((User) newEntity.get("user")
-                    , operator
-                    , userEvent.selectUserAccountOperationInfoByUsername(operator().getUsername()))
+                , operator
+                , userEvent.selectUserAccountOperationInfoByUsername(operator().getUsername()))
                 , "===== 添加测试数据失败!");
 
         //=== update(..)
@@ -259,8 +254,8 @@ public class UserServiceTests {
         ((UserPersonInfo) newEntity.get("userPersonInfo")).setIntroduction("最新测试数据");
 
         Assert.isTrue(service.update((User) newEntity.get("user")
-                    , operator
-                    , userEvent.selectUserAccountOperationInfoByUsername(operator().getUsername()))
+                , operator
+                , userEvent.selectUserAccountOperationInfoByUsername(operator().getUsername()))
                 , "===== update - update(Entity) -> false");
         Assert.isTrue(!((User) newEntity.get("user")).isEmpty()
                 , "===== update - update(Entity) -> 无效的 Entity");
@@ -274,8 +269,7 @@ public class UserServiceTests {
     @Test
     @Transactional
     public void delete()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         System.err.println(String.format("===== %s => %s ====="
                 , this.getClass().getName()
                 , Thread.currentThread().getStackTrace()[1].getMethodName()));
@@ -289,14 +283,14 @@ public class UserServiceTests {
         Assert.isTrue(((User) newEntity.get("user")).isEntityLegal()
                 , "===== getEntityForTest() -> 无效的 Entity");
         Assert.isTrue(service.insert((User) newEntity.get("user")
-                    , operator
-                    , userEvent.selectUserAccountOperationInfoByUsername(operator().getUsername()))
+                , operator
+                , userEvent.selectUserAccountOperationInfoByUsername(operator().getUsername()))
                 , "===== 添加测试数据失败!");
 
         //=== delete(..)
         Assert.isTrue(service.delete((User) newEntity.get("user")
-                    , operator
-                    , userEvent.selectUserAccountOperationInfoByUsername(operator().getUsername()))
+                , operator
+                , userEvent.selectUserAccountOperationInfoByUsername(operator().getUsername()))
                 , "===== delete(Entity) -> false");
         System.out.println((User) newEntity.get("user"));
 

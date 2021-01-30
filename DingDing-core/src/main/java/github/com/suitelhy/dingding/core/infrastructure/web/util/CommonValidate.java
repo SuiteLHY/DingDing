@@ -18,7 +18,6 @@ public class CommonValidate {
      * 补全字符串后缀斜杠
      *
      * @param str 字符串
-     *
      * @return
      */
     public String checkStringEnd(String str) {
@@ -30,7 +29,6 @@ public class CommonValidate {
      *
      * @param path     路径
      * @param fileName 文件名
-     *
      * @return true|false
      */
     public boolean validateFileExist(String path, String fileName) {
@@ -40,8 +38,7 @@ public class CommonValidate {
     /**
      * 判断文件是否存在
      *
-     * @param path  路径 + 文件名
-     *
+     * @param path 路径 + 文件名
      * @return true | false
      */
     public boolean validateFileExist(String path) {
@@ -54,7 +51,6 @@ public class CommonValidate {
      * @param path     文件路径
      * @param fileName 文件名
      * @param mark     标记
-     *
      * @return 可用的文件名
      */
     public String validateRepeatFilename(String path

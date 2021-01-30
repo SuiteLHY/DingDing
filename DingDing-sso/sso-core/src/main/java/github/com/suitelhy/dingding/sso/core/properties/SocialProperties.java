@@ -5,43 +5,42 @@ package github.com.suitelhy.dingding.sso.core.properties;
  *
  * @author zhailiang
  * @Editor Suite
- *
  */
 public class SocialProperties {
-	
-	/**
-	 * 社交登录功能拦截的url
-	 */
-	private String filterProcessesUrl = "/auth";
 
-	private QQProperties qq = new QQProperties();
-	
-	private WeiXinProperties weiXin = new WeiXinProperties();
+    /**
+     * 社交登录功能拦截的url
+     */
+    private String filterProcessesUrl = "/auth";
 
-	//===== Getter and Setter =====//
+    private QQProperties qq = new QQProperties();
 
-	public QQProperties getQq() {
-		return qq;
-	}
+    private WeiXinProperties weiXin = new WeiXinProperties();
 
-	public void setQq(QQProperties qq) {
-		this.qq = qq;
-	}
+    //===== Getter and Setter =====//
 
-	public String getFilterProcessesUrl() {
-		return filterProcessesUrl;
-	}
+    public QQProperties getQq() {
+        return qq;
+    }
 
-	public void setFilterProcessesUrl(String filterProcessesUrl) {
-		this.filterProcessesUrl = filterProcessesUrl;
-	}
+    public void setQq(QQProperties qq) {
+        this.qq = qq;
+    }
 
-	public WeiXinProperties getWeiXin() {
-		return weiXin;
-	}
+    public String getFilterProcessesUrl() {
+        return filterProcessesUrl;
+    }
 
-	public void setWeiXin(WeiXinProperties weiXin) {
-		this.weiXin = weiXin;
-	}
-	
+    public void setFilterProcessesUrl(String filterProcessesUrl) {
+        this.filterProcessesUrl = filterProcessesUrl;
+    }
+
+    public WeiXinProperties getWeiXin() {
+        return weiXin;
+    }
+
+    public void setWeiXin(WeiXinProperties weiXin) {
+        this.weiXin = weiXin;
+    }
+
 }

@@ -28,8 +28,10 @@ public interface UserRepository
         extends JpaRepository<User, String> {
 
     //===== select data =====//
+
     /**
      * 查询用户总数
+     *
      * @return
      */
     @Override
@@ -37,6 +39,7 @@ public interface UserRepository
 
     /**
      * 查询所有用户列表
+     *
      * @param pageable
      * @return
      */
@@ -45,6 +48,7 @@ public interface UserRepository
 
     /**
      * 查询用户
+     *
      * @param userid
      * @return
      */
@@ -53,6 +57,7 @@ public interface UserRepository
 
     /**
      * 查询用户
+     *
      * @param username
      * @param status
      * @return
@@ -60,8 +65,10 @@ public interface UserRepository
     Optional<User> findUserByUsernameAndStatus(String username, Account.StatusVo status);
 
     //===== insert data =====//
+
     /**
      * 新增(/修改)用户
+     *
      * @param user
      * @return
      */
@@ -71,8 +78,10 @@ public interface UserRepository
     User saveAndFlush(User user);
 
     //===== update data =====//
+
     /**
      * 修改指定用户信息
+     *
      * @param nickname
      * @param id
      * @param status
@@ -96,15 +105,15 @@ public interface UserRepository
 
     /**
      * 删除给定的实体
-     * @Description Spring Data JPA 提供的 <method>delete(T entity)</method> 无法保证操作 <b>执行且成功</b> !
-     *-> , 应该换用 <method>deleteById(String id)</method>.
-     * @Reference
-     *-> <a href="https://docs.spring.io/spring-data/commons/docs/current/api/org/springframework/data/repository/CrudRepository.html#delete-T-">
-     *->     CrudRepository (Spring Data Core 2.2.3.RELEASE API) # delete-T-</a>
-     * @Update 不建议使用!
+     *
      * @param user
-     * @throws IllegalArgumentException - in case the given entity is null.
+     * @throws IllegalArgumentException                               - in case the given entity is null.
      * @throws org.springframework.dao.EmptyResultDataAccessException - in case the given entity is non persistent.
+     * @Description Spring Data JPA 提供的 <method>delete(T entity)</method> 无法保证操作 <b>执行且成功</b> !
+     * -> , 应该换用 <method>deleteById(String id)</method>.
+     * @Reference -> <a href="https://docs.spring.io/spring-data/commons/docs/current/api/org/springframework/data/repository/CrudRepository.html#delete-T-">
+     * ->     CrudRepository (Spring Data Core 2.2.3.RELEASE API) # delete-T-</a>
+     * @Update 不建议使用!
      */
     @Modifying
     @Override
@@ -113,14 +122,15 @@ public interface UserRepository
 
     /**
      * 删除给定的 id 所指定的实体
+     *
+     * @param id
+     * @throws IllegalArgumentException                               - in case the given id is null.
+     * @throws org.springframework.dao.EmptyResultDataAccessException - in case the given id -> entity is non persistent.
      * @Description 可以保证删除操作 <b>执行且成功</b>.
      * @Reference <a href="https://stackoverflow.com/questions/31346356/spring-data-jpa-deleteby-query-not-working?noredirect=1&lq=1">
-     *->     Spring Data JPA DeleteBy查询不起作用 - Stack Overflow</a>
-     *-> , <a href="https://stackoverflow.com/questions/23723025/spring-data-delete-by-is-supported">
-     *->      Spring Data: "delete by" is supported? - Stack Overflow</a>
-     * @param id
-     * @throws IllegalArgumentException - in case the given id is null.
-     * @throws org.springframework.dao.EmptyResultDataAccessException - in case the given id -> entity is non persistent.
+     * ->     Spring Data JPA DeleteBy查询不起作用 - Stack Overflow</a>
+     * -> , <a href="https://stackoverflow.com/questions/23723025/spring-data-delete-by-is-supported">
+     * ->      Spring Data: "delete by" is supported? - Stack Overflow</a>
      */
     @Modifying
     @Override

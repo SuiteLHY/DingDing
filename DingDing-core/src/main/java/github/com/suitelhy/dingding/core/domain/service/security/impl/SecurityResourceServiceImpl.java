@@ -30,7 +30,6 @@ import java.util.*;
  * (安全) 资源
  *
  * @Description (安全) 资源 - 业务实现.
- *
  * @see SecurityResourceService
  */
 @Service("securityResourceService")
@@ -52,7 +51,6 @@ public class SecurityResourceServiceImpl
      *
      * @param pageIndex 分页索引, 从 0 开始.
      * @param pageSize
-     *
      * @return
      */
     @Override
@@ -87,15 +85,15 @@ public class SecurityResourceServiceImpl
     /**
      * 查询所有 URL - ROLE 权限对应关系
      *
+     * @return {@link java.util.List<java.util.Map<java.lang.String, java.lang.Object>>}
      * @Description {URL - ROLE}, 一对多.
      * [
-     *    {[{"client_id" -> {@link java.lang.String}}, {"url_path" -> {@link java.lang.String}}] : ["role_code", {@link java.util.List<Object>}]}
+     * {[{"client_id" -> {@link java.lang.String}}, {"url_path" -> {@link java.lang.String}}] : ["role_code", {@link java.util.List<Object>}]}
      * ]
-     *
-     * @return {@link java.util.List<java.util.Map<java.lang.String, java.lang.Object>>}
      */
     @Override
-    public @NotNull ContainArrayHashMap<String, List<Object>> selectAllUrlRoleMap() {
+    public @NotNull
+    ContainArrayHashMap<String, List<Object>> selectAllUrlRoleMap() {
         /*final Map<String[], List<Object>> result = new LinkedHashMap<>(1);*/
         final @NotNull ContainArrayHashMap<String, List<Object>> result = new ContainArrayHashMap<>(1);
 
@@ -140,12 +138,12 @@ public class SecurityResourceServiceImpl
      * 查询所有 URL - ROLE 权限对应关系
      *
      * @param clientId [资源服务器 ID]   {@link SecurityResourceUrl#getClientId()}
-     *
-     * @return  {@link ContainArrayHashMap}
+     * @return {@link ContainArrayHashMap}
      */
     @Override
-    public @NotNull ContainArrayHashMap<String, List<Object>> selectUrlRoleMap(@NotNull String clientId) {
-        if (! SecurityResourceUrl.Validator.RESOURCE_URL.clientId(clientId)) {
+    public @NotNull
+    ContainArrayHashMap<String, List<Object>> selectUrlRoleMap(@NotNull String clientId) {
+        if (!SecurityResourceUrl.Validator.RESOURCE_URL.clientId(clientId)) {
             //-- 非法输入: [资源服务器 ID]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "[资源服务器 ID]"
@@ -165,7 +163,7 @@ public class SecurityResourceServiceImpl
                 final String eachHttpMethod = (String) each.get("url_method");
                 final Object eachRoleCode = each.get("role_code");
 
-                final @NotNull String[] urlInfo = new String[] {eachClientId, eachUrlPath, eachHttpMethod};
+                final @NotNull String[] urlInfo = new String[]{eachClientId, eachUrlPath, eachHttpMethod};
                 final @NotNull List<Object> roles = (result.containsKey(urlInfo) && null != result.get(urlInfo))
                         ? result.get(urlInfo)
                         : new ArrayList<>(1);
@@ -187,7 +185,8 @@ public class SecurityResourceServiceImpl
      * @Description 查询数据列表 - 分页 - 总页数.
      */
     @Override
-    public @NotNull Long selectCount(int pageSize) {
+    public @NotNull
+    Long selectCount(int pageSize) {
         if (pageSize < 1) {
             //-- 非法输入: <param>pageSize</param>
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -207,13 +206,13 @@ public class SecurityResourceServiceImpl
     /**
      * 查询指定的资源
      *
-     * @param code  资源编码    {@link SecurityResource#getCode()}
-     *
+     * @param code 资源编码    {@link SecurityResource#getCode()}
      * @return {@link SecurityResource}
      */
     @Override
-    public @NotNull SecurityResource selectResourceByCode(@NotNull String code) {
-        if (! SecurityResource.Validator.RESOURCE.code(code)) {
+    public @NotNull
+    SecurityResource selectResourceByCode(@NotNull String code) {
+        if (!SecurityResource.Validator.RESOURCE.code(code)) {
             //-- 非法输入: 资源编码
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "资源编码"
@@ -301,9 +300,8 @@ public class SecurityResourceServiceImpl
     /**
      * 新增一个资源
      *
-     * @param resource  [（安全认证）资源]  {@link SecurityResource}
-     * @param operator  操作者
-     *
+     * @param resource [（安全认证）资源]  {@link SecurityResource}
+     * @param operator 操作者
      * @return 操作是否成功 / 是否已存在相同的有效数据
      */
     @Override
@@ -311,7 +309,7 @@ public class SecurityResourceServiceImpl
             , propagation = Propagation.REQUIRED
             , timeout = 15)
     public boolean insert(@NotNull SecurityResource resource, @NotNull SecurityUser operator, @NotNull UserAccountOperationInfo operator_userAccountOperationInfo) {
-        if (null == resource || ! resource.isEntityLegal()) {
+        if (null == resource || !resource.isEntityLegal()) {
             //-- 非法输入: [（安全认证）资源]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "[（安全认证）资源]"
@@ -332,8 +330,7 @@ public class SecurityResourceServiceImpl
         /*final @NotNull UserAccountOperationInfo operator_userAccountOperationInfo = userAccountOperationInfoService.selectByUsername(operator.getUsername());*/
         if (null == operator_userAccountOperationInfo
                 || operator_userAccountOperationInfo.isEmpty()
-                || ! operator_userAccountOperationInfo.equals(operator))
-        {
+                || !operator_userAccountOperationInfo.equals(operator)) {
             //-- 非法输入: 操作者 <- 无[有效的账户操作基础记录]
             throw new IllegalArgumentException(String.format("非法参数:<description>【%s】 <- %s</description>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "操作者"
@@ -346,12 +343,12 @@ public class SecurityResourceServiceImpl
 
         if (repository.existsByCode(resource.id())) {
             //--- 已存在相同数据 (根据 EntityID) 的情况
-            return ! repository.findSecurityResourceByCode(resource.id())
+            return !repository.findSecurityResourceByCode(resource.id())
                     .orElseGet(SecurityResource.Factory.RESOURCE::createDefault)
                     .isEmpty();
         }
 
-        return ! repository.save(resource).isEmpty();
+        return !repository.save(resource).isEmpty();
     }
 
 //    /**
@@ -685,9 +682,7 @@ public class SecurityResourceServiceImpl
      * @param resource                          [（安全认证）资源]  {@link SecurityResource}
      * @param operator                          操作者
      * @param operator_userAccountOperationInfo [操作者 - 账户操作基础记录]
-     *
      * @return 操作是否成功
-     *
      * @throws IllegalArgumentException
      * @throws BusinessAtomicException
      */
@@ -697,8 +692,7 @@ public class SecurityResourceServiceImpl
             , rollbackFor = Exception.class
             , timeout = 15)
     public boolean update(@NotNull SecurityResource resource, @NotNull SecurityUser operator, @NotNull UserAccountOperationInfo operator_userAccountOperationInfo)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if (null == resource || resource.isEmpty()) {
             //-- 非法输入: 非法角色
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -720,8 +714,7 @@ public class SecurityResourceServiceImpl
         /*final @NotNull UserAccountOperationInfo operator_userAccountOperationInfo = userAccountOperationInfoService.selectByUsername(operator.getUsername());*/
         if (null == operator_userAccountOperationInfo
                 || operator_userAccountOperationInfo.isEmpty()
-                || ! operator_userAccountOperationInfo.equals(operator))
-        {
+                || !operator_userAccountOperationInfo.equals(operator)) {
             //-- 非法输入: 操作者 <- 无[有效的账户操作基础记录]
             throw new IllegalArgumentException(String.format("非法参数:<description>【%s】 <- %s!</description>->【%s】&【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "操作者"
@@ -750,7 +743,7 @@ public class SecurityResourceServiceImpl
                     , resource
                     , operator
                     , operator_userAccountOperationInfo);
-            if (! logService.insert(newLog_Resource)) {
+            if (!logService.insert(newLog_Resource)) {
                 throw new BusinessAtomicException(String.format("操作失败:<description>【%s】 <- %s!</description>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                         , HandleType.LogVo.SECURITY__SECURITY_RESOURCE__UPDATE.name
                         , "生成操作日志记录"
@@ -770,23 +763,21 @@ public class SecurityResourceServiceImpl
      *
      * @param old_resource      [（安全认证）资源] <- 原始版本业务全量数据
      * @param new_resource_data [（安全认证）资源] <- 需要更新的数据
-     * · 数据结构:
-     * {
-     *      resource_icon: [图标],
-     *      resource_link: [资源链接],
-     *      resource_name: [资源名称],
-     *      resource_parentCode: [父节点 <- 资源编码],
-     *      resource_sort: [序号],
-     *      resource_type_vo_value: [资源类型 -> VO 的值]
-     * }
+     *                          · 数据结构:
+     *                          {
+     *                          resource_icon: [图标],
+     *                          resource_link: [资源链接],
+     *                          resource_name: [资源名称],
+     *                          resource_parentCode: [父节点 <- 资源编码],
+     *                          resource_sort: [序号],
+     *                          resource_type_vo_value: [资源类型 -> VO 的值]
+     *                          }
      * @param operator          操作者
-     *
      * @return 操作是否成功
      */
     @Override
     public boolean update(@NotNull SecurityResource old_resource, @NotNull Map<String, Object> new_resource_data, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if (null == old_resource || !old_resource.isEntityLegal()) {
             //-- 非法输入: 原始版本业务全量数据
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -797,8 +788,7 @@ public class SecurityResourceServiceImpl
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
         if (null == new_resource_data
-                || (!new_resource_data.containsKey("resource_icon") && !new_resource_data.containsKey("resource_link") && !new_resource_data.containsKey("resource_name") && !new_resource_data.containsKey("resource_parentCode") && !new_resource_data.containsKey("resource_sort") && !new_resource_data.containsKey("resource_type")))
-        {
+                || (!new_resource_data.containsKey("resource_icon") && !new_resource_data.containsKey("resource_link") && !new_resource_data.containsKey("resource_name") && !new_resource_data.containsKey("resource_parentCode") && !new_resource_data.containsKey("resource_sort") && !new_resource_data.containsKey("resource_type"))) {
             //-- 非法输入: 需要更新的数据
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "需要更新的数据"
@@ -921,8 +911,7 @@ public class SecurityResourceServiceImpl
                 || !ObjectUtils.nullSafeEquals(old_resource.getName(), latest_resource.getName())
                 || !ObjectUtils.nullSafeEquals(old_resource.getParentCode(), latest_resource.getParentCode())
                 || !ObjectUtils.nullSafeEquals(old_resource.getSort(), latest_resource.getSort())
-                || !ObjectUtils.nullSafeEquals(old_resource.getType(), latest_resource.getType()))
-        {
+                || !ObjectUtils.nullSafeEquals(old_resource.getType(), latest_resource.getType())) {
             //-- 非法输入: 原始版本业务全量数据 -> 已过期
             throw new IllegalArgumentException(String.format("非法参数:<description>【%s】 <- %s!</description>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "原始版本业务全量数据"
@@ -1037,14 +1026,12 @@ public class SecurityResourceServiceImpl
     /**
      * 删除指定的资源
      *
-     * @Description 删除成功后校验持久化数据; 主要为了避免在未提交的事务中进行对操作结果的非预期判断.
-     * · 完整业务流程的一部分.
-     *
      * @param resource                          [（安全认证）资源]
      * @param operator                          操作者
      * @param operator_userAccountOperationInfo [操作者 - 账户操作基础记录]
-     *
      * @return 操作是否成功
+     * @Description 删除成功后校验持久化数据; 主要为了避免在未提交的事务中进行对操作结果的非预期判断.
+     * · 完整业务流程的一部分.
      */
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -1052,8 +1039,7 @@ public class SecurityResourceServiceImpl
             , rollbackFor = Exception.class
             , timeout = 15)
     public boolean delete(@NotNull SecurityResource resource, @NotNull SecurityUser operator, @NotNull UserAccountOperationInfo operator_userAccountOperationInfo)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if (null == resource || resource.isEmpty()) {
             //-- 非法输入: [（安全认证）资源]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -1075,8 +1061,7 @@ public class SecurityResourceServiceImpl
         /*final @NotNull UserAccountOperationInfo operator_userAccountOperationInfo = userAccountOperationInfoService.selectByUsername(operator.getUsername());*/
         if (null == operator_userAccountOperationInfo
                 || operator_userAccountOperationInfo.isEmpty()
-                || ! operator_userAccountOperationInfo.equals(operator))
-        {
+                || !operator_userAccountOperationInfo.equals(operator)) {
             //-- 非法输入: 操作者 <- 无[有效的账户操作基础记录]
             throw new IllegalArgumentException(String.format("非法参数:<description>【%s】 <- %s!</description>->【%s】&【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "操作者"
@@ -1106,7 +1091,7 @@ public class SecurityResourceServiceImpl
                     , resource
                     , operator
                     , operator_userAccountOperationInfo);
-            if (! logService.insert(newLog_Resource)) {
+            if (!logService.insert(newLog_Resource)) {
                 throw new BusinessAtomicException(String.format("操作失败:<description>【%s】 <- %s!</description>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                         , HandleType.LogVo.SECURITY__SECURITY_RESOURCE__DELETION.name
                         , "生成操作日志记录"

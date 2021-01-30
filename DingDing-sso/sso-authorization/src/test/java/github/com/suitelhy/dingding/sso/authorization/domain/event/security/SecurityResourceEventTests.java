@@ -31,7 +31,6 @@ import java.util.*;
  * (安全) 资源 - 业务 <- 测试单元
  *
  * @Description 测试单元.
- *
  * @see SecurityResourceEvent
  */
 @SpringBootTest
@@ -66,19 +65,23 @@ public class SecurityResourceEventTests {
      *
      * @return {@link SecurityUser}
      */
-    private @NotNull SecurityUser operator() {
+    private @NotNull
+    SecurityUser operator() {
         return securityUserService.selectByUsername("admin");
     }
 
-    private @NotNull String getClientId() {
+    private @NotNull
+    String getClientId() {
         return this.clientId;
     }
 
-    private @NotNull SecurityResource getEntityForTest() {
+    private @NotNull
+    SecurityResource getEntityForTest() {
         return getEntityForTest(null);
     }
 
-    private @NotNull SecurityResource getEntityForTest(@Nullable Integer seed) {
+    private @NotNull
+    SecurityResource getEntityForTest(@Nullable Integer seed) {
         return SecurityResource.Factory.RESOURCE.create(
                 "test"
                         .concat(new CalendarController().toString().replaceAll("[-:\\s]", ""))
@@ -92,11 +95,13 @@ public class SecurityResourceEventTests {
                 , Resource.TypeVo.MENU);
     }
 
-    private @NotNull SecurityRole getRoleForTest() {
+    private @NotNull
+    SecurityRole getRoleForTest() {
         return getRoleForTest(null);
     }
 
-    private @NotNull SecurityRole getRoleForTest(@Nullable Integer seed) {
+    private @NotNull
+    SecurityRole getRoleForTest(@Nullable Integer seed) {
         return SecurityRole.Factory.ROLE.create(
                 "test"
                         .concat(new CalendarController().toString().replaceAll("[-:\\s]", "")
@@ -105,18 +110,21 @@ public class SecurityResourceEventTests {
                 , "测试用数据");
     }
 
-    private @NotNull SecurityUser getSecurityUserForTest(@NotNull User user) {
+    private @NotNull
+    SecurityUser getSecurityUserForTest(@NotNull User user) {
         if (securityUserService.existByUsername(user.getUsername())) {
             return securityUserService.selectByUsername(user.getUsername());
         }
         return SecurityUser.Factory.USER.create(user);
     }
 
-    private @NotNull String getUrlForTest() {
+    private @NotNull
+    String getUrlForTest() {
         return getUrlForTest(null);
     }
 
-    private @NotNull String getUrlForTest(@Nullable Integer seed) {
+    private @NotNull
+    String getUrlForTest(@Nullable Integer seed) {
         return "/test/test"
                 .concat(new CalendarController().toString().replaceAll("[-:\\s]", ""))
                 .concat((null == seed || seed < 0) ? "" : Integer.toString(seed));
@@ -150,7 +158,8 @@ public class SecurityResourceEventTests {
      *
      * @return {@link this#getUserForTest(Integer)}
      */
-    private @NotNull Map<String, EntityModel> getUserForTest() {
+    private @NotNull
+    Map<String, EntityModel> getUserForTest() {
         return getUserForTest(null);
     }
 
@@ -158,16 +167,16 @@ public class SecurityResourceEventTests {
      * 获取测试用的用户相关 {@link EntityModel} 集合
      *
      * @param seed
-     *
      * @return {@link Map}
      * · 数据结构:
      * {
-     *    "user": {@link User},
-     *    "userAccountOperationInfo": {@link UserAccountOperationInfo},
-     *    "userPersonInfo": {@link UserPersonInfo}
+     * "user": {@link User},
+     * "userAccountOperationInfo": {@link UserAccountOperationInfo},
+     * "userPersonInfo": {@link UserPersonInfo}
      * }
      */
-    private @NotNull Map<String, EntityModel> getUserForTest(Integer seed) {
+    private @NotNull
+    Map<String, EntityModel> getUserForTest(Integer seed) {
         final @NotNull Map<String, EntityModel> result = new HashMap<>(3);
 
         final @NotNull User newUser = User.Factory.USER.create(
@@ -200,11 +209,13 @@ public class SecurityResourceEventTests {
         return result;
     }
 
-    private @NotNull String getUrlHttpMethodNameForTest() {
+    private @NotNull
+    String getUrlHttpMethodNameForTest() {
         return HTTP.MethodVo.GET.name();
     }
 
-    private @NotNull String ip() {
+    private @NotNull
+    String ip() {
         return "127.0.0.0";
     }
 
@@ -214,15 +225,13 @@ public class SecurityResourceEventTests {
     }
 
     /**
-     * @see SecurityResourceEvent#existResourceOnRoleByRoleCode(String)
-     *
      * @throws BusinessAtomicException
+     * @see SecurityResourceEvent#existResourceOnRoleByRoleCode(String)
      */
     @Test
     @Transactional
     public void existResourceOnRoleByRoleCode()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         // 获取必要的测试用身份信息
         final @NotNull SecurityUser operator = operator();
         final @NotNull UserAccountOperationInfo operator_userAccountOperationInfo = userEvent.selectUserAccountOperationInfoByUsername(operator().getUsername());
@@ -249,8 +258,7 @@ public class SecurityResourceEventTests {
     @Test
     @Transactional
     public void selectResourceOnRoleByRoleCode()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         // 获取必要的测试用身份信息
         final @NotNull SecurityUser operator = operator();
         final @NotNull UserAccountOperationInfo operator_userAccountOperationInfo = userEvent.selectUserAccountOperationInfoByUsername(operator().getUsername());
@@ -269,7 +277,7 @@ public class SecurityResourceEventTests {
         // selectResourceOnRoleByRoleCode(String)
         final @NotNull List<SecurityResource> existedResources = securityResourceEvent.selectResourceOnRoleByRoleCode(newRole.getCode());
         boolean existedResourceFlag = false;
-        if (! existedResources.isEmpty()) {
+        if (!existedResources.isEmpty()) {
             for (@NotNull SecurityResource eachResource : existedResources) {
                 if (newEntity.equals(eachResource)) {
                     existedResourceFlag = true;
@@ -287,8 +295,7 @@ public class SecurityResourceEventTests {
     @Test
     @Transactional
     public void selectRoleOnResourceByResourceCode()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         // 获取必要的测试用身份信息
         final @NotNull SecurityUser operator = operator();
         final @NotNull UserAccountOperationInfo operator_userAccountOperationInfo = userEvent.selectUserAccountOperationInfoByUsername(operator.getUsername());
@@ -301,17 +308,17 @@ public class SecurityResourceEventTests {
 
         Assert.isTrue(service.insert(newEntity, operator, operator_userAccountOperationInfo)
                 , "===== 添加测试数据 -> false");
-        Assert.isTrue(! newEntity.isEmpty()
+        Assert.isTrue(!newEntity.isEmpty()
                 , "===== 添加测试数据 -> 无效的 Entity");
 
         Assert.isTrue(service.insert(newEntity1, operator, operator_userAccountOperationInfo)
                 , "===== 添加测试数据 -> false");
-        Assert.isTrue(! newEntity1.isEmpty()
+        Assert.isTrue(!newEntity1.isEmpty()
                 , "===== 添加测试数据 -> 无效的 Entity");
 
         Assert.isTrue(service.insert(newEntity2, operator, operator_userAccountOperationInfo)
                 , "===== 添加测试数据 -> false");
-        Assert.isTrue(! newEntity2.isEmpty() || newEntity2.equals(newEntity1)
+        Assert.isTrue(!newEntity2.isEmpty() || newEntity2.equals(newEntity1)
                 , "===== 添加测试数据 -> 无效的 Entity");
 
         final int resource_baseRole_number = securityResourceEvent.selectRoleOnResourceByResourceCode(newEntity.getCode()).size();
@@ -330,24 +337,24 @@ public class SecurityResourceEventTests {
                 , "===== 添加测试数据 -> false");
 
         final @NotNull Set<SecurityResource> resources = new HashSet<>(2);
-        if (! newEntity.isEmpty()) {
+        if (!newEntity.isEmpty()) {
             resources.add(newEntity);
         }
-        if (! newEntity1.isEmpty()) {
+        if (!newEntity1.isEmpty()) {
             resources.add(newEntity1);
         }
-        if (! newEntity2.isEmpty()) {
+        if (!newEntity2.isEmpty()) {
             resources.add(newEntity2);
         }
 
         final @NotNull Set<SecurityRole> roles = new HashSet<>(2);
-        if (! newRole.isEmpty()) {
+        if (!newRole.isEmpty()) {
             roles.add(newRole);
         }
-        if (! newRole1.isEmpty()) {
+        if (!newRole1.isEmpty()) {
             roles.add(newRole1);
         }
-        if (! newRole2.isEmpty()) {
+        if (!newRole2.isEmpty()) {
             roles.add(newRole2);
         }
 
@@ -366,7 +373,7 @@ public class SecurityResourceEventTests {
         for (@NotNull SecurityResource eachResource : resources) {
             final @NotNull List<SecurityRole> eachResource_roles = securityResourceEvent.selectRoleOnResourceByResourceCode(eachResource.getCode());
 
-            Assert.isTrue((null != eachResource_roles && ! eachResource_roles.isEmpty())
+            Assert.isTrue((null != eachResource_roles && !eachResource_roles.isEmpty())
                     , "===== 校验结果 <- 非预期结果!");
 
             existRoleNum += eachResource_roles.size();
@@ -384,8 +391,7 @@ public class SecurityResourceEventTests {
     @Test
     @Transactional
     public void selectUrlInfoOnResourceByResourceCode()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         // 获取必要的测试用身份信息
         final @NotNull SecurityUser operator = operator();
         final @NotNull UserAccountOperationInfo operator_userAccountOperationInfo = userEvent.selectUserAccountOperationInfoByUsername(operator.getUsername());
@@ -398,51 +404,48 @@ public class SecurityResourceEventTests {
 
         Assert.isTrue(service.insert(newEntity, operator, operator_userAccountOperationInfo)
                 , "===== 添加测试数据 -> false");
-        Assert.isTrue(! newEntity.isEmpty()
+        Assert.isTrue(!newEntity.isEmpty()
                 , "===== 添加测试数据 -> 无效的 Entity");
 
         Assert.isTrue(service.insert(newEntity1, operator, operator_userAccountOperationInfo)
                 , "===== 添加测试数据 -> false");
-        Assert.isTrue(! newEntity1.isEmpty()
+        Assert.isTrue(!newEntity1.isEmpty()
                 , "===== 添加测试数据 -> 无效的 Entity");
 
         Assert.isTrue(service.insert(newEntity2, operator, operator_userAccountOperationInfo)
                 , "===== 添加测试数据 -> false");
-        Assert.isTrue(! newEntity2.isEmpty() || newEntity2.equals(newEntity1)
+        Assert.isTrue(!newEntity2.isEmpty() || newEntity2.equals(newEntity1)
                 , "===== 添加测试数据 -> 无效的 Entity");
 
-        final @NotNull String[] newUrl = new String[] {getClientId(), getUrlForTest(), getUrlHttpMethodNameForTest()};
-        final @NotNull String[] newUrl1 = new String[] {getClientId(), getUrlForTest(1), getUrlHttpMethodNameForTest()};
-        final @NotNull String[] newUrl2 = new String[] {getClientId(), getUrlForTest(1), getUrlHttpMethodNameForTest()};
+        final @NotNull String[] newUrl = new String[]{getClientId(), getUrlForTest(), getUrlHttpMethodNameForTest()};
+        final @NotNull String[] newUrl1 = new String[]{getClientId(), getUrlForTest(1), getUrlHttpMethodNameForTest()};
+        final @NotNull String[] newUrl2 = new String[]{getClientId(), getUrlForTest(1), getUrlHttpMethodNameForTest()};
 
         final @NotNull Set<SecurityResource> resources = new HashSet<>(1);
-        if (! newEntity.isEmpty()) {
+        if (!newEntity.isEmpty()) {
             resources.add(newEntity);
         }
-        if (! newEntity1.isEmpty()) {
+        if (!newEntity1.isEmpty()) {
             resources.add(newEntity1);
         }
-        if (! newEntity2.isEmpty()) {
+        if (!newEntity2.isEmpty()) {
             resources.add(newEntity2);
         }
 
         final @NotNull ContainArrayHashSet<String> urls = new ContainArrayHashSet<>(3);
         if (SecurityResourceUrl.Validator.RESOURCE_URL.clientId(newUrl[0])
                 && SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(newUrl[1])
-                && SecurityResourceUrl.Validator.RESOURCE_URL.urlMethod(newUrl[2]))
-        {
+                && SecurityResourceUrl.Validator.RESOURCE_URL.urlMethod(newUrl[2])) {
             urls.add(newUrl);
         }
         if (SecurityResourceUrl.Validator.RESOURCE_URL.clientId(newUrl1[0])
                 && SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(newUrl1[1])
-                && SecurityResourceUrl.Validator.RESOURCE_URL.urlMethod(newUrl1[2]))
-        {
+                && SecurityResourceUrl.Validator.RESOURCE_URL.urlMethod(newUrl1[2])) {
             urls.add(newUrl1);
         }
         if (SecurityResourceUrl.Validator.RESOURCE_URL.clientId(newUrl2[0])
                 && SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(newUrl2[1])
-                && SecurityResourceUrl.Validator.RESOURCE_URL.urlMethod(newUrl2[2]))
-        {
+                && SecurityResourceUrl.Validator.RESOURCE_URL.urlMethod(newUrl2[2])) {
             urls.add(newUrl2);
         }
 
@@ -469,7 +472,7 @@ public class SecurityResourceEventTests {
         for (@NotNull SecurityResource eachResource : resources) {
             final @NotNull List<SecurityResourceUrl> eachResource_urlInfo = securityResourceEvent.selectUrlInfoOnResourceByResourceCode(eachResource.getCode());
 
-            Assert.isTrue(null != eachResource_urlInfo && ! eachResource_urlInfo.isEmpty()
+            Assert.isTrue(null != eachResource_urlInfo && !eachResource_urlInfo.isEmpty()
                     , "===== selectUrlInfoOnResourceByResourceCode(..) <- 非预期结果!");
 
             existResourceNum += eachResource_urlInfo.size();
@@ -485,8 +488,7 @@ public class SecurityResourceEventTests {
     @Test
     @Transactional
     public void insertResourceUrlRelationship()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         // 获取必要的测试用身份信息
         final @NotNull SecurityUser operator = operator();
         final @NotNull UserAccountOperationInfo operator_userAccountOperationInfo = userEvent.selectUserAccountOperationInfoByUsername(operator.getUsername());
@@ -518,38 +520,35 @@ public class SecurityResourceEventTests {
                 , "===== 添加测试数据 -> 无效的 Entity");
 
         //===== insertResourceUrlRelationship(...)
-        final @NotNull String[] newUrl = new String[] {getClientId(), getUrlForTest(), getUrlHttpMethodNameForTest()};
-        final @NotNull String[] newUrl1 = new String[] {getClientId(), getUrlForTest(1), getUrlHttpMethodNameForTest()};
-        final @NotNull String[] newUrl2 = new String[] {getClientId(), getUrlForTest(1), getUrlHttpMethodNameForTest()};
+        final @NotNull String[] newUrl = new String[]{getClientId(), getUrlForTest(), getUrlHttpMethodNameForTest()};
+        final @NotNull String[] newUrl1 = new String[]{getClientId(), getUrlForTest(1), getUrlHttpMethodNameForTest()};
+        final @NotNull String[] newUrl2 = new String[]{getClientId(), getUrlForTest(1), getUrlHttpMethodNameForTest()};
 
         final @NotNull Set<SecurityResource> resources = new HashSet<>(1);
-        if (! newEntity.isEmpty()) {
+        if (!newEntity.isEmpty()) {
             resources.add(newEntity);
         }
-        if (! newEntity1.isEmpty()) {
+        if (!newEntity1.isEmpty()) {
             resources.add(newEntity1);
         }
-        if (! newEntity2.isEmpty()) {
+        if (!newEntity2.isEmpty()) {
             resources.add(newEntity2);
         }
 
         final @NotNull ContainArrayHashSet<String> urls = new ContainArrayHashSet<>(3);
         if (SecurityResourceUrl.Validator.RESOURCE_URL.clientId(newUrl[0])
                 && SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(newUrl[1])
-                && SecurityResourceUrl.Validator.RESOURCE_URL.urlMethod(newUrl[2]))
-        {
+                && SecurityResourceUrl.Validator.RESOURCE_URL.urlMethod(newUrl[2])) {
             urls.add(newUrl);
         }
         if (SecurityResourceUrl.Validator.RESOURCE_URL.clientId(newUrl1[0])
                 && SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(newUrl1[1])
-                && SecurityResourceUrl.Validator.RESOURCE_URL.urlMethod(newUrl1[2]))
-        {
+                && SecurityResourceUrl.Validator.RESOURCE_URL.urlMethod(newUrl1[2])) {
             urls.add(newUrl1);
         }
         if (SecurityResourceUrl.Validator.RESOURCE_URL.clientId(newUrl2[0])
                 && SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(newUrl2[1])
-                && SecurityResourceUrl.Validator.RESOURCE_URL.urlMethod(newUrl2[2]))
-        {
+                && SecurityResourceUrl.Validator.RESOURCE_URL.urlMethod(newUrl2[2])) {
             urls.add(newUrl2);
         }
 
@@ -575,7 +574,7 @@ public class SecurityResourceEventTests {
         for (@NotNull SecurityResource eachResource : resources) {
             final @NotNull List<SecurityResourceUrl> eachResource_roles = securityResourceEvent.selectUrlInfoOnResourceByResourceCode(eachResource.getCode());
 
-            Assert.isTrue(null != eachResource_roles && ! eachResource_roles.isEmpty()
+            Assert.isTrue(null != eachResource_roles && !eachResource_roles.isEmpty()
                     , "===== insertUrl(...) <- 非预期结果!");
 
             existResourceNum += eachResource_roles.size();
@@ -594,8 +593,7 @@ public class SecurityResourceEventTests {
     @Test
     @Transactional
     public void updateResource()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         final @NotNull SecurityResource result;
 
         // 获取必要的测试用身份信息
@@ -623,7 +621,7 @@ public class SecurityResourceEventTests {
 
         final @NotNull SecurityResource existedResource = service.selectResourceByCode(result.getCode());
 
-        Assert.isTrue((! existedResource.isEmpty() && result.getName().equals(existedResource.getName()))
+        Assert.isTrue((!existedResource.isEmpty() && result.getName().equals(existedResource.getName()))
                 , String.format("===== 校验数据 -> 【%s】&【%s】 <- 执行失败!", result.getName(), existedResource.getName()));
     }
 
@@ -633,8 +631,7 @@ public class SecurityResourceEventTests {
     @Test
     @Transactional
     public void deleteResource()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         final @NotNull SecurityResource result;
 
         // 获取必要的测试用身份信息
@@ -668,8 +665,7 @@ public class SecurityResourceEventTests {
     @Test
     @Transactional
     public void deleteResourceUrlRelationship__SecurityResourceUrl()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         // 获取必要的测试用身份信息
         final @NotNull SecurityUser operator = operator();
         final @NotNull UserAccountOperationInfo operator_userAccountOperationInfo = userEvent.selectUserAccountOperationInfoByUsername(operator.getUsername());
@@ -696,38 +692,35 @@ public class SecurityResourceEventTests {
 
         //===== insertResourceUrlRelationship(...)
 
-        final @NotNull String[] newUrl = new String[] {getClientId(), getUrlForTest(), getUrlHttpMethodNameForTest()};
-        final @NotNull String[] newUrl1 = new String[] {getClientId(), getUrlForTest(1), getUrlHttpMethodNameForTest()};
-        final @NotNull String[] newUrl2 = new String[] {getClientId(), getUrlForTest(1), getUrlHttpMethodNameForTest()};
+        final @NotNull String[] newUrl = new String[]{getClientId(), getUrlForTest(), getUrlHttpMethodNameForTest()};
+        final @NotNull String[] newUrl1 = new String[]{getClientId(), getUrlForTest(1), getUrlHttpMethodNameForTest()};
+        final @NotNull String[] newUrl2 = new String[]{getClientId(), getUrlForTest(1), getUrlHttpMethodNameForTest()};
 
         final @NotNull Set<SecurityResource> resources = new HashSet<>(1);
-        if (! newEntity.isEmpty()) {
+        if (!newEntity.isEmpty()) {
             resources.add(newEntity);
         }
-        if (! newEntity1.isEmpty()) {
+        if (!newEntity1.isEmpty()) {
             resources.add(newEntity1);
         }
-        if (! newEntity2.isEmpty()) {
+        if (!newEntity2.isEmpty()) {
             resources.add(newEntity2);
         }
 
         final @NotNull ContainArrayHashSet<String> urls = new ContainArrayHashSet<>(3);
         if (SecurityResourceUrl.Validator.RESOURCE_URL.clientId(newUrl[0])
                 && SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(newUrl[1])
-                && SecurityResourceUrl.Validator.RESOURCE_URL.urlMethod(newUrl[2]))
-        {
+                && SecurityResourceUrl.Validator.RESOURCE_URL.urlMethod(newUrl[2])) {
             urls.add(newUrl);
         }
         if (SecurityResourceUrl.Validator.RESOURCE_URL.clientId(newUrl1[0])
                 && SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(newUrl1[1])
-                && SecurityResourceUrl.Validator.RESOURCE_URL.urlMethod(newUrl1[2]))
-        {
+                && SecurityResourceUrl.Validator.RESOURCE_URL.urlMethod(newUrl1[2])) {
             urls.add(newUrl1);
         }
         if (SecurityResourceUrl.Validator.RESOURCE_URL.clientId(newUrl2[0])
                 && SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(newUrl2[1])
-                && SecurityResourceUrl.Validator.RESOURCE_URL.urlMethod(newUrl2[2]))
-        {
+                && SecurityResourceUrl.Validator.RESOURCE_URL.urlMethod(newUrl2[2])) {
             urls.add(newUrl2);
         }
 
@@ -753,7 +746,7 @@ public class SecurityResourceEventTests {
         for (@NotNull SecurityResource eachResource : resources) {
             final @NotNull List<SecurityResourceUrl> eachResource_roles = securityResourceEvent.selectUrlInfoOnResourceByResourceCode(eachResource.getCode());
 
-            Assert.isTrue(null != eachResource_roles && ! eachResource_roles.isEmpty()
+            Assert.isTrue(null != eachResource_roles && !eachResource_roles.isEmpty()
                     , "===== insertResourceUrlRelationship(...) <- 非预期结果!");
 
             existResourceNum += eachResource_roles.size();
@@ -797,8 +790,7 @@ public class SecurityResourceEventTests {
     @Test
     @Transactional
     public void deleteRoleResourceRelationship()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         // 获取必要的测试用身份信息
         final @NotNull SecurityUser operator = operator();
         final @NotNull UserAccountOperationInfo operator_userAccountOperationInfo = userEvent.selectUserAccountOperationInfoByUsername(operator.getUsername());
@@ -811,17 +803,17 @@ public class SecurityResourceEventTests {
 
         Assert.isTrue(service.insert(newEntity, operator, operator_userAccountOperationInfo)
                 , "===== 添加测试数据 -> false");
-        Assert.isTrue(! newEntity.isEmpty()
+        Assert.isTrue(!newEntity.isEmpty()
                 , "===== 添加测试数据 -> 无效的 Entity");
 
         Assert.isTrue(service.insert(newEntity1, operator, operator_userAccountOperationInfo)
                 , "===== 添加测试数据 -> false");
-        Assert.isTrue(! newEntity1.isEmpty()
+        Assert.isTrue(!newEntity1.isEmpty()
                 , "===== 添加测试数据 -> 无效的 Entity");
 
         Assert.isTrue(service.insert(newEntity2, operator, operator_userAccountOperationInfo)
                 , "===== 添加测试数据 -> false");
-        Assert.isTrue(! newEntity2.isEmpty() || newEntity2.equals(newEntity1)
+        Assert.isTrue(!newEntity2.isEmpty() || newEntity2.equals(newEntity1)
                 , "===== 添加测试数据 -> 无效的 Entity");
 
         final @NotNull List<SecurityRole> resource_baseRoles = securityResourceEvent.selectRoleOnResourceByResourceCode(newEntity.getCode());
@@ -842,24 +834,24 @@ public class SecurityResourceEventTests {
                 , "===== 添加测试数据 -> false");
 
         final @NotNull Set<SecurityResource> resources = new HashSet<>(2);
-        if (! newEntity.isEmpty()) {
+        if (!newEntity.isEmpty()) {
             resources.add(newEntity);
         }
-        if (! newEntity1.isEmpty()) {
+        if (!newEntity1.isEmpty()) {
             resources.add(newEntity1);
         }
-        if (! newEntity2.isEmpty()) {
+        if (!newEntity2.isEmpty()) {
             resources.add(newEntity2);
         }
 
         final @NotNull Set<SecurityRole> roles = new HashSet<>(2);
-        if (! newRole.isEmpty()) {
+        if (!newRole.isEmpty()) {
             roles.add(newRole);
         }
-        if (! newRole1.isEmpty()) {
+        if (!newRole1.isEmpty()) {
             roles.add(newRole1);
         }
-        if (! newRole2.isEmpty()) {
+        if (!newRole2.isEmpty()) {
             roles.add(newRole2);
         }
 
@@ -886,7 +878,7 @@ public class SecurityResourceEventTests {
         for (@NotNull SecurityResource eachResource : resources) {
             final @NotNull List<SecurityRole> eachResource_roles = securityResourceEvent.selectRoleOnResourceByResourceCode(eachResource.getCode());
 
-            Assert.isTrue(null != eachResource_roles && ! eachResource_roles.isEmpty()
+            Assert.isTrue(null != eachResource_roles && !eachResource_roles.isEmpty()
                     , "===== 校验结果 <- 非预期结果!");
 
             existRoleNum += eachResource_roles.size();

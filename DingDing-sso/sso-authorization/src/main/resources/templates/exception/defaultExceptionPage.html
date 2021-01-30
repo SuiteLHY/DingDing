@@ -8,17 +8,17 @@
 <head>
     <title>异常处理结果</title>
 
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 <body th:with="ex=${#request.getAttribute('ex')}">
-    <h2>业务错误: [[${ex.getClass().getSimpleName()}]]</h2>
+<h2>业务错误: [[${ex.getClass().getSimpleName()}]]</h2>
 
-    <hr />
+<hr/>
 
-    <p>错误描述：</p>
-    [[${ex.getMessage()}]]
+<p>错误描述：</p>
+[[${ex.getMessage()}]]
 
-    <p>错误信息：</p>
-    [[${exStackTrace}]]
+<p>错误信息：</p>
+[[${exStackTrace}]]
 </body>
 </html>

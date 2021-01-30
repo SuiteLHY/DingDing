@@ -56,12 +56,12 @@ public class RoleTaskImpl
     /**
      * 查询所有角色
      *
-     * @param pageIndex     分页索引, 从0开始
-     * @param pageSize      分页 - 每页容量
-     *
+     * @param pageIndex 分页索引, 从0开始
+     * @param pageSize  分页 - 每页容量
      * @return {@link TaskResult}
      */
-    private @NotNull TaskResult<List<RoleDto>> selectAllRole(int pageIndex, int pageSize) {
+    private @NotNull
+    TaskResult<List<RoleDto>> selectAllRole(int pageIndex, int pageSize) {
         @NotNull TaskResult<List<RoleDto>> taskResult;
         final @NotNull List<RoleDto> resultData = new ArrayList<>(0);
         try {
@@ -106,14 +106,14 @@ public class RoleTaskImpl
     /**
      * 查询所有角色
      *
-     * @param pageIndex     分页索引, 从0开始
-     * @param pageSize      分页 - 每页容量
-     * @param operator      操作者 {@link AbstractSecurityUser}
-     *
+     * @param pageIndex 分页索引, 从0开始
+     * @param pageSize  分页 - 每页容量
+     * @param operator  操作者 {@link AbstractSecurityUser}
      * @return {@link TaskResult}
      */
     @Override
-    public @NotNull TaskResult<List<RoleDto>> selectAllRole(int pageIndex, int pageSize, @NotNull AbstractSecurityUser operator) {
+    public @NotNull
+    TaskResult<List<RoleDto>> selectAllRole(int pageIndex, int pageSize, @NotNull AbstractSecurityUser operator) {
         @NotNull TaskResult<List<RoleDto>> taskResult;
         final @NotNull List<RoleDto> resultData = new ArrayList<>(0);
         try {
@@ -165,14 +165,14 @@ public class RoleTaskImpl
     /**
      * 查询所有角色
      *
-     * @param pageIndex     分页索引, 从0开始
-     * @param pageSize      分页 - 每页容量
-     * @param operator      操作者
-     *
+     * @param pageIndex 分页索引, 从0开始
+     * @param pageSize  分页 - 每页容量
+     * @param operator  操作者
      * @return {@link TaskResult}
      */
     @Override
-    public @NotNull TaskResult<List<RoleDto>> selectAllRole(int pageIndex, int pageSize, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
+    public @NotNull
+    TaskResult<List<RoleDto>> selectAllRole(int pageIndex, int pageSize, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
         @NotNull TaskResult<List<RoleDto>> taskResult;
         final @NotNull List<RoleDto> resultData = new ArrayList<>(0);
         try {
@@ -230,10 +230,10 @@ public class RoleTaskImpl
      * 查询 (指定的) 角色
      *
      * @param roleCode 角色编码
-     *
      * @return {@link TaskResult}
      */
-    private @NotNull TaskResult<RoleDto> selectRoleByCode(@NotNull String roleCode) {
+    private @NotNull
+    TaskResult<RoleDto> selectRoleByCode(@NotNull String roleCode) {
         @NotNull TaskResult<RoleDto> taskResult;
         @NotNull RoleDto resultData;
         try {
@@ -296,11 +296,11 @@ public class RoleTaskImpl
      * 查询 (指定的) 角色
      *
      * @param roleCode 角色编码
-     *
      * @return {@link TaskResult}
      */
     @Override
-    public @NotNull TaskResult<RoleDto> selectRoleByCode(@NotNull String roleCode, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
+    public @NotNull
+    TaskResult<RoleDto> selectRoleByCode(@NotNull String roleCode, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
         @NotNull TaskResult<RoleDto> taskResult;
         @NotNull RoleDto resultData;
         try {
@@ -359,16 +359,16 @@ public class RoleTaskImpl
     /**
      * 查询 (关联的) 角色
      *
-     * @param username  用户名称
-     *
+     * @param username 用户名称
      * @return {@link TaskResult}
      */
-    private @NotNull TaskResult<List<RoleDto>> selectRoleByUsername(@NotNull String username) {
+    private @NotNull
+    TaskResult<List<RoleDto>> selectRoleByUsername(@NotNull String username) {
         @NotNull TaskResult<List<RoleDto>> taskResult;
         final @NotNull List<RoleDto> resultData = new ArrayList<>(0);
         try {
             if (null == username
-                    || ! SecurityUserRole.Validator.USER_ROLE.username(username)) {
+                    || !SecurityUserRole.Validator.USER_ROLE.username(username)) {
                 //-- 非法参数: 用户名称
                 throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                         , "用户名称"
@@ -419,12 +419,12 @@ public class RoleTaskImpl
     /**
      * 查询 (关联的) 角色
      *
-     * @param username  用户名称
-     *
+     * @param username 用户名称
      * @return {@link TaskResult}
      */
     @Override
-    public @NotNull TaskResult<List<RoleDto>> selectRoleByUsername(@NotNull String username, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
+    public @NotNull
+    TaskResult<List<RoleDto>> selectRoleByUsername(@NotNull String username, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
         @NotNull TaskResult<List<RoleDto>> taskResult;
         final @NotNull List<RoleDto> resultData = new ArrayList<>(0);
         try {
@@ -481,19 +481,17 @@ public class RoleTaskImpl
     /**
      * 添加角色
      *
-     * @Description 添加单个角色.
-     *
-     * @param roleCode          {@link SecurityRole.Validator#code(String)}
-     * @param roleName          {@link SecurityRole.Validator#name(String)}
-     * @param roleDescription   {@link SecurityRole.Validator#description(String)}
-     *
+     * @param roleCode        {@link SecurityRole.Validator#code(String)}
+     * @param roleName        {@link SecurityRole.Validator#name(String)}
+     * @param roleDescription {@link SecurityRole.Validator#description(String)}
      * @return {@link TaskResult}
+     * @Description 添加单个角色.
      */
-    private @NotNull TaskResult<RoleDto> addRole(@NotNull String roleCode
+    private @NotNull
+    TaskResult<RoleDto> addRole(@NotNull String roleCode
             , @NotNull String roleName
             , @Nullable String roleDescription
-            , @NotNull String operator_username)
-    {
+            , @NotNull String operator_username) {
         @NotNull TaskResult<RoleDto> taskResult;
         @NotNull RoleDto resultData;
         try {
@@ -552,21 +550,19 @@ public class RoleTaskImpl
     /**
      * 添加角色
      *
-     * @Description 添加单个角色.
-     *
-     * @param roleCode          {@link SecurityRole.Validator#code(String)}
-     * @param roleName          {@link SecurityRole.Validator#name(String)}
-     * @param roleDescription   {@link SecurityRole.Validator#description(String)}
-     * @param operator          操作者 {@link AbstractSecurityUser}
-     *
+     * @param roleCode        {@link SecurityRole.Validator#code(String)}
+     * @param roleName        {@link SecurityRole.Validator#name(String)}
+     * @param roleDescription {@link SecurityRole.Validator#description(String)}
+     * @param operator        操作者 {@link AbstractSecurityUser}
      * @return {@link TaskResult}
+     * @Description 添加单个角色.
      */
     @Override
-    public @NotNull TaskResult<RoleDto> addRole(@NotNull String roleCode
+    public @NotNull
+    TaskResult<RoleDto> addRole(@NotNull String roleCode
             , @NotNull String roleName
             , @Nullable String roleDescription
-            , @NotNull AbstractSecurityUser operator)
-    {
+            , @NotNull AbstractSecurityUser operator) {
         @NotNull TaskResult<RoleDto> taskResult;
         @NotNull RoleDto resultData;
         try {
@@ -614,21 +610,19 @@ public class RoleTaskImpl
     /**
      * 添加角色
      *
-     * @Description 添加单个角色.
-     *
-     * @param roleCode          {@link SecurityRole.Validator#code(String)}
-     * @param roleName          {@link SecurityRole.Validator#name(String)}
-     * @param roleDescription   {@link SecurityRole.Validator#description(String)}
-     * @param operator          操作者
-     *
+     * @param roleCode        {@link SecurityRole.Validator#code(String)}
+     * @param roleName        {@link SecurityRole.Validator#name(String)}
+     * @param roleDescription {@link SecurityRole.Validator#description(String)}
+     * @param operator        操作者
      * @return {@link TaskResult}
+     * @Description 添加单个角色.
      */
     @Override
-    public @NotNull TaskResult<RoleDto> addRole(@NotNull String roleCode
+    public @NotNull
+    TaskResult<RoleDto> addRole(@NotNull String roleCode
             , @NotNull String roleName
             , @Nullable String roleDescription
-            , OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator)
-    {
+            , OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
         @NotNull TaskResult<RoleDto> taskResult;
         @NotNull RoleDto resultData;
         try {
@@ -694,10 +688,10 @@ public class RoleTaskImpl
      * @param existedRole       {@link RoleDto}
      * @param existedUser       {@link UserDto}
      * @param operator_username [操作者 - 用户名称]
-     *
      * @return {@link TaskResult}
      */
-    private @NotNull TaskResult<Boolean> addRoleToUser(@NotNull RoleDto existedRole, @NotNull UserDto existedUser, @NotNull String operator_username) {
+    private @NotNull
+    TaskResult<Boolean> addRoleToUser(@NotNull RoleDto existedRole, @NotNull UserDto existedUser, @NotNull String operator_username) {
         @NotNull TaskResult<Boolean> taskResult;
         boolean resultData = false;
         try {
@@ -764,11 +758,11 @@ public class RoleTaskImpl
      * @param existedRole {@link RoleDto}
      * @param existedUser {@link UserDto}
      * @param operator    操作者 {@link AbstractSecurityUser}
-     *
      * @return {@link TaskResult}
      */
     @Override
-    public @NotNull TaskResult<Boolean> addRoleToUser(@NotNull RoleDto existedRole, @NotNull UserDto existedUser, @NotNull AbstractSecurityUser operator) {
+    public @NotNull
+    TaskResult<Boolean> addRoleToUser(@NotNull RoleDto existedRole, @NotNull UserDto existedUser, @NotNull AbstractSecurityUser operator) {
         @NotNull TaskResult<Boolean> taskResult;
         boolean resultData = false;
         try {
@@ -816,11 +810,11 @@ public class RoleTaskImpl
      * @param existedRole {@link RoleDto}
      * @param existedUser {@link UserDto}
      * @param operator    操作者
-     *
      * @return {@link TaskResult}
      */
     @Override
-    public @NotNull TaskResult<Boolean> addRoleToUser(@NotNull RoleDto existedRole, @NotNull UserDto existedUser, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
+    public @NotNull
+    TaskResult<Boolean> addRoleToUser(@NotNull RoleDto existedRole, @NotNull UserDto existedUser, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
         @NotNull TaskResult<Boolean> taskResult;
         boolean resultData = false;
         try {
@@ -879,27 +873,25 @@ public class RoleTaskImpl
     /**
      * 更新指定角色
      *
-     * @Description 局部更新.
-     *
-     * @param old_roleCode          {@link SecurityRole.Validator#code(String)}
-     * @param old_roleName          {@link SecurityRole.Validator#name(String)}
-     * @param old_roleDescription   {@link SecurityRole.Validator#description(String)}
-     * @param new_role_data         替换的角色数据 {@link Map<String, Object>}
-     * · 数据格式:
-     * {
-     *    role_name : [角色名称],
-     *    role_description : [角色描述]
-     * }
-     * @param operator_username     [操作者 - 用户名称]
-     *
+     * @param old_roleCode        {@link SecurityRole.Validator#code(String)}
+     * @param old_roleName        {@link SecurityRole.Validator#name(String)}
+     * @param old_roleDescription {@link SecurityRole.Validator#description(String)}
+     * @param new_role_data       替换的角色数据 {@link Map<String, Object>}
+     *                            · 数据格式:
+     *                            {
+     *                            role_name : [角色名称],
+     *                            role_description : [角色描述]
+     *                            }
+     * @param operator_username   [操作者 - 用户名称]
      * @return {@link TaskResult}
+     * @Description 局部更新.
      */
-    private @NotNull TaskResult<RoleDto> updateRole(@NotNull String old_roleCode
+    private @NotNull
+    TaskResult<RoleDto> updateRole(@NotNull String old_roleCode
             , @NotNull String old_roleName
             , @Nullable String old_roleDescription
             , @NotNull Map<String, Object> new_role_data
-            , @NotNull String operator_username)
-    {
+            , @NotNull String operator_username) {
         /*if (!SecurityRole.Validator.ROLE.code(old_roleCode)
                 || !SecurityRole.Validator.ROLE.name(old_roleName)
                 || !SecurityRole.Validator.ROLE.description(old_roleDescription)
@@ -991,28 +983,26 @@ public class RoleTaskImpl
     /**
      * 更新指定角色
      *
-     * @Description 局部更新.
-     *
-     * @param old_roleCode          {@link SecurityRole.Validator#code(String)}
-     * @param old_roleName          {@link SecurityRole.Validator#name(String)}
-     * @param old_roleDescription   {@link SecurityRole.Validator#description(String)}
-     * @param new_role_data         替换的角色数据 {@link Map<String, Object>}
-     * · 数据格式:
-     * {
-     *    role_name : [角色名称],
-     *    role_description : [角色描述]
-     * }
-     * @param operator              操作者 {@link AbstractSecurityUser}
-     *
+     * @param old_roleCode        {@link SecurityRole.Validator#code(String)}
+     * @param old_roleName        {@link SecurityRole.Validator#name(String)}
+     * @param old_roleDescription {@link SecurityRole.Validator#description(String)}
+     * @param new_role_data       替换的角色数据 {@link Map<String, Object>}
+     *                            · 数据格式:
+     *                            {
+     *                            role_name : [角色名称],
+     *                            role_description : [角色描述]
+     *                            }
+     * @param operator            操作者 {@link AbstractSecurityUser}
      * @return {@link TaskResult}
+     * @Description 局部更新.
      */
     @Override
-    public @NotNull TaskResult<RoleDto> updateRole(@NotNull String old_roleCode
+    public @NotNull
+    TaskResult<RoleDto> updateRole(@NotNull String old_roleCode
             , @NotNull String old_roleName
             , @Nullable String old_roleDescription
             , @NotNull Map<String, Object> new_role_data
-            , @NotNull AbstractSecurityUser operator)
-    {
+            , @NotNull AbstractSecurityUser operator) {
         @NotNull TaskResult<RoleDto> taskResult;
         @NotNull RoleDto resultData;
         try {
@@ -1064,28 +1054,26 @@ public class RoleTaskImpl
     /**
      * 更新指定角色
      *
-     * @Description 局部更新.
-     *
-     * @param old_roleCode          {@link SecurityRole.Validator#code(String)}
-     * @param old_roleName          {@link SecurityRole.Validator#name(String)}
-     * @param old_roleDescription   {@link SecurityRole.Validator#description(String)}
-     * @param new_role_data         替换的角色数据 {@link Map<String, Object>}
-     * · 数据格式:
-     * {
-     *    role_name : [角色名称],
-     *    role_description : [角色描述]
-     * }
-     * @param operator              操作者
-     *
+     * @param old_roleCode        {@link SecurityRole.Validator#code(String)}
+     * @param old_roleName        {@link SecurityRole.Validator#name(String)}
+     * @param old_roleDescription {@link SecurityRole.Validator#description(String)}
+     * @param new_role_data       替换的角色数据 {@link Map<String, Object>}
+     *                            · 数据格式:
+     *                            {
+     *                            role_name : [角色名称],
+     *                            role_description : [角色描述]
+     *                            }
+     * @param operator            操作者
      * @return {@link TaskResult}
+     * @Description 局部更新.
      */
     @Override
-    public @NotNull TaskResult<RoleDto> updateRole(@NotNull String old_roleCode
+    public @NotNull
+    TaskResult<RoleDto> updateRole(@NotNull String old_roleCode
             , @NotNull String old_roleName
             , @Nullable String old_roleDescription
             , @NotNull Map<String, Object> new_role_data
-            , OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator)
-    {
+            , OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
         @NotNull TaskResult<RoleDto> taskResult;
         @NotNull RoleDto resultData;
         try {
@@ -1149,10 +1137,10 @@ public class RoleTaskImpl
      *
      * @param roleCode          {@link SecurityRole#getCode()}
      * @param operator_username [操作者 - 用户名称]
-     *
      * @return {@link TaskResult}
      */
-    private @NotNull TaskResult<RoleDto> deleteRole(@NotNull String roleCode, @NotNull String operator_username) {
+    private @NotNull
+    TaskResult<RoleDto> deleteRole(@NotNull String roleCode, @NotNull String operator_username) {
         /*if (!SecurityRole.Validator.ROLE.code(roleCode)
                 || !SecurityUser.Validator.USER.username(username)) {
             return null;
@@ -1163,7 +1151,7 @@ public class RoleTaskImpl
             final @NotNull SecurityRole role = securityRoleService.selectRoleByCode(roleCode);
 
             boolean deleteRoleSuccessFlag = false;
-            if (! role.isEmpty()) {
+            if (!role.isEmpty()) {
                 deleteRoleSuccessFlag = securityRoleEvent.deleteRole(role, securityUserService.selectByUsername(operator_username));
             }
 
@@ -1177,7 +1165,7 @@ public class RoleTaskImpl
                         , resultData);
             } else {
                 //--- 业务操作失败
-                if (! securityRoleService.existsByCode(role.getCode())) {
+                if (!securityRoleService.existsByCode(role.getCode())) {
                     resultData = RoleDto.Factory.ROLE_DTO.createDefault();
 
                     taskResult = TaskResult.Factory.DEFAULT.create(TaskResult.Vo.StatusVo.FAILURE_INPUT_PARAMETER
@@ -1224,17 +1212,17 @@ public class RoleTaskImpl
     /**
      * 删除指定角色
      *
-     * @param roleCode  {@link SecurityRole#getCode()}
-     * @param operator  操作者 {@link AbstractSecurityUser}
-     *
+     * @param roleCode {@link SecurityRole#getCode()}
+     * @param operator 操作者 {@link AbstractSecurityUser}
      * @return {@link TaskResult}
      */
     @Override
-    public @NotNull TaskResult<RoleDto> deleteRole(@NotNull String roleCode, @NotNull AbstractSecurityUser operator) {
+    public @NotNull
+    TaskResult<RoleDto> deleteRole(@NotNull String roleCode, @NotNull AbstractSecurityUser operator) {
         @NotNull TaskResult<RoleDto> taskResult;
         @NotNull RoleDto resultData;
         try {
-            if (! securityUserService.existAdminPermission(operator.getUsername())) {
+            if (!securityUserService.existAdminPermission(operator.getUsername())) {
                 throw new IllegalArgumentException(String.format("非法参数:<description>【%s】 <- %s</description>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                         , "操作者"
                         , "无足够的操作权限"
@@ -1278,13 +1266,13 @@ public class RoleTaskImpl
     /**
      * 删除指定角色
      *
-     * @param roleCode  {@link SecurityRole#getCode()}
-     * @param operator  操作者
-     *
+     * @param roleCode {@link SecurityRole#getCode()}
+     * @param operator 操作者
      * @return {@link TaskResult}
      */
     @Override
-    public @NotNull TaskResult<RoleDto> deleteRole(@NotNull String roleCode, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
+    public @NotNull
+    TaskResult<RoleDto> deleteRole(@NotNull String roleCode, OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails operator) {
         @NotNull TaskResult<RoleDto> taskResult;
         @NotNull RoleDto resultData;
         try {
@@ -1292,7 +1280,7 @@ public class RoleTaskImpl
                 //-- 非法输入: 身份认证凭证
                 throw new AuthenticationCredentialsNotFoundException("非法的身份认证凭证");
             }
-            if (! Boolean.TRUE.equals(operator.isActive())) {
+            if (!Boolean.TRUE.equals(operator.isActive())) {
                 //-- 非法输入: 身份认证凭证
                 throw new AuthenticationCredentialsNotFoundException("无效的身份认证凭证");
             }
@@ -1308,7 +1296,7 @@ public class RoleTaskImpl
                         }
                     }
                 }
-                if (! isInsufficientPermissions) {
+                if (!isInsufficientPermissions) {
                     throw new AccessDeniedException("权限不足");
                 }
             }

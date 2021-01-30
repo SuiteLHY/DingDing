@@ -18,9 +18,9 @@ import java.util.Map;
  *
  * @Description 多数据源, 主从分离.
  * @Reference <a href="https://github.com/ityouknow/spring-boot-examples/blob/master/spring-boot-jpa/spring-boot-multi-Jpa/src/main/java/com/neo/config/DataSourceConfig.java">
- *->     spring-boot-examples/DataSourceConfig.java at master · ityouknow/spring-boot-examples</a>
- *
+ * ->     spring-boot-examples/DataSourceConfig.java at master · ityouknow/spring-boot-examples</a>
  */
+
 /**
  * Spring boot - version 2.2.2 -> 踩坑(...):
  *-> <a href="https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-2.2-Release-Notes">

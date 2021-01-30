@@ -20,9 +20,8 @@ import java.util.regex.Pattern;
 /**
  * 工具整合
  *
- * @Design 整合项目中需要使用的各种工具类.
- *
  * @author Suite
+ * @Design 整合项目中需要使用的各种工具类.
  */
 public /*enum*/interface Toolbox {
 
@@ -77,26 +76,29 @@ public /*enum*/interface Toolbox {
      * 数组工具
      *
      * @Description 数组类型数据的工具类.
-     *
      * @see github.com.suitelhy.dingding.core.infrastructure.util.ArrayUtil
      */
     final class ArrayUtil {
 
         public static class OneDimensionalArray {
 
-            public static @NotNull github.com.suitelhy.dingding.core.infrastructure.util.ArrayUtil.OneDimensionalArrayUtil getInstance() {
+            public static @NotNull
+            github.com.suitelhy.dingding.core.infrastructure.util.ArrayUtil.OneDimensionalArrayUtil getInstance() {
                 return github.com.suitelhy.dingding.core.infrastructure.util.ArrayUtil.OneDimensionalArrayUtil.getInstance();
             }
 
-            private OneDimensionalArray() {}
+            private OneDimensionalArray() {
+            }
 
         }
 
-        public static @NotNull github.com.suitelhy.dingding.core.infrastructure.util.ArrayUtil getInstance() {
+        public static @NotNull
+        github.com.suitelhy.dingding.core.infrastructure.util.ArrayUtil getInstance() {
             return github.com.suitelhy.dingding.core.infrastructure.util.ArrayUtil.getInstance();
         }
 
-        private ArrayUtil() {}
+        private ArrayUtil() {
+        }
 
     }
 
@@ -104,16 +106,17 @@ public /*enum*/interface Toolbox {
      * 网络工具
      *
      * @Description 网络工具类.
-     *
      * @see github.com.suitelhy.dingding.core.infrastructure.web.util.NetUtil
      */
     final class NetUtil {
 
-        public static @NotNull github.com.suitelhy.dingding.core.infrastructure.web.util.NetUtil getInstance() {
+        public static @NotNull
+        github.com.suitelhy.dingding.core.infrastructure.web.util.NetUtil getInstance() {
             return github.com.suitelhy.dingding.core.infrastructure.web.util.NetUtil.getInstance();
         }
 
-        private NetUtil() {}
+        private NetUtil() {
+        }
 
     }
 
@@ -121,16 +124,17 @@ public /*enum*/interface Toolbox {
      * 正则表达式 - 常用校验模板
      *
      * @Description 业务中较为普遍使用的正则校验.
-     *
      * @see github.com.suitelhy.dingding.core.infrastructure.domain.util.EntityUtil.Regex.GeneralRule
      */
     final class RegexGeneralRule {
 
-        public static @NotNull github.com.suitelhy.dingding.core.infrastructure.domain.util.EntityUtil.Regex.GeneralRule getInstance() {
+        public static @NotNull
+        github.com.suitelhy.dingding.core.infrastructure.domain.util.EntityUtil.Regex.GeneralRule getInstance() {
             return github.com.suitelhy.dingding.core.infrastructure.domain.util.EntityUtil.Regex.GeneralRule.getInstance();
         }
 
-        private RegexGeneralRule() {}
+        private RegexGeneralRule() {
+        }
 
     }
 
@@ -139,16 +143,17 @@ public /*enum*/interface Toolbox {
      *
      * @Description [正则表达式 - 基础工具类]的整合, 适用于需要直接使用[符合 {@link Pattern} 格式的字符串]的场景.
      * · 【说明】{@link RegexUtil#getInstance()} 使用了[正则表达式模板的缓存池]以减少不必要的系统开销.
-     *
      * @see github.com.suitelhy.dingding.core.infrastructure.util.RegexUtil
      */
     final class RegexUtil {
 
-        public static @NotNull github.com.suitelhy.dingding.core.infrastructure.util.RegexUtil getInstance() {
+        public static @NotNull
+        github.com.suitelhy.dingding.core.infrastructure.util.RegexUtil getInstance() {
             return github.com.suitelhy.dingding.core.infrastructure.util.RegexUtil.getInstance();
         }
 
-        private RegexUtil() {}
+        private RegexUtil() {
+        }
 
     }
 
@@ -156,20 +161,20 @@ public /*enum*/interface Toolbox {
      * ValueObject 对象的业务辅助工具
      *
      * @Description 用于 {@link github.com.suitelhy.dingding.core.infrastructure.domain.model.VoModel} 的实例对象.
-     *
      * @see github.com.suitelhy.dingding.core.infrastructure.domain.util.VoUtil
      * @see github.com.suitelhy.dingding.core.infrastructure.domain.model.VoModel
      */
     final class VoUtil {
 
-        public static @NotNull github.com.suitelhy.dingding.core.infrastructure.domain.util.VoUtil getInstance() {
+        public static @NotNull
+        github.com.suitelhy.dingding.core.infrastructure.domain.util.VoUtil getInstance() {
             return github.com.suitelhy.dingding.core.infrastructure.domain.util.VoUtil.getInstance();
         }
 
-        private VoUtil() {}
+        private VoUtil() {
+        }
 
     }
-
 
 
 }

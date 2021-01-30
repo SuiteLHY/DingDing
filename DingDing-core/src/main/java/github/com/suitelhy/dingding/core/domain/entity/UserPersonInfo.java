@@ -19,8 +19,9 @@ import java.time.LocalDateTime;
  * [用户 -> 个人信息]
  *
  * <p>关于 id 生成策略, 个人倾向于使用"代理键" ———— 所选策略还是应该交由数据库来实现.
+ *
  * @Reference <a href="https://dzone.com/articles/persisting-natural-key-entities-with-spring-data-j">
- *->     Persisting Natural Key Entities With Spring Data JPA</a>
+ * ->     Persisting Natural Key Entities With Spring Data JPA</a>
  * </p>
  */
 @Entity
@@ -87,20 +88,15 @@ public class UserPersonInfo
     /**
      * 等效比较
      *
-     * @Description 在 {@link super#equals(Object)} 的基础上添加[判断关联用户]的功能.
-     *
-     * @Solution
-     * · 约束声明原则 -> {@code javax.validation.ConstraintDeclarationException: HV000151: A method overriding another method must not redefine the parameter constraint configuration, but method UserAccountOperationInfo#equals(User) redefines the configuration of Object#equals(Object).}
-     *
-     * @param obj  {@link Object}
-     *
+     * @param obj {@link Object}
      * @return 判断结果
+     * @Description 在 {@link super#equals(Object)} 的基础上添加[判断关联用户]的功能.
+     * @Solution · 约束声明原则 -> {@code javax.validation.ConstraintDeclarationException: HV000151: A method overriding another method must not redefine the parameter constraint configuration, but method UserAccountOperationInfo#equals(User) redefines the configuration of Object#equals(Object).}
      */
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof User && ((User) obj).isEntityLegal() && null != ((User) obj).id()
-                && this.isEntityLegal())
-        {
+                && this.isEntityLegal()) {
             return this.id()[0].equals(((User) obj).id());
         }
         return super.equals(obj);
@@ -110,22 +106,20 @@ public class UserPersonInfo
      * 判断是否相同 <- [{@link EntityModel} 实例]
      *
      * @param user 实体对象, 必须合法且可未持久化    {@link EntityModel}
-     *
      * @return 判断结果
-     *
      * @see User
      */
     public boolean equals(@NotNull User user) {
         if (null != user && user.isEntityLegal() && null != user.id()
-                && this.isEntityLegal())
-        {
+                && this.isEntityLegal()) {
             return this.id()[0].equals(user.id());
         }
         return false;
     }
 
     @Override
-    public @NotNull String[] id() {
+    public @NotNull
+    String[] id() {
         return new String[]{
                 this.username
                 , this.nickname
@@ -135,9 +129,8 @@ public class UserPersonInfo
     /**
      * 是否无效
      *
-     * @Description 保证 User 的基本业务实现中的合法性.
-     *
      * @return
+     * @Description 保证 User 的基本业务实现中的合法性.
      */
     @Override
     public boolean isEmpty() {
@@ -148,9 +141,8 @@ public class UserPersonInfo
     /**
      * 是否符合基础数据合法性要求
      *
-     * @Description 只保证 User 的数据合法, 不保证 User 的业务实现中的合法性.
-     *
      * @return
+     * @Description 只保证 User 的数据合法, 不保证 User 的业务实现中的合法性.
      */
     @Override
     public boolean isEntityLegal() {
@@ -165,11 +157,9 @@ public class UserPersonInfo
     /**
      * 校验 Entity - ID
      *
-     * @Description <abstractClass>AbstractEntityModel</abstractClass>提供的模板设计.
-     *
-     * @param entityId      <method>id()</method>
-     *
+     * @param entityId <method>id()</method>
      * @return boolean
+     * @Description <abstractClass>AbstractEntityModel</abstractClass>提供的模板设计.
      */
     @Override
     protected boolean validateId(@NotNull String[] entityId) {
@@ -204,11 +194,9 @@ public class UserPersonInfo
         /**
          * {@link AbstractEntity} 实例的 ID 校验
          *
-         * @Design 对 {@link this#entity_id(String[])} 的补充拓展.
-         *
          * @param entityIdString
-         *
          * @return {@link Boolean#TYPE}
+         * @Design 对 {@link this#entity_id(String[])} 的补充拓展.
          */
         public boolean entity_id(@NotNull String entityIdString) {
             return null != entityIdString
@@ -261,24 +249,23 @@ public class UserPersonInfo
     /**
      * 仅用于持久化注入
      */
-    public UserPersonInfo() {}
+    public UserPersonInfo() {
+    }
 
     //===== entity factory =====//
 
     /**
      * 创建/更新记录 -> Entity对象
      *
-     * @Description 添加 (<param>id</param>为 null) / 更新 (<param>id</param>合法) 记录.
-     *
-     * @param id            数据 ID
-     * @param username      用户名称
-     * @param nickname      用户 - 昵称
-     * @param age           用户 - 年龄
-     * @param faceImage     用户 - 头像
-     * @param introduction  用户 - 简介
-     * @param sex           用户 - 性别
-     *
+     * @param id           数据 ID
+     * @param username     用户名称
+     * @param nickname     用户 - 昵称
+     * @param age          用户 - 年龄
+     * @param faceImage    用户 - 头像
+     * @param introduction 用户 - 简介
+     * @param sex          用户 - 性别
      * @throws IllegalArgumentException
+     * @Description 添加 (<param>id</param>为 null) / 更新 (<param>id</param>合法) 记录.
      */
     private UserPersonInfo(@Nullable String id
             , @NotNull String username
@@ -287,8 +274,7 @@ public class UserPersonInfo
             , @Nullable String faceImage
             , @Nullable String introduction
             , @Nullable Human.SexVo sex)
-            throws IllegalArgumentException
-    {
+            throws IllegalArgumentException {
         if (null == id) {
             //--- 添加数据
         } else {
@@ -382,15 +368,13 @@ public class UserPersonInfo
         /**
          * 创建
          *
-         * @param username      用户名称
-         * @param nickname      用户 - 昵称
-         * @param age           用户 - 年龄
-         * @param faceImage     用户 - 头像
-         * @param introduction  用户 - 简介
-         * @param sex           用户 - 性别
-         *
+         * @param username     用户名称
+         * @param nickname     用户 - 昵称
+         * @param age          用户 - 年龄
+         * @param faceImage    用户 - 头像
+         * @param introduction 用户 - 简介
+         * @param sex          用户 - 性别
          * @return {@link UserPersonInfo}
-         *
          * @throws IllegalArgumentException
          */
         public UserPersonInfo create(@NotNull String username
@@ -399,8 +383,7 @@ public class UserPersonInfo
                 , @Nullable String faceImage
                 , @Nullable String introduction
                 , @Nullable Human.SexVo sex)
-                throws IllegalArgumentException
-        {
+                throws IllegalArgumentException {
             return new UserPersonInfo(null, username, nickname
                     , age, faceImage, introduction
                     , sex);
@@ -409,15 +392,12 @@ public class UserPersonInfo
         /**
          * 创建
          *
-         * @param userPersonInfo    [用户 -> 个人信息]
-         *
+         * @param userPersonInfo [用户 -> 个人信息]
          * @return {@link UserPersonInfo}
-         *
          * @throws IllegalArgumentException
          */
         public UserPersonInfo create(@NotNull UserPersonInfo userPersonInfo)
-                throws IllegalArgumentException
-        {
+                throws IllegalArgumentException {
             if (null == userPersonInfo || !userPersonInfo.isEntityLegal()) {
                 throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                         , "[用户 -> 个人信息]"

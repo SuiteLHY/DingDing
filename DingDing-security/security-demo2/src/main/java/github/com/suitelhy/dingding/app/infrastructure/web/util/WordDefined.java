@@ -13,11 +13,11 @@ public enum WordDefined {
     public final String LOGIN_SUCCESS = "登录成功!";
     public final String LOGOUT_SUCCESS = "注销成功!";
 
-    public final /*String*/Integer LOG_TYPE_LOGIN = /*"登陆"*/11;
-    public final /*String*/Integer LOG_TYPE_LOGOUT = /*"注销"*/4;
-    public final /*String*/Integer LOG_TYPE_ADD = /*"新增"*/1;
-    public final /*String*/Integer LOG_TYPE_UPDATE = /*"更新"*/2;
-    public final /*String*/Integer LOG_TYPE_DELETE = /*"删除"*/5;
+    public final /*String*/ Integer LOG_TYPE_LOGIN = /*"登陆"*/11;
+    public final /*String*/ Integer LOG_TYPE_LOGOUT = /*"注销"*/4;
+    public final /*String*/ Integer LOG_TYPE_ADD = /*"新增"*/1;
+    public final /*String*/ Integer LOG_TYPE_UPDATE = /*"更新"*/2;
+    public final /*String*/ Integer LOG_TYPE_DELETE = /*"删除"*/5;
     public final String LOG_TYPE_COMPLETE = "完成";
     public final String LOG_TYPE_IMPORT = "导入";
     public final String LOG_TYPE_EXPORT = "导出";

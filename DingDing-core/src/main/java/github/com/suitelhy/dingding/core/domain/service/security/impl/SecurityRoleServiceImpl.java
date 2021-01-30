@@ -30,7 +30,6 @@ import java.util.*;
  * (安全) 角色
  *
  * @Description (安全) 角色 - 业务实现.
- *
  * @see SecurityRoleService
  */
 @Service("securityRoleService")
@@ -52,11 +51,11 @@ public class SecurityRoleServiceImpl
     /**
      * 判断存在
      *
-     * @param code      角色编码
-     *
+     * @param code 角色编码
      * @return {@link java.lang.Boolean}
      */
-    public @NotNull Boolean existsByCode(@NotNull String code) {
+    public @NotNull
+    Boolean existsByCode(@NotNull String code) {
         if (!SecurityRole.Validator.ROLE.code(code)) {
             //-- 非法输入: 角色编码
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -73,13 +72,13 @@ public class SecurityRoleServiceImpl
     /**
      * 查询所有
      *
-     * @param pageIndex     分页索引, 从0开始
-     * @param pageSize      分页 - 每页容量
-     *
-     * @return  {@link org.springframework.data.domain.Page)
+     * @param pageIndex 分页索引, 从0开始
+     * @param pageSize  分页 - 每页容量
+     * @return {@link org.springframework.data.domain.Page)
      */
     @Override
-    public @NotNull Page<SecurityRole> selectAll(int pageIndex, int pageSize) {
+    public @NotNull
+    Page<SecurityRole> selectAll(int pageIndex, int pageSize) {
         if (pageIndex < 0) {
             //-- 非法输入: <param>pageIndex</param>
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -109,13 +108,13 @@ public class SecurityRoleServiceImpl
     /**
      * 查询总页数
      *
-     * @Description 查询数据列表 - 分页 - 总页数
-     *
      * @param pageSize 分页 - 每页容量
      * @return 分页 - 总页数
+     * @Description 查询数据列表 - 分页 - 总页数
      */
     @Override
-    public @NotNull Long selectCount(int pageSize) {
+    public @NotNull
+    Long selectCount(int pageSize) {
         if (pageSize < 1) {
             //-- 非法输入: <param>pageSize</param>
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -135,13 +134,13 @@ public class SecurityRoleServiceImpl
     /**
      * 查询指定的角色
      *
-     * @param code      角色编码    {@link SecurityRole}
-     *
+     * @param code 角色编码    {@link SecurityRole}
      * @return {@link SecurityRole}
      */
     @Override
-    public @NotNull SecurityRole selectRoleByCode(@NotNull String code) {
-        if (! SecurityRole.Validator.ROLE.code(code)) {
+    public @NotNull
+    SecurityRole selectRoleByCode(@NotNull String code) {
+        if (!SecurityRole.Validator.ROLE.code(code)) {
             //-- 非法输入: 角色编码
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "角色编码"
@@ -183,13 +182,11 @@ public class SecurityRoleServiceImpl
      * 新增一个角色
      *
      * @param roleVo [安全模块 VO -> 角色].    {@link Security.RoleVo}
-     *
      * @return 操作是否成功 / 是否已存在相同的有效数据
      */
     @Override
     public boolean insert(@NotNull Security.RoleVo roleVo)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         SecurityRole role;
         if (null == roleVo
                 || !(role = SecurityRole.Factory.ROLE.create(roleVo)).isEntityLegal()) {
@@ -204,7 +201,7 @@ public class SecurityRoleServiceImpl
 
         if (repository.existsByCode(role.getCode())) {
             //--- 已存在相同数据 (根据 EntityID) 的情况
-            return ! repository.findByCode(role.getCode())
+            return !repository.findByCode(role.getCode())
                     .orElseGet(SecurityRole.Factory.ROLE::createDefault)
                     .isEmpty();
         } else {
@@ -225,14 +222,11 @@ public class SecurityRoleServiceImpl
     /**
      * 新增一个角色
      *
-     * @Description
-     * · 完整的业务流程.
-     *
      * @param role                              [（安全认证）角色], 必须合法.   {@link SecurityRole}
      * @param operator                          操作者
      * @param operator_userAccountOperationInfo [操作者 - 账户操作基础记录]
-     *
      * @return 操作是否成功 / 是否已存在相同的有效数据
+     * @Description · 完整的业务流程.
      */
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -240,8 +234,7 @@ public class SecurityRoleServiceImpl
             , rollbackFor = Exception.class
             , timeout = 15)
     public boolean insert(@NotNull SecurityRole role, @NotNull SecurityUser operator, @NotNull UserAccountOperationInfo operator_userAccountOperationInfo)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if (null == role || !role.isEntityLegal()) {
             //-- 非法输入: [（安全认证）角色]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -263,8 +256,7 @@ public class SecurityRoleServiceImpl
         /*final @NotNull UserAccountOperationInfo operator_userAccountOperationInfo = userAccountOperationInfoService.selectByUsername(operator.getUsername());*/
         if (null == operator_userAccountOperationInfo
                 || operator_userAccountOperationInfo.isEmpty()
-                || ! operator_userAccountOperationInfo.equals(operator))
-        {
+                || !operator_userAccountOperationInfo.equals(operator)) {
             //-- 非法输入: 操作者 <- 无[有效的账户操作基础记录]
             throw new IllegalArgumentException(String.format("非法参数:<description>【%s】<-【%s】</description>->【%s】&【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "操作者"
@@ -278,7 +270,7 @@ public class SecurityRoleServiceImpl
 
         if (repository.existsByCode(role.getCode())) {
             //--- 已存在相同数据 (根据 EntityID) 的情况
-            return ! repository.findByCode(role.getCode())
+            return !repository.findByCode(role.getCode())
                     .orElseGet(SecurityRole.Factory.ROLE::createDefault)
                     .isEmpty();
         } else {
@@ -299,7 +291,7 @@ public class SecurityRoleServiceImpl
                     , role
                     , operator
                     , operator_userAccountOperationInfo);
-            if (! logService.insert(newLog_UserRole)) {
+            if (!logService.insert(newLog_UserRole)) {
                 throw new BusinessAtomicException(String.format("操作失败:<description>【%s】<-【%s】</description>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                         , HandleType.LogVo.SECURITY__SECURITY_ROLE__ADD.name
                         , "生成操作日志记录"
@@ -499,13 +491,11 @@ public class SecurityRoleServiceImpl
     /**
      * 更新指定的角色
      *
-     * @Description 全量更新.
-     *
      * @param role                              [（安全认证）角色]  {@link SecurityRole}
      * @param operator                          操作者
      * @param operator_userAccountOperationInfo [操作者 - 账户操作基础记录]
-     *
      * @return 操作是否成功
+     * @Description 全量更新.
      */
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -513,8 +503,7 @@ public class SecurityRoleServiceImpl
             , rollbackFor = Exception.class
             , timeout = 15)
     public boolean update(@NotNull SecurityRole role, @NotNull SecurityUser operator, @NotNull UserAccountOperationInfo operator_userAccountOperationInfo)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if (null == role || role.isEmpty()) {
             //-- 非法输入: 非法角色
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -536,8 +525,7 @@ public class SecurityRoleServiceImpl
         /*final @NotNull UserAccountOperationInfo operator_userAccountOperationInfo = userAccountOperationInfoService.selectByUsername(operator.getUsername());*/
         if (null == operator_userAccountOperationInfo
                 || operator_userAccountOperationInfo.isEmpty()
-                || !operator_userAccountOperationInfo.equals(operator))
-        {
+                || !operator_userAccountOperationInfo.equals(operator)) {
             //-- 非法输入: 操作者 <- 无[有效的账户操作基础记录]
             throw new IllegalArgumentException(String.format("非法参数:<description>【%s】<-【%s】</description>->【%s】&【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "操作者"
@@ -566,7 +554,7 @@ public class SecurityRoleServiceImpl
                 , role
                 , operator
                 , operator_userAccountOperationInfo);
-        if (! logService.insert(newLog_SecurityRole)) {
+        if (!logService.insert(newLog_SecurityRole)) {
             throw new BusinessAtomicException(String.format("操作失败:<description>【%s】<-【%s】</description>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , HandleType.LogVo.SECURITY__SECURITY_ROLE__UPDATE.name
                     , "生成操作日志记录"
@@ -583,20 +571,18 @@ public class SecurityRoleServiceImpl
     /**
      * 更新指定的角色
      *
-     * @Description 增量更新.
-     * · 完整业务
-     *
      * @param old_role                          原始版本业务全量数据.
      * @param new_role_data                     需要更新的数据.
-     * · 数据格式:
-     * {
-     *    role_name : [角色名称],
-     *    role_description : [角色描述]
-     * }
+     *                                          · 数据格式:
+     *                                          {
+     *                                          role_name : [角色名称],
+     *                                          role_description : [角色描述]
+     *                                          }
      * @param operator                          操作者
      * @param operator_userAccountOperationInfo [操作者 - 账户操作基础记录]
-     *
      * @return 操作是否成功
+     * @Description 增量更新.
+     * · 完整业务
      */
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -607,9 +593,8 @@ public class SecurityRoleServiceImpl
             , @NotNull Map<String, Object> new_role_data
             , @NotNull SecurityUser operator
             , @NotNull UserAccountOperationInfo operator_userAccountOperationInfo)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
-        if (null == old_role || ! old_role.isEntityLegal()) {
+            throws IllegalArgumentException, BusinessAtomicException {
+        if (null == old_role || !old_role.isEntityLegal()) {
             //-- 非法输入: 原始版本业务全量数据
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "原始版本业务全量数据"
@@ -619,8 +604,7 @@ public class SecurityRoleServiceImpl
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
         if (null == new_role_data
-                || (! new_role_data.containsKey("role_name") && ! new_role_data.containsKey("role_description")))
-        {
+                || (!new_role_data.containsKey("role_name") && !new_role_data.containsKey("role_description"))) {
             //-- 非法输入: 需要更新的数据
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "需要更新的数据"
@@ -630,7 +614,7 @@ public class SecurityRoleServiceImpl
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
         if (new_role_data.containsKey("role_code")
-                && ! SecurityRole.Validator.ROLE.code((String) new_role_data.get("role_code"))) {
+                && !SecurityRole.Validator.ROLE.code((String) new_role_data.get("role_code"))) {
             //-- 非法输入: 需要更新的数据 => 角色编码
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "需要更新的数据 => 角色编码"
@@ -640,7 +624,7 @@ public class SecurityRoleServiceImpl
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
         if (new_role_data.containsKey("role_name")
-                && ! SecurityRole.Validator.ROLE.name((String) new_role_data.get("role_name"))) {
+                && !SecurityRole.Validator.ROLE.name((String) new_role_data.get("role_name"))) {
             //-- 非法输入: 需要更新的数据 => 角色名称
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "需要更新的数据 => 角色名称"
@@ -650,7 +634,7 @@ public class SecurityRoleServiceImpl
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
         if (new_role_data.containsKey("role_description")
-                && ! SecurityRole.Validator.ROLE.description((String) new_role_data.get("role_description"))) {
+                && !SecurityRole.Validator.ROLE.description((String) new_role_data.get("role_description"))) {
             //-- 非法输入: 需要更新的数据 => 角色描述
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "需要更新的数据 => 角色描述"
@@ -671,8 +655,7 @@ public class SecurityRoleServiceImpl
         /*final @NotNull UserAccountOperationInfo operator_userAccountOperationInfo = userAccountOperationInfoService.selectByUsername(operator.getUsername());*/
         if (null == operator_userAccountOperationInfo
                 || operator_userAccountOperationInfo.isEmpty()
-                || ! operator_userAccountOperationInfo.equals(operator))
-        {
+                || !operator_userAccountOperationInfo.equals(operator)) {
             //-- 非法输入: 操作者 <- 无[有效的账户操作基础记录]
             throw new IllegalArgumentException(String.format("非法参数:<description>【%s】<-【%s】</description>->【%s】&【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "操作者"
@@ -705,11 +688,10 @@ public class SecurityRoleServiceImpl
                 , old_role.getCode()
                 , old_role.getName()
                 , old_role.getDescription());
-        if (! latest_role.equals(old_role)
+        if (!latest_role.equals(old_role)
                 || !ObjectUtils.nullSafeEquals(old_role.getCode(), latest_role.getCode())
                 || !ObjectUtils.nullSafeEquals(old_role.getName(), latest_role.getName())
-                || !ObjectUtils.nullSafeEquals(old_role.getDescription(), latest_role.getDescription()))
-        {
+                || !ObjectUtils.nullSafeEquals(old_role.getDescription(), latest_role.getDescription())) {
             //-- 非法输入: 原始版本业务全量数据 -> 已过期
             throw new IllegalArgumentException(String.format("非法参数:<description>【%s】<-【%s】</description>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "原始版本业务全量数据"
@@ -726,7 +708,7 @@ public class SecurityRoleServiceImpl
                 , latest_role.getName()
                 , latest_role.getDescription());
         if (new_role_data.containsKey("role_name")
-                && ! new_role.setName((String) new_role_data.get("role_name"))) {
+                && !new_role.setName((String) new_role_data.get("role_name"))) {
             //-- 非法输入: 需要更新的数据 => 角色名称
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "需要更新的数据 => 角色名称"
@@ -736,7 +718,7 @@ public class SecurityRoleServiceImpl
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
         if (new_role_data.containsKey("role_description")
-                && ! new_role.setDescription((String) new_role_data.get("role_description"))) {
+                && !new_role.setDescription((String) new_role_data.get("role_description"))) {
             //-- 非法输入: 需要更新的数据 => 角色描述
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "需要更新的数据 => 角色描述"
@@ -763,7 +745,7 @@ public class SecurityRoleServiceImpl
                 , old_role
                 , operator
                 , operator_userAccountOperationInfo);
-        if (! logService.insert(newLog_SecurityRole)) {
+        if (!logService.insert(newLog_SecurityRole)) {
             throw new BusinessAtomicException(String.format("操作失败:<description>【%s】<-【%s】</description>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , HandleType.LogVo.SECURITY__SECURITY_ROLE__UPDATE.name
                     , "生成操作日志记录"
@@ -780,14 +762,12 @@ public class SecurityRoleServiceImpl
     /**
      * 删除指定的角色
      *
-     * @Description 删除成功后校验持久化数据; 主要为了避免在未提交的事务中进行对操作结果的非预期判断.
-     * · 完整业务流程的一部分.
-     *
      * @param role                              [（安全认证）角色]  {@link SecurityRole}
      * @param operator                          操作者
      * @param operator_userAccountOperationInfo [操作者 - 账户操作基础记录]
-     *
      * @return 操作是否成功
+     * @Description 删除成功后校验持久化数据; 主要为了避免在未提交的事务中进行对操作结果的非预期判断.
+     * · 完整业务流程的一部分.
      */
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -795,8 +775,7 @@ public class SecurityRoleServiceImpl
             , rollbackFor = Exception.class
             , timeout = 15)
     public boolean delete(@NotNull SecurityRole role, @NotNull SecurityUser operator, @NotNull UserAccountOperationInfo operator_userAccountOperationInfo)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if (null == role || role.isEmpty()) {
             //-- 非法输入: 非法角色
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -817,8 +796,7 @@ public class SecurityRoleServiceImpl
         }
         if (null == operator_userAccountOperationInfo
                 || operator_userAccountOperationInfo.isEmpty()
-                || ! operator_userAccountOperationInfo.equals(operator))
-        {
+                || !operator_userAccountOperationInfo.equals(operator)) {
             //-- 非法输入: 操作者 <- 无[有效的账户操作基础记录]
             throw new IllegalArgumentException(String.format("非法参数:<description>【%s】<-【%s】</description>->【%s】&【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "操作者"
@@ -848,7 +826,7 @@ public class SecurityRoleServiceImpl
                 , role
                 , operator
                 , operator_userAccountOperationInfo);
-        if (! logService.insert(newLog_SecurityRole)) {
+        if (!logService.insert(newLog_SecurityRole)) {
             throw new BusinessAtomicException(String.format("操作失败:<description>【%s】<-【%s】</description>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , HandleType.LogVo.SECURITY__SECURITY_ROLE__DELETION.name
                     , "生成操作日志记录"

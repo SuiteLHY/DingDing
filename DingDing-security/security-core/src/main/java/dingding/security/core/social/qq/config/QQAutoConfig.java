@@ -15,38 +15,36 @@ import org.springframework.social.connect.ConnectionFactory;
 import dingding.security.core.social.qq.connet.QQConnectionFactory;
 
 /**
- *
  * @author zhailiang
- *
  */
 @Configuration
 @ConditionalOnProperty(prefix = "dingding.security.social.qq", name = "app-id")
 public class QQAutoConfig
-		extends SocialConfigurerAdapter {
+        extends SocialConfigurerAdapter {
 
-	@Autowired
-	private SecurityProperties securityProperties;
-	
-	@Override
-	public void addConnectionFactories(ConnectionFactoryConfigurer configurer, Environment environment) {
-		configurer.addConnectionFactory(createConnectionFactory());
-	}
-	
-	@Override
-	public UserIdSource getUserIdSource() {
-		return new CurrentUserHolder();
-	}
+    @Autowired
+    private SecurityProperties securityProperties;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.springframework.boot.autoconfigure.social.SocialAutoConfigurerAdapter
-	 * #createConnectionFactory()
-	 */
-	protected ConnectionFactory<?> createConnectionFactory() {
-		QQProperties qqConfig = securityProperties.getSocial().getQq();
-		return new QQConnectionFactory(qqConfig.getProviderId(), qqConfig.getAppId(), qqConfig.getAppSecret());
-	}
+    @Override
+    public void addConnectionFactories(ConnectionFactoryConfigurer configurer, Environment environment) {
+        configurer.addConnectionFactory(createConnectionFactory());
+    }
+
+    @Override
+    public UserIdSource getUserIdSource() {
+        return new CurrentUserHolder();
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * org.springframework.boot.autoconfigure.social.SocialAutoConfigurerAdapter
+     * #createConnectionFactory()
+     */
+    protected ConnectionFactory<?> createConnectionFactory() {
+        QQProperties qqConfig = securityProperties.getSocial().getQq();
+        return new QQConnectionFactory(qqConfig.getProviderId(), qqConfig.getAppId(), qqConfig.getAppSecret());
+    }
 
 }

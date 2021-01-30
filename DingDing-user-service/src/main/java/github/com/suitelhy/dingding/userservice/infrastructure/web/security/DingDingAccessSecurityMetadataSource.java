@@ -27,9 +27,7 @@ import java.util.*;
  * @Description 自定义权限数据源，提供所有URL资源与对应角色权限的映射集合.
  * 这里重写并实现了基于数据库的权限数据源, 实现了 {@link FilterInvocationSecurityMetadataSource} 接口;
  * 框架的默认实现是 {@link DefaultFilterInvocationSecurityMetadataSource}.
- *
- * @Reference
- * {@link <a href="https://www.shuzhiduo.com/A/qVdeW1wrJP/">[权限管理系统篇] (五)-Spring security（授权过程分析）</a>}
+ * @Reference {@link <a href="https://www.shuzhiduo.com/A/qVdeW1wrJP/">[权限管理系统篇] (五)-Spring security（授权过程分析）</a>}
  * {@link <a href="https://github.com/ygsama/ipa/blob/master/oauth2-server/src/main/java/io/github/ygsama/oauth2server/config/LoginSecurityInterceptor.java">ipa/LoginSecurityInterceptor.java at master · ygsama/ipa</a>}
  */
 @Slf4j
@@ -40,7 +38,8 @@ public class DingDingAccessSecurityMetadataSource
     /**
      * @Description {[url + method] : [对应 url 资源的角色列表]}
      */
-    private static @NotNull Map<RequestMatcher, Collection<ConfigAttribute>> permissionMap;
+    private static @NotNull
+    Map<RequestMatcher, Collection<ConfigAttribute>> permissionMap;
 
     private final SecurityResourceService resourceService;
 
@@ -52,7 +51,7 @@ public class DingDingAccessSecurityMetadataSource
     /**
      * (Constructor)
      *
-     * @param resourceService   {@link SecurityResourceService}
+     * @param resourceService {@link SecurityResourceService}
      */
     DingDingAccessSecurityMetadataSource(@Autowired SecurityResourceService resourceService) {
         this.resourceService = resourceService;
@@ -103,7 +102,7 @@ public class DingDingAccessSecurityMetadataSource
         DingDingAccessSecurityMetadataSource.permissionMap.put(anonymousRequestMatcher, anonymousAttributes);
 
         //===== 剩余的url资源， @noAuth，所有人都无法访问 =====//
-        final @NotNull AntPathRequestMatcher[] noAccessRequestMatchers = new AntPathRequestMatcher[] {
+        final @NotNull AntPathRequestMatcher[] noAccessRequestMatchers = new AntPathRequestMatcher[]{
                 new AntPathRequestMatcher("/**", HTTP.MethodVo.GET.name())
                 , new AntPathRequestMatcher("/**", HTTP.MethodVo.HEAD.name())
                 , new AntPathRequestMatcher("/**", HTTP.MethodVo.POST.name())
@@ -127,14 +126,12 @@ public class DingDingAccessSecurityMetadataSource
     }
 
     /**
+     * @param object 安全对象类型 {@link org.springframework.security.web.FilterInvocation}
      * @Description 鉴权时会被 {@link AbstractSecurityInterceptor#beforeInvocation(Object)} 调用, 根据 URL 找到对应需要的权限.
-     *
-     * @param object    安全对象类型 {@link org.springframework.security.web.FilterInvocation}
      */
     @Override
     public Collection<ConfigAttribute> getAttributes(Object object)
-            throws IllegalArgumentException
-    {
+            throws IllegalArgumentException {
         if (null == permissionMap) {
             loadResourceDefine();
         }

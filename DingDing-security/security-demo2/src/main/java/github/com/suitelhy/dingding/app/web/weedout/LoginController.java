@@ -37,6 +37,7 @@ public class LoginController {
 
     /**
      * 登入 - 页面
+     *
      * @return
      */
     @ApiOperation(value = "用户登录页面")
@@ -47,6 +48,7 @@ public class LoginController {
 
     /**
      * 登入 - 操作
+     *
      * @param username
      * @param password
      * @param session
@@ -67,7 +69,7 @@ public class LoginController {
             , LogUtil logUtil
             , HttpServletRequest request) {
         final String ip = NetUtil.getIpAddress(request);
-    	/*final UserDto user = userTask.selectUserByUsername(username);*/
+        /*final UserDto user = userTask.selectUserByUsername(username);*/
         final UserDto user = UserDto.Factory.USER_DTO.create(currentUser);
         if (null == user || user.isEmpty()) {
             attributes.addFlashAttribute("error", defined.LOGIN_USERID_ERROR);
@@ -93,7 +95,7 @@ public class LoginController {
         } else {
             List<String> list = (List<String>) servletContext.getAttribute("online");
             if (list.contains(username)) {
-                attributes.addFlashAttribute("error","已在线");
+                attributes.addFlashAttribute("error", "已在线");
                 // 重定向 -> 登入 - 页面
                 return "redirect:/user/login";
             }
@@ -120,6 +122,7 @@ public class LoginController {
 
     /**
      * 登出 - 操作
+     *
      * @param session
      * @param attributes
      * @param defined

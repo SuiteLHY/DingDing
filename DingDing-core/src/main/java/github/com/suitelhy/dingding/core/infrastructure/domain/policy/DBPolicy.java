@@ -24,12 +24,9 @@ public enum DBPolicy {
     /**
      * 校验符合 <code>uuid()</code> 生成策略的 UUID 字符串
      *
-     * @Reference
-     *-> <a href="https://stackoverflow.com/questions/37615731/java-regex-for-uuid">java regex for UUID - Stack Overflow</a>
-     *
      * @param uuid
-     *
      * @return {@link Boolean#TYPE}
+     * @Reference -> <a href="https://stackoverflow.com/questions/37615731/java-regex-for-uuid">java regex for UUID - Stack Overflow</a>
      */
     public boolean validateUuid(@Nullable String uuid) {
         return null != uuid

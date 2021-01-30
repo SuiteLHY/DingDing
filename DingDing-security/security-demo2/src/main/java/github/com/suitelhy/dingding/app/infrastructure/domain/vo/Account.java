@@ -8,7 +8,6 @@ import javax.validation.constraints.NotNull;
 
 /**
  * 账户特性
- *
  */
 public interface Account<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V extends Number, _DESCRIPTION>
         extends VoModel<VO, V, _DESCRIPTION> {
@@ -17,9 +16,7 @@ public interface Account<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V exten
      * 账户 - 状态
      */
     enum StatusVo implements VoModel<StatusVo, Integer, String> {
-        DESTRUCTION(0, "注销", "该账户已经被注销, 业务逻辑上已被删除")
-        , NORMAL(1, "正常", "该账户正常")
-        , ABNORMAL(2, "异常", "该账户异常, 很可能出现了严重的问题, 应该被禁用");
+        DESTRUCTION(0, "注销", "该账户已经被注销, 业务逻辑上已被删除"), NORMAL(1, "正常", "该账户正常"), ABNORMAL(2, "异常", "该账户异常, 很可能出现了严重的问题, 应该被禁用");
 
         /**
          * 为持久化类型转换器提供支持
@@ -79,6 +76,7 @@ public interface Account<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V exten
 
         /**
          * 备注: <method>equals(Object)</method>
+         *
          * @param value
          * @return
          */

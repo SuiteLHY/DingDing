@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package github.com.suitelhy.dingding.sso.server.infrastructure.security.weedout;
 
@@ -19,20 +19,20 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class SsoUserDetailsService
-		implements UserDetailsService {
+        implements UserDetailsService {
 
-	@Autowired
-	private PasswordEncoder passwordEncoder;
-	
-	/* (non-Javadoc)
-	 * @see org.springframework.security.core.userdetails.UserDetailsService#loadUserByUsername(java.lang.String)
-	 */
-	@Override
-	public UserDetails loadUserByUsername(String username)
-			throws UsernameNotFoundException {
-		return new User(username
-				, passwordEncoder.encode("123456")/*"123456"*/
-				, AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER"));
-	}
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    /* (non-Javadoc)
+     * @see org.springframework.security.core.userdetails.UserDetailsService#loadUserByUsername(java.lang.String)
+     */
+    @Override
+    public UserDetails loadUserByUsername(String username)
+            throws UsernameNotFoundException {
+        return new User(username
+                , passwordEncoder.encode("123456")/*"123456"*/
+                , AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER"));
+    }
 
 }

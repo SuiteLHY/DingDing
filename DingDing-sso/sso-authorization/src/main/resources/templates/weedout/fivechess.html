@@ -6,7 +6,7 @@
 <head>
     <title> 五子棋 </title>
 
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
     <script type="text/javascript" th:src="@{/static/source/js/jquery.min.js}"></script>
     <script type="text/javascript" th:src="@{/static/source/js/jcanvas.min.js}"></script>
@@ -24,7 +24,7 @@
         var cellColor = "#000";
         var highlightCellColor = "red";
         var humanSide, computerSide;
-        var lastStep = [0,0];
+        var lastStep = [0, 0];
         var manual = false;
         var showOrder = false;
 
@@ -35,8 +35,8 @@
             var size = CW * 5 / 6;
             $("canvas").drawEllipse({
                 fillStyle: (player === BLACK ? "black" : "white")
-                , x: (cx-1)*CW+OS
-                , y:(cy-1)*CW+OS
+                , x: (cx - 1) * CW + OS
+                , y: (cy - 1) * CW + OS
                 , width: size
                 , height: size
             });
@@ -65,7 +65,7 @@
                     , font: "8pt Arial"
                     , text: 1
                 });
-                for(var i = 0; i < history.length; ++i) {
+                for (var i = 0; i < history.length; ++i) {
                     var step = history[i];
                     var x = step[0];
                     var y = step[1];
@@ -143,11 +143,13 @@
             }
         }
 
-        $(function() {
+        $(function () {
             if (!window.console) {
                 console = {
-                    log: function(){}
-                    , debug: function(){}
+                    log: function () {
+                    }
+                    , debug: function () {
+                    }
                 };
             }
             for (var i = 1; i <= BS; ++i) {
@@ -187,7 +189,7 @@
                 br.setLevel(1);
             } else if (level === "1") {
                 br.setLevel(2);
-            } else if(level === "2") {
+            } else if (level === "2") {
                 br.setLevel(3);
             } else {
                 br.setLevel(4);
@@ -205,7 +207,7 @@
                     break;
                 }
             }
-            lastStep = [0,0];
+            lastStep = [0, 0];
             drawBoard();
             turn();
         }
@@ -274,15 +276,16 @@
         }
 
         var lastCX = -1, lastCY = -1;
+
         function highlightCell(cx, cy) {
             if (lastCX === cx && lastCY === cy) {
                 return;
             }
             if (lastCX >= 1
-                    && lastCX <= BS
-                    && lastCX >= 1
-                    && lastCX <= BS) {
-                drawCell(lastCX,lastCY,bgColor);
+                && lastCX <= BS
+                && lastCX >= 1
+                && lastCX <= BS) {
+                drawCell(lastCX, lastCY, bgColor);
             }
             if (cx >= 1 && cx <= BS && cy >= 1 && cy <= BS) {
                 drawCell(cx, cy, highlightCellColor);
@@ -312,18 +315,18 @@
 
             if (bd.getPlayer() === humanSide || manual) {
                 drawCell(lastCX, lastCY, highlightCellColor);
-                $("canvas").mousemove(function(event) {
+                $("canvas").mousemove(function (event) {
                     var position = $("canvas").position();
                     var cx = Math.round((event.pageX - position.left - OS) / CW) + 1;
                     var cy = Math.round((event.pageY - position.top - OS) / CW) + 1;
                     if (cx >= 1
-                            && cx <= BS
-                            && cy >= 1
-                            && cy <= BS) {
+                        && cx <= BS
+                        && cy >= 1
+                        && cy <= BS) {
                         highlightCell(cx, cy);
                     }
                 });
-                $("canvas").click(function(event) {
+                $("canvas").click(function (event) {
                     var position = $("canvas").position();
                     var cx = Math.round((event.pageX - position.left - OS) / CW) + 1;
                     var cy = Math.round((event.pageY - position.top - OS) / CW) + 1;
@@ -360,65 +363,66 @@
     </style>
 </head>
 <body>
-    <table>
-        <tr>
-            <td valign="top">
-                <div style="height:540px;font-size:20px;font-family:Arial">
-                    <div id="welcome">
-                        <span style="font-size:40px;font-family:Arial;color:red">五子棋<br/></span>
+<table>
+    <tr>
+        <td valign="top">
+            <div style="height:540px;font-size:20px;font-family:Arial">
+                <div id="welcome">
+                    <span style="font-size:40px;font-family:Arial;color:red">五子棋<br/></span>
 
-                        <span style="font-size:15px;font-family:Arial;text-align:right;">Author:<a href="http://weibo.com/yssss1980">@殷山</a></span>
-                    </div>
+                    <span style="font-size:15px;font-family:Arial;text-align:right;">Author:<a
+                            href="http://weibo.com/yssss1980">@殷山</a></span>
+                </div>
 
-                    <hr/>
+                <hr/>
 
-                    <div id="opera">
-                        <fieldset>
-                            <legend>落子</legend>
+                <div id="opera">
+                    <fieldset>
+                        <legend>落子</legend>
 
-                            <input type="radio" name="side" value="BLACK" checked/> 黑方<br/>
+                        <input type="radio" name="side" value="BLACK" checked/> 黑方<br/>
 
-                            <input type="radio" name="side" value="WHITE"/> 白方 <br/>
-                        </fieldset>
+                        <input type="radio" name="side" value="WHITE"/> 白方 <br/>
+                    </fieldset>
 
-                        <br/>
+                    <br/>
 
-                        <fieldset>
-                            <legend>难度</legend>
-                            <input type="radio" name="level" value="0"/> 傻瓜<br/>
-                            <input type="radio" name="level" value="1"/> 简单<br/>
-                            <input type="radio" name="level" value="2" checked/> 中等<br/>
-                            <input type="radio" name="level" value="3"/> 困难 <br/>
-                        </fieldset>
+                    <fieldset>
+                        <legend>难度</legend>
+                        <input type="radio" name="level" value="0"/> 傻瓜<br/>
+                        <input type="radio" name="level" value="1"/> 简单<br/>
+                        <input type="radio" name="level" value="2" checked/> 中等<br/>
+                        <input type="radio" name="level" value="3"/> 困难 <br/>
+                    </fieldset>
 
-                        <br/>
+                    <br/>
 
-                        <input type="checkbox" id="orderChk" onclick="troggleOrder()"/>显示落子次序
+                    <input type="checkbox" id="orderChk" onclick="troggleOrder()"/>显示落子次序
 
-                        <br/><br/>
+                    <br/><br/>
 
-                        <input class="button" type="button" onclick="newGame()" value="新游戏"/>
+                    <input class="button" type="button" onclick="newGame()" value="新游戏"/>
 
-                        <br/>
+                    <br/>
 
-                        <input class="button" type="button" onclick="regret()" value="悔棋"/>
+                    <input class="button" type="button" onclick="regret()" value="悔棋"/>
 
-                        <br/>
-                    </div>
                     <br/>
                 </div>
-            </td>
+                <br/>
+            </div>
+        </td>
 
-            <td>
-                <canvas id="bdcanvas"
-                        width="640"
-                        height="640"
-                        style="background:darkorange">
-                </canvas>
-            </td>
-        </tr>
-    </table>
+        <td>
+            <canvas id="bdcanvas"
+                    width="640"
+                    height="640"
+                    style="background:darkorange">
+            </canvas>
+        </td>
+    </tr>
+</table>
 
-    <div id="log"></div>
+<div id="log"></div>
 </body>
 </html>

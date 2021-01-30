@@ -18,9 +18,7 @@ public interface Resource<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V 
      */
     enum TypeVo
             implements VoModel<TypeVo, Integer, String> {
-        BASE_INFO(0, "基础信息")
-        , MENU(1, "菜单")
-        , BUTTON(2, "按钮");
+        BASE_INFO(0, "基础信息"), MENU(1, "菜单"), BUTTON(2, "按钮");
 
         /**
          * 为持久化类型转换器提供支持
@@ -49,7 +47,8 @@ public interface Resource<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V 
 
         public final Integer code;
 
-        public final @NotNull String name;
+        public final @NotNull
+        String name;
 
         TypeVo(Integer code, @NotNull String name) {
             this.code = code;
@@ -72,12 +71,14 @@ public interface Resource<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V 
          * @return
          */
         @Override
-        public @NotNull String displayName() {
+        public @NotNull
+        String displayName() {
             return this.name;
         }
 
         @Override
-        public @NotNull String toString() {
+        public @NotNull
+        String toString() {
             return VoModel.toString(this);
         }
 
@@ -88,7 +89,8 @@ public interface Resource<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V 
          */
         @Override
         @SuppressWarnings("unchecked")
-        public @NotNull Converter voAttributeConverter() {
+        public @NotNull
+        Converter voAttributeConverter() {
             return Converter.getInstance();
         }
 

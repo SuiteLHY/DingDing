@@ -81,9 +81,9 @@ public class UserTaskTests {
         Assert.notNull(newUser
                 , "insert - User.Factory.USER -> create(..) -> null");
         Assert.isTrue(userTask.insert(newUserDto
-                    , newUser.getPassword()
-                    , ip()
-                    , new CalendarController().toString())
+                , newUser.getPassword()
+                , ip()
+                , new CalendarController().toString())
                 , "insert - insert(User user) -> false");
         //=== select
         Assert.notNull(result = userTask.selectUserByUserid(newUserDto.id())
@@ -110,9 +110,9 @@ public class UserTaskTests {
         Assert.notNull(newUser
                 , "User.Factory.USER -> create(..) -> null");
         Assert.isTrue(userTask.insert(newUserDto
-                    , newUser.getPassword()
-                    , ip()
-                    , new CalendarController().toString())
+                , newUser.getPassword()
+                , ip()
+                , new CalendarController().toString())
                 , "insert(User user) -> false");
     }
 
@@ -125,17 +125,17 @@ public class UserTaskTests {
         Assert.notNull(newUser
                 , "insert - User.Factory.USER -> create(..) -> null");
         Assert.isTrue(userTask.insert(newUserDto
-                    , newUser.getPassword()
-                    , ip()
-                    , new CalendarController().toString())
+                , newUser.getPassword()
+                , ip()
+                , new CalendarController().toString())
                 , "insert - insert(User user) -> false");
         //=== update
         newUserDto.setAge("18");
         newUserDto.setIntroduction("最新_" + newUserDto.getIntroduction());
         Assert.isTrue(userTask.update(newUserDto
-                    , newUser.getPassword()
-                    , ip()
-                    , new CalendarController().toString())
+                , newUser.getPassword()
+                , ip()
+                , new CalendarController().toString())
                 , "update - update(User user) -> false");
         System.out.println(newUser);
     }
@@ -148,9 +148,9 @@ public class UserTaskTests {
         final UserDto newUserDto = UserDto.Factory.USER_DTO.create(newUser);
         //=== insert
         Assert.isTrue(userTask.insert(newUserDto
-                    , newUser.getPassword()
-                    , ip()
-                    , new CalendarController().toString())
+                , newUser.getPassword()
+                , ip()
+                , new CalendarController().toString())
                 , "===== insert - insert(User) -> null");
         Assert.isTrue(!newUserDto.isEmpty()
                 , "===== insert - insert(User) -> 无效的 User");

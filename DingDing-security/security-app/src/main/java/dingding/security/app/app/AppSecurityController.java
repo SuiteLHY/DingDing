@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package dingding.security.app.app;
 
@@ -25,26 +25,26 @@ import dingding.security.core.social.support.SocialUserInfo;
  */
 @RestController
 public class AppSecurityController
-		extends SocialController {
-	
-	@Autowired
-	private ProviderSignInUtils providerSignInUtils;
-	
-	@Autowired
-	private AppSignUpUtils appSignUpUtils;
-	
-	/**
-	 * 需要注册时跳到这里，返回401和用户信息给前端
-	 *
-	 * @param request
-	 * @return
-	 */
-	@GetMapping(SecurityConstants.DEFAULT_SOCIAL_USER_INFO_URL)
-	@ResponseStatus(HttpStatus.UNAUTHORIZED)
-	public SocialUserInfo getSocialUserInfo(HttpServletRequest request) {
-		Connection<?> connection = providerSignInUtils.getConnectionFromSession(new ServletWebRequest(request));
-		appSignUpUtils.saveConnectionData(new ServletWebRequest(request), connection.createData());
-		return buildSocialUserInfo(connection);
-	}
+        extends SocialController {
+
+    @Autowired
+    private ProviderSignInUtils providerSignInUtils;
+
+    @Autowired
+    private AppSignUpUtils appSignUpUtils;
+
+    /**
+     * 需要注册时跳到这里，返回401和用户信息给前端
+     *
+     * @param request
+     * @return
+     */
+    @GetMapping(SecurityConstants.DEFAULT_SOCIAL_USER_INFO_URL)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public SocialUserInfo getSocialUserInfo(HttpServletRequest request) {
+        Connection<?> connection = providerSignInUtils.getConnectionFromSession(new ServletWebRequest(request));
+        appSignUpUtils.saveConnectionData(new ServletWebRequest(request), connection.createData());
+        return buildSocialUserInfo(connection);
+    }
 
 }

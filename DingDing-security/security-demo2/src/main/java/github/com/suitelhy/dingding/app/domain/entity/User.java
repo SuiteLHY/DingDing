@@ -18,12 +18,16 @@ import java.time.LocalDateTime;
 
 /**
  * 用户信息
- *
+ * <p>
+ * <p>
+ * 关于数据脱敏的自定义注解实现, 可参考: <a href="https://blog.csdn.net/liufei198613/article/details/79009015">
+ * ->     注解实现json序列化的时候自动进行数据脱敏_liufei198613的博客-CSDN博客</a>
  */
 /**
  * 关于数据脱敏的自定义注解实现, 可参考: <a href="https://blog.csdn.net/liufei198613/article/details/79009015">
  *->     注解实现json序列化的时候自动进行数据脱敏_liufei198613的博客-CSDN博客</a>
  */
+
 /**
  * 关于 id 生成策略, 个人倾向于使用"代理键", 所选策略还是应该交由数据库来实现.
  * @Reference <a href="https://dzone.com/articles/persisting-natural-key-entities-with-spring-data-j">
@@ -40,7 +44,7 @@ public class User
     @GeneratedValue(generator = "USER_ID_STRATEGY")
     @GenericGenerator(name = "USER_ID_STRATEGY", strategy = "uuid")
     @Id
-    private /*final */String userid;
+    private /*final */ String userid;
 
     // 用户名称
     @Column(nullable = false, unique = true)
@@ -95,7 +99,8 @@ public class User
 
     //===== Entity Model =====//
     @Override
-    public @NotNull String id() {
+    public @NotNull
+    String id() {
         return this.getUserid();
     }
 
@@ -137,7 +142,7 @@ public class User
                 && Validator.USER.password(this.password) // 用户密码
                 && Validator.USER.username(this.username) // 用户名称
                 && (Validator.USER.status(this.status)
-                        && Account.StatusVo.NORMAL.equals(this.status))/* 账号状态 */;
+                && Account.StatusVo.NORMAL.equals(this.status))/* 账号状态 */;
     }
 
 //    @Override
@@ -158,9 +163,10 @@ public class User
     }
 
     //===== Entity Validator =====//
+
     /**
      * 用户 - 属性校验器
-     * @Description 各个属性的基础校验(注意: ≠完全校验).
+     * @Description 各个属性的基础校验(注意 : ≠ 完全校验).
      */
     public enum Validator implements EntityValidator<User, String> {
         USER;
@@ -273,16 +279,19 @@ public class User
 //    }
 
     //===== base constructor =====//
+
     /**
      * 仅用于持久化注入
      */
-    public User() {}
+    public User() {
+    }
 
     //===== entity factory =====//
+
     /**
      * 创建/更新用户 -> Entity对象
      *
-     * @Description 添加(<param>id</param>为 null) / 更新(<param>id</param>合法)用户.
+     * @Description 添加(< param > id < / param > 为 null) / 更新(<param>id</param>合法)用户.
      * @param id            用户ID
      * @param age           用户 - 年龄
      * @param firsttime     注册时间

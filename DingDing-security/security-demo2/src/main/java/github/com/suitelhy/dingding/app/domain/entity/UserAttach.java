@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
  * 用户 <- 附件
  *
  * @Description 用于存储用户直接关联的各种附件;
- *-> 其中数据占用小的直接存储数据内容, 大的则存储文件系统上的存放地址链接.
+ * -> 其中数据占用小的直接存储数据内容, 大的则存储文件系统上的存放地址链接.
  */
 @Entity
 @Table(name = "user_attach")
@@ -118,13 +118,15 @@ public class UserAttach
     }
 
     //===== Entity Model =====//
+
     /**
      * 唯一标识 <- Entity 对象
      *
      * @return The unique identify of the entity.
      */
     @Override
-    public @NotNull String id() {
+    public @NotNull
+    String id() {
         return this.id;
     }
 
@@ -159,12 +161,14 @@ public class UserAttach
      * @Description <abstractClass>AbstractEntityModel</abstractClass>提供的模板设计.
      */
     @Override
-    protected @NotNull boolean validateId(@NotNull String id) {
+    protected @NotNull
+    boolean validateId(@NotNull String id) {
         return Validator.USER.id(id);
     }
 
     //===== base constructor =====//
-    public UserAttach() {}
+    public UserAttach() {
+    }
 
     private UserAttach(@Nullable String id
             , @NotNull String userid

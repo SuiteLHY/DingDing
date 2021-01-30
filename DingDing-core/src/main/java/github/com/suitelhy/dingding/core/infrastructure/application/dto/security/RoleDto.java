@@ -12,7 +12,6 @@ import javax.validation.constraints.NotNull;
  * (安全) 角色
  *
  * @Description (安全) 角色 -> DTO.
- *
  * @see SecurityRole
  */
 public class RoleDto
@@ -50,12 +49,10 @@ public class RoleDto
      * (Constructor)
      *
      * @param dtoId {@link SecurityRole}
-     *
      * @throws IllegalArgumentException 此时 {@param dtoId} 非法
      */
     protected RoleDto(@NotNull SecurityRole dtoId)
-            throws IllegalArgumentException
-    {
+            throws IllegalArgumentException {
         if (null == dtoId || !dtoId.isEntityLegal()) {
             //-- 非法输入: <param>dtoId</param>
             throw new IllegalArgumentException(this.getClass().getSimpleName()
@@ -93,9 +90,8 @@ public class RoleDto
     /**
      * 是否符合业务要求 <- Entity 对象
      *
-     * @Description 需要实现类实现该接口
-     *
      * @return {@link Boolean#TYPE}
+     * @Description 需要实现类实现该接口
      */
     @Override
     public boolean isEntityLegal() {
@@ -108,39 +104,24 @@ public class RoleDto
      * @return 转换结果
      */
     @Override
-    public @NotNull String toJSONString() {
-        return String.format("%s{code=\"%s\", name=\"%s\", description=\"%s\"}"
+    public @NotNull
+    String toJSONString() {
+        /*return String.format("%s{code=\"%s\", name=\"%s\", description=\"%s\"}"
+                , getClass().getSimpleName()
+                , (null != this.code) ? this.code : ""
+                , (null != this.name) ? this.name : ""
+                , (null != this.description) ? this.description : "");*/
+        return String.format("{\"class_name\":\"%s\", \"code\":\"%s\", \"name\":\"%s\", \"description\":\"%s\"}"
                 , getClass().getSimpleName()
                 , (null != this.code) ? this.code : ""
                 , (null != this.name) ? this.name : ""
                 , (null != this.description) ? this.description : "");
     }
 
-    /**
-     * Returns a string representation of the object. In general, the
-     * {@code toString} method returns a string that
-     * "textually represents" this object. The result should
-     * be a concise but informative representation that is easy for a
-     * person to read.
-     * It is recommended that all subclasses override this method.
-     * <p>
-     * The {@code toString} method for class {@code Object}
-     * returns a string consisting of the name of the class of which the
-     * object is an instance, the at-sign character `{@code @}', and
-     * the unsigned hexadecimal representation of the hash code of the
-     * object. In other words, this method returns a string equal to the
-     * value of:
-     * <blockquote>
-     * <pre>
-     * getClass().getName() + '@' + Integer.toHexString(hashCode())
-     * </pre></blockquote>
-     *
-     * @return a string representation of the object.
-     */
-    @NotNull
     @Override
-    public String toString() {
-        return DtoModel.toString(this);
+    public @NotNull
+    String toString() {
+        return this.toJSONString();
     }
 
     //===== Factory =====//
@@ -152,8 +133,7 @@ public class RoleDto
         /**
          * 创建 DTO
          *
-         * @param role  {@link SecurityRole}
-         *
+         * @param role {@link SecurityRole}
          * @return {@link RoleDto}
          */
         @NotNull
@@ -164,17 +144,15 @@ public class RoleDto
         /**
          * 创建 DTO
          *
-         * @param code          角色编码
-         * @param name          角色名称
-         * @param description   角色描述
-         *
+         * @param code        角色编码
+         * @param name        角色名称
+         * @param description 角色描述
          * @return {@link RoleDto}
          */
         @NotNull
         public RoleDto create(@NotNull String code
                 , @NotNull String name
-                , @Nullable String description)
-        {
+                , @Nullable String description) {
             final @NotNull SecurityRole role = SecurityRole.Factory.ROLE.create(code
                     , name
                     , description);
@@ -184,8 +162,7 @@ public class RoleDto
         /**
          * 创建 DTO
          *
-         * @param roleVo    {@link Security.RoleVo}
-         *
+         * @param roleVo {@link Security.RoleVo}
          * @return {@link RoleDto}
          */
         @NotNull
@@ -197,13 +174,11 @@ public class RoleDto
         /**
          * 更新 DTO
          *
-         * @param id            数据 ID
-         * @param code          角色编码
-         * @param name          角色名称
-         * @param description   角色描述
-         *
+         * @param id          数据 ID
+         * @param code        角色编码
+         * @param name        角色名称
+         * @param description 角色描述
          * @return {@link RoleDto}
-         *
          * @throws IllegalArgumentException 此时 {@param id} 非法
          */
         @NotNull
@@ -211,8 +186,7 @@ public class RoleDto
                 , @NotNull String code
                 , @NotNull String name
                 , @Nullable String description)
-                throws IllegalArgumentException
-        {
+                throws IllegalArgumentException {
             final @NotNull SecurityRole role = SecurityRole.Factory.ROLE.update(id
                     , code
                     , name

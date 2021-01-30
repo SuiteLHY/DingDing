@@ -36,7 +36,6 @@ import java.util.*;
  * (安全) 用户
  *
  * @Description (安全) 用户 - 业务实现.
- *
  * @see SecurityUser
  * @see SecurityUserRepository
  * @see SecurityUserService
@@ -76,15 +75,12 @@ public class SecurityUserServiceImpl
      * 判断存在
      *
      * @param userId {@link SecurityUser#getUserId()}
-     *
      * @return 判断结果
-     *
      * @throws IllegalArgumentException
      */
     @Override
     public boolean existByUserId(@NotNull String userId)
-            throws IllegalArgumentException
-    {
+            throws IllegalArgumentException {
         if (!SecurityUser.Validator.USER.userId(userId)) {
             //-- 非法输入: [用户 ID]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
@@ -102,15 +98,12 @@ public class SecurityUserServiceImpl
      * 判断存在
      *
      * @param username {@link SecurityUser#getUsername()}
-     *
      * @return 判断结果
-     *
      * @throws IllegalArgumentException
      */
     @Override
     public boolean existByUsername(@NotNull String username)
-            throws IllegalArgumentException
-    {
+            throws IllegalArgumentException {
         if (!SecurityUser.Validator.USER.username(username)) {
             //-- 非法输入: 用户名称
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
@@ -127,16 +120,13 @@ public class SecurityUserServiceImpl
     /**
      * 是否具有管理员权限
      *
-     * @param username  用户名称    {@link SecurityUser.Validator#username(String)}
-     *
+     * @param username 用户名称    {@link SecurityUser.Validator#username(String)}
      * @return {@link Boolean}
-     *
      * @throws IllegalArgumentException
      */
     @Override
     public boolean existAdminPermission(@NotNull String username)
-            throws IllegalArgumentException
-    {
+            throws IllegalArgumentException {
         if (null == username || !SecurityUser.Validator.USER.username(username)) {
             //-- 非法输入: 用户名称
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
@@ -190,7 +180,6 @@ public class SecurityUserServiceImpl
      *
      * @param pageIndex 分页索引, 从0开始
      * @param pageSize
-     *
      * @return
      */
     @Override
@@ -225,14 +214,13 @@ public class SecurityUserServiceImpl
     /**
      * 查询总页数
      *
-     * @Description 查询数据列表 - 分页 - 总页数
-     *
      * @param pageSize 分页 - 每页容量
-     *
      * @return 分页 - 总页数
+     * @Description 查询数据列表 - 分页 - 总页数
      */
     @Override
-    public @NotNull Long selectCount(int pageSize) {
+    public @NotNull
+    Long selectCount(int pageSize) {
         if (pageSize < 1) {
             //-- 非法输入: <param>pageSize</param>
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
@@ -252,13 +240,13 @@ public class SecurityUserServiceImpl
     /**
      * 查询指定的用户
      *
-     * @param userId    [用户 ID] {@link SecurityUser.Validator#userId(String)}
-     *
+     * @param userId [用户 ID] {@link SecurityUser.Validator#userId(String)}
      * @return {@link SecurityUserRole}
      */
     @Override
-    public @NotNull SecurityUser selectByUserId(@NotNull String userId) {
-        if (! SecurityUser.Validator.USER.userId(userId)) {
+    public @NotNull
+    SecurityUser selectByUserId(@NotNull String userId) {
+        if (!SecurityUser.Validator.USER.userId(userId)) {
             //-- 非法输入: [用户 ID]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                     , "[用户 ID]"
@@ -275,13 +263,13 @@ public class SecurityUserServiceImpl
     /**
      * 查询指定的用户
      *
-     * @param username  用户名称    {@link SecurityUser.Validator#username(String)}
-     *
+     * @param username 用户名称    {@link SecurityUser.Validator#username(String)}
      * @return {@link SecurityUserRole}
      */
     @Override
-    public @NotNull SecurityUser selectByUsername(@NotNull String username) {
-        if (! SecurityUser.Validator.USER.username(username)) {
+    public @NotNull
+    SecurityUser selectByUsername(@NotNull String username) {
+        if (!SecurityUser.Validator.USER.username(username)) {
             //-- 非法输入: 用户名称
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                     , "用户名称"
@@ -432,22 +420,18 @@ public class SecurityUserServiceImpl
     /**
      * 新增一个用户
      *
-     * @Description
-     * · 完整业务流程的一部分.
-     *
      * @param user                              [（安全认证）用户]
      * @param operator                          操作者
      * @param operator_userAccountOperationInfo [操作者 - 账户操作基础记录]
-     *
      * @return 操作是否成功 / 是否已存在相同的有效数据
+     * @Description · 完整业务流程的一部分.
      */
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED
             , timeout = 15)
     public boolean insert(@NotNull SecurityUser user, @NotNull SecurityUser operator, @NotNull UserAccountOperationInfo operator_userAccountOperationInfo)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if (null == user || !user.isEntityLegal()) {
             //-- 非法输入: 预期新增的用户
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
@@ -469,8 +453,7 @@ public class SecurityUserServiceImpl
         /*final @NotNull UserAccountOperationInfo operator_userAccountOperationInfo = userAccountOperationInfoService.selectByUsername(operator.getUsername());*/
         if (null == operator_userAccountOperationInfo
                 || operator_userAccountOperationInfo.isEmpty()
-                || ! operator_userAccountOperationInfo.equals(operator))
-        {
+                || !operator_userAccountOperationInfo.equals(operator)) {
             //-- 非法输入: 操作者 <- 无[有效的账户操作基础记录]
             throw new IllegalArgumentException(String.format("非法参数:<description>【%s】 <- %s!</description>->【%s】&【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                     , "操作者"
@@ -484,7 +467,7 @@ public class SecurityUserServiceImpl
 
         if (repository.existsByUsername(user.getUsername())) {
             //--- 已存在相同数据 (根据 EntityID 判断) 的情况
-            return ! repository.findByUsername(user.getUsername())
+            return !repository.findByUsername(user.getUsername())
                     .orElseGet(SecurityUser.Factory.USER::createDefault)
                     .isEmpty();
         }
@@ -508,7 +491,7 @@ public class SecurityUserServiceImpl
                 , newUser
                 , operator
                 , operator_userAccountOperationInfo);
-        if (! logService.insert(newLog_SecurityUser)) {
+        if (!logService.insert(newLog_SecurityUser)) {
             throw new BusinessAtomicException(String.format("操作失败:<description>【%s】 <- %s!</description>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                     , HandleType.LogVo.SECURITY__SECURITY_USER__ADD.name
                     , "生成操作日志记录"
@@ -529,7 +512,6 @@ public class SecurityUserServiceImpl
      * @param user                              [（安全认证）用户]
      * @param operator                          操作者
      * @param operator_userAccountOperationInfo [操作者 - 账户操作基础记录]
-     *
      * @return 操作是否成功
      */
     @Override
@@ -538,8 +520,7 @@ public class SecurityUserServiceImpl
             , rollbackFor = Exception.class
             , timeout = 15)
     public boolean update(@NotNull SecurityUser user, @NotNull SecurityUser operator, @NotNull UserAccountOperationInfo operator_userAccountOperationInfo)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if (null == user || user.isEmpty()) {
             //-- 非法输入: 非法用户
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
@@ -561,8 +542,7 @@ public class SecurityUserServiceImpl
         /*final @NotNull UserAccountOperationInfo operator_userAccountOperationInfo = userAccountOperationInfoService.selectByUsername(operator.getUsername());*/
         if (null == operator_userAccountOperationInfo
                 || operator_userAccountOperationInfo.isEmpty()
-                || ! operator_userAccountOperationInfo.equals(operator))
-        {
+                || !operator_userAccountOperationInfo.equals(operator)) {
             //-- 非法输入: 操作者 <- 无[有效的账户操作基础户记录]
             throw new IllegalArgumentException(String.format("非法参数:<description>【%s】 <- %s!</description>->【%s】&【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                     , "操作者"
@@ -616,7 +596,7 @@ public class SecurityUserServiceImpl
                 , user
                 , operator
                 , operator_userAccountOperationInfo);
-        if (! logService.insert(newLog_SecurityUser)) {
+        if (!logService.insert(newLog_SecurityUser)) {
             throw new BusinessAtomicException(String.format("操作失败:<description>【%s】 <- %s!</description>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                     , HandleType.LogVo.SECURITY__SECURITY_USER__ADD.name
                     , "生成操作日志记录"
@@ -634,14 +614,12 @@ public class SecurityUserServiceImpl
     /**
      * 删除指定的用户
      *
-     * @Description 删除成功后校验持久化数据; 主要为了避免在未提交的事务中进行对操作结果的非预期判断.
-     * · 完整业务流程的一部分.
-     *
      * @param user                              [（安全认证）用户]
      * @param operator                          操作者
      * @param operator_userAccountOperationInfo [操作者 - 账户操作基础记录]
-     *
      * @return 操作是否成功
+     * @Description 删除成功后校验持久化数据; 主要为了避免在未提交的事务中进行对操作结果的非预期判断.
+     * · 完整业务流程的一部分.
      */
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -650,8 +628,7 @@ public class SecurityUserServiceImpl
     public boolean delete(@NotNull SecurityUser user
             , @NotNull SecurityUser operator
             , @NotNull UserAccountOperationInfo operator_userAccountOperationInfo)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if (null == user || user.isEmpty()) {
             //-- 非法输入: 非法用户
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
@@ -673,8 +650,7 @@ public class SecurityUserServiceImpl
         /*final @NotNull UserAccountOperationInfo operator_userAccountOperationInfo = userAccountOperationInfoService.selectByUsername(operator.getUsername());*/
         if (null == operator_userAccountOperationInfo
                 || operator_userAccountOperationInfo.isEmpty()
-                || ! operator_userAccountOperationInfo.equals(operator))
-        {
+                || !operator_userAccountOperationInfo.equals(operator)) {
             //-- 非法输入: 操作者 <- 无[有效的账户操作基础户记录]
             throw new IllegalArgumentException(String.format("非法参数:<description>【%s】 <- %s!</description>->【%s】&【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                     , "操作者"
@@ -686,7 +662,7 @@ public class SecurityUserServiceImpl
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
 
-        if (! repository.existsById(user.getUserId())) {
+        if (!repository.existsById(user.getUserId())) {
             //--- 不存在预期删除的数据的情况
             return true;
         } else {
@@ -710,7 +686,7 @@ public class SecurityUserServiceImpl
                     , user
                     , operator
                     , operator_userAccountOperationInfo);
-            if (! logService.insert(newLog_SecurityUser)) {
+            if (!logService.insert(newLog_SecurityUser)) {
                 throw new BusinessAtomicException(String.format("操作失败:<description>【%s】 <- %s!</description>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                         , HandleType.LogVo.SECURITY__SECURITY_USER__DELETE.name
                         , "生成操作日志记录"

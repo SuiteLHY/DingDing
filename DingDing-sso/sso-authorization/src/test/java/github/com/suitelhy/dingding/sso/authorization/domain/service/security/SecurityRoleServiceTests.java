@@ -30,7 +30,6 @@ import java.util.*;
  * (安全) 角色 - 业务 <- 测试单元
  *
  * @Description 测试单元.
- *
  * @see SecurityRoleService
  */
 @SpringBootTest
@@ -59,35 +58,40 @@ public class SecurityRoleServiceTests {
      *
      * @return {@link SecurityUser}
      */
-    private @NotNull SecurityUser operator() {
+    private @NotNull
+    SecurityUser operator() {
         return securityUserService.selectByUsername("admin");
     }
 
-    private @NotNull SecurityRole getEntityForTest() {
+    private @NotNull
+    SecurityRole getEntityForTest() {
         return getEntityForTest(null);
     }
 
-    private @NotNull SecurityRole getEntityForTest(@Nullable Integer seed) {
+    private @NotNull
+    SecurityRole getEntityForTest(@Nullable Integer seed) {
         return SecurityRole.Factory.ROLE.create(
                 "test"
                         .concat(new CalendarController().toString().replaceAll("[-:\\s]", "")
-                        .concat(null == seed ? "" : Integer.toString(seed)))
+                                .concat(null == seed ? "" : Integer.toString(seed)))
                 , "测试角色".concat(null == seed ? "" : Integer.toString(seed))
                 , "测试用数据");
     }
 
-    private @NotNull SecurityResource getResourceForTest() {
+    private @NotNull
+    SecurityResource getResourceForTest() {
         return getResourceForTest(null);
     }
 
-    private @NotNull SecurityResource getResourceForTest(@Nullable Integer seed) {
+    private @NotNull
+    SecurityResource getResourceForTest(@Nullable Integer seed) {
         @NotNull String seedString = (null == seed)
                 ? ""
                 : Integer.toString(seed);
         return SecurityResource.Factory.RESOURCE.create(
                 "test"
                         .concat(new CalendarController().toString().replaceAll("[-:\\s]", "")
-                        .concat(seedString))
+                                .concat(seedString))
                 , null
                 , null
                 , "test".concat(seedString)
@@ -108,8 +112,7 @@ public class SecurityRoleServiceTests {
     @Test
     @Transactional
     public void existsByCode()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         // 获取必要的测试用身份信息
         final @NotNull SecurityUser operator = operator();
         final @NotNull UserAccountOperationInfo operator_UserAccountOperationInfo = userEvent.selectUserAccountOperationInfoByUsername(operator.getUsername());
@@ -132,8 +135,7 @@ public class SecurityRoleServiceTests {
     @Test
     @Transactional
     public void selectCount()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         final long result;
 
         // 获取必要的测试用身份信息
@@ -158,8 +160,7 @@ public class SecurityRoleServiceTests {
     @Test
     @Transactional
     public void selectRoleByCode()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         final @NotNull SecurityRole result;
 
         // 获取必要的测试用身份信息
@@ -186,8 +187,7 @@ public class SecurityRoleServiceTests {
     @Transactional(isolation = Isolation.SERIALIZABLE
             , timeout = 20)
     public void selectResourceByCode()
-            throws Exception
-    {
+            throws Exception {
         // 获取必要的测试用身份信息
         final @NotNull SecurityUser operator = operator();
         final @NotNull UserAccountOperationInfo operator_UserAccountOperationInfo = userEvent.selectUserAccountOperationInfoByUsername(operator.getUsername());
@@ -201,21 +201,21 @@ public class SecurityRoleServiceTests {
                 , "===== getEntityForTest() -> 无效的 Entity");
         Assert.isTrue(service.insert(newEntity, operator, operator_UserAccountOperationInfo)
                 , "===== 添加测试数据 -> false");
-        Assert.isTrue(! newEntity.isEmpty()
+        Assert.isTrue(!newEntity.isEmpty()
                 , "===== 添加测试数据 -> 无效的 Entity");
 
         Assert.isTrue(newEntity1.isEntityLegal()
                 , "===== getEntityForTest() -> 无效的 Entity");
         Assert.isTrue(service.insert(newEntity1, operator, operator_UserAccountOperationInfo)
                 , "===== 添加测试数据 -> false");
-        Assert.isTrue(! newEntity1.isEmpty()
+        Assert.isTrue(!newEntity1.isEmpty()
                 , "===== 添加测试数据 -> 无效的 Entity");
 
         Assert.isTrue(newEntity2.isEntityLegal()
                 , "===== getEntityForTest() -> 无效的 Entity");
         Assert.isTrue(service.insert(newEntity2, operator, operator_UserAccountOperationInfo)
                 , "===== 添加测试数据 -> false");
-        Assert.isTrue(! newEntity2.isEmpty() || newEntity2.equals(newEntity1)
+        Assert.isTrue(!newEntity2.isEmpty() || newEntity2.equals(newEntity1)
                 , "===== 添加测试数据 -> 无效的 Entity");
 
         final @NotNull SecurityResource newResource = getResourceForTest(2);
@@ -230,25 +230,25 @@ public class SecurityRoleServiceTests {
                 , "===== 添加测试数据 -> false");
 
         final @NotNull Set<SecurityRole> roles = new HashSet<>(2);
-        if (! newEntity.isEmpty()) {
+        if (!newEntity.isEmpty()) {
             roles.add(newEntity);
         }
-        if (! newEntity1.isEmpty()) {
+        if (!newEntity1.isEmpty()) {
             roles.add(newEntity1);
         }
-        if (! newEntity2.isEmpty()) {
+        if (!newEntity2.isEmpty()) {
             roles.add(newEntity2);
         }
         System.out.println("===> roles:\n" + roles);
 
         final @NotNull Set<SecurityResource> resources = new HashSet<>(2);
-        if (! newResource.isEmpty()) {
+        if (!newResource.isEmpty()) {
             resources.add(newResource);
         }
-        if (! newResource1.isEmpty()) {
+        if (!newResource1.isEmpty()) {
             resources.add(newResource1);
         }
-        if (! newResource2.isEmpty()) {
+        if (!newResource2.isEmpty()) {
             resources.add(newResource2);
         }
         System.out.println("===> resources:\n" + resources);
@@ -267,7 +267,7 @@ public class SecurityRoleServiceTests {
         for (@NotNull SecurityRole eachRole : roles) {
             final @NotNull List<SecurityResource> eachRole_resources = securityRoleEvent.selectResourceOnRoleByRoleCode(eachRole.getCode());
 
-            Assert.isTrue(null != eachRole_resources && ! eachRole_resources.isEmpty()
+            Assert.isTrue(null != eachRole_resources && !eachRole_resources.isEmpty()
                     , "===== selectResourceByCode(..) <- 非预期结果! ".concat(eachRole.toString()));
 
             existResourceNum += eachRole_resources.size();
@@ -283,8 +283,7 @@ public class SecurityRoleServiceTests {
     @Test
     @Transactional
     public void insert()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         final @NotNull SecurityRole newEntity = getEntityForTest();
 
         // 获取必要的测试用身份信息
@@ -295,7 +294,7 @@ public class SecurityRoleServiceTests {
                 , "getEntityForTest() -> 无效的 Entity");
         Assert.isTrue(service.insert(newEntity, operator, operator_UserAccountOperationInfo)
                 , "===== insert(Entity) -> false");
-        Assert.isTrue(! newEntity.isEmpty()
+        Assert.isTrue(!newEntity.isEmpty()
                 , "===== insert(Entity) -> 无效的 Entity");
 
         System.out.println(newEntity);
@@ -305,8 +304,7 @@ public class SecurityRoleServiceTests {
     @Transactional(isolation = Isolation.SERIALIZABLE
             , timeout = 20)
     public void insertResource()
-            throws Exception
-    {
+            throws Exception {
         // 获取必要的测试用身份信息
         final @NotNull SecurityUser operator = operator();
         final @NotNull UserAccountOperationInfo operator_UserAccountOperationInfo = userEvent.selectUserAccountOperationInfoByUsername(operator.getUsername());
@@ -320,21 +318,21 @@ public class SecurityRoleServiceTests {
                 , "===== getEntityForTest() -> 无效的 Entity");
         Assert.isTrue(service.insert(newEntity, operator, operator_UserAccountOperationInfo)
                 , "===== 添加测试数据 -> false");
-        Assert.isTrue(! newEntity.isEmpty()
+        Assert.isTrue(!newEntity.isEmpty()
                 , "===== 添加测试数据 -> 无效的 Entity");
 
         Assert.isTrue(newEntity1.isEntityLegal()
                 , "===== getEntityForTest() -> 无效的 Entity");
         Assert.isTrue(service.insert(newEntity1, operator, operator_UserAccountOperationInfo)
                 , "===== 添加测试数据 -> false");
-        Assert.isTrue(! newEntity1.isEmpty()
+        Assert.isTrue(!newEntity1.isEmpty()
                 , "===== 添加测试数据 -> 无效的 Entity");
 
         Assert.isTrue(newEntity2.isEntityLegal()
                 , "===== getEntityForTest() -> 无效的 Entity");
         Assert.isTrue(service.insert(newEntity2, operator, operator_UserAccountOperationInfo)
                 , "===== 添加测试数据 -> false");
-        Assert.isTrue(! newEntity2.isEmpty() || newEntity2.equals(newEntity1)
+        Assert.isTrue(!newEntity2.isEmpty() || newEntity2.equals(newEntity1)
                 , "===== 添加测试数据 -> 无效的 Entity");
 
         //=== insertResource(..)
@@ -350,25 +348,25 @@ public class SecurityRoleServiceTests {
                 , "===== 添加测试数据 -> false");
 
         final @NotNull Set<SecurityRole> roles = new HashSet<>(2);
-        if (! newEntity.isEmpty()) {
+        if (!newEntity.isEmpty()) {
             roles.add(newEntity);
         }
-        if (! newEntity1.isEmpty()) {
+        if (!newEntity1.isEmpty()) {
             roles.add(newEntity1);
         }
-        if (! newEntity2.isEmpty()) {
+        if (!newEntity2.isEmpty()) {
             roles.add(newEntity2);
         }
         System.out.println("===> roles:\n" + roles);
 
         final @NotNull Set<SecurityResource> resources = new HashSet<>(2);
-        if (! newResource.isEmpty()) {
+        if (!newResource.isEmpty()) {
             resources.add(newResource);
         }
-        if (! newResource1.isEmpty()) {
+        if (!newResource1.isEmpty()) {
             resources.add(newResource1);
         }
-        if (! newResource2.isEmpty()) {
+        if (!newResource2.isEmpty()) {
             resources.add(newResource2);
         }
         System.out.println("===> resources:\n" + resources);
@@ -407,8 +405,7 @@ public class SecurityRoleServiceTests {
     @Test
     @Transactional
     public void update()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         final @NotNull SecurityRole result;
 
         // 获取必要的测试用身份信息
@@ -437,8 +434,7 @@ public class SecurityRoleServiceTests {
     @Test
     @Transactional
     public void delete()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         final @NotNull SecurityRole result;
 
         // 获取必要的测试用身份信息
@@ -465,8 +461,7 @@ public class SecurityRoleServiceTests {
     @Transactional(isolation = Isolation.SERIALIZABLE
             , timeout = 20)
     public void deleteResource()
-            throws Exception
-    {
+            throws Exception {
         // 获取必要的测试用身份信息
         final @NotNull SecurityUser operator = operator();
         final @NotNull UserAccountOperationInfo operator_UserAccountOperationInfo = userEvent.selectUserAccountOperationInfoByUsername(operator.getUsername());
@@ -478,17 +473,17 @@ public class SecurityRoleServiceTests {
 
         Assert.isTrue(service.insert(newEntity, operator, operator_UserAccountOperationInfo)
                 , "===== 添加测试数据 -> false");
-        Assert.isTrue(! newEntity.isEmpty()
+        Assert.isTrue(!newEntity.isEmpty()
                 , "===== 添加测试数据 -> 无效的 Entity");
 
         Assert.isTrue(service.insert(newEntity1, operator, operator_UserAccountOperationInfo)
                 , "===== 添加测试数据 -> false");
-        Assert.isTrue(! newEntity1.isEmpty()
+        Assert.isTrue(!newEntity1.isEmpty()
                 , "===== 添加测试数据 -> 无效的 Entity");
 
         Assert.isTrue(service.insert(newEntity2, operator, operator_UserAccountOperationInfo)
                 , "===== 添加测试数据 -> false");
-        Assert.isTrue(! newEntity2.isEmpty() || newEntity2.equals(newEntity1)
+        Assert.isTrue(!newEntity2.isEmpty() || newEntity2.equals(newEntity1)
                 , "===== 添加测试数据 -> 无效的 Entity");
 
         //=== insertResource(..)
@@ -504,25 +499,25 @@ public class SecurityRoleServiceTests {
                 , "===== 添加测试数据 -> false");
 
         final @NotNull Set<SecurityRole> roles = new HashSet<>(2);
-        if (! newEntity.isEmpty()) {
+        if (!newEntity.isEmpty()) {
             roles.add(newEntity);
         }
-        if (! newEntity1.isEmpty()) {
+        if (!newEntity1.isEmpty()) {
             roles.add(newEntity1);
         }
-        if (! newEntity2.isEmpty()) {
+        if (!newEntity2.isEmpty()) {
             roles.add(newEntity2);
         }
         System.out.println("===> roles:\n" + roles);
 
         final @NotNull Set<SecurityResource> resources = new HashSet<>(2);
-        if (! newResource.isEmpty()) {
+        if (!newResource.isEmpty()) {
             resources.add(newResource);
         }
-        if (! newResource1.isEmpty()) {
+        if (!newResource1.isEmpty()) {
             resources.add(newResource1);
         }
-        if (! newResource2.isEmpty()) {
+        if (!newResource2.isEmpty()) {
             resources.add(newResource2);
         }
         System.out.println("===> resources:\n" + resources);
@@ -542,7 +537,7 @@ public class SecurityRoleServiceTests {
         for (@NotNull SecurityRole eachRole : roles) {
             final @NotNull List<SecurityResource> eachRole_resources = securityRoleEvent.selectResourceOnRoleByRoleCode(eachRole.getCode());
 
-            Assert.isTrue(null != eachRole_resources && ! eachRole_resources.isEmpty()
+            Assert.isTrue(null != eachRole_resources && !eachRole_resources.isEmpty()
                     , "===== 校验测试数据 <- 非预期结果! ".concat(eachRole.toString()));
 
             existResourceNum += eachRole_resources.size();

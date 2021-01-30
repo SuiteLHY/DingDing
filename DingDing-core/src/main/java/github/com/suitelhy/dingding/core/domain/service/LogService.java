@@ -30,8 +30,8 @@ public interface LogService
     /**
      * 查询所有日志记录 (分页)
      *
-     * @param pageIndex     分页索引, 从0开始
-     * @param pageSize      分页 - 每页容量
+     * @param pageIndex 分页索引, 从0开始
+     * @param pageSize  分页 - 每页容量
      * @return {@link org.springframework.data.domain.Page}
      */
     @NotNull
@@ -41,8 +41,7 @@ public interface LogService
     /**
      * 查询所有日志记录数量
      *
-     * @param pageSize      分页 - 每页容量
-     *
+     * @param pageSize 分页 - 每页容量
      * @return
      */
     Long selectCount(int pageSize)
@@ -51,9 +50,8 @@ public interface LogService
     /**
      * 查询指定用户对应的日志记录数量
      *
-     * @param username      {@link Log.Validator#operatorUsername(String)}
-     * @param pageSize      分页 - 每页容量
-     *
+     * @param username {@link Log.Validator#operatorUsername(String)}
+     * @param pageSize 分页 - 每页容量
      * @return {@link Long}
      */
     Long selectCountByUsername(@NotNull String username, int pageSize)
@@ -62,8 +60,7 @@ public interface LogService
     /**
      * 查询指定的日志记录
      *
-     * @param id    [日志记录 - 编号]
-     *
+     * @param id [日志记录 - 编号]
      * @return {@link Log}
      */
     Log selectLogById(@NotNull String id)
@@ -72,10 +69,9 @@ public interface LogService
     /**
      * 查询指定用户对应的日志记录 (分页)
      *
-     * @param username      {@link Log.Validator#operatorUsername(String)}
-     * @param page          分页索引, 从 0 开始
-     * @param pageSize      分页 - 每页容量
-     *
+     * @param username {@link Log.Validator#operatorUsername(String)}
+     * @param page     分页索引, 从 0 开始
+     * @param pageSize 分页 - 每页容量
      * @return {@link List}
      */
     List<Log> selectLogByUsername(@NotNull String username, int page, int pageSize)
@@ -84,8 +80,7 @@ public interface LogService
     /**
      * 新增日志记录
      *
-     * @param log   {@link Log}
-     *
+     * @param log {@link Log}
      * @return 操作是否成功 / 是否已存在有效数据
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -97,8 +92,7 @@ public interface LogService
     /**
      * 删除日志记录
      *
-     * @param id    [日志记录 - 编号] {@link Log.Validator#id(String)}
-     *
+     * @param id [日志记录 - 编号] {@link Log.Validator#id(String)}
      * @return {@link Long}
      */
     @Transactional(isolation = Isolation.SERIALIZABLE

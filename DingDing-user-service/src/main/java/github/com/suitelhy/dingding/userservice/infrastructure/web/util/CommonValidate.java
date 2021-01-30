@@ -6,15 +6,17 @@ public class CommonValidate {
 
     /**
      * 补全路径尾部
+     *
      * @param path 路径
      * @return <code>path</code>
      */
-    public String checkPathEnd(String path){
+    public String checkPathEnd(String path) {
         return path.endsWith("\\") ? path : path + "\\";
     }
 
     /**
      * 补全字符串后缀斜杠
+     *
      * @param str 字符串
      * @return
      */
@@ -24,9 +26,10 @@ public class CommonValidate {
 
     /**
      * 判断文件是否存在
-     * @param path 路径
+     *
+     * @param path     路径
      * @param fileName 文件名
-     * @return  true|false
+     * @return true|false
      */
     public boolean validateFileExist(String path, String fileName) {
         return new File(checkPathEnd(path) + fileName).exists();
@@ -34,8 +37,9 @@ public class CommonValidate {
 
     /**
      * 判断文件是否存在
-     * @param path  路径 + 文件名
-     * @return  true | false
+     *
+     * @param path 路径 + 文件名
+     * @return true | false
      */
     public boolean validateFileExist(String path) {
         return new File(path).exists();
@@ -43,9 +47,10 @@ public class CommonValidate {
 
     /**
      * 判断文件是否存在, 在指定文件路径下的所有层级中查找
-     * @param path      文件路径
-     * @param fileName  文件名
-     * @param mark      标记
+     *
+     * @param path     文件路径
+     * @param fileName 文件名
+     * @param mark     标记
      * @return 可用的文件名
      */
     public String validateRepeatFilename(String path

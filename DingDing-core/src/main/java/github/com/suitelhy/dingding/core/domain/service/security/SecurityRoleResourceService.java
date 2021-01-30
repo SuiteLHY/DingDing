@@ -22,7 +22,6 @@ import java.util.Set;
  * （安全认证）角色 ←→ 资源
  *
  * @Description [（安全认证）角色 ←→ 资源]关联关系 - 业务接口.
- *
  * @see SecurityRoleResource
  * @see SecurityRoleResourceRepository
  * @see SecurityRoleResourceServiceImpl
@@ -39,8 +38,7 @@ public interface SecurityRoleResourceService
     /**
      * 判断[（安全认证）资源]是否存在 (关联的) [（安全认证）角色]
      *
-     * @param resourceCode  资源编码    {@link SecurityRoleResource.Validator#resourceCode(String)}
-     *
+     * @param resourceCode 资源编码    {@link SecurityRoleResource.Validator#resourceCode(String)}
      * @return {@link boolean}
      */
     boolean existRoleByResourceCode(@NotNull String resourceCode);
@@ -48,8 +46,7 @@ public interface SecurityRoleResourceService
     /**
      * 判断[（安全认证）角色]是否存在 (关联的) [（安全认证）资源]
      *
-     * @param roleCode  角色编码    {@link SecurityRoleResource.Validator#roleCode(String)}
-     *
+     * @param roleCode 角色编码    {@link SecurityRoleResource.Validator#roleCode(String)}
      * @return {@link boolean}
      */
     boolean existResourceByRoleCode(@NotNull String roleCode);
@@ -57,9 +54,8 @@ public interface SecurityRoleResourceService
     /**
      * 查询所有
      *
-     * @param pageIndex     分页索引, 从0开始
-     * @param pageSize      分页 - 每页容量
-     *
+     * @param pageIndex 分页索引, 从0开始
+     * @param pageSize  分页 - 每页容量
      * @return {@link Page}
      */
     Page<SecurityRoleResource> selectAll(int pageIndex, int pageSize);
@@ -67,40 +63,38 @@ public interface SecurityRoleResourceService
     /**
      * 查询总页数
      *
+     * @param pageSize 分页 - 每页容量
+     * @return 分页 - 总页数
      * @Description 查询数据列表 - 分页 - 总页数
-     *
-     * @param pageSize      分页 - 每页容量
-     *
-     * @return              分页 - 总页数
      */
-    @NotNull Long selectCount(int pageSize);
+    @NotNull
+    Long selectCount(int pageSize);
 
     /**
      * 查询
      *
-     * @param resourceCode  资源编码    {@link SecurityRoleResource.Validator#resourceCode(String)}
-     *
+     * @param resourceCode 资源编码    {@link SecurityRoleResource.Validator#resourceCode(String)}
      * @return {@link SecurityRoleResource}
      */
-    @NotNull List<SecurityRoleResource> selectByResourceCode(@NotNull String resourceCode);
+    @NotNull
+    List<SecurityRoleResource> selectByResourceCode(@NotNull String resourceCode);
 
     /**
      * 查询
      *
-     * @param roleCode  角色编码    {@link SecurityRoleResource.Validator#roleCode(String)}
-     *
+     * @param roleCode 角色编码    {@link SecurityRoleResource.Validator#roleCode(String)}
      * @return {@link SecurityRoleResource}
      */
-    @NotNull List<SecurityRoleResource> selectByRoleCode(@NotNull String roleCode);
+    @NotNull
+    List<SecurityRoleResource> selectByRoleCode(@NotNull String roleCode);
 
     //===== 添加操作业务 =====//
 
     /**
      * 新增一个[（安全认证）角色 ←→ 资源]关联关系
      *
-     * @param roleResource  [（安全认证）角色 ←→ 资源]    {@link SecurityRoleResource}
-     * @param operator      操作者
-     *
+     * @param roleResource [（安全认证）角色 ←→ 资源]    {@link SecurityRoleResource}
+     * @param operator     操作者
      * @return 操作是否成功 / 是否已存在相同的有效数据
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -163,14 +157,12 @@ public interface SecurityRoleResourceService
     /**
      * 删除指定的[（安全认证）角色 ←→ 资源]关联关系
      *
-     * @Description 删除成功后校验持久化数据; 主要为了避免在未提交的事务中进行对操作结果的非预期判断.
-     * · 完整业务流程的一部分
-     *
      * @param roleResource                      [（安全认证）角色 ←→ 资源]    {@link SecurityRoleResource}
      * @param operator                          操作者
      * @param operator_userAccountOperationInfo [操作者 - 账户操作基础记录]
-     *
      * @return 操作是否成功
+     * @Description 删除成功后校验持久化数据; 主要为了避免在未提交的事务中进行对操作结果的非预期判断.
+     * · 完整业务流程的一部分
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED

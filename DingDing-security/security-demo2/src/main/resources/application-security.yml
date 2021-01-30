@@ -7,23 +7,23 @@ security:
 dingding:
   security:
     browser:
-#      signInPage: /demo-signIn.html
+      #      signInPage: /demo-signIn.html
       signInResponseType: REDIRECT
-#      singInSuccessUrl: /manage.html
+      #      singInSuccessUrl: /manage.html
       rememberMeSeconds: 294000
-#      signOutUrl: /demo-logout.html
-#      signUpUrl: /demo-signUp.html
-#    # Session 管理相关配置; 参见SessionProperties
-#    session:
-#      maximumSessions: 1
-#      maxSessionsPreventsLogin: false
-#      sessionInvalidUrl: /dingding-session-invalid.html
-#    # 短信验证码配置项，参见SmsCodeProperties
-#    code:
-#      sms:
-#        length: 6
-#        expireIn: 60
-#        url: /user/*
+    #      signOutUrl: /demo-logout.html
+    #      signUpUrl: /demo-signUp.html
+    #    # Session 管理相关配置; 参见SessionProperties
+    #    session:
+    #      maximumSessions: 1
+    #      maxSessionsPreventsLogin: false
+    #      sessionInvalidUrl: /dingding-session-invalid.html
+    #    # 短信验证码配置项，参见SmsCodeProperties
+    #    code:
+    #      sms:
+    #        length: 6
+    #        expireIn: 60
+    #        url: /user/*
     social:
       # 社交登录功能拦截的 URL, 参见 SocialProperties
       filterProcessesUrl: /qqLogin
@@ -36,7 +36,7 @@ dingding:
       weixin:
         app-id: wxd99431bbff8305a0
         app-secret: 60f78681d063590a469f1b297feff3c4
-#        providerId: weixin
+      #        providerId: weixin
       # 认证服务器注册的第三方应用配置项; 参见 OAuth2ClientProperties
       oauth2:
         clients[0]:

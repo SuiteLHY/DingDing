@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package dingding.security.core.validate.code.sms;
 
@@ -14,36 +14,36 @@ import dingding.security.core.validate.code.ValidateCodeGenerator;
 
 /**
  * 短信验证码生成器
- * 
+ *
  * @author zhailiang
  *
  */
 @Component("smsValidateCodeGenerator")
 public class SmsCodeGenerator
-		implements ValidateCodeGenerator {
+        implements ValidateCodeGenerator {
 
-	@Autowired
-	private SecurityProperties securityProperties;
-	
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * ValidateCodeGenerator#generate(org.
-	 * springframework.web.context.request.ServletWebRequest)
-	 */
-	@Override
-	public ValidateCode generate(ServletWebRequest request) {
-		String code = RandomStringUtils.randomNumeric(securityProperties.getCode().getSms().getLength());
-		return new ValidateCode(code, securityProperties.getCode().getSms().getExpireIn());
-	}
+    @Autowired
+    private SecurityProperties securityProperties;
 
-	public SecurityProperties getSecurityProperties() {
-		return securityProperties;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * ValidateCodeGenerator#generate(org.
+     * springframework.web.context.request.ServletWebRequest)
+     */
+    @Override
+    public ValidateCode generate(ServletWebRequest request) {
+        String code = RandomStringUtils.randomNumeric(securityProperties.getCode().getSms().getLength());
+        return new ValidateCode(code, securityProperties.getCode().getSms().getExpireIn());
+    }
 
-	public void setSecurityProperties(SecurityProperties securityProperties) {
-		this.securityProperties = securityProperties;
-	}
-	
+    public SecurityProperties getSecurityProperties() {
+        return securityProperties;
+    }
+
+    public void setSecurityProperties(SecurityProperties securityProperties) {
+        this.securityProperties = securityProperties;
+    }
+
 }

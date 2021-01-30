@@ -21,7 +21,6 @@ import java.util.Optional;
  * (安全) 用户
  *
  * @Description (安全) 用户 - 基础交互业务接口.
- *
  * @see SecurityUser
  */
 public interface SecurityUserRepository
@@ -41,7 +40,6 @@ public interface SecurityUserRepository
      * 判断存在
      *
      * @param userId
-     *
      * @return
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -51,10 +49,8 @@ public interface SecurityUserRepository
     /**
      * 判断存在
      *
-     * @param entityId      {@link SecurityUser#id()}
-     *
+     * @param entityId {@link SecurityUser#id()}
      * @return
-     *
      * @see SecurityUser#id()
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -94,7 +90,7 @@ public interface SecurityUserRepository
                     + "from SECURITY_USER_ROLE ur "
                     + "left join SECURITY_ROLE r on ur.role_code = r.code "
                     + "where ur.username = :username "*/
-                    "select r.id as id \n" +
+            "select r.id as id \n" +
                     ", ur.role_code as code \n" +
                     ", r.name as name \n" +
                     ", r.description as description \n" +
@@ -115,18 +111,18 @@ public interface SecurityUserRepository
      */
     @Query(nativeQuery = true
             , value = "select sr.id as id \n"
-                    + ", sr.code as code \n"
-                    + ", sr.icon as icon \n"
-                    + ", sr.link as link \n"
-                    + ", sr.name as name \n"
-                    + ", sr.parent_code as parent_code \n"
-                    + ", sr.sort as sort \n"
-                    + ", sr.type as type \n"
-                    + "from SECURITY_RESOURCE sr \n"
-                    + "left join SECURITY_ROLE_RESOURCE rr on rr.resource_code = sr.code \n"
-                    + "left join SECURITY_USER_ROLE ur on ur.role_code = rr.role_code \n"
-                    + "where ur.username = :username \n"
-                    + "group by code, name ")
+            + ", sr.code as code \n"
+            + ", sr.icon as icon \n"
+            + ", sr.link as link \n"
+            + ", sr.name as name \n"
+            + ", sr.parent_code as parent_code \n"
+            + ", sr.sort as sort \n"
+            + ", sr.type as type \n"
+            + "from SECURITY_RESOURCE sr \n"
+            + "left join SECURITY_ROLE_RESOURCE rr on rr.resource_code = sr.code \n"
+            + "left join SECURITY_USER_ROLE ur on ur.role_code = rr.role_code \n"
+            + "where ur.username = :username \n"
+            + "group by code, name ")
     List<Map<String, Object>> selectResourceByUsername(@NotNull @Param("username") String username);
 
     /**
@@ -137,13 +133,13 @@ public interface SecurityUserRepository
      */
     @Query(nativeQuery = true
             , value = "select sru.client_id as client_id "
-                    + ", sru.url_path as url_path "
-                    + ", sru.url_method as url_method "
-                    + "from SECURITY_RESOURCE_URL sru "
-                    + "left join SECURITY_ROLE_RESOURCE rr on rr.resource_code = sru.code "
-                    + "left join SECURITY_USER_ROLE ur on ur.role_code = rr.role_code "
-                    + "where ur.username = :username and sru.client_id = :clientId "
-                    + "group by url_path ")
+            + ", sru.url_path as url_path "
+            + ", sru.url_method as url_method "
+            + "from SECURITY_RESOURCE_URL sru "
+            + "left join SECURITY_ROLE_RESOURCE rr on rr.resource_code = sru.code "
+            + "left join SECURITY_USER_ROLE ur on ur.role_code = rr.role_code "
+            + "where ur.username = :username and sru.client_id = :clientId "
+            + "group by url_path ")
     List<Map<String, Object>> selectURLByUsernameAndClientId(@NotNull @Param("username") String username
             , @NotNull @Param("clientId") String clientId);
 
@@ -152,7 +148,7 @@ public interface SecurityUserRepository
     /**
      * 新增/更新日志记录
      *
-     * @param securityUser          {@link SecurityUser}
+     * @param securityUser {@link SecurityUser}
      * @return {@link SecurityUser}
      */
     @Override
@@ -166,7 +162,7 @@ public interface SecurityUserRepository
     /**
      * 删除指定用户
      *
-     * @param userId    用户ID
+     * @param userId 用户ID
      */
     @Override
     @Modifying
@@ -177,7 +173,7 @@ public interface SecurityUserRepository
     /**
      * 删除指定用户
      *
-     * @param username  用户名
+     * @param username 用户名
      * @return
      */
     @Modifying

@@ -4,8 +4,8 @@ server:
     context-path: /user-service
 
 spring:
-#  application:
-#    name: user-service
+  #  application:
+  #    name: user-service
   ## Spring Data JPA
   ##-> <a href="https://blog.csdn.net/WZH577/article/details/99698187">Hibernate数据库配置项中命名策略说明</a>
   jpa:

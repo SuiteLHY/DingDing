@@ -66,7 +66,6 @@ public class Log
      * 操作类型
      *
      * @Description 日志操作类型对应的 VO ({@link github.com.suitelhy.dingding.core.infrastructure.domain.model.VoModel}).
-     *
      * @see HandleType.LogVo
      */
     @Column
@@ -97,7 +96,8 @@ public class Log
      * @see Validator
      */
     @Transient
-    private final @NotNull Validator validator;
+    private final @NotNull
+    Validator validator;
 
     //===== base constructor =====//
 
@@ -134,14 +134,13 @@ public class Log
     /**
      * 校验 Entity - ID
      *
-     * @Design {@link AbstractEntity} 提供的模板设计.
-     *
      * @param id <method>id()</method>
-     *
      * @return {@link Boolean#TYPE}
+     * @Design {@link AbstractEntity} 提供的模板设计.
      */
     @Override
-    protected @NotNull boolean validateId(@NotNull Long id) {
+    protected @NotNull
+    boolean validateId(@NotNull Long id) {
         return Validator.LOG.entity_id(id);
     }
 
@@ -417,16 +416,15 @@ public class Log
     /**
      * (Constructor)
      *
-     * @param id                [日志记录 - 编号]                       {@link this#id}
-     * @param description       操作的描述信息                          {@link this#description}
-     * @param detail            操作的详细信息                          {@link this#detail}
-     * @param time              操作时间                               {@link this#time}
-     * @param type              操作类型                               {@link this#type}
-     * @param operatorIp        [操作者 - （执行操作时）登录的 IP 地址]    {@link this#operatorIp}
-     * @param operatorUsername  [操作者 - 用户名称]                     {@link this#operatorUsername}
-     * @param targetId          [被操作对象 - 用于日志追踪的 ID]          {@link this#targetId}
-     * @param validator         实体验证器                             {@link Validator}
-     *
+     * @param id               [日志记录 - 编号]                       {@link this#id}
+     * @param description      操作的描述信息                          {@link this#description}
+     * @param detail           操作的详细信息                          {@link this#detail}
+     * @param time             操作时间                               {@link this#time}
+     * @param type             操作类型                               {@link this#type}
+     * @param operatorIp       [操作者 - （执行操作时）登录的 IP 地址]    {@link this#operatorIp}
+     * @param operatorUsername [操作者 - 用户名称]                     {@link this#operatorUsername}
+     * @param targetId         [被操作对象 - 用于日志追踪的 ID]          {@link this#targetId}
+     * @param validator        实体验证器                             {@link Validator}
      * @throws IllegalArgumentException
      */
     private Log(@Nullable String id
@@ -438,8 +436,7 @@ public class Log
             , @NotNull String operatorUsername
             , @NotNull String targetId
             , @NotNull Validator validator)
-            throws IllegalArgumentException, NullPointerException
-    {
+            throws IllegalArgumentException, NullPointerException {
         if (null == validator) {
             //-- 非法输入: 实体验证器
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -465,7 +462,7 @@ public class Log
                         , Thread.currentThread().getStackTrace()[1].getLineNumber()));
             }
         }
-        if (! this.validator.description(description)) {
+        if (!this.validator.description(description)) {
             //-- 非法输入: 操作的描述信息
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "操作的描述信息"
@@ -474,7 +471,7 @@ public class Log
                     , Thread.currentThread().getStackTrace()[1].getMethodName()
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
-        if (! this.validator.detail(detail)) {
+        if (!this.validator.detail(detail)) {
             //-- 非法输入: 操作的详细信息
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "操作的详细信息"
@@ -483,7 +480,7 @@ public class Log
                     , Thread.currentThread().getStackTrace()[1].getMethodName()
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
-        if (! this.validator.time(time)) {
+        if (!this.validator.time(time)) {
             //-- 非法输入: 操作时间
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "操作时间"
@@ -492,7 +489,7 @@ public class Log
                     , Thread.currentThread().getStackTrace()[1].getMethodName()
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
-        if (! this.validator.type(type)) {
+        if (!this.validator.type(type)) {
             //-- 非法输入: 操作类型
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】(对应的实体验证器:%s) <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "操作类型"
@@ -502,7 +499,7 @@ public class Log
                     , Thread.currentThread().getStackTrace()[1].getMethodName()
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
-        if (! this.validator.operatorIp(operatorIp)) {
+        if (!this.validator.operatorIp(operatorIp)) {
             //-- 非法输入: [操作者 - （执行操作时）登录的 IP 地址]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "[操作者 - （执行操作时）登录的 IP 地址]"
@@ -520,7 +517,7 @@ public class Log
                     , Thread.currentThread().getStackTrace()[1].getMethodName()
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
-        if (! this.validator.targetId(targetId)) {
+        if (!this.validator.targetId(targetId)) {
             //-- 非法输入: [被操作对象 - 用于日志追踪的 ID]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】(对应的实体验证器:%s) <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "[被操作对象 - 用于日志追踪的 ID]"
@@ -559,7 +556,6 @@ public class Log
              * @param resource                          （安全认证）资源              {@link github.com.suitelhy.dingding.core.domain.entity.security.SecurityResource}
              * @param operator                          操作者                      {@link github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser}
              * @param operator_UserAccountOperationInfo [操作者 - 账户操作基础记录]    {@link github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo}
-             *
              * @return {@link Log}
              */
             @NotNull
@@ -570,8 +566,7 @@ public class Log
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.security.SecurityResource resource
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser operator
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo operator_UserAccountOperationInfo)
-                    throws IllegalArgumentException
-            {
+                    throws IllegalArgumentException {
                 if (null == resource || !resource.isEntityLegal()) {
                     throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , "（安全认证）资源"
@@ -590,8 +585,7 @@ public class Log
                 }
                 if (null == operator_UserAccountOperationInfo
                         || operator_UserAccountOperationInfo.isEmpty()
-                        || !operator_UserAccountOperationInfo.equals(operator))
-                {
+                        || !operator_UserAccountOperationInfo.equals(operator)) {
                     throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , "[操作者 - 账户操作基础记录]"
                             , operator_UserAccountOperationInfo
@@ -624,7 +618,6 @@ public class Log
              * @param resource                          （安全认证）资源              {@link github.com.suitelhy.dingding.core.domain.entity.security.SecurityResource}
              * @param operator                          操作者                      {@link github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser}
              * @param operator_UserAccountOperationInfo [操作者 - 账户操作基础记录]    {@link github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo}
-             *
              * @return {@link Log}
              */
             @NotNull
@@ -633,8 +626,7 @@ public class Log
                     , @NotNull HandleType.LogVo type
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.security.SecurityResource resource
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser operator
-                    , @NotNull github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo operator_UserAccountOperationInfo)
-            {
+                    , @NotNull github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo operator_UserAccountOperationInfo) {
                 if (null == resource || !resource.isEntityLegal()) {
                     throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , "（安全认证）资源"
@@ -653,8 +645,7 @@ public class Log
                 }
                 if (null == operator_UserAccountOperationInfo
                         || operator_UserAccountOperationInfo.isEmpty()
-                        || !operator_UserAccountOperationInfo.equals(operator))
-                {
+                        || !operator_UserAccountOperationInfo.equals(operator)) {
                     throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , "[操作者 - 账户操作基础记录]"
                             , operator_UserAccountOperationInfo
@@ -705,7 +696,6 @@ public class Log
              * @param resourceUrl                       [资源 ←→ URL]               {@link github.com.suitelhy.dingding.core.domain.entity.security.SecurityResourceUrl}
              * @param operator                          操作者                      {@link github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser}
              * @param operator_UserAccountOperationInfo [操作者 - 账户操作基础记录]    {@link github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo}
-             *
              * @return {@link Log}
              */
             @NotNull
@@ -716,8 +706,7 @@ public class Log
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.security.SecurityResourceUrl resourceUrl
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser operator
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo operator_UserAccountOperationInfo)
-                    throws IllegalArgumentException
-            {
+                    throws IllegalArgumentException {
                 if (null == resourceUrl || !resourceUrl.isEntityLegal()) {
                     throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , "[资源 ←→ URL]"
@@ -736,8 +725,7 @@ public class Log
                 }
                 if (null == operator_UserAccountOperationInfo
                         || operator_UserAccountOperationInfo.isEmpty()
-                        || !operator_UserAccountOperationInfo.equals(operator))
-                {
+                        || !operator_UserAccountOperationInfo.equals(operator)) {
                     throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , "[操作者 - 账户操作基础记录]"
                             , operator_UserAccountOperationInfo
@@ -769,7 +757,6 @@ public class Log
              * @param resourceUrl                       [资源 ←→ URL]               {@link github.com.suitelhy.dingding.core.domain.entity.security.SecurityResourceUrl}
              * @param operator                          操作者                      {@link github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser}
              * @param operator_UserAccountOperationInfo [操作者 - 账户操作基础记录]    {@link github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo}
-             *
              * @return {@link Log}
              */
             @NotNull
@@ -779,8 +766,7 @@ public class Log
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.security.SecurityResourceUrl resourceUrl
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser operator
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo operator_UserAccountOperationInfo)
-                    throws IllegalArgumentException
-            {
+                    throws IllegalArgumentException {
                 if (null == resourceUrl || !resourceUrl.isEntityLegal()) {
                     throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , "[资源 ←→ URL]"
@@ -799,8 +785,7 @@ public class Log
                 }
                 if (null == operator_UserAccountOperationInfo
                         || operator_UserAccountOperationInfo.isEmpty()
-                        || !operator_UserAccountOperationInfo.equals(operator))
-                {
+                        || !operator_UserAccountOperationInfo.equals(operator)) {
                     throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , "[操作者 - 账户操作基础记录]"
                             , operator_UserAccountOperationInfo
@@ -850,7 +835,6 @@ public class Log
              * @param role                              （安全认证）角色              {@link github.com.suitelhy.dingding.core.domain.entity.security.SecurityRole}
              * @param operator                          操作者                      {@link github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser}
              * @param operator_UserAccountOperationInfo [操作者 - 账户操作基础记录]    {@link github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo}
-             *
              * @return {@link Log}
              */
             @NotNull
@@ -861,8 +845,7 @@ public class Log
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.security.SecurityRole role
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser operator
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo operator_UserAccountOperationInfo)
-                    throws IllegalArgumentException
-            {
+                    throws IllegalArgumentException {
                 if (null == role || !role.isEntityLegal()) {
                     throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , "（安全认证）角色"
@@ -881,8 +864,7 @@ public class Log
                 }
                 if (null == operator_UserAccountOperationInfo
                         || operator_UserAccountOperationInfo.isEmpty()
-                        || !operator_UserAccountOperationInfo.equals(operator))
-                {
+                        || !operator_UserAccountOperationInfo.equals(operator)) {
                     throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , "[操作者 - 账户操作基础记录]"
                             , operator_UserAccountOperationInfo
@@ -915,7 +897,6 @@ public class Log
              * @param role                              （安全认证）角色              {@link github.com.suitelhy.dingding.core.domain.entity.security.SecurityRole}
              * @param operator                          操作者                      {@link github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser}
              * @param operator_UserAccountOperationInfo [操作者 - 账户操作基础记录]    {@link github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo}
-             *
              * @return {@link Log}
              */
             @NotNull
@@ -925,8 +906,7 @@ public class Log
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.security.SecurityRole role
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser operator
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo operator_UserAccountOperationInfo)
-                    throws IllegalArgumentException
-            {
+                    throws IllegalArgumentException {
                 if (null == role || !role.isEntityLegal()) {
                     throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , "（安全认证）角色"
@@ -945,8 +925,7 @@ public class Log
                 }
                 if (null == operator_UserAccountOperationInfo
                         || operator_UserAccountOperationInfo.isEmpty()
-                        || !operator_UserAccountOperationInfo.equals(operator))
-                {
+                        || !operator_UserAccountOperationInfo.equals(operator)) {
                     throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , "[操作者 - 账户操作基础记录]"
                             , operator_UserAccountOperationInfo
@@ -997,7 +976,6 @@ public class Log
              * @param roleResource                      [角色 ←→ 资源]               {@link github.com.suitelhy.dingding.core.domain.entity.security.SecurityRoleResource}
              * @param operator                          操作者                      {@link github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser}
              * @param operator_UserAccountOperationInfo [操作者 - 账户操作基础记录]    {@link github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo}
-             *
              * @return {@link Log}
              */
             @NotNull
@@ -1008,8 +986,7 @@ public class Log
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.security.SecurityRoleResource roleResource
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser operator
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo operator_UserAccountOperationInfo)
-                    throws IllegalArgumentException
-            {
+                    throws IllegalArgumentException {
                 if (null == roleResource || !roleResource.isEntityLegal()) {
                     throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , "[角色 ←→ 资源]"
@@ -1028,8 +1005,7 @@ public class Log
                 }
                 if (null == operator_UserAccountOperationInfo
                         || operator_UserAccountOperationInfo.isEmpty()
-                        || !operator_UserAccountOperationInfo.equals(operator))
-                {
+                        || !operator_UserAccountOperationInfo.equals(operator)) {
                     throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , "[操作者 - 账户操作基础记录]"
                             , operator_UserAccountOperationInfo
@@ -1062,7 +1038,6 @@ public class Log
              * @param roleResource                      [角色 ←→ 资源]               {@link github.com.suitelhy.dingding.core.domain.entity.security.SecurityRoleResource}
              * @param operator                          操作者                      {@link github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser}
              * @param operator_UserAccountOperationInfo [操作者 - 账户操作基础记录]    {@link github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo}
-             *
              * @return {@link Log}
              */
             @NotNull
@@ -1072,8 +1047,7 @@ public class Log
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.security.SecurityRoleResource roleResource
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser operator
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo operator_UserAccountOperationInfo)
-                    throws IllegalArgumentException
-            {
+                    throws IllegalArgumentException {
                 if (null == roleResource || !roleResource.isEntityLegal()) {
                     throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , "[角色 ←→ 资源]"
@@ -1092,8 +1066,7 @@ public class Log
                 }
                 if (null == operator_UserAccountOperationInfo
                         || operator_UserAccountOperationInfo.isEmpty()
-                        || !operator_UserAccountOperationInfo.equals(operator))
-                {
+                        || !operator_UserAccountOperationInfo.equals(operator)) {
                     throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , "[操作者 - 账户操作基础记录]"
                             , operator_UserAccountOperationInfo
@@ -1144,7 +1117,6 @@ public class Log
              * @param user                              （安全认证）用户              {@link github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser}
              * @param operator                          操作者                      {@link github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser}
              * @param operator_UserAccountOperationInfo [操作者 - 账户操作基础记录]    {@link github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo}
-             *
              * @return {@link Log}
              */
             @NotNull
@@ -1155,8 +1127,7 @@ public class Log
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser user
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser operator
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo operator_UserAccountOperationInfo)
-                    throws IllegalArgumentException
-            {
+                    throws IllegalArgumentException {
                 if (null == user || !user.isEntityLegal()) {
                     throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , "（安全认证）用户"
@@ -1176,8 +1147,7 @@ public class Log
                 }
                 if (null == operator_UserAccountOperationInfo
                         || operator_UserAccountOperationInfo.isEmpty()
-                        || !operator_UserAccountOperationInfo.equals(operator))
-                {
+                        || !operator_UserAccountOperationInfo.equals(operator)) {
                     throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , "[操作者 - 账户操作基础记录]"
                             , operator_UserAccountOperationInfo
@@ -1210,7 +1180,6 @@ public class Log
              * @param user                              （安全认证）用户              {@link github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser}
              * @param operator                          操作者                      {@link github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser}
              * @param operator_UserAccountOperationInfo [操作者 - 账户操作基础记录]    {@link github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo}
-             *
              * @return {@link Log}
              */
             @NotNull
@@ -1220,8 +1189,7 @@ public class Log
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser user
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser operator
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo operator_UserAccountOperationInfo)
-                    throws IllegalArgumentException
-            {
+                    throws IllegalArgumentException {
                 if (null == user || !user.isEntityLegal()) {
                     throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , "（安全认证）用户"
@@ -1240,8 +1208,7 @@ public class Log
                 }
                 if (null == operator_UserAccountOperationInfo
                         || operator_UserAccountOperationInfo.isEmpty()
-                        || !operator_UserAccountOperationInfo.equals(operator))
-                {
+                        || !operator_UserAccountOperationInfo.equals(operator)) {
                     throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , "[操作者 - 账户操作基础记录]"
                             , operator_UserAccountOperationInfo
@@ -1292,7 +1259,6 @@ public class Log
              * @param userRole                          [（安全认证）用户 ←→ 角色]     {@link github.com.suitelhy.dingding.core.domain.entity.security.SecurityUserRole}
              * @param operator                          操作者                      {@link github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser}
              * @param operator_UserAccountOperationInfo [操作者 - 账户操作基础记录]    {@link github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo}
-             *
              * @return {@link Log}
              */
             @NotNull
@@ -1303,8 +1269,7 @@ public class Log
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.security.SecurityUserRole userRole
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser operator
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo operator_UserAccountOperationInfo)
-                    throws IllegalArgumentException
-            {
+                    throws IllegalArgumentException {
                 if (null == userRole || !userRole.isEntityLegal()) {
                     throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , "[（安全认证）用户 ←→ 角色]"
@@ -1323,8 +1288,7 @@ public class Log
                 }
                 if (null == operator_UserAccountOperationInfo
                         || operator_UserAccountOperationInfo.isEmpty()
-                        || !operator_UserAccountOperationInfo.equals(operator))
-                {
+                        || !operator_UserAccountOperationInfo.equals(operator)) {
                     throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , "[操作者 - 账户操作基础记录]"
                             , operator_UserAccountOperationInfo
@@ -1357,7 +1321,6 @@ public class Log
              * @param userRole                          [（安全认证）用户 ←→ 角色]     {@link github.com.suitelhy.dingding.core.domain.entity.security.SecurityUserRole}
              * @param operator                          操作者                      {@link github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser}
              * @param operator_UserAccountOperationInfo [操作者 - 账户操作基础记录]    {@link github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo}
-             *
              * @return {@link Log}
              */
             @NotNull
@@ -1367,8 +1330,7 @@ public class Log
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.security.SecurityUserRole userRole
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser operator
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo operator_UserAccountOperationInfo)
-                    throws IllegalArgumentException
-            {
+                    throws IllegalArgumentException {
                 if (null == userRole || !userRole.isEntityLegal()) {
                     throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , "[（安全认证）用户 ←→ 角色]"
@@ -1387,8 +1349,7 @@ public class Log
                 }
                 if (null == operator_UserAccountOperationInfo
                         || operator_UserAccountOperationInfo.isEmpty()
-                        || !operator_UserAccountOperationInfo.equals(operator))
-                {
+                        || !operator_UserAccountOperationInfo.equals(operator)) {
                     throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , "[操作者 - 账户操作基础记录]"
                             , operator_UserAccountOperationInfo
@@ -1439,7 +1400,6 @@ public class Log
              * @param user                              用户基础信息                 {@link github.com.suitelhy.dingding.core.domain.entity.User}
              * @param operator                          操作者                      {@link github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser}
              * @param operator_UserAccountOperationInfo [操作者 - 账户操作基础记录]    {@link github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo}
-             *
              * @return {@link Log}
              */
             @NotNull
@@ -1450,8 +1410,7 @@ public class Log
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.User user
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser operator
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo operator_UserAccountOperationInfo)
-                    throws IllegalArgumentException
-            {
+                    throws IllegalArgumentException {
                 if (null == user || !user.isEntityLegal()) {
                     throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , "用户基础信息"
@@ -1470,8 +1429,7 @@ public class Log
                 }
                 if (null == operator_UserAccountOperationInfo
                         || operator_UserAccountOperationInfo.isEmpty()
-                        || !operator_UserAccountOperationInfo.equals(operator))
-                {
+                        || !operator_UserAccountOperationInfo.equals(operator)) {
                     throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , "[操作者 - 账户操作基础记录]"
                             , operator_UserAccountOperationInfo
@@ -1504,7 +1462,6 @@ public class Log
              * @param user                              用户基础信息                 {@link github.com.suitelhy.dingding.core.domain.entity.User}
              * @param operator                          操作者                      {@link github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser}
              * @param operator_UserAccountOperationInfo [操作者 - 账户操作基础记录]    {@link github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo}
-             *
              * @return {@link Log}
              */
             @NotNull
@@ -1514,8 +1471,7 @@ public class Log
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.User user
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser operator
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo operator_UserAccountOperationInfo)
-                    throws IllegalArgumentException
-            {
+                    throws IllegalArgumentException {
                 if (null == user || !user.isEntityLegal()) {
                     throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , "用户基础信息"
@@ -1534,8 +1490,7 @@ public class Log
                 }
                 if (null == operator_UserAccountOperationInfo
                         || operator_UserAccountOperationInfo.isEmpty()
-                        || !operator_UserAccountOperationInfo.equals(operator))
-                {
+                        || !operator_UserAccountOperationInfo.equals(operator)) {
                     throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , "[操作者 - 账户操作基础记录]"
                             , operator_UserAccountOperationInfo
@@ -1586,7 +1541,6 @@ public class Log
              * @param operationInfo                     [用户 -> 账户操作基础记录]     {@link github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo}
              * @param operator                          操作者                      {@link github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser}
              * @param operator_UserAccountOperationInfo [操作者 - 账户操作基础记录]    {@link github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo}
-             *
              * @return {@link Log}
              */
             @NotNull
@@ -1597,8 +1551,7 @@ public class Log
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo operationInfo
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser operator
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo operator_UserAccountOperationInfo)
-                    throws IllegalArgumentException
-            {
+                    throws IllegalArgumentException {
                 if (null == operationInfo || !operationInfo.isEntityLegal()) {
                     throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , "用户基础信息"
@@ -1617,8 +1570,7 @@ public class Log
                 }
                 if (null == operator_UserAccountOperationInfo
                         || operator_UserAccountOperationInfo.isEmpty()
-                        || !operator_UserAccountOperationInfo.equals(operator))
-                {
+                        || !operator_UserAccountOperationInfo.equals(operator)) {
                     throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , "[操作者 - 账户操作基础记录]"
                             , operator_UserAccountOperationInfo
@@ -1651,7 +1603,6 @@ public class Log
              * @param operationInfo                     [用户 -> 账户操作基础记录]     {@link github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo}
              * @param operator                          操作者                      {@link github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser}
              * @param operator_UserAccountOperationInfo [操作者 - 账户操作基础记录]    {@link github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo}
-             *
              * @return {@link Log}
              */
             @NotNull
@@ -1661,8 +1612,7 @@ public class Log
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo operationInfo
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser operator
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo operator_UserAccountOperationInfo)
-                    throws IllegalArgumentException
-            {
+                    throws IllegalArgumentException {
                 if (null == operationInfo || !operationInfo.isEntityLegal()) {
                     throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , "[用户 -> 账户操作基础记录]"
@@ -1681,8 +1631,7 @@ public class Log
                 }
                 if (null == operator_UserAccountOperationInfo
                         || operator_UserAccountOperationInfo.isEmpty()
-                        || !operator_UserAccountOperationInfo.equals(operator))
-                {
+                        || !operator_UserAccountOperationInfo.equals(operator)) {
                     throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , "[操作者 - 账户操作基础记录]"
                             , operator_UserAccountOperationInfo
@@ -1733,7 +1682,6 @@ public class Log
              * @param userPersonInfo                    [用户 -> 个人信息]           {@link github.com.suitelhy.dingding.core.domain.entity.UserPersonInfo}
              * @param operator                          操作者                      {@link github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser}
              * @param operator_UserAccountOperationInfo [操作者 - 账户操作基础记录]    {@link github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo}
-             *
              * @return {@link Log}
              */
             @NotNull
@@ -1744,8 +1692,7 @@ public class Log
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.UserPersonInfo userPersonInfo
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser operator
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo operator_UserAccountOperationInfo)
-                    throws IllegalArgumentException
-            {
+                    throws IllegalArgumentException {
                 if (null == userPersonInfo || !userPersonInfo.isEntityLegal()) {
                     throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , "[用户 -> 个人信息]"
@@ -1764,8 +1711,7 @@ public class Log
                 }
                 if (null == operator_UserAccountOperationInfo
                         || operator_UserAccountOperationInfo.isEmpty()
-                        || !operator_UserAccountOperationInfo.equals(operator))
-                {
+                        || !operator_UserAccountOperationInfo.equals(operator)) {
                     throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , "[操作者 - 账户操作基础记录]"
                             , operator_UserAccountOperationInfo
@@ -1798,7 +1744,6 @@ public class Log
              * @param userPersonInfo                    [用户 -> 个人信息]           {@link github.com.suitelhy.dingding.core.domain.entity.UserPersonInfo}
              * @param operator                          操作者                      {@link github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser}
              * @param operator_UserAccountOperationInfo [操作者 - 账户操作基础记录]    {@link github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo}
-             *
              * @return {@link Log}
              */
             @NotNull
@@ -1808,8 +1753,7 @@ public class Log
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.UserPersonInfo userPersonInfo
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.security.SecurityUser operator
                     , @NotNull github.com.suitelhy.dingding.core.domain.entity.UserAccountOperationInfo operator_UserAccountOperationInfo)
-                    throws IllegalArgumentException
-            {
+                    throws IllegalArgumentException {
                 if (null == userPersonInfo || !userPersonInfo.isEntityLegal()) {
                     throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , "[用户 -> 个人信息]"
@@ -1828,8 +1772,7 @@ public class Log
                 }
                 if (null == operator_UserAccountOperationInfo
                         || operator_UserAccountOperationInfo.isEmpty()
-                        || !operator_UserAccountOperationInfo.equals(operator))
-                {
+                        || !operator_UserAccountOperationInfo.equals(operator)) {
                     throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , "[操作者 - 账户操作基础记录]"
                             , operator_UserAccountOperationInfo

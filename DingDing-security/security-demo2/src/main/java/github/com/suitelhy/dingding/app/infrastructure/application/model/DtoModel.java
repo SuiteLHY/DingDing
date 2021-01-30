@@ -28,9 +28,10 @@ public interface DtoModel<_ENTITY extends EntityModel<ID>, ID>
 
     /**
      * 判断是否相同
-     * @Description <code>equals(Object obj)</code> 应该根据 <code>equals(EntityModel entity)</code> 的实现来重写.
+     *
      * @param obj
      * @return
+     * @Description <code>equals(Object obj)</code> 应该根据 <code>equals(EntityModel entity)</code> 的实现来重写.
      */
     @Override
     boolean equals(Object obj);
@@ -38,9 +39,9 @@ public interface DtoModel<_ENTITY extends EntityModel<ID>, ID>
     /**
      * 判断是否相同 <- Entity 对象
      *
-     * @Description 默认按照 Entity 设计实现, 不应该被重写
      * @param entity 实体对象
      * @return
+     * @Description 默认按照 Entity 设计实现, 不应该被重写
      */
     @Override
     default boolean equals(@Nullable EntityModel entity) {
@@ -49,21 +50,22 @@ public interface DtoModel<_ENTITY extends EntityModel<ID>, ID>
 
     /**
      * 计算哈希值
-     * @Description 如果重写了 <code>equals(Object obj)</code>, 则必须根据 <code>equals(Object obj)</code>
-     *-> 的实现来重写 <code>hashCode()</code>.
+     *
      * @return
+     * @Description 如果重写了 <code>equals(Object obj)</code>, 则必须根据 <code>equals(Object obj)</code>
+     * -> 的实现来重写 <code>hashCode()</code>.
      */
     int hashCode();
 
     /**
      * 是否符合业务要求 <- DTO 对象
+     *
      * @return
      */
     boolean isDtoLegal();
 
     /**
      * 是否无效 <- DTO 对象
-     *
      *
      * @return
      */
@@ -75,10 +77,10 @@ public interface DtoModel<_ENTITY extends EntityModel<ID>, ID>
     /**
      * 是否无效 <- DTO 对象
      *
-     * @Description <interface>DtoModel</interface> 提供的默认实现.
-     *-> <tt>EntityModel.isEmpty(this) || !isLegal() || !isDtoLegal()</tt>
      * @param dto
      * @return
+     * @Description <interface>DtoModel</interface> 提供的默认实现.
+     * -> <tt>EntityModel.isEmpty(this) || !isLegal() || !isDtoLegal()</tt>
      */
     static boolean isEmpty(@NotNull DtoModel<?, ?> dto) {
         return EntityModel.isEmpty(dto)

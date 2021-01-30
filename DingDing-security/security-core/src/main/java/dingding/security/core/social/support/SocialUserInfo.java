@@ -5,48 +5,47 @@ package dingding.security.core.social.support;
  *
  * @author zhailiang
  * @Editor Suite
- *
  */
 public class SocialUserInfo {
-	
-	private String providerId;
-	
-	private String providerUserId;
-	
-	private String nickname;
-	
-	private String headImg;
 
-	public String getProviderId() {
-		return providerId;
-	}
+    private String providerId;
 
-	public void setProviderId(String providerId) {
-		this.providerId = providerId;
-	}
+    private String providerUserId;
 
-	public String getProviderUserId() {
-		return providerUserId;
-	}
+    private String nickname;
 
-	public void setProviderUserId(String providerUserId) {
-		this.providerUserId = providerUserId;
-	}
+    private String headImg;
 
-	public String getNickname() {
-		return nickname;
-	}
+    public String getProviderId() {
+        return providerId;
+    }
 
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
-	}
+    public void setProviderId(String providerId) {
+        this.providerId = providerId;
+    }
 
-	public String getHeadImg() {
-		return headImg;
-	}
+    public String getProviderUserId() {
+        return providerUserId;
+    }
 
-	public void setHeadImg(String headImg) {
-		this.headImg = headImg;
-	}
-	
+    public void setProviderUserId(String providerUserId) {
+        this.providerUserId = providerUserId;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getHeadImg() {
+        return headImg;
+    }
+
+    public void setHeadImg(String headImg) {
+        this.headImg = headImg;
+    }
+
 }

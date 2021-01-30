@@ -40,8 +40,8 @@ public class RoleResourceAggregate
                 if (null != resource && !resource.isEmpty()) {
                     if (repository.existsByRoleCodeAndResourceCode(RoleResourceAggregate.this.root().getCode(), resource.getCode())
                             || !repository
-                                    .saveAndFlush(SecurityRoleResource.Factory.ROLE_RESOURCE.create(RoleResourceAggregate.this.root().getCode(), resource.getCode()))
-                                    .isEmpty()) {
+                            .saveAndFlush(SecurityRoleResource.Factory.ROLE_RESOURCE.create(RoleResourceAggregate.this.root().getCode(), resource.getCode()))
+                            .isEmpty()) {
                         return super.add(resource);
                     }
                     return false;
@@ -71,7 +71,7 @@ public class RoleResourceAggregate
     @Override
     public int hashCode() {
         return /*root.hashCode() * resources.hashCode()*/
-                ObjectUtils.nullSafeHashCode(new Object[] {this.root(), this.resources});
+                ObjectUtils.nullSafeHashCode(new Object[]{this.root(), this.resources});
     }
 
 }

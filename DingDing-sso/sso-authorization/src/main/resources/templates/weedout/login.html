@@ -3,142 +3,142 @@
 <head>
     <title>WebChat | 登陆</title>
 
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
-    <link rel='stylesheet' type='text/css' th:href="@{/static/source/css/login.css}" />
+    <link rel='stylesheet' type='text/css' th:href="@{/static/source/css/login.css}"/>
 
     <script th:src="@{/static/plugins/jquery/jquery-2.1.4.min.js}"></script>
 
     <script th:src="@{/static/plugins/layer/layer.js}"></script>
 </head>
 <body>
-    <h1>WebChat</h1>
+<h1>WebChat</h1>
 
-    <th:block th:if="${param.error}">
-        <p style="color: firebrick;">Invalid username and password.</p>
-    </th:block>
+<th:block th:if="${param.error}">
+    <p style="color: firebrick;">Invalid username and password.</p>
+</th:block>
 
-    <th:block th:if="${param.logout}">
-        <p style="color: lawngreen;">You have been logged out.</p>
-    </th:block>
+<th:block th:if="${param.logout}">
+    <p style="color: lawngreen;">You have been logged out.</p>
+</th:block>
 
-    <div class="login-form">
-        <div class="close"></div>
+<div class="login-form">
+    <div class="close"></div>
 
-        <div class="head-info">
-            <label class="lbl-1"/>
+    <div class="head-info">
+        <label class="lbl-1"/>
 
-            <label class="lbl-2"/>
+        <label class="lbl-2"/>
 
-            <label class="lbl-3"/>
-        </div>
-
-        <div class="clear"></div>
-
-        <div class="avtar">
-            <img th:src="@{/static/source/img/avtar.png}" />
-        </div>
-
-        <form id="login-form"
-            action="#"
-            method="post"
-            onsubmit="return checkLoginForm()"
-            th:action="@{/user/login}">
-            <div class="key">
-                <input type="text"
-                       id="username"
-                       name="username"
-                       placeholder="请输入账号"/>
-            </div>
-
-            <div class="key">
-                <input type="password"
-                       id="password"
-                       name="password"
-                       placeholder="请输入密码"/>
-            </div>
-
-            <div class="signin">
-                <input type="submit" id="submit" value="Login"/>
-            </div>
-
-            <div class="signin">
-                <input type="submit" id="submit1" value="Registered"/>
-            </div>
-        </form>
+        <label class="lbl-3"/>
     </div>
 
-    <!--/* @Reference <a href="https://www.jianshu.com/p/ee177796702e">Spring Boot系列(四)：thymeleaf使用详解 - 简书</a> */-->
-    <!--/* <script th:if="${not empty param.timeout}">
-        $(function() {
+    <div class="clear"></div>
+
+    <div class="avtar">
+        <img th:src="@{/static/source/img/avtar.png}"/>
+    </div>
+
+    <form id="login-form"
+          action="#"
+          method="post"
+          onsubmit="return checkLoginForm()"
+          th:action="@{/user/login}">
+        <div class="key">
+            <input type="text"
+                   id="username"
+                   name="username"
+                   placeholder="请输入账号"/>
+        </div>
+
+        <div class="key">
+            <input type="password"
+                   id="password"
+                   name="password"
+                   placeholder="请输入密码"/>
+        </div>
+
+        <div class="signin">
+            <input type="submit" id="submit" value="Login"/>
+        </div>
+
+        <div class="signin">
+            <input type="submit" id="submit1" value="Registered"/>
+        </div>
+    </form>
+</div>
+
+<!--/* @Reference <a href="https://www.jianshu.com/p/ee177796702e">Spring Boot系列(四)：thymeleaf使用详解 - 简书</a> */-->
+<!--/* <script th:if="${not empty param.timeout}">
+    $(function() {
+        layer.msg('连接超时,请重新登陆!', {
+            offset: 0,
+            shift: 6
+        });
+    });
+</script> */-->
+
+<!--/* 使用JS内联 */-->
+<!--/* -> @Reference <a href="https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html#inlining">12.3 JavaScript内联</a> */-->
+<script th:inline="javascript">
+    $(function () {
+        if (!isNull([[${param.timeout}]])) {
             layer.msg('连接超时,请重新登陆!', {
                 offset: 0,
                 shift: 6
             });
-        });
-    </script> */-->
-
-    <!--/* 使用JS内联 */-->
-    <!--/* -> @Reference <a href="https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html#inlining">12.3 JavaScript内联</a> */-->
-    <script th:inline="javascript">
-        $(function() {
-            if (!isNull([[${param.timeout}]])) {
-                layer.msg('连接超时,请重新登陆!', {
-                    offset: 0,
-                    shift: 6
-                });
-            }
-            if ([[${error}]]) {
-                $('#submit').attr('value', [[${error}]]).css('background', 'red');
-            }
-            if ([[${message}]]) {
-                layer.msg([[${message}]], {
-                    offset: 0,
-                });
-            }
-            $('.close').on('click', function(c) {
-                $('.login-form').fadeOut('slow', function(c){
-                    $('.login-form').remove();
-                });
+        }
+        if ([[${error}]]) {
+            $('#submit').attr('value', [[${error}]]).css('background', 'red');
+        }
+        if ([[${message}]]) {
+            layer.msg([[${message}]], {
+                offset: 0,
             });
-            $('#username, #password').change(function() {
-                $('#submit').attr('value', 'Login').css('background', '#3ea751');
+        }
+        $('.close').on('click', function (c) {
+            $('.login-form').fadeOut('slow', function (c) {
+                $('.login-form').remove();
             });
         });
+        $('#username, #password').change(function () {
+            $('#submit').attr('value', 'Login').css('background', '#3ea751');
+        });
+    });
 
-        /**
-         * check the login form before user login.
-         * @returns {boolean}
-         */
-        function checkLoginForm() {
-            var username = $('#username').val();
-            var password = $('#password').val();
-            if (isNull(username) && isNull(password)) {
-                $('#submit').attr('value', '请输入账号和密码!!!').css('background', 'red');
-                return false;
-            }
-            if (isNull(username)) {
-                $('#submit').attr('value', '请输入账号!!!').css('background', 'red');
-                return false;
-            }
-            if (isNull(password)) {
-                $('#submit').attr('value', '请输入密码!!!').css('background', 'red');
-                return false;
-            }
-            $('#submit').attr('value', 'Logging~');
-            return true;
+    /**
+     * check the login form before user login.
+     * @returns {boolean}
+     */
+    function checkLoginForm() {
+        var username = $('#username').val();
+        var password = $('#password').val();
+        if (isNull(username) && isNull(password)) {
+            $('#submit').attr('value', '请输入账号和密码!!!').css('background', 'red');
+            return false;
         }
+        if (isNull(username)) {
+            $('#submit').attr('value', '请输入账号!!!').css('background', 'red');
+            return false;
+        }
+        if (isNull(password)) {
+            $('#submit').attr('value', '请输入密码!!!').css('background', 'red');
+            return false;
+        }
+        $('#submit').attr('value', 'Logging~');
+        return true;
+    }
 
-        /**
-         * 判空函数
-         * @param input
-         * @returns {boolean}
-         */
-        function isNull(input) {
-            return input == null
-                || input === ''
-                || input === undefined;
-        }
-    </script>
+    /**
+     * 判空函数
+     * @param input
+     * @returns {boolean}
+     */
+    function isNull(input) {
+        return input == null
+            || input === ''
+            || input === undefined;
+    }
+</script>
 </body>
 </html>

@@ -12,23 +12,22 @@ import dingding.security.core.properties.SecurityProperties;
 
 /**
  * 默认的session失效处理策略
- * 
+ *
  * @author zhailiang
  * @Editor Suite
- *
  */
 public class DingDingInvalidSessionStrategy
-		extends AbstractSessionStrategy
-		implements InvalidSessionStrategy {
+        extends AbstractSessionStrategy
+        implements InvalidSessionStrategy {
 
-	public DingDingInvalidSessionStrategy(SecurityProperties securityProperties) {
-		super(securityProperties);
-	}
+    public DingDingInvalidSessionStrategy(SecurityProperties securityProperties) {
+        super(securityProperties);
+    }
 
-	@Override
-	public void onInvalidSessionDetected(HttpServletRequest request, HttpServletResponse response)
-			throws IOException, ServletException {
-		onSessionInvalid(request, response);
-	}
+    @Override
+    public void onInvalidSessionDetected(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+        onSessionInvalid(request, response);
+    }
 
 }

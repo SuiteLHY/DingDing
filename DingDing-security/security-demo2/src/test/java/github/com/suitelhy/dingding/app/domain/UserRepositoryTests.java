@@ -133,8 +133,8 @@ public class UserRepositoryTests {
                 , "===== insert(User) -> 无效的 User");
         //--- update
         Assert.isTrue(userRepository.modifyByIdAndStatus("测试_最新"
-                        , newUser.id()
-                        , Account.StatusVo.NORMAL) > 0
+                , newUser.id()
+                , Account.StatusVo.NORMAL) > 0
                 , "===== modifyByIdAndStatus(String, String, AccountVo.Status) -> fault");
         System.out.println(newUser);
     }

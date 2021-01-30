@@ -19,9 +19,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Web层 - <class>LogController</class> MockMvc测试 (静态) (未启动服务)
  *
- * @Description 使用 MockMvc 实现 Http请求 模拟 Web 交互流程。</br>
- *-> 通过使用标注在测试用例上的 @AutoConfigureMockMvc 注释来注入 MockMvc 实例.
  * @author Suite
+ * @Description 使用 MockMvc 实现 Http请求 模拟 Web 交互流程。</br>
+ * -> 通过使用标注在测试用例上的 @AutoConfigureMockMvc 注释来注入 MockMvc 实例.
  */
 @SpringBootTest
 @AutoConfigureMockMvc

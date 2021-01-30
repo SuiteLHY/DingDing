@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package dingding.security.app.rbac.repository;
 

@@ -14,7 +14,6 @@ import java.io.IOException;
 
 /**
  * 验证成功 -> 自定义操作实现
- *
  */
 @Slf4j
 @Component

@@ -28,7 +28,8 @@ public class BasicUserDto
 
     //===== DtoModel =====//
 
-    private final transient @NotNull User dtoId;
+    private final transient @NotNull
+    User dtoId;
 
     /**
      * (Constructor)
@@ -43,12 +44,10 @@ public class BasicUserDto
      * (Constructor)
      *
      * @param dtoId {@link User}
-     *
      * @throws IllegalArgumentException 此时 {@param dtoId} 非法.
      */
     protected BasicUserDto(@NotNull User dtoId)
-            throws IllegalArgumentException
-    {
+            throws IllegalArgumentException {
         if (null == dtoId || dtoId.isEmpty()) {
             //-- 非法输入: <param>dtoId</param>
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
@@ -68,13 +67,11 @@ public class BasicUserDto
     /**
      * (Constructor)
      *
-     * @param basicUserDto  {@link BasicUserDto}
-     *
+     * @param basicUserDto {@link BasicUserDto}
      * @throws IllegalArgumentException 此时 {@param basicUserDto} 非法.
      */
     protected BasicUserDto(@NotNull BasicUserDto basicUserDto)
-            throws IllegalArgumentException
-    {
+            throws IllegalArgumentException {
         if (null == basicUserDto || basicUserDto.isEmpty()) {
             //-- 非法输入: <param>basicUserDto</param>
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
@@ -96,7 +93,6 @@ public class BasicUserDto
      *
      * @param username
      * @param password 用户密码（明文或密文）
-     *
      * @return The unique identify of the DTO, or null.
      */
     @Nullable
@@ -135,9 +131,8 @@ public class BasicUserDto
     /**
      * 是否符合业务要求
      *
-     * @Description 需要实现类实现该接口.
-     *
      * @return 判断结果
+     * @Description 需要实现类实现该接口.
      */
     @Override
     public boolean isEntityLegal() {
@@ -147,9 +142,8 @@ public class BasicUserDto
     /**
      * 是否无效 <- DTO 对象
      *
-     * @Description 使用默认实现.
-     *
      * @return 判断结果
+     * @Description 使用默认实现.
      */
     @Override
     public boolean isEmpty() {
@@ -162,8 +156,15 @@ public class BasicUserDto
      * @return 转换结果
      */
     @Override
-    public @NotNull String toJSONString() {
+    public @NotNull
+    String toJSONString() {
         return String.format("{%s}", this.username);
+    }
+
+    @Override
+    public @NotNull
+    String toString() {
+        return this.toJSONString();
     }
 
     //===== Factory =====//
@@ -175,13 +176,12 @@ public class BasicUserDto
         /**
          * 创建用户 DTO
          *
-         * @param user  {@link User}
-         *
+         * @param user {@link User}
          * @return {@link BasicUserDto}
          */
-        public @NotNull BasicUserDto create(@NotNull User user)
-                throws IllegalArgumentException
-        {
+        public @NotNull
+        BasicUserDto create(@NotNull User user)
+                throws IllegalArgumentException {
             return new BasicUserDto(user);
         }
 
@@ -190,14 +190,12 @@ public class BasicUserDto
          *
          * @param username 用户名称
          * @param password 用户密码
-         *
          * @return {@link BasicUserDto}
-         *
          * @throws IllegalArgumentException
          */
-        public @NotNull BasicUserDto create(@NotNull String username, @NotNull String password)
-                throws IllegalArgumentException
-        {
+        public @NotNull
+        BasicUserDto create(@NotNull String username, @NotNull String password)
+                throws IllegalArgumentException {
             final User newUser = User.Factory.USER.create(username, password);
             return new BasicUserDto(newUser);
         }
@@ -208,16 +206,14 @@ public class BasicUserDto
          * @param id       用户 ID       {@link User.Validator#userid(String)}
          * @param username 用户名称       {@link User.Validator#username(String)}
          * @param password 用户 - 密码    {@link User.Validator#password(String)}
-         *
          * @return {@link BasicUserDto}
-         *
          * @throws IllegalArgumentException 此时 <param>id</param> 非法
          */
-        public @NotNull BasicUserDto update(@NotNull String id
+        public @NotNull
+        BasicUserDto update(@NotNull String id
                 , @NotNull String username
                 , @NotNull String password)
-                throws IllegalArgumentException
-        {
+                throws IllegalArgumentException {
             final User user = User.Factory.USER.update(id, username, password);
             return new BasicUserDto(user);
         }
@@ -225,12 +221,10 @@ public class BasicUserDto
         /**
          * 销毁 DTO
          *
-         * @param userDto   {@link BasicUserDto}
-         *
-         * @return
-         * {
-         *  {@code true}: <b>销毁成功</b>,
-         *  {@code false}: <b>销毁失败, 此时 {@param userDto} 无效或无法销毁</b>
+         * @param userDto {@link BasicUserDto}
+         * @return {
+         * {@code true}: <b>销毁成功</b>,
+         * {@code false}: <b>销毁失败, 此时 {@param userDto} 无效或无法销毁</b>
          * }
          */
         public boolean delete(@NotNull BasicUserDto userDto) {
@@ -246,7 +240,8 @@ public class BasicUserDto
          * @return 非 {@code null}.
          */
         @Override
-        public @NotNull BasicUserDto createDefault() {
+        public @NotNull
+        BasicUserDto createDefault() {
             return new BasicUserDto();
         }
 
@@ -275,15 +270,13 @@ public class BasicUserDto
     /**
      * 等效判断
      *
-     * @param securityUser  {@link AbstractSecurityUser}
-     *
+     * @param securityUser {@link AbstractSecurityUser}
      * @return 判断结果
      */
     public boolean equals(AbstractSecurityUser securityUser) {
         if (null == securityUser
                 || securityUser.isEmpty()
-                || !this.isDtoLegal())
-        {
+                || !this.isDtoLegal()) {
             return false;
         }
         return this.username.equals(securityUser.getUsername());
@@ -293,14 +286,12 @@ public class BasicUserDto
      * 等效判断
      *
      * @param userAuthenticationDetails {@link OAuth2AuthenticationInfo.AbstractUserAuthentication.AbstractDetails}
-     *
      * @return 判断结果
      */
     public boolean equals(OAuth2AuthenticationInfo.AbstractUserAuthentication.AbstractDetails userAuthenticationDetails) {
         if (null == userAuthenticationDetails
                 || !Boolean.TRUE.equals(userAuthenticationDetails.isActive())
-                || !this.isDtoLegal())
-        {
+                || !this.isDtoLegal()) {
             return false;
         }
         return this.username.equals(userAuthenticationDetails.getUserName());
@@ -310,10 +301,10 @@ public class BasicUserDto
      * 判断密码是否相同
      *
      * @param password
-     *
      * @return {true: <tt>密码相同</tt>, false: <tt>密码不相同</tt>, null: <tt>DTO无效</tt>}
      */
-    public @Nullable Boolean equalsPassword(String password) {
+    public @Nullable
+    Boolean equalsPassword(String password) {
         if (dtoId.isEmpty()) {
             return null;
         }

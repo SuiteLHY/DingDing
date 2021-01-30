@@ -27,10 +27,8 @@ import java.util.*;
 /**
  * DingDingUserDetailsService
  *
- * @Description Spring Security <- 项目定制化 {@link UserDetailsService} 实现.
- *
  * @author Suite
- *
+ * @Description Spring Security <- 项目定制化 {@link UserDetailsService} 实现.
  * @see UserDetailsService
  * @see AbstractSecurityUser
  */
@@ -43,15 +41,12 @@ public class DingDingUserDetailsService
      * 用户（安全认证）基本信息
      *
      * @Description {@link AbstractSecurityUser} 的项目定制化实现.
-     *
      * @Design {@link AbstractSecurityUser}
      * · 【安全设计】使用[静态的嵌套类]能够有效地限制[对 {@link SecurityUser} 的滥用].
-     *
      * @see AbstractSecurityUser
      */
     public static class SecurityUser
-            extends AbstractSecurityUser
-    {
+            extends AbstractSecurityUser {
 
         /**
          * (Constructor)
@@ -63,7 +58,6 @@ public class DingDingUserDetailsService
          * @param accountNonLocked      {@link this#isAccountNonLocked()}
          * @param credentialsNonExpired {@link this#isCredentialsNonExpired()}
          * @param enabled               {@link this#isEnabled()}
-         *
          * @throws AccountStatusException
          * @throws IllegalArgumentException
          */
@@ -74,8 +68,7 @@ public class DingDingUserDetailsService
                 , boolean accountNonLocked
                 , boolean credentialsNonExpired
                 , boolean enabled)
-                throws AccountStatusException, IllegalArgumentException
-        {
+                throws AccountStatusException, IllegalArgumentException {
             super(username, password, authorities
                     , accountNonExpired, accountNonLocked, credentialsNonExpired
                     , enabled);
@@ -93,9 +86,9 @@ public class DingDingUserDetailsService
     private UserEvent userEvent;
 
     @Override
-    public @NotNull UserDetails loadUserByUsername(String username)
-            throws AuthenticationException
-    {
+    public @NotNull
+    UserDetails loadUserByUsername(String username)
+            throws AuthenticationException {
         /*final @NotNull User user = userService.selectUserByUsername(username);*/
         final @NotNull User user = userEvent.selectUserByUsername(username);
 
@@ -117,23 +110,25 @@ public class DingDingUserDetailsService
         return new SecurityUser(user.getUsername()
                 , /*passwordEncoder.encode(user.getPassword())*/user.getPassword()
                 , authorities
-                , ! Account.StatusVo.DESTRUCTION.equals(user.getStatus())
-                , ! Account.StatusVo.LOCKED.equals(user.getStatus())
+                , !Account.StatusVo.DESTRUCTION.equals(user.getStatus())
+                , !Account.StatusVo.LOCKED.equals(user.getStatus())
                 , Account.StatusVo.NORMAL.equals(user.getStatus())
-                , ! user.isEmpty());
+                , !user.isEmpty());
     }
 
-    public @Nullable BasicUserDto getUserInfo(@NotNull String username) {
+    public @Nullable
+    BasicUserDto getUserInfo(@NotNull String username) {
         final @NotNull User user = User.Validator.USER.username(username)
                 ? userEvent.selectUserByUsername(username)
                 : null;
 
-        return (null != user && ! user.isEmpty())
+        return (null != user && !user.isEmpty())
                 ? BasicUserDto.Factory.USER_DTO.create(user)
                 : null;
     }
 
-    public @Nullable BasicUserDto getUserInfo(@NotNull UserDetails user) {
+    public @Nullable
+    BasicUserDto getUserInfo(@NotNull UserDetails user) {
         return (null != user)
                 ? getUserInfo(user.getUsername())
                 : null;

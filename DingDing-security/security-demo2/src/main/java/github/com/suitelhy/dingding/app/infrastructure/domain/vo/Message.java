@@ -218,6 +218,7 @@ import javax.validation.constraints.NotNull;
 //    //==========//
 //
 //}
+
 /**
  * 消息 VO <- 接口
  *
@@ -274,7 +275,8 @@ public interface Message<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V exten
          * @return
          */
         @Override
-        public @NotNull String showName() {
+        public @NotNull
+        String showName() {
             return this.name;
         }
 
@@ -309,9 +311,7 @@ public interface Message<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V exten
                 extends VoModel<VO, V, _DESCRIPTION> {
 
             enum AcceptStatusVo implements Status<AcceptStatusVo, Integer, String> {
-                UNSENT(0, "未发送", "消息未成功发送。")
-                , SENT(1, "已发送", "消息已成功发送，对方未阅读。")
-                , READ(2, "已阅读", "消息已成功发送，对方已阅读。");
+                UNSENT(0, "未发送", "消息未成功发送。"), SENT(1, "已发送", "消息已成功发送，对方未阅读。"), READ(2, "已阅读", "消息已成功发送，对方已阅读。");
 
                 private final int code;
 
@@ -356,7 +356,8 @@ public interface Message<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V exten
                  * @return
                  */
                 @Override
-                public @NotNull String showName() {
+                public @NotNull
+                String showName() {
                     return this.name;
                 }
 
@@ -439,7 +440,8 @@ public interface Message<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V exten
          * @return
          */
         @Override
-        public @NotNull String showName() {
+        public @NotNull
+        String showName() {
             return this.name;
         }
 
@@ -473,11 +475,7 @@ public interface Message<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V exten
                 extends VoModel<VO, V, _DESCRIPTION> {
 
             enum AcceptStatusVo implements VoModel<AcceptStatusVo, Integer, String> {
-                UNSENT(0, "未发送", "消息未成功发送，群聊中的所有用户都未接收到此消息。")
-                , PARTIAL_SEND(1, "部分发送", "消息已成功发送给群聊中的部分用户。")
-                , SENT(2, "已发送", "消息已成功发送，群聊中的所有用户都已接收到此消息。")
-                , PARTIAL_READ(3, "部分已读", "消息已成功发送，群聊中的部分用户已阅读此消息。")
-                , READ(4, "全部已读", "消息已成功发送，群聊中的所有用户都已阅读此消息。");
+                UNSENT(0, "未发送", "消息未成功发送，群聊中的所有用户都未接收到此消息。"), PARTIAL_SEND(1, "部分发送", "消息已成功发送给群聊中的部分用户。"), SENT(2, "已发送", "消息已成功发送，群聊中的所有用户都已接收到此消息。"), PARTIAL_READ(3, "部分已读", "消息已成功发送，群聊中的部分用户已阅读此消息。"), READ(4, "全部已读", "消息已成功发送，群聊中的所有用户都已阅读此消息。");
 
                 private final int code;
 
@@ -522,7 +520,8 @@ public interface Message<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V exten
                  * @return
                  */
                 @Override
-                public @NotNull String showName() {
+                public @NotNull
+                String showName() {
                     return this.name;
                 }
 

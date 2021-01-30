@@ -55,7 +55,7 @@ function Brain() {
     var b = false;
     var c = false;
     var e = false;
-    this.setLevel = function(u) {
+    this.setLevel = function (u) {
         if (u == 1) {
             b = c = e = false
         } else {
@@ -78,7 +78,7 @@ function Brain() {
             }
         }
     };
-    var d = function(y) {
+    var d = function (y) {
         var v = (t[y] > 0) ? 1 : -1;
         for (var w = -2; w <= 2; ++w) {
             for (var u = -2; u <= 2; ++u) {
@@ -89,7 +89,7 @@ function Brain() {
             }
         }
     };
-    var p = function(C, x, N, M) {
+    var p = function (C, x, N, M) {
         var L = PD.A1;
         var E = 1;
         var R = 0,
@@ -212,7 +212,7 @@ function Brain() {
         }
         return L
     };
-    var j = function(y, A) {
+    var j = function (y, A) {
         var C = new Array(12);
         for (var x = 0; x < 12; ++x) {
             C[x] = 0
@@ -248,8 +248,8 @@ function Brain() {
         }
         return [z, v]
     };
-    var h = function(u) {
-        var v = function(x, w) {
+    var h = function (u) {
+        var v = function (x, w) {
             for (var z = 1; z <= 4; ++z) {
                 var y = u + z * x + z * w * (BS + 2);
                 if (y >= 0 && y < DS) {
@@ -274,14 +274,14 @@ function Brain() {
         v(1, -1);
         v(-1, 1)
     };
-    var g = function(v, w) {
+    var g = function (v, w) {
         var u = w[0] + w[1] * (BS + 2);
         t[u] = v;
         a[u] = l[u] = -1;
         d(u);
         h(u)
     };
-    var f = function(v) {
+    var f = function (v) {
         var u = v[0] + v[1] * (BS + 2);
         t[u] = 0;
         d(u);
@@ -293,7 +293,7 @@ function Brain() {
         }
         h(u)
     };
-    this.scan = function(A) {
+    this.scan = function (A) {
         t = A.getData();
         n = new Array(DS);
         l = new Array(DS);
@@ -323,7 +323,7 @@ function Brain() {
         }
         return [n, a, l]
     };
-    var m = function(J) {
+    var m = function (J) {
         var z = (J == BLACK) ? a : l;
         var D = (J == BLACK) ? l : a;
         var u = (J == BLACK);
@@ -361,7 +361,7 @@ function Brain() {
             }
         }
         if (F.length > 1) {
-            F.sort(function(y, x) {
+            F.sort(function (y, x) {
                 var L = 0.5;
                 if (A[y] < A[x]) {
                     L = 0.8
@@ -375,12 +375,12 @@ function Brain() {
         }
         return [w, F, B]
     };
-    var r = function(z, A) {
+    var r = function (z, A) {
         var w = (z == BLACK) ? l : a;
         var v = [];
         var u = A[0];
         var C = A[1];
-        var B = function(y, x) {
+        var B = function (y, x) {
             for (var E = 1; E <= 4; ++E) {
                 var H = u + E * y;
                 var G = C + E * x;
@@ -403,10 +403,11 @@ function Brain() {
             }
             return true
         };
-        if (B(1, 0) && B(-1, 0) && B(0, 1) && B(0, -1) && B(1, 1) && B(-1, -1) && B(1, -1) && B(-1, 1)) {}
+        if (B(1, 0) && B(-1, 0) && B(0, 1) && B(0, -1) && B(1, 1) && B(-1, -1) && B(1, -1) && B(-1, 1)) {
+        }
         return v
     };
-    var i = function(O, U, I, W) {
+    var i = function (O, U, I, W) {
         if (U >= q) {
             return false
         }
@@ -485,7 +486,7 @@ function Brain() {
         }
         return false
     };
-    var o = function(I, M, D, O) {
+    var o = function (I, M, D, O) {
         var L = (I == BLACK) ? a : l;
         var N = (I == BLACK) ? l : a;
         var K = [];
@@ -540,7 +541,7 @@ function Brain() {
         }
         return false
     };
-    var s = function(A) {
+    var s = function (A) {
         var z = (A == BLACK) ? a : l;
         var v = [];
         var C = {};
@@ -555,14 +556,14 @@ function Brain() {
                 }
             }
         }
-        v.sort(function(E, x) {
+        v.sort(function (E, x) {
             var F = E[0] + E[1] * (BS + 2);
             var y = x[0] + x[1] * (BS + 2);
             return n[F] - n[y]
         });
         return v
     };
-    this.findBestStep = function(y) {
+    this.findBestStep = function (y) {
         var x = (new Date()).getTime();
         this.scan(y);
         var C = y.getPlayer();

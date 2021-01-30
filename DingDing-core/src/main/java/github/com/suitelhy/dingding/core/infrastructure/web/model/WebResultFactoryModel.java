@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 /**
  * {@link R} 的工厂类接口
  *
- * @param <R>   {@link WebResult}
+ * @param <R> {@link WebResult}
  */
 public interface WebResultFactoryModel<R extends WebResult<?>> {
 
@@ -25,6 +25,7 @@ public interface WebResultFactoryModel<R extends WebResult<?>> {
      *
      * @return 非 {@code null}.
      */
-    @NotNull R createDefault();
+    @NotNull
+    R createDefault();
 
 }

@@ -16,7 +16,6 @@ import java.util.Map;
  * (安全) 资源
  *
  * @Description (安全) 资源 -> DTO.
- *
  * @see SecurityResource
  */
 public class ResourceDto
@@ -49,7 +48,8 @@ public class ResourceDto
     protected Resource.TypeVo type;
 
     // (关联的) [URL 信息]
-    protected final @NotNull ContainArrayHashSet<String> urlInfoSet = new ContainArrayHashSet<>(0);
+    protected final @NotNull
+    ContainArrayHashSet<String> urlInfoSet = new ContainArrayHashSet<>(0);
 
     //===== DtoModel =====//
 
@@ -72,12 +72,10 @@ public class ResourceDto
      * (Constructor)
      *
      * @param dtoId [唯一标识 <- DTO 对象]
-     *
      * @throws IllegalArgumentException
      */
     protected ResourceDto(final @NotNull SecurityResource dtoId)
-            throws IllegalArgumentException
-    {
+            throws IllegalArgumentException {
         if (null == dtoId || !dtoId.isEntityLegal()) {
             //-- 非法输入: <param>dtoId</param>
             throw new IllegalArgumentException(String.format("%s -> 非法输入: <param>dtoId</param>", this.getClass().getSimpleName()));
@@ -98,14 +96,12 @@ public class ResourceDto
     /**
      * (Constructor)
      *
-     * @param dtoId         [唯一标识 <- DTO 对象]
-     * @param resourceUrls  {@param dtoId} 关联的[（安全认证）资源 ←→ URL]集合
-     *
+     * @param dtoId        [唯一标识 <- DTO 对象]
+     * @param resourceUrls {@param dtoId} 关联的[（安全认证）资源 ←→ URL]集合
      * @throws IllegalArgumentException
      */
     protected ResourceDto(final @NotNull SecurityResource dtoId, final @NotNull HashSet<SecurityResourceUrl> resourceUrls)
-            throws IllegalArgumentException
-    {
+            throws IllegalArgumentException {
         if (null == dtoId || !dtoId.isEntityLegal()) {
             //-- 非法输入: [唯一标识 <- DTO 对象]
             throw new IllegalArgumentException(String.format("非法输入: <param>%s</param>->【%s】 <- %s"
@@ -127,8 +123,7 @@ public class ResourceDto
             for (final SecurityResourceUrl eachResourceUrl : resourceUrls) {
                 if (null == eachResourceUrl
                         || !eachResourceUrl.isEntityLegal()
-                        || !eachResourceUrl.equals(this.dtoId))
-                {
+                        || !eachResourceUrl.equals(this.dtoId)) {
                     //-- 非法输入: 关联的[（安全认证）资源 ←→ URL]集合
                     throw new IllegalArgumentException(String.format("非法输入: <param>%s <- 【%s】</param>->【%s <- %s&%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , "关联的[（安全认证）资源 ←→ URL]集合"
@@ -178,9 +173,8 @@ public class ResourceDto
     /**
      * 是否符合业务要求 <- Entity 对象
      *
-     * @Description 需要实现类实现该接口
-     *
      * @return
+     * @Description 需要实现类实现该接口
      */
     @Override
     public boolean isEntityLegal() {
@@ -193,38 +187,24 @@ public class ResourceDto
      * @return 转换结果
      */
     @Override
-    public @NotNull String toJSONString() {
-        return String.format("%s{code=\"%s\", name=\"%s\", type=%s}"
+    public @NotNull
+    String toJSONString() {
+        /*return String.format("%s{code=\"%s\", name=\"%s\", type=%s}"
+                , getClass().getSimpleName()
+                , (null != this.code) ? this.code : ""
+                , (null != this.name) ? this.name : ""
+                , (null != this.type) ? this.type : "");*/
+        return String.format("{\"class_name\":\"%s\", \"code\":\"%s\", \"name\":\"%s\", \"type\":%s}"
                 , getClass().getSimpleName()
                 , (null != this.code) ? this.code : ""
                 , (null != this.name) ? this.name : ""
                 , (null != this.type) ? this.type : "");
     }
 
-    /**
-     * Returns a string representation of the object. In general, the
-     * {@code toString} method returns a string that
-     * "textually represents" this object. The result should
-     * be a concise but informative representation that is easy for a
-     * person to read.
-     * It is recommended that all subclasses override this method.
-     * <p>
-     * The {@code toString} method for class {@code Object}
-     * returns a string consisting of the name of the class of which the
-     * object is an instance, the at-sign character `{@code @}', and
-     * the unsigned hexadecimal representation of the hash code of the
-     * object. In other words, this method returns a string equal to the
-     * value of:
-     * <blockquote>
-     * <pre>
-     * getClass().getName() + '@' + Integer.toHexString(hashCode())
-     * </pre></blockquote>
-     *
-     * @return a string representation of the object.
-     */
     @Override
-    public @NotNull String toString() {
-        return DtoModel.toString(this);
+    public @NotNull
+    String toString() {
+        return this.toJSONString();
     }
 
     //===== Factory =====//
@@ -236,8 +216,7 @@ public class ResourceDto
         /**
          * 创建 DTO
          *
-         * @param resource  {@link SecurityResource}
-         *
+         * @param resource {@link SecurityResource}
          * @return {@link ResourceDto}
          */
         @NotNull
@@ -248,15 +227,14 @@ public class ResourceDto
         /**
          * 创建 DTO
          *
-         * @param resource      {@link SecurityResource}
-         * @param urlInfoSet    关联的[URL 信息]集合
-         * · 数据结构:
-         * [{
-         *      clientId : [资源服务器 ID],
-         *      urlPath : [资源对应的 URL (Path部分)],
-         *      urlMethod : [资源对应的 URL Method]
-         * }]
-         *
+         * @param resource   {@link SecurityResource}
+         * @param urlInfoSet 关联的[URL 信息]集合
+         *                   · 数据结构:
+         *                   [{
+         *                   clientId : [资源服务器 ID],
+         *                   urlPath : [资源对应的 URL (Path部分)],
+         *                   urlMethod : [资源对应的 URL Method]
+         *                   }]
          * @return {@link ResourceDto}
          */
         @NotNull
@@ -285,14 +263,13 @@ public class ResourceDto
         /**
          * 创建 DTO
          *
-         * @param code          角色编码
-         * @param icon          图标
-         * @param link          资源链接
-         * @param name          角色名称
-         * @param parentCode    父节点 <- 资源编码
-         * @param sort          序号
-         * @param type          资源类型
-         *
+         * @param code       角色编码
+         * @param icon       图标
+         * @param link       资源链接
+         * @param name       角色名称
+         * @param parentCode 父节点 <- 资源编码
+         * @param sort       序号
+         * @param type       资源类型
          * @return {@link ResourceDto}
          */
         @NotNull
@@ -303,8 +280,7 @@ public class ResourceDto
                 , @Nullable String parentCode
                 , @NotNull int sort
                 , @NotNull Resource.TypeVo type)
-                throws IllegalArgumentException
-        {
+                throws IllegalArgumentException {
             final @NotNull SecurityResource resource = SecurityResource.Factory.RESOURCE.create(
                     code, icon, link
                     , name, parentCode, sort
@@ -315,19 +291,16 @@ public class ResourceDto
         /**
          * 更新 DTO
          *
-         * @param id            数据 ID
-         * @param code          角色编码
-         * @param icon          图标
-         * @param link          资源链接
-         * @param name          角色名称
-         * @param parentCode    父节点 <- 资源编码
-         * @param sort          序号
-         * @param type          资源类型
-         *
+         * @param id         数据 ID
+         * @param code       角色编码
+         * @param icon       图标
+         * @param link       资源链接
+         * @param name       角色名称
+         * @param parentCode 父节点 <- 资源编码
+         * @param sort       序号
+         * @param type       资源类型
          * @return {@link ResourceDto}
-         *
-         * @throws IllegalArgumentException
-         *-> 此时 {@param id}/{@param code}/{@param icon}/{@param link}/{@param name}/{@param parentCode}/{@param sort}/{@param type} 非法
+         * @throws IllegalArgumentException -> 此时 {@param id}/{@param code}/{@param icon}/{@param link}/{@param name}/{@param parentCode}/{@param sort}/{@param type} 非法
          */
         @NotNull
         public ResourceDto update(@NotNull Long id
@@ -338,8 +311,7 @@ public class ResourceDto
                 , @Nullable String parentCode
                 , @NotNull int sort
                 , @NotNull Resource.TypeVo type)
-                throws IllegalArgumentException
-        {
+                throws IllegalArgumentException {
             final @NotNull SecurityResource resource = SecurityResource.Factory.RESOURCE.update(
                     id, code, icon
                     , link, name, parentCode

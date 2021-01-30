@@ -6,5 +6,4 @@ package github.com.suitelhy.dingding.app.domain.aggregate;
 public class UserAggregate {
 
 
-
 }

@@ -26,6 +26,22 @@
  * Swagger API - 注解 -> 参考API文档:
  * -> <a href="http://docs.swagger.io/swagger-core/v1.5.0/apidocs/io/swagger/annotations/package-summary.html">
  * ->     io.swagger.annotations (swagger-annotations 1.5.0 API)</a>
+ * <p>
+ * Spring boot - Test
+ * @Reference <a href="https://stackoverflow.com/questions/8297215/spring-resttemplate-get-with-parameters">
+ * ->     java - Spring RestTemplate GET with parameters - Stack Overflow</a>
+ * <p>
+ * <p>
+ * AssertJ
+ * @Reference <a href="https://assertj.github.io/doc/">AssertJ - fluent assertions java library</a>
+ * -> , <a href="https://blog.csdn.net/neven7/article/details/51448559">
+ * ->     断言神器AssertJ快速入门_neven7的专栏-CSDN博客</a>
+ * <p>
+ * RESTful API:
+ * <p>
+ * Swagger API - 注解 -> 参考API文档:
+ * -> <a href="http://docs.swagger.io/swagger-core/v1.5.0/apidocs/io/swagger/annotations/package-summary.html">
+ * ->     io.swagger.annotations (swagger-annotations 1.5.0 API)</a>
  */
 /**
  * Spring boot - Test

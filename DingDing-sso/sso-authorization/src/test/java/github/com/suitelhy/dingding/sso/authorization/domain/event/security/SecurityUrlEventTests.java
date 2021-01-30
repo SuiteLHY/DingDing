@@ -41,7 +41,6 @@ import java.util.*;
  * (安全) 资源 - 业务 <- 测试单元
  *
  * @Description 测试单元.
- *
  * @see SecurityResourceService
  */
 @SpringBootTest
@@ -82,19 +81,23 @@ public class SecurityUrlEventTests {
      *
      * @return {@link SecurityUser}
      */
-    private @NotNull SecurityUser operator() {
+    private @NotNull
+    SecurityUser operator() {
         return securityUserService.selectByUsername("admin");
     }
 
-    private @NotNull String getClientId() {
+    private @NotNull
+    String getClientId() {
         return this.clientId;
     }
 
-    private @NotNull SecurityResource getEntityForTest() {
+    private @NotNull
+    SecurityResource getEntityForTest() {
         return getEntityForTest(null);
     }
 
-    private @NotNull SecurityResource getEntityForTest(@Nullable Integer seed) {
+    private @NotNull
+    SecurityResource getEntityForTest(@Nullable Integer seed) {
         return SecurityResource.Factory.RESOURCE.create(
                 "test"
                         .concat(new CalendarController().toString().replaceAll("[-:\\s]", ""))
@@ -108,11 +111,13 @@ public class SecurityUrlEventTests {
                 , Resource.TypeVo.MENU);
     }
 
-    private @NotNull SecurityRole getRoleForTest() {
+    private @NotNull
+    SecurityRole getRoleForTest() {
         return getRoleForTest(null);
     }
 
-    private @NotNull SecurityRole getRoleForTest(@Nullable Integer seed) {
+    private @NotNull
+    SecurityRole getRoleForTest(@Nullable Integer seed) {
         return SecurityRole.Factory.ROLE.create(
                 "test"
                         .concat(new CalendarController().toString().replaceAll("[-:\\s]", "")
@@ -121,18 +126,21 @@ public class SecurityUrlEventTests {
                 , "测试用数据");
     }
 
-    private @NotNull SecurityUser getSecurityUserForTest(@NotNull User user) {
+    private @NotNull
+    SecurityUser getSecurityUserForTest(@NotNull User user) {
         if (securityUserService.existByUsername(user.getUsername())) {
             return securityUserService.selectByUsername(user.getUsername());
         }
         return SecurityUser.Factory.USER.create(user);
     }
 
-    private @NotNull String getUrlForTest() {
+    private @NotNull
+    String getUrlForTest() {
         return getUrlForTest(null);
     }
 
-    private @NotNull String getUrlForTest(@Nullable Integer seed) {
+    private @NotNull
+    String getUrlForTest(@Nullable Integer seed) {
         return "/test/test"
                 .concat(new CalendarController().toString().replaceAll("[-:\\s]", ""))
                 .concat((null == seed || seed < 0) ? "" : Integer.toString(seed));
@@ -144,12 +152,13 @@ public class SecurityUrlEventTests {
      * @return {@link this#getUserForTest(Integer)}
      * · 数据结构:
      * {
-     *    "user": {@link User},
-     *    "userAccountOperationInfo": {@link UserAccountOperationInfo},
-     *    "userPersonInfo": {@link UserPersonInfo}
+     * "user": {@link User},
+     * "userAccountOperationInfo": {@link UserAccountOperationInfo},
+     * "userPersonInfo": {@link UserPersonInfo}
      * }
      */
-    private @NotNull Map<String, EntityModel<?>> getUserForTest() {
+    private @NotNull
+    Map<String, EntityModel<?>> getUserForTest() {
         return getUserForTest(null);
     }
 
@@ -157,16 +166,16 @@ public class SecurityUrlEventTests {
      * 获取测试用的用户相关 {@link EntityModel} 集合
      *
      * @param seed
-     *
      * @return {@link Map}
      * · 数据结构:
      * {
-     *    "user": {@link User},
-     *    "userAccountOperationInfo": {@link UserAccountOperationInfo},
-     *    "userPersonInfo": {@link UserPersonInfo}
+     * "user": {@link User},
+     * "userAccountOperationInfo": {@link UserAccountOperationInfo},
+     * "userPersonInfo": {@link UserPersonInfo}
      * }
      */
-    private @NotNull Map<String, EntityModel<?>> getUserForTest(Integer seed) {
+    private @NotNull
+    Map<String, EntityModel<?>> getUserForTest(Integer seed) {
         @NotNull Map<String, EntityModel<?>> result = new HashMap<>(3);
 
         final @NotNull User newUser = User.Factory.USER.create(
@@ -199,23 +208,27 @@ public class SecurityUrlEventTests {
         return result;
     }
 
-    private @NotNull String getUrlHttpMethodNameForTest() {
+    private @NotNull
+    String getUrlHttpMethodNameForTest() {
         return HTTP.MethodVo.GET.name();
     }
 
-    private @NotNull String[] getUrlInfoForTest() {
+    private @NotNull
+    String[] getUrlInfoForTest() {
         return getUrlInfoForTest(null);
     }
 
-    private @NotNull String[] getUrlInfoForTest(@Nullable Integer seed) {
-        return new String[] {
+    private @NotNull
+    String[] getUrlInfoForTest(@Nullable Integer seed) {
+        return new String[]{
                 getClientId(),
                 getUrlForTest(seed),
                 getUrlHttpMethodNameForTest()
         };
     }
 
-    private @NotNull String ip() {
+    private @NotNull
+    String ip() {
         return "127.0.0.0";
     }
 
@@ -230,8 +243,7 @@ public class SecurityUrlEventTests {
     @Test
     @Transactional
     public void existResourceOnUrlInfo()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         // 获取必要的测试用身份信息
         final @NotNull SecurityUser operator = operator();
         final @NotNull UserAccountOperationInfo operator_userAccountOperationInfo = userEvent.selectUserAccountOperationInfoByUsername(operator().getUsername());
@@ -245,8 +257,8 @@ public class SecurityUrlEventTests {
         final @NotNull String[] newUrlInfo = getUrlInfoForTest();
 
         Assert.isTrue(securityResourceUrlService.insert(SecurityResourceUrl.Factory.RESOURCE_URL.create(newEntity, newUrlInfo)
-                    , operator
-                    , operator_userAccountOperationInfo)
+                , operator
+                , operator_userAccountOperationInfo)
                 , "===== 添加测试数据失败!");
 
         Assert.isTrue(securityUrlEvent.insertResourceUrlRelationship(newEntity, newUrlInfo, operator)
@@ -264,8 +276,7 @@ public class SecurityUrlEventTests {
     @Test
     @Transactional
     public void selectResourceUrlRelationshipOnUrlInfoByClientIdAndUrlPath()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         // 获取必要的测试用身份信息
         final @NotNull SecurityUser operator = operator();
         final @NotNull UserAccountOperationInfo operator_userAccountOperationInfo = userEvent.selectUserAccountOperationInfoByUsername(operator.getUsername());
@@ -290,13 +301,13 @@ public class SecurityUrlEventTests {
         final @NotNull String[] newUrl2 = getUrlInfoForTest(1);
 
         final @NotNull Set<SecurityResource> resources = new HashSet<>(1);
-        if (! newEntity.isEmpty()) {
+        if (!newEntity.isEmpty()) {
             resources.add(newEntity);
         }
-        if (! newEntity1.isEmpty()) {
+        if (!newEntity1.isEmpty()) {
             resources.add(newEntity1);
         }
-        if (! newEntity2.isEmpty()) {
+        if (!newEntity2.isEmpty()) {
             resources.add(newEntity2);
         }
 
@@ -333,7 +344,7 @@ public class SecurityUrlEventTests {
         for (@NotNull String[] eachUrl : urls) {
             final @NotNull List<SecurityResourceUrl> eachUrl_resourceUrl = securityUrlEvent.selectResourceUrlRelationshipOnUrlInfoByClientIdAndUrlPath(eachUrl[0], eachUrl[1]);
 
-            Assert.isTrue(! eachUrl_resourceUrl.isEmpty()
+            Assert.isTrue(!eachUrl_resourceUrl.isEmpty()
                     , "===== selectResourceUrlRelationshipOnUrlInfoByClientIdAndUrlPath(String, String) <- 非预期结果!");
 
             for (@NotNull SecurityResource eachResource : resources) {
@@ -356,8 +367,7 @@ public class SecurityUrlEventTests {
     @Test
     @Transactional
     public void insertUrlInfo()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         // 获取必要的测试用身份信息
         final @NotNull SecurityUser operator = operator();
         final @NotNull UserAccountOperationInfo operator_userAccountOperationInfo = userEvent.selectUserAccountOperationInfoByUsername(operator.getUsername());
@@ -379,7 +389,7 @@ public class SecurityUrlEventTests {
         final @NotNull List<SecurityResourceUrl> newEntity_existedResourceUrls = securityUrlEvent.selectUrlInfoOnResourceByResourceCode(newEntity.getCode());
 
         boolean newUrlInfo_flag = false;
-        if (! newEntity_existedResourceUrls.isEmpty()) {
+        if (!newEntity_existedResourceUrls.isEmpty()) {
             for (@NotNull SecurityResourceUrl eachResourceUrl : newEntity_existedResourceUrls) {
                 if (Arrays.equals(newUrlInfo, eachResourceUrl.getUrlInfo())) {
                     newUrlInfo_flag = true;
@@ -397,8 +407,7 @@ public class SecurityUrlEventTests {
     @Test
     @Transactional
     public void deleteUrlInfo()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         // 获取必要的测试用身份信息
         final @NotNull SecurityUser operator = operator();
         final @NotNull UserAccountOperationInfo operator_userAccountOperationInfo = userEvent.selectUserAccountOperationInfoByUsername(operator.getUsername());
@@ -425,13 +434,13 @@ public class SecurityUrlEventTests {
         final @NotNull String[] newUrl2 = getUrlInfoForTest(1);
 
         final @NotNull Set<SecurityResource> resources = new HashSet<>(1);
-        if (! newEntity.isEmpty()) {
+        if (!newEntity.isEmpty()) {
             resources.add(newEntity);
         }
-        if (! newEntity1.isEmpty()) {
+        if (!newEntity1.isEmpty()) {
             resources.add(newEntity1);
         }
-        if (! newEntity2.isEmpty()) {
+        if (!newEntity2.isEmpty()) {
             resources.add(newEntity2);
         }
 
@@ -469,7 +478,7 @@ public class SecurityUrlEventTests {
         for (@NotNull SecurityResource eachResource : resources) {
             final @NotNull List<SecurityResourceUrl> eachResource_roles = securityResourceEvent.selectUrlInfoOnResourceByResourceCode(eachResource.getCode());
 
-            Assert.isTrue(null != eachResource_roles && ! eachResource_roles.isEmpty()
+            Assert.isTrue(null != eachResource_roles && !eachResource_roles.isEmpty()
                     , "===== insertResourceUrlRelationship(...) <- 非预期结果!");
 
             existResourceNum += eachResource_roles.size();
@@ -493,7 +502,7 @@ public class SecurityUrlEventTests {
             final @NotNull List<SecurityResourceUrl> eachResource_urls = securityUrlEvent.selectUrlInfoOnResourceByResourceCode(eachResource.getCode());
 
             boolean existedUrlsFlag = false;
-            if (! eachResource_urls.isEmpty()) {
+            if (!eachResource_urls.isEmpty()) {
                 for (@NotNull SecurityResourceUrl eachExistedUrl : eachResource_urls) {
                     for (@NotNull String[] eachUrl : urls) {
                         if (Arrays.equals(eachUrl, eachExistedUrl.getUrlInfo())) {
@@ -504,7 +513,7 @@ public class SecurityUrlEventTests {
                 }
             }
 
-            Assert.isTrue(! existedUrlsFlag
+            Assert.isTrue(!existedUrlsFlag
                     , String.format("===== 校验数据 -> 【%s】&【%s】 <- 非预期结果!", eachResource, eachResource_urls));
         }
     }

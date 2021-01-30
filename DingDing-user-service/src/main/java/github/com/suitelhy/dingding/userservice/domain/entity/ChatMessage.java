@@ -53,6 +53,7 @@ public class ChatMessage
     private LocalDateTime dataTime;
 
     //===== AbstractEntityModel =====//
+
     /**
      * 唯一标识 <- Entity 对象
      *
@@ -145,7 +146,8 @@ public class ChatMessage
     }
 
     //===== Entity Factory =====//
-    public ChatMessage() {}
+    public ChatMessage() {
+    }
 
     private ChatMessage(@NotNull String id
             , @NotNull String sendUserId

@@ -8,6 +8,7 @@ public abstract class AbstractEntityModel<ID>
         implements EntityModel<ID> {
 
     //===== EntityModel =====//
+
     /**
      * 唯一标识 <- Entity 对象
      *
@@ -20,9 +21,9 @@ public abstract class AbstractEntityModel<ID>
     /**
      * 判断是否相同
      *
-     * @Description <code>equals(Object obj)</code> 应该根据 <code>equals(EntityModel entity)</code> 的实现来重写.
      * @param obj
      * @return
+     * @Description <code>equals(Object obj)</code> 应该根据 <code>equals(EntityModel entity)</code> 的实现来重写.
      */
     @Override
     public boolean equals(Object obj) {
@@ -32,9 +33,9 @@ public abstract class AbstractEntityModel<ID>
     /**
      * 计算哈希值
      *
-     * @Description 如果重写了 <code>equals(Object obj)</code>, 则必须根据 <code>equals(Object obj)</code>
-     *-> 的实现重写 <code>hashCode()</code>.
      * @return
+     * @Description 如果重写了 <code>equals(Object obj)</code>, 则必须根据 <code>equals(Object obj)</code>
+     * -> 的实现重写 <code>hashCode()</code>.
      */
     @Override
     public int hashCode() {
@@ -44,8 +45,8 @@ public abstract class AbstractEntityModel<ID>
     /**
      * 是否无效: id() 校验不通过 || 不符合业务要求 || 未持久化
      *
-     * @Description <tt>EntityModel.isEmpty(this) || !isLegal() || isPersistence() -> not false</tt>
      * @return
+     * @Description <tt>EntityModel.isEmpty(this) || !isLegal() || isPersistence() -> not false</tt>
      */
     @Override
     public boolean isEmpty() {
@@ -57,8 +58,8 @@ public abstract class AbstractEntityModel<ID>
     /**
      * 是否符合业务要求 <- Entity 对象
      *
-     * @Description 需要实现类实现该抽象方法
      * @return
+     * @Description 需要实现类实现该抽象方法
      */
     @Override
     public abstract boolean isEntityLegal();
@@ -69,12 +70,14 @@ public abstract class AbstractEntityModel<ID>
      * @return 可为 null, 此时未实现该接口.
      */
     @Override
-    public @Nullable Boolean isEntityPersistence() {
+    public @Nullable
+    Boolean isEntityPersistence() {
         return null;
     }
 
     /**
      * 转换为字符串 <- Entity 对象
+     *
      * @return
      */
     @Override
@@ -84,9 +87,10 @@ public abstract class AbstractEntityModel<ID>
 
     /**
      * 校验 Entity - ID
-     * @Description <abstractClass>AbstractEntityModel</abstractClass>提供的模板设计.
+     *
      * @param id <method>id()</method>
      * @return
+     * @Description <abstractClass>AbstractEntityModel</abstractClass>提供的模板设计.
      */
     protected abstract boolean validateId(@NotNull ID id);
 

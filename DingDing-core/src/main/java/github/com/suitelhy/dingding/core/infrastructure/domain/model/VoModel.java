@@ -20,27 +20,28 @@ public interface VoModel<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V e
     /**
      * VO 的值对应的业务名称
      *
-     * @Description Unique attribute. 用于对 <tt>value()</tt> 进行补充说明.
-     *
      * @return 不为 null
+     * @Description Unique attribute. 用于对 <tt>value()</tt> 进行补充说明.
      */
-    @NotNull String name();
+    @NotNull
+    String name();
 
     /**
      * VO 的值
      *
-     * @Description Unique attribute.
-     *
      * @return 可为 {@code null}, 此时[VO的值]为 {@code null} (而不是缺失设置).
+     * @Description Unique attribute.
      */
-    @Nullable V value();
+    @Nullable
+    V value();
 
     /**
      * VO 的详细信息
      *
      * @return
      */
-    default @Nullable _DESCRIPTION description() {
+    default @Nullable
+    _DESCRIPTION description() {
         return null;
     }
 
@@ -49,7 +50,8 @@ public interface VoModel<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V e
      *
      * @return
      */
-    default @NotNull String displayName() {
+    default @NotNull
+    String displayName() {
         return name();
     }
 
@@ -57,9 +59,7 @@ public interface VoModel<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V e
      * 等效比较
      *
      * @param value {@link V}
-     *
      * @return 判断结果
-     *
      * @see this#value()
      */
     default boolean equalsValue(V value) {
@@ -76,25 +76,22 @@ public interface VoModel<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V e
      * @return 转换结果
      */
     @Override
-    @NotNull String toString();
+    @NotNull
+    String toString();
 
     /**
      * VO 对象转 String 对象 <- <interface>VoModel</interface>默认实现
      *
-     * @param vo                [VO 对象]
-     *
+     * @param vo             [VO 对象]
      * @param <VO>
      * @param <V>
      * @param <_DESCRIPTION>
-     *
      * @return 当前 [VO 对象] 的字符串表示
-     *
      * @throws IllegalArgumentException {@param vo}非法 (值为{@code null}) 时抛出该异常
      */
     static <VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V extends Number, _DESCRIPTION>
     @NotNull String toString(@NotNull VO vo)
-            throws IllegalArgumentException
-    {
+            throws IllegalArgumentException {
         if (null == vo) {
             throw new IllegalArgumentException("非法参数: [VO 对象]");
         }
@@ -111,9 +108,8 @@ public interface VoModel<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V e
     /**
      * 提供类型转换器
      *
-     * @Design 为持久化类型转换功能提供支持.
-     *
      * @return {@link _CONVERTER}
+     * @Design 为持久化类型转换功能提供支持.
      */
     <_CONVERTER extends VoAttributeConverter<VO, V, _DESCRIPTION>>
     @NotNull _CONVERTER voAttributeConverter();

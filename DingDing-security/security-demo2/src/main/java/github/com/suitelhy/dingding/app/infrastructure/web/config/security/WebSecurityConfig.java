@@ -21,27 +21,24 @@ import javax.validation.constraints.NotNull;
 /**
  * Spring Security 配置
  *
- * @Disuse
- *-> <Guide><a href="https://spring.io/guides/gs/authenticating-ldap/">
- *->     Getting Started · Authenticating a User with LDAP</a></Guide>
- *-> , <Docs><a href="https://www.docs4dev.com/docs/zh/spring-security/4.2.10.RELEASE/reference/ldap.html">
- *->     Spring Security 4.2.10.RELEASE 中文文档 - 29. LDAP 身份验证 | Docs4dev</a></Docs>
- *
- * @Reference
- *-> <Guide><a href="https://spring.io/guides/gs/securing-web/">
- *->     Getting Started · Securing a Web Application</a></Guide>
- *-> , <Blog>【☆】<a href="https://woodwhales.cn/2019/04/12/026/">
- *->     SpringBoot + Spring Security 学习笔记（一）自定义基本使用及个性化登录配置 | woodwhale's blog</a></Blog>
- *-> , <Blog><a href="https://semlinker.com/spring-security-quickstart/">
- *->     Spring Boot 集成 Spring Security | 全栈修仙之路</a></Blog>
- *-> , <Community>【☆】<a href="https://juejin.im/post/5da40403f265da5b6723eeeb">
- *->     Spring Security 自定义登录认证（二） - 掘金</a></Community>
- *-> , <Docs><a href="https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#hello-web-security-java-configuration">
- *->     Spring Security Reference</a></Docs>
- *-> , <Docs><a href="https://www.springcloud.cc/spring-security.html">
- *->     Spring Security 中文文档 参考手册 中文版</a></Docs>
- *
+ * @Disuse -> <Guide><a href="https://spring.io/guides/gs/authenticating-ldap/">
+ * ->     Getting Started · Authenticating a User with LDAP</a></Guide>
+ * -> , <Docs><a href="https://www.docs4dev.com/docs/zh/spring-security/4.2.10.RELEASE/reference/ldap.html">
+ * ->     Spring Security 4.2.10.RELEASE 中文文档 - 29. LDAP 身份验证 | Docs4dev</a></Docs>
+ * @Reference -> <Guide><a href="https://spring.io/guides/gs/securing-web/">
+ * ->     Getting Started · Securing a Web Application</a></Guide>
+ * -> , <Blog>【☆】<a href="https://woodwhales.cn/2019/04/12/026/">
+ * ->     SpringBoot + Spring Security 学习笔记（一）自定义基本使用及个性化登录配置 | woodwhale's blog</a></Blog>
+ * -> , <Blog><a href="https://semlinker.com/spring-security-quickstart/">
+ * ->     Spring Boot 集成 Spring Security | 全栈修仙之路</a></Blog>
+ * -> , <Community>【☆】<a href="https://juejin.im/post/5da40403f265da5b6723eeeb">
+ * ->     Spring Security 自定义登录认证（二） - 掘金</a></Community>
+ * -> , <Docs><a href="https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#hello-web-security-java-configuration">
+ * ->     Spring Security Reference</a></Docs>
+ * -> , <Docs><a href="https://www.springcloud.cc/spring-security.html">
+ * ->     Spring Security 中文文档 参考手册 中文版</a></Docs>
  */
+
 /**
  * TIPS: 前端资源请求记得制定并实现特定的过滤策略. 不然资源请求会报<code>404</code>.
  * @Reference

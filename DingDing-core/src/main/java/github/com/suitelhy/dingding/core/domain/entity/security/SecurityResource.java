@@ -76,19 +76,16 @@ public class SecurityResource
      * 序号
      *
      * @Description 排序用.
-     *
-     * @Solution
-     *-> · 持久化映射字段及其 getter 方法 (通常情况下) 不应该使用原始类型. <- {@link <a href="https://stackoverflow.com/questions/56497893/org-springframework-aop-aopinvocationexception-null-return-value-from-advice-do">
-     *->     java - org.springframework.aop.AopInvocationException: Null return value from advice does not match primitive return type for: public abstract char - Stack Overflow</a>}
+     * @Solution -> · 持久化映射字段及其 getter 方法 (通常情况下) 不应该使用原始类型. <- {@link <a href="https://stackoverflow.com/questions/56497893/org-springframework-aop-aopinvocationexception-null-return-value-from-advice-do">
+     * ->     java - org.springframework.aop.AopInvocationException: Null return value from advice does not match primitive return type for: public abstract char - Stack Overflow</a>}
      */
     @Column(nullable = false, length = 20)
-    private /*int*/Integer sort;
+    private /*int*/ Integer sort;
 
     /**
      * 资源类型
      *
      * @Description 非空.
-     *
      * @see Resource.TypeVo
      */
     @Column(nullable = false)
@@ -111,15 +108,16 @@ public class SecurityResource
      * @see this#getCode()
      */
     @Override
-    public /*@NotNull*/@Nullable /*Long*/String id() {
+    public /*@NotNull*/
+    @Nullable /*Long*/String id() {
         return /*this.getId()*/this.getCode();
     }
 
     /**
      * 是否无效
      *
-     * @Description 保证 User 的基本业务实现中的合法性.
      * @return
+     * @Description 保证 User 的基本业务实现中的合法性.
      */
     @Override
     public boolean isEmpty() {
@@ -130,8 +128,8 @@ public class SecurityResource
     /**
      * 是否符合基础数据合法性要求
      *
-     * @Description 只保证 User 的数据合法, 不保证 User 的业务实现中的合法性.
      * @return
+     * @Description 只保证 User 的数据合法, 不保证 User 的业务实现中的合法性.
      */
     @Override
     public boolean isEntityLegal() {
@@ -147,9 +145,9 @@ public class SecurityResource
     /**
      * 校验 Entity - ID
      *
-     * @Description <abstractClass>AbstractEntityModel</abstractClass>提供的模板设计.
      * @param id <method>id()</method>
      * @return
+     * @Description <abstractClass>AbstractEntityModel</abstractClass>提供的模板设计.
      */
     @Override
     protected boolean validateId(@NotNull /*Long*/String id) {
@@ -200,7 +198,7 @@ public class SecurityResource
     /**
      * 角色 - 属性校验器
      *
-     * @Description 各个属性的基础校验(注意: 此校验 ≠ 完全校验).
+     * @Description 各个属性的基础校验(注意 : 此校验 ≠ 完全校验).
      */
     public enum Validator
             implements EntityValidator<SecurityResource, /*Long*/String> {
@@ -286,7 +284,6 @@ public class SecurityResource
          *
          * @param parent
          * @param child
-         *
          * @return {@link Boolean#TYPE}
          */
         public boolean isChildNode(@NotNull SecurityResource parent, @NotNull SecurityResource child) {
@@ -311,22 +308,22 @@ public class SecurityResource
     /**
      * 仅用于持久化注入
      */
-    public SecurityResource() {}
+    public SecurityResource() {
+    }
 
     //===== entity factory =====//
 
     /**
      * (构造器)
      *
-     * @param id            数据 ID
-     * @param code          角色编码
-     * @param icon          图标
-     * @param link          资源链接
-     * @param name          角色名称
-     * @param parentCode    父节点 <- 资源编码
-     * @param sort          序号
-     * @param type          资源类型
-     *
+     * @param id         数据 ID
+     * @param code       角色编码
+     * @param icon       图标
+     * @param link       资源链接
+     * @param name       角色名称
+     * @param parentCode 父节点 <- 资源编码
+     * @param sort       序号
+     * @param type       资源类型
      * @throws IllegalArgumentException
      */
     private SecurityResource(@Nullable Long id
@@ -337,8 +334,7 @@ public class SecurityResource
             , @Nullable String parentCode
             , @NotNull int sort
             , @NotNull Resource.TypeVo type)
-            throws IllegalArgumentException
-    {
+            throws IllegalArgumentException {
         if (null == id) {
             //--- 添加功能
         } else {
@@ -455,14 +451,13 @@ public class SecurityResource
         /**
          * 创建
          *
-         * @param code          资源编码
-         * @param icon          图标
-         * @param link          资源链接
-         * @param name          角色名称
-         * @param parentCode    父节点 <- 资源编码
-         * @param sort          序号
-         * @param type          资源类型
-         *
+         * @param code       资源编码
+         * @param icon       图标
+         * @param link       资源链接
+         * @param name       角色名称
+         * @param parentCode 父节点 <- 资源编码
+         * @param sort       序号
+         * @param type       资源类型
          * @throws IllegalArgumentException
          */
         public SecurityResource create(@NotNull String code
@@ -472,8 +467,7 @@ public class SecurityResource
                 , @Nullable String parentCode
                 , @NotNull int sort
                 , @NotNull Resource.TypeVo type)
-                throws IllegalArgumentException
-        {
+                throws IllegalArgumentException {
             return new SecurityResource(null, code, icon
                     , link, name, parentCode
                     , sort, type);
@@ -482,15 +476,14 @@ public class SecurityResource
         /**
          * 更新
          *
-         * @param id            数据 ID
-         * @param code          资源编码
-         * @param icon          图标
-         * @param link          资源链接
-         * @param name          角色名称
-         * @param parentCode    父节点 <- 资源编码
-         * @param sort          序号
-         * @param type          资源类型
-         *
+         * @param id         数据 ID
+         * @param code       资源编码
+         * @param icon       图标
+         * @param link       资源链接
+         * @param name       角色名称
+         * @param parentCode 父节点 <- 资源编码
+         * @param sort       序号
+         * @param type       资源类型
          * @throws IllegalArgumentException
          */
         public SecurityResource update(@NotNull Long id
@@ -501,8 +494,7 @@ public class SecurityResource
                 , @Nullable String parentCode
                 , @NotNull int sort
                 , @NotNull Resource.TypeVo type)
-                throws IllegalArgumentException
-        {
+                throws IllegalArgumentException {
             if (!Validator.RESOURCE.id(id)) {
                 //-- 非法输入: [数据 ID]
                 throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
@@ -521,19 +513,16 @@ public class SecurityResource
         /**
          * 更新
          *
-         * @Description 更新所必要的匹配条件: 被替换的 Entity 与 替换的 Entity 的 {@link SecurityResource#id()} 必须一致.
-         *
          * @param oldEntity 被替换的资源
          * @param newEntity 替换的资源
-         *
          * @return {@link SecurityResource}
-         *
          * @throws IllegalArgumentException
+         * @Description 更新所必要的匹配条件: 被替换的 Entity 与 替换的 Entity 的 {@link SecurityResource#id()} 必须一致.
          */
-        public @NotNull SecurityResource update(@NotNull SecurityResource oldEntity
+        public @NotNull
+        SecurityResource update(@NotNull SecurityResource oldEntity
                 , @NotNull SecurityResource newEntity)
-                throws IllegalArgumentException
-        {
+                throws IllegalArgumentException {
             if (null == oldEntity || oldEntity.isEmpty()) {
                 //-- 非法输入: 被替换的资源
                 throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"

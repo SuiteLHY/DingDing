@@ -9,6 +9,7 @@ public @interface SuiteTable {
 
     /**
      * 数据库表名
+     *
      * @return
      */
     String value() default "";

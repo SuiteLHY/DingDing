@@ -28,7 +28,7 @@ spring:
             ## 用于令牌获取的地址
             access-token-uri: http://127.0.0.1:9999/authorization-server/oauth/token
             authorization-grant-type: authorization_code,password,refresh_token
-#            clientAuthenticationMethod:
+            #            clientAuthenticationMethod:
             client-id: dingding1
             client-secret: dingding_secrect1
             redirect-uri: http://127.0.0.1:8080/client1/index.html
@@ -42,7 +42,7 @@ spring:
             ### 资源服务器将期望授权服务器具有安全的端点; 我们可以从【/oauth/token_key】获取密钥:
             jwk-set-uri: http://127.0.0.1:9999/authorization-server/oauth/token_key
             tokenUri: http://127.0.0.1:9999/authorization-server/oauth/token
-#            userInfoAuthenticationMethod: form
+      #            userInfoAuthenticationMethod: form
       # 资源服务器配置: 详见 <class>org.springframework.boot.autoconfigure.security.oauth2.authorization.OAuth2ResourceServerProperties</class>
       resourceserver:
         jwt:

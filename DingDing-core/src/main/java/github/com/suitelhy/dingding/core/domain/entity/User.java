@@ -19,10 +19,9 @@ import java.time.LocalDateTime;
 /**
  * 用户 - 基础信息
  *
- * @Description
- * · 关于数据脱敏的自定义注解实现, 可参考:
+ * @Description · 关于数据脱敏的自定义注解实现, 可参考:
  * {@link <a href="https://blog.csdn.net/liufei198613/article/details/79009015">注解实现json序列化的时候自动进行数据脱敏_liufei198613的博客-CSDN博客</a>}
- *
+ * <p>
  * · 关于 id 生成策略, 个人倾向于使用"代理键" ———— 所选策略还是应该交由数据库来实现.
  * {@link <a href="https://dzone.com/articles/persisting-natural-key-entities-with-spring-data-j">Persisting Natural Key Entities With Spring Data JPA</a>}
  */
@@ -61,7 +60,6 @@ public class User
      * 用户密码_明文
      *
      * @Description 最大长度为20.
-     *
      * @Design (不可逆)加密前的明文; 仅生成新的用户时使用.
      */
     @Nullable
@@ -76,16 +74,16 @@ public class User
     //===== Entity Model =====//
 
     @Override
-    public @NotNull String id() {
+    public @NotNull
+    String id() {
         return this.username;
     }
 
     /**
      * 是否无效
      *
-     * @Description 保证 User 的基本业务实现中的合法性.
-     *
      * @return
+     * @Description 保证 User 的基本业务实现中的合法性.
      */
     @Override
     public boolean isEmpty() {
@@ -99,9 +97,8 @@ public class User
     /**
      * 是否符合基础数据合法性要求
      *
-     * @Description 只保证 User 的数据合法, 不保证 User 的业务实现中的合法性.
-     *
      * @return
+     * @Description 只保证 User 的数据合法, 不保证 User 的业务实现中的合法性.
      */
     @Override
     public boolean isEntityLegal() {
@@ -114,11 +111,9 @@ public class User
     /**
      * 校验 Entity - ID
      *
-     * @Description <abstractClass>AbstractEntityModel</abstractClass>提供的模板设计.
-     *
      * @param entityId <method>id()</method>
-     *
      * @return
+     * @Description <abstractClass>AbstractEntityModel</abstractClass>提供的模板设计.
      */
     @Override
     protected boolean validateId(@NotNull String entityId) {
@@ -188,9 +183,7 @@ public class User
          * 用户密码（明文） <- 校验
          *
          * @param passwordPlaintext
-         *
          * @return
-         *
          * @Design 仅创建新的用户时执行该校验; 其他情况下应该验证 {@param passwordPlaintext} 为 <code>null</code> 且予以放行.
          */
         public boolean passwordPlaintext(@NotNull String passwordPlaintext) {
@@ -224,28 +217,26 @@ public class User
     /**
      * 仅用于持久化注入
      */
-    public User() {}
+    public User() {
+    }
 
     //===== entity factory =====//
 
     /**
      * 创建/更新用户 -> Entity对象
      *
-     * @Description 添加 (<param>id</param>为 null) / 更新 (<param>id</param>合法) 用户.
-     *
      * @param userid            [用户 ID]
      * @param username          用户名称
      * @param password          用户密码（密文）    {@param passwordPlaintext} 为 {@code null} 时非空; 否则不执行业务校验.
      * @param passwordPlaintext 用户密码（明文）    非 {@code null} 时, {@param password} 将不被使用.
-     *
      * @throws IllegalArgumentException
+     * @Description 添加 (<param>id</param>为 null) / 更新 (<param>id</param>合法) 用户.
      */
     private User(@NotNull String userid
             , @NotNull String username
             , @Nullable String password
             , @Nullable String passwordPlaintext)
-            throws IllegalArgumentException
-    {
+            throws IllegalArgumentException {
         if (null == userid) {
             //--- 添加用户功能
             if (!Validator.USER.passwordPlaintext(passwordPlaintext)
@@ -318,15 +309,12 @@ public class User
          *
          * @param username          用户名称
          * @param passwordPlaintext 用户密码（明文）
-         *
          * @return {@link User}
-         *
          * @throws IllegalArgumentException
          */
         @NotNull
         public User create(@NotNull String username, @NotNull String passwordPlaintext)
-                throws IllegalArgumentException
-        {
+                throws IllegalArgumentException {
             return new User(null, username, null
                     , passwordPlaintext);
         }
@@ -334,20 +322,17 @@ public class User
         /**
          * 更新
          *
-         * @param userid    用户 ID
-         * @param username  用户名称
-         * @param password  用户 - 密码（密文）
-         *
+         * @param userid   用户 ID
+         * @param username 用户名称
+         * @param password 用户 - 密码（密文）
          * @return 可为 null, 此时输入参数非法.
-         *
          * @throws IllegalArgumentException 此时 <param>id</param> 非法.
          */
         @NotNull
         public User update(@NotNull String userid
                 , @NotNull String username
                 , @NotNull String password)
-                throws IllegalArgumentException
-        {
+                throws IllegalArgumentException {
             if (!Validator.USER.userid(userid)) {
                 throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                         , "用户 ID"
@@ -364,8 +349,7 @@ public class User
         /**
          * 销毁 Entity 实例
          *
-         * @param user  {@link User}
-         *
+         * @param user {@link User}
          * @return {{@code true}:<b>销毁成功</b>, {@code false}:<b>销毁失败</b>; 此时 {@param user} 无效或无法被销毁}
          */
         public boolean delete(@NotNull User user) {
@@ -392,8 +376,7 @@ public class User
     //===== entity security =====//
 
     public interface SecurityStrategy
-            extends EntitySecurity
-    {
+            extends EntitySecurity {
 
         enum PasswordEncoder
                 implements org.springframework.security.crypto.password.PasswordEncoder {
@@ -468,7 +451,6 @@ public class User
      * 判断密码（明文）是否相同
      *
      * @param passwordPlaintext 用户密码（明文）
-     *
      * @return {true: <tt>密码相同</tt>, false: <tt>密码不相同</tt>, null: <tt>Entity无效</tt>}
      */
     public Boolean equalsPassword(@NotNull String passwordPlaintext) {

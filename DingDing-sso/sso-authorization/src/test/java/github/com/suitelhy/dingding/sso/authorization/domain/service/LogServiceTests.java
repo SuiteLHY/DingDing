@@ -32,7 +32,6 @@ import java.util.Map;
  * 日志记录 - 业务 <- 测试单元
  *
  * @Description 测试单元.
- *
  * @see LogService
  */
 @SpringBootTest
@@ -61,7 +60,8 @@ public class LogServiceTests {
      *
      * @return {@link SecurityUser}
      */
-    private @NotNull SecurityUser operator() {
+    private @NotNull
+    SecurityUser operator() {
         return securityUserService.selectByUsername("admin");
     }
 
@@ -70,7 +70,8 @@ public class LogServiceTests {
      *
      * @return {@link this#getUserForTest(Integer)}
      */
-    private @NotNull Map<String, EntityModel> getUserForTest() {
+    private @NotNull
+    Map<String, EntityModel> getUserForTest() {
         return getUserForTest(null);
     }
 
@@ -78,16 +79,16 @@ public class LogServiceTests {
      * 获取测试用的用户相关 {@link EntityModel} 集合
      *
      * @param seed
-     *
      * @return {@link Map}
      * · 数据结构:
      * {
-     *    "user": {@link User},
-     *    "userAccountOperationInfo": {@link UserAccountOperationInfo},
-     *    "userPersonInfo": {@link UserPersonInfo}
+     * "user": {@link User},
+     * "userAccountOperationInfo": {@link UserAccountOperationInfo},
+     * "userPersonInfo": {@link UserPersonInfo}
      * }
      */
-    private @NotNull Map<String, EntityModel> getUserForTest(Integer seed) {
+    private @NotNull
+    Map<String, EntityModel> getUserForTest(Integer seed) {
         @NotNull Map<String, EntityModel> result = new HashMap<>(3);
 
         @NotNull User newUser = User.Factory.USER.create(
@@ -135,15 +136,14 @@ public class LogServiceTests {
     /**
      * 获取测试用的 {@link Log} 对象
      *
-     * @param user                      {@link User}
-     * @param operator                  {@link SecurityUser}
-     * @param logVo                     {@link HandleType.LogVo}
-     *
+     * @param user     {@link User}
+     * @param operator {@link SecurityUser}
+     * @param logVo    {@link HandleType.LogVo}
      * @return {@link Log}
      */
-    private @NotNull Log getEntityForTest(@NotNull User user, @NotNull SecurityUser operator, @NotNull HandleType.LogVo logVo)
-            throws IllegalArgumentException
-    {
+    private @NotNull
+    Log getEntityForTest(@NotNull User user, @NotNull SecurityUser operator, @NotNull HandleType.LogVo logVo)
+            throws IllegalArgumentException {
         if (null == user) {
             throw new IllegalArgumentException("非法参数: <param>user</param>");
         }
@@ -189,11 +189,10 @@ public class LogServiceTests {
     @Test
     @Transactional
     public void selectAll()
-            throws JsonProcessingException
-    {
+            throws JsonProcessingException {
         final @NotNull Page<Log> result = service.selectAll(0, 10);
 
-        Assert.isTrue(! result.isEmpty()
+        Assert.isTrue(!result.isEmpty()
                 , "The result -> empty");
 
         System.out.println(toJSONString.writeValueAsString(result));
@@ -215,8 +214,7 @@ public class LogServiceTests {
     @Test
     @Transactional
     public void selectCountByUsername()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         final Long result;
 
         System.err.println("===== "
@@ -238,12 +236,12 @@ public class LogServiceTests {
         final @NotNull UserAccountOperationInfo newUserAccountOperationInfo = (UserAccountOperationInfo) newUserInfo.get("userAccountOperationInfo");
         final @NotNull UserPersonInfo newUserPersonInfo = (UserPersonInfo) newUserInfo.get("userPersonInfo");
 
-        Assert.isTrue(! userService.existUserByUsername(newUser.getUsername())
+        Assert.isTrue(!userService.existUserByUsername(newUser.getUsername())
                 , "===== 数据异常: 测试预期添加的用户数据" + newUser + "已存在!");
 
         Assert.isTrue(userEvent.registerUser(newUser, newUserAccountOperationInfo, newUserPersonInfo, operator)
                 , "===== insert(User, UserAccountOperationInfo, UserPersonInfo, SecurityUser) -> false!");
-        Assert.isTrue(! newUser.isEmpty()
+        Assert.isTrue(!newUser.isEmpty()
                 , "===== insert(User, UserAccountOperationInfo, UserPersonInfo, SecurityUser) -> 无效的 User!");
         System.out.println("newUser: ".concat(newUser.toString()));
 
@@ -270,8 +268,7 @@ public class LogServiceTests {
     @Test
     @Transactional
     public void selectLogByUsername()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         final List<Log> result;
 
         System.err.println("===== "
@@ -292,14 +289,14 @@ public class LogServiceTests {
         final @NotNull UserAccountOperationInfo newUserAccountOperationInfo = (UserAccountOperationInfo) newUserInfo.get("userAccountOperationInfo");
         final @NotNull UserPersonInfo newUserPersonInfo = (UserPersonInfo) newUserInfo.get("userPersonInfo");
 
-        Assert.isTrue(! userService.existUserByUsername(newUser.getUsername())
+        Assert.isTrue(!userService.existUserByUsername(newUser.getUsername())
                 , "===== 数据异常: 测试预期添加的用户数据" + newUser + "已存在!");
 
         Assert.isTrue(newUser.isEntityLegal()
                 , "getUserForTest() -> 无效的 User!");
         Assert.isTrue(userEvent.registerUser(newUser, newUserAccountOperationInfo, newUserPersonInfo, operator)
                 , "===== insert(User, UserAccountOperationInfo, UserPersonInfo, SecurityUser) -> false!");
-        Assert.isTrue(! newUser.isEmpty()
+        Assert.isTrue(!newUser.isEmpty()
                 , "===== insert(User, UserAccountOperationInfo, UserPersonInfo, SecurityUser) -> 无效的 User!");
         System.out.println("newUser: ".concat(newUser.toString()));
 
@@ -308,7 +305,7 @@ public class LogServiceTests {
                 , "getEntityForTest(...) -> 无效的 Entity!");
         Assert.isTrue(service.insert(newEntity)
                 , "===== insert(...) -> false!");
-        Assert.isTrue(! newEntity.isEmpty()
+        Assert.isTrue(!newEntity.isEmpty()
                 , "===== insert(...) -> 无效的 Entity!");
         System.out.println("newEntity: " + newEntity);
 
@@ -327,8 +324,7 @@ public class LogServiceTests {
     @Test
     @Transactional
     public void insert()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         // 获取必要的测试用身份信息
         final @NotNull SecurityUser operator = operator();
 
@@ -343,7 +339,7 @@ public class LogServiceTests {
                 , "getUserForTest() -> 无效的 User!");
         Assert.isTrue(userEvent.registerUser(newUser, newUserAccountOperationInfo, newUserPersonInfo, operator)
                 , "===== insert(User, UserAccountOperationInfo, UserPersonInfo, operator) -> false!");
-        Assert.isTrue(! newUser.isEmpty()
+        Assert.isTrue(!newUser.isEmpty()
                 , "===== insert(User, UserAccountOperationInfo, UserPersonInfo, operator) -> 无效的 User!");
         System.out.println("newUser: ".concat(newUser.toString()));
 
@@ -352,7 +348,7 @@ public class LogServiceTests {
                 , "getEntityForTest(...) -> 无效的 Entity!");
         Assert.isTrue(service.insert(newEntity)
                 , "===== insert(...) -> false!");
-        Assert.isTrue(! newEntity.isEmpty()
+        Assert.isTrue(!newEntity.isEmpty()
                 , "===== insert(...) -> 无效的 Entity!");
         System.out.println("newEntity: ".concat(newEntity.toString()));
 
@@ -362,8 +358,7 @@ public class LogServiceTests {
     @Test
     @Transactional
     public void deleteById()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         final boolean result;
 
         // 获取必要的测试用身份信息
@@ -382,7 +377,7 @@ public class LogServiceTests {
                 , "getUserForTest() -> 无效的 User!");
         Assert.isTrue(userEvent.registerUser(newUser, newUserAccountOperationInfo, newUserPersonInfo, operator)
                 , "===== insert(User, UserAccountOperationInfo, UserPersonInfo, operator) -> false!");
-        Assert.isTrue(! newUser.isEmpty()
+        Assert.isTrue(!newUser.isEmpty()
                 , "===== insert(User, UserAccountOperationInfo, UserPersonInfo, operator) -> 无效的 User!");
         System.out.println("newUser: ".concat(newUser.toString()));
 
@@ -391,7 +386,7 @@ public class LogServiceTests {
                 , "getEntityForTest(...) -> 无效的 Entity!");
         Assert.isTrue(service.insert(newEntity)
                 , "===== insert(...) -> false!");
-        Assert.isTrue(! newEntity.isEmpty()
+        Assert.isTrue(!newEntity.isEmpty()
                 , "===== insert(...) -> 无效的 Entity!");
         System.out.println("newEntity: " + newEntity);
 

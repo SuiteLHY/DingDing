@@ -13,7 +13,6 @@ import io.netty.util.concurrent.GlobalEventExecutor;
  * 文本消息处理器
  *
  * @Description 处理 WebSocket 传输用的文本消息.
- *
  * @Tips <class>TextWebSocketFrame</class>是 WebSocket 通信中专门处理文本的类; frame 是消息的载体.
  */
 public class ChatHandler
@@ -23,14 +22,14 @@ public class ChatHandler
      * 客户端 Channel 组 <- 存放和管理容器
      *
      * @Api <a href="https://netty.io/4.1/api/io/netty/channel/group/ChannelGroup.html">
-     *->     ChannelGroup（Netty API参考（4.1.45.Final））</a>
-     *
+     * ->     ChannelGroup（Netty API参考（4.1.45.Final））</a>
      * @Description <interface>ChannelGroup</interface>
      */
     private static final ChannelGroup clients = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
     /**
      * Channel -> 从对等方读取消息时 -> 动作
+     *
      * @param ctx
      * @param msg
      * @throws Exception
@@ -43,7 +42,7 @@ public class ChatHandler
         System.out.println("=== 接收到数据: " + content);
 
         for (Channel channel : clients) {
-            channel.writeAndFlush(new TextWebSocketFrame("[" + new CalendarController()+ "]接收到消息: " + content));
+            channel.writeAndFlush(new TextWebSocketFrame("[" + new CalendarController() + "]接收到消息: " + content));
         }
         /*//↑ 等效写法; 语法糖, 业务确定后需要简化代码时可用.
         clients.writeAndFlush(new TextWebSocketFrame("[" + new CalendarController()
@@ -52,6 +51,7 @@ public class ChatHandler
 
     /**
      * Channel -> 操作类添加 -> 动作
+     *
      * @param ctx
      * @throws Exception
      */
@@ -63,6 +63,7 @@ public class ChatHandler
 
     /**
      * Channel -> 操作类移除 -> 动作
+     *
      * @param ctx
      * @throws Exception
      */

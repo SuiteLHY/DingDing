@@ -21,7 +21,6 @@ import java.util.Map;
  * （安全认证）资源 ←→ URL
  *
  * @Description [（安全认证）资源 ←→ URL]关联关系.
- *
  * @see SecurityResource
  */
 @Entity
@@ -82,7 +81,7 @@ public class SecurityResourceUrl
 
     @Override
     public @NotNull /*Long*/Object[] id() {
-        return new Object[] {
+        return new Object[]{
                 this.code
                 , this.clientId
                 , this.urlPath
@@ -93,9 +92,8 @@ public class SecurityResourceUrl
     /**
      * 是否无效
      *
-     * @Description 保证 User 的基本业务实现中的合法性.
-     *
      * @return {@link Boolean#TYPE}
+     * @Description 保证 User 的基本业务实现中的合法性.
      */
     @Override
     public boolean isEmpty() {
@@ -107,9 +105,8 @@ public class SecurityResourceUrl
     /**
      * 是否符合基础数据合法性要求
      *
-     * @Description 只保证数据合法, 不保证业务实现中的合法性.
-     *
      * @return 判断结果
+     * @Description 只保证数据合法, 不保证业务实现中的合法性.
      */
     @Override
     public boolean isEntityLegal() {
@@ -123,11 +120,9 @@ public class SecurityResourceUrl
     /**
      * 校验 Entity - ID
      *
-     * @Description {@link AbstractEntity} 提供的模板设计.
-     *
-     * @param id        {@link this#id()}
-     *
+     * @param id {@link this#id()}
      * @return {@link Boolean#TYPE}
+     * @Description {@link AbstractEntity} 提供的模板设计.
      */
     @Override
     protected boolean validateId(@NotNull /*Long*/Object[] id) {
@@ -137,15 +132,11 @@ public class SecurityResourceUrl
     /**
      * 等效比较
      *
-     * @Description 在 {@link super#equals(Object)} 的基础上添加[判断关联（安全认证）资源]的功能.
-     *
-     * @Solution
-     * · 约束声明原则 -> {@code javax.validation.ConstraintDeclarationException: HV000151: A method overriding another method must not redefine the parameter constraint configuration, but method UserAccountOperationInfo#equals(User) redefines the configuration of Object#equals(Object).}
-     * <= 【解法: 避免在被重写方法的基础上进一步限制形参的范围】
-     *
-     * @param obj  {@link Object}
-     *
+     * @param obj {@link Object}
      * @return 判断结果
+     * @Description 在 {@link super#equals(Object)} 的基础上添加[判断关联（安全认证）资源]的功能.
+     * @Solution · 约束声明原则 -> {@code javax.validation.ConstraintDeclarationException: HV000151: A method overriding another method must not redefine the parameter constraint configuration, but method UserAccountOperationInfo#equals(User) redefines the configuration of Object#equals(Object).}
+     * <= 【解法: 避免在被重写方法的基础上进一步限制形参的范围】
      */
     @Override
     public boolean equals(Object obj) {
@@ -165,19 +156,16 @@ public class SecurityResourceUrl
     /**
      * 判断是否相同 <- [{@link EntityModel} 实例]
      *
-     * @Description 默认按照 {@link EntityModel} 设计实现, 不应该被重写.
-     *
      * @param entity 实体对象, 必须合法且可未持久化    {@link EntityModel}
-     *
      * @return 判断结果
+     * @Description 默认按照 {@link EntityModel} 设计实现, 不应该被重写.
      */
     @Override
     public boolean equals(EntityModel<?> entity) {
         if (null != entity && this.isEntityLegal()) {
             if (entity instanceof SecurityResource
                     && entity.isEntityLegal()
-                    && null != ((SecurityResource) entity).id())
-            {
+                    && null != ((SecurityResource) entity).id()) {
                 return this.id()[0].equals(((SecurityResource) entity).id());
             }
         }
@@ -189,7 +177,7 @@ public class SecurityResourceUrl
     /**
      * 角色 - 属性校验器
      *
-     * @Description 各个属性的基础校验(注意: 此校验 ≠ 完全校验).
+     * @Description 各个属性的基础校验(注意 : 此校验 ≠ 完全校验).
      */
     public enum Validator
             implements EntityValidator<SecurityResourceUrl, /*Long*/Object[]> {
@@ -231,10 +219,8 @@ public class SecurityResourceUrl
         /**
          * URL 校验
          *
-         * @param methodVo     URL (Method部分)
-         *
+         * @param methodVo URL (Method部分)
          * @return 校验结果
-         *
          * @see HTTP.MethodVo
          */
         public boolean urlMethod(@NotNull HTTP.MethodVo methodVo) {
@@ -244,10 +230,8 @@ public class SecurityResourceUrl
         /**
          * URL 校验
          *
-         * @param urlMethod     URL (Method部分)
-         *
+         * @param urlMethod URL (Method部分)
          * @return 校验结果
-         *
          * @see EntityUtil.Regex.GeneralRule#urlPath(String)
          */
         public boolean urlMethod(@NotNull String urlMethod) {
@@ -259,10 +243,8 @@ public class SecurityResourceUrl
         /**
          * URL 校验
          *
-         * @param urlPath   URL (Path部分)
-         *
+         * @param urlPath URL (Path部分)
          * @return 校验结果
-         *
          * @see EntityUtil.Regex.GeneralRule#urlPath(String)
          */
         public boolean urlPath(@NotNull String urlPath) {
@@ -276,16 +258,13 @@ public class SecurityResourceUrl
         /**
          * URL 相关信息
          *
-         * @Description 业务拓展设计.
-         *
-         * @param urlInfo
-         * [
-         *    {@link SecurityResourceUrl.Validator#clientId(String)}
-         *    , {@link SecurityResourceUrl.Validator#urlPath(String)}
-         *    , {@link SecurityResourceUrl.Validator#urlMethod(String)}
-         * ]
-         *
+         * @param urlInfo [
+         *                {@link SecurityResourceUrl.Validator#clientId(String)}
+         *                , {@link SecurityResourceUrl.Validator#urlPath(String)}
+         *                , {@link SecurityResourceUrl.Validator#urlMethod(String)}
+         *                ]
          * @return 校验结果
+         * @Description 业务拓展设计.
          */
         public boolean urlInfo(@NotNull String[] urlInfo) {
             return null != urlInfo
@@ -304,19 +283,19 @@ public class SecurityResourceUrl
     /**
      * 仅用于持久化注入
      */
-    public SecurityResourceUrl() {}
+    public SecurityResourceUrl() {
+    }
 
     //===== entity factory =====//
 
     /**
      * (构造器)
      *
-     * @param id            数据 ID
-     * @param code          资源编码
-     * @param clientId      资源服务器 ID
-     * @param urlPath       资源对应的 URL (单个)
-     * @param methodVo      资源对应的 URL - 通信方法    {@link HTTP.MethodVo}
-     *
+     * @param id       数据 ID
+     * @param code     资源编码
+     * @param clientId 资源服务器 ID
+     * @param urlPath  资源对应的 URL (单个)
+     * @param methodVo 资源对应的 URL - 通信方法    {@link HTTP.MethodVo}
      * @throws IllegalArgumentException
      */
     private SecurityResourceUrl(@Nullable Long id
@@ -324,8 +303,7 @@ public class SecurityResourceUrl
             , @NotNull String clientId
             , @NotNull String urlPath
             , @NotNull HTTP.MethodVo methodVo)
-            throws IllegalArgumentException
-    {
+            throws IllegalArgumentException {
         if (null == id) {
             //--- 添加功能
         } else {
@@ -396,21 +374,19 @@ public class SecurityResourceUrl
         /**
          * 创建
          *
-         * @param code          资源编码
-         * @param clientId      资源服务器 ID
-         * @param url           资源对应的 URL (单个)
-         * @param methodVo      资源对应的 URL - 通信方法    {@link HTTP.MethodVo}
-         *
+         * @param code     资源编码
+         * @param clientId 资源服务器 ID
+         * @param url      资源对应的 URL (单个)
+         * @param methodVo 资源对应的 URL - 通信方法    {@link HTTP.MethodVo}
          * @return {@link SecurityResourceUrl}
-         *
          * @throws IllegalArgumentException
          */
-        public @NotNull SecurityResourceUrl create(@NotNull String code
+        public @NotNull
+        SecurityResourceUrl create(@NotNull String code
                 , @NotNull String clientId
                 , @NotNull String url
                 , @NotNull HTTP.MethodVo methodVo)
-                throws IllegalArgumentException
-        {
+                throws IllegalArgumentException {
             return new SecurityResourceUrl(null, code, clientId
                     , url, methodVo);
         }
@@ -418,21 +394,19 @@ public class SecurityResourceUrl
         /**
          * 创建
          *
-         * @param code          资源编码
-         * @param clientId      资源服务器 ID
-         * @param url           资源对应的 URL (单个)
-         * @param methodName    资源对应的 URL - 通信方法    {@link HTTP.MethodVo#name()}
-         *
+         * @param code       资源编码
+         * @param clientId   资源服务器 ID
+         * @param url        资源对应的 URL (单个)
+         * @param methodName 资源对应的 URL - 通信方法    {@link HTTP.MethodVo#name()}
          * @return {@link SecurityResourceUrl}
-         *
          * @throws IllegalArgumentException
          */
-        public @NotNull SecurityResourceUrl create(@NotNull String code
+        public @NotNull
+        SecurityResourceUrl create(@NotNull String code
                 , @NotNull String clientId
                 , @NotNull String url
                 , @NotNull String methodName)
-                throws IllegalArgumentException
-        {
+                throws IllegalArgumentException {
             return new SecurityResourceUrl(null
                     , code
                     , clientId
@@ -443,16 +417,14 @@ public class SecurityResourceUrl
         /**
          * 创建
          *
-         * @param resource  [（安全认证）资源]
-         * @param urlInfo   [URL 相关信息]
-         *
+         * @param resource [（安全认证）资源]
+         * @param urlInfo  [URL 相关信息]
          * @return {@link SecurityResourceUrl}
-         *
          * @throws IllegalArgumentException
          */
-        public @NotNull SecurityResourceUrl create(@NotNull SecurityResource resource, @NotNull String[] urlInfo)
-                throws IllegalArgumentException
-        {
+        public @NotNull
+        SecurityResourceUrl create(@NotNull SecurityResource resource, @NotNull String[] urlInfo)
+                throws IllegalArgumentException {
             if (null == resource || resource.isEmpty()) {
                 //-- 非法输入: [（安全认证）资源]
                 throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
@@ -462,7 +434,7 @@ public class SecurityResourceUrl
                         , Thread.currentThread().getStackTrace()[1].getMethodName()
                         , Thread.currentThread().getStackTrace()[1].getLineNumber()));
             }
-            if (! Validator.RESOURCE_URL.urlInfo(urlInfo)) {
+            if (!Validator.RESOURCE_URL.urlInfo(urlInfo)) {
                 //-- 非法输入: [URL 相关信息]
                 throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                         , "[URL 相关信息]"
@@ -482,23 +454,21 @@ public class SecurityResourceUrl
         /**
          * 更新
          *
-         * @param id            数据 ID
-         * @param code          资源编码
-         * @param clientId      资源服务器 ID
-         * @param url           资源对应的 URL (单个)
-         *
+         * @param id       数据 ID
+         * @param code     资源编码
+         * @param clientId 资源服务器 ID
+         * @param url      资源对应的 URL (单个)
          * @return {@link SecurityResourceUrl}
-         *
          * @throws IllegalArgumentException
          */
-        public @NotNull SecurityResourceUrl update(@NotNull Long id
+        public @NotNull
+        SecurityResourceUrl update(@NotNull Long id
                 , @NotNull String code
                 , @NotNull String clientId
                 , @NotNull String url
                 , @NotNull HTTP.MethodVo methodVo)
-                throws IllegalArgumentException
-        {
-            if (! Validator.RESOURCE_URL.id(id)) {
+                throws IllegalArgumentException {
+            if (!Validator.RESOURCE_URL.id(id)) {
                 //-- 非法输入: [数据 ID]
                 throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                         , "[数据 ID]"
@@ -518,7 +488,8 @@ public class SecurityResourceUrl
          * @return 非 {@code null}.
          */
         @Override
-        public @NotNull SecurityResourceUrl createDefault() {
+        public @NotNull
+        SecurityResourceUrl createDefault() {
             return new SecurityResourceUrl();
         }
 
@@ -594,14 +565,13 @@ public class SecurityResourceUrl
     /**
      * 获取[URL 信息]
      *
-     * @Description 业务拓展方法.
-     *
      * @return {@link String[]}
-     *
+     * @Description 业务拓展方法.
      * @see Validator#urlInfo(String[])
      */
-    public @NotNull String[] getUrlInfo() {
-        return new String[] {
+    public @NotNull
+    String[] getUrlInfo() {
+        return new String[]{
                 this.getClientId()
                 , this.getUrlPath()
                 , this.getUrlMethod()
@@ -611,12 +581,10 @@ public class SecurityResourceUrl
     /**
      * 设置[URL 信息]
      *
-     * @param urlInfo   [URL 信息]
-     *
+     * @param urlInfo [URL 信息]
      * @return 操作结果 - 是否全部成功（已成功的操作不会被回滚）
      * · {@code true}   - 此时所有操作全部[合法且执行成功].
      * · {@code false}  - 此时所有或部分操作[不合法或执行失败].
-     *
      * @see Validator#urlInfo(String[])
      */
     public boolean setUrlInfo(@NotNull String[] urlInfo) {

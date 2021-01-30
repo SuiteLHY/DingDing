@@ -18,6 +18,7 @@ import com.fasterxml.classmate.TypeResolver;
 /**
  * SpringFox - Swagger 配置类
  *
+ * @author Suite
  * @Issue · 集成 Spring Security 之后, Swagger ui 的 Controller 无法注册到 Web MVC 中.
  * -> {@Solution <a href="https://stackoverflow.com/questions/43545540/swagger-ui-no-mapping-found-for-http-request">
  * ->     java - swagger-ui No mapping found for HTTP request - Stack Overflow</a>}
@@ -26,12 +27,8 @@ import com.fasterxml.classmate.TypeResolver;
  * ->     无法解析指针：/ definitions /列表在文档中不存在·问题＃2563·springfox / springfox</a></Solution>
  * -> , <Solution><a href="https://github.com/springfox/springfox/blob/d6c72bf8623b3efaebb3e276154cf98f5fdf8af6/springfox-spring-config/src/main/java/springfox/springconfig/Swagger2SpringBoot.java#L85">
  * ->     springfox/Swagger2SpringBoot.java at d6c72bf8623b3efaebb3e276154cf98f5fdf8af6 · springfox/springfox</a></Solution>
- *
  * @Reference -> <a href="https://www.baeldung.com/swagger-2-documentation-for-spring-rest-api">
  * ->     使用Spring REST API设置Swagger 2</a>
- *
- * @author Suite
- *
  * @CreateDate 2018-12-19 11:38
  */
 @Configuration

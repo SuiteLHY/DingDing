@@ -7,18 +7,17 @@ import dingding.security.app.rbac.repository.support.QueryWraper;
 
 /**
  * @author zhailiang
- *
  */
 public class AdminSpec
-		extends DingDingSpecification<Admin, AdminCondition> {
+        extends DingDingSpecification<Admin, AdminCondition> {
 
-	public AdminSpec(AdminCondition condition) {
-		super(condition);
-	}
+    public AdminSpec(AdminCondition condition) {
+        super(condition);
+    }
 
-	@Override
-	protected void addCondition(QueryWraper<Admin> queryWrapper) {
-		addLikeCondition(queryWrapper, "username");
-	}
+    @Override
+    protected void addCondition(QueryWraper<Admin> queryWrapper) {
+        addLikeCondition(queryWrapper, "username");
+    }
 
 }

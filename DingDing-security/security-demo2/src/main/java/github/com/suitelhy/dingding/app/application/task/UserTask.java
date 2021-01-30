@@ -11,6 +11,7 @@ public interface UserTask {
 
     /**
      * 查询用户列表
+     *
      * @param pageCount 页码, 从1开始
      * @param pageSize
      * @return 用户 Entity 对象集合
@@ -19,6 +20,7 @@ public interface UserTask {
 
     /**
      * 查询指定的用户
+     *
      * @param userid
      * @return 用户 Entity 对象
      */
@@ -26,6 +28,7 @@ public interface UserTask {
 
     /**
      * 查询指定的用户
+     *
      * @param username
      * @return
      */
@@ -33,6 +36,7 @@ public interface UserTask {
 
     /**
      * 查询用户列表 - 分页 - 总页数
+     *
      * @param pageSize 分页 - 每页容量
      * @return 分页 - 总页数
      */
@@ -40,6 +44,7 @@ public interface UserTask {
 
     /**
      * 新增一个用户
+     *
      * @param user
      * @return 业务操作是否成功
      */
@@ -50,6 +55,7 @@ public interface UserTask {
 
     /**
      * 更新指定的用户
+     *
      * @param user
      * @return 业务操作是否成功
      */
@@ -60,6 +66,7 @@ public interface UserTask {
 
     /**
      * 删除指定的用户
+     *
      * @param user
      * @return 业务操作是否成功
      */

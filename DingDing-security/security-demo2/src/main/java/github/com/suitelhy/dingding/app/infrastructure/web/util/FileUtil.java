@@ -11,6 +11,7 @@ public class FileUtil {
 
     /**
      * 按照分隔符将地址字符串切割开,然后拼装成 File 数组
+     *
      * @param files 字符串
      * @param split 分隔符,可以为正则
      * @return

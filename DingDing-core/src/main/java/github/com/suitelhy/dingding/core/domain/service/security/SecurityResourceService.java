@@ -20,7 +20,6 @@ import java.util.*;
  * (安全) 资源
  *
  * @Description (安全) 资源 - 业务接口.
- *
  * @see EntityService
  * @see SecurityResourceServiceImpl
  */
@@ -37,7 +36,6 @@ public interface SecurityResourceService
      *
      * @param pageIndex 分页索引, 从 0 开始.
      * @param pageSize
-     *
      * @return {@link Page}
      */
     Page<SecurityResource> selectAll(int pageIndex, int pageSize)
@@ -48,39 +46,39 @@ public interface SecurityResourceService
      *
      * @return {@link ContainArrayHashMap}
      */
-    @NotNull ContainArrayHashMap<String, List<Object>> selectAllUrlRoleMap()
+    @NotNull
+    ContainArrayHashMap<String, List<Object>> selectAllUrlRoleMap()
             throws IllegalArgumentException;
 
     /**
      * 查询所有 [URL - ROLE] 权限对应关系
      *
-     * @param clientId  [资源服务器 ID]  {@link SecurityResourceUrl#getClientId()}
-     *
+     * @param clientId [资源服务器 ID]  {@link SecurityResourceUrl#getClientId()}
      * @return {@link ContainArrayHashMap}
      */
-    @NotNull ContainArrayHashMap<String, List<Object>> selectUrlRoleMap(@NotNull String clientId)
+    @NotNull
+    ContainArrayHashMap<String, List<Object>> selectUrlRoleMap(@NotNull String clientId)
             throws IllegalArgumentException;
 
     /**
      * 查询总页数
      *
-     * @Description 查询数据列表 - 分页 - 总页数.
-     *
-     * @param pageSize  分页 - 每页容量
-     *
+     * @param pageSize 分页 - 每页容量
      * @return 分页 - 总页数
+     * @Description 查询数据列表 - 分页 - 总页数.
      */
-    @NotNull Long selectCount(int pageSize)
+    @NotNull
+    Long selectCount(int pageSize)
             throws IllegalArgumentException;
 
     /**
      * 查询指定的资源
      *
-     * @param code  资源编码    {@link SecurityResource#getCode()}
-     *
+     * @param code 资源编码    {@link SecurityResource#getCode()}
      * @return {@link SecurityResource}
      */
-    @NotNull SecurityResource selectResourceByCode(@NotNull String code)
+    @NotNull
+    SecurityResource selectResourceByCode(@NotNull String code)
             throws IllegalArgumentException;
 
 //    /**
@@ -119,7 +117,6 @@ public interface SecurityResourceService
      * @param resource                          [（安全认证）资源]
      * @param operator                          操作者
      * @param operator_userAccountOperationInfo [操作者 - 账户操作基础记录]
-     *
      * @return 操作是否成功 / 是否已存在相同的有效数据
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -404,9 +401,7 @@ public interface SecurityResourceService
      * @param resource                          [（安全认证）资源]  {@link SecurityResource}
      * @param operator                          操作者
      * @param operator_userAccountOperationInfo [操作者 - 账户操作基础记录]
-     *
      * @return 操作是否成功
-     *
      * @throws IllegalArgumentException
      * @throws BusinessAtomicException
      */
@@ -424,17 +419,16 @@ public interface SecurityResourceService
      *
      * @param old_resource      [（安全认证）资源] <- 原始版本业务全量数据
      * @param new_resource_data [（安全认证）资源] <- 需要更新的数据
-     * · 数据结构:
-     * {
-     *      resource_icon: [图标],
-     *      resource_link: [资源链接],
-     *      resource_name: [资源名称],
-     *      resource_parentCode: [父节点 <- 资源编码],
-     *      resource_sort: [序号],
-     *      resource_type: [资源类型]
-     * }
+     *                          · 数据结构:
+     *                          {
+     *                          resource_icon: [图标],
+     *                          resource_link: [资源链接],
+     *                          resource_name: [资源名称],
+     *                          resource_parentCode: [父节点 <- 资源编码],
+     *                          resource_sort: [序号],
+     *                          resource_type: [资源类型]
+     *                          }
      * @param operator          操作者
-     *
      * @return 操作是否成功
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -447,14 +441,12 @@ public interface SecurityResourceService
     /**
      * 删除指定的资源
      *
-     * @Description 删除成功后校验持久化数据; 主要为了避免在未提交的事务中进行对操作结果的非预期判断.
-     * · 完整业务流程的一部分.
-     *
      * @param resource                          [（安全认证）资源]
      * @param operator                          操作者
      * @param operator_userAccountOperationInfo [操作者 - 账户操作基础记录]
-     *
      * @return 操作是否成功
+     * @Description 删除成功后校验持久化数据; 主要为了避免在未提交的事务中进行对操作结果的非预期判断.
+     * · 完整业务流程的一部分.
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED

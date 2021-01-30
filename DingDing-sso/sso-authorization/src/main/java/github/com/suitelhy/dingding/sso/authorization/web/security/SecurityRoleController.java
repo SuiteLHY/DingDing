@@ -39,7 +39,6 @@ public class SecurityRoleController {
      * 获取当前用户角色列表
      *
      * @param authentication
-     *
      * @return API响应的主要数据
      */
     @GetMapping("/roleList")
@@ -74,14 +73,12 @@ public class SecurityRoleController {
      * @param authentication
      * @param pageIndex
      * @param pageSize
-     *
      * @return API响应的主要数据
      */
     @GetMapping("/allRoleList")
     public String getAllRoleList(final @AuthenticationPrincipal OAuth2Authentication authentication
             , @RequestParam(defaultValue = "0") String pageIndex
-            , @RequestParam(defaultValue = "10") String pageSize)
-    {
+            , @RequestParam(defaultValue = "10") String pageSize) {
         @NotNull WebResult<List<RoleDto>> result;
         try {
             final OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails userAuthenticationDetails = OAuth2AuthenticationUtil.getInstance().getDetails(authentication);
@@ -114,22 +111,19 @@ public class SecurityRoleController {
     /**
      * 添加角色
      *
-     * @Description 添加单个角色.
-     *
      * @param authentication
      * @param roleCode
      * @param roleName
      * @param roleDescription
-     *
      * @return API响应的主要数据
+     * @Description 添加单个角色.
      */
     @PutMapping("/assignedRole")
     public String addRole(@AuthenticationPrincipal final OAuth2Authentication authentication
             , @RequestParam(name = "code") String roleCode
             , @RequestParam(name = "name") String roleName
             , @RequestParam(name = "description") String roleDescription)
-            throws JsonProcessingException
-    {
+            throws JsonProcessingException {
         /*final Map<String, Object> result = new LinkedHashMap<>(3);*/
         try {
             final OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails userAuthenticationDetails = OAuth2AuthenticationUtil.getInstance().getDetails(authentication);
@@ -182,16 +176,14 @@ public class SecurityRoleController {
     /**
      * 更新指定角色
      *
-     * @Description 局部更新.
-     *
      * @param authentication
      * @param old_roleCode
      * @param old_roleName
      * @param old_roleDescription
      * @param roleName
      * @param roleDescription
-     *
      * @return API响应的主要数据
+     * @Description 局部更新.
      */
     @PatchMapping("/assignedRole")
     public String updateRole(@AuthenticationPrincipal final OAuth2Authentication authentication
@@ -199,16 +191,15 @@ public class SecurityRoleController {
             , @RequestParam(name = "old_name") String old_roleName
             , @RequestParam(name = "old_description") String old_roleDescription
             , @RequestParam(name = "new_name", required = false) String roleName
-            , @RequestParam(name = "new_description", required = false) String roleDescription)
-    {
+            , @RequestParam(name = "new_description", required = false) String roleDescription) {
         try {
             final OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails userAuthenticationDetails = OAuth2AuthenticationUtil.getInstance().getDetails(authentication);
 
             Map<String, Object> new_role_data = new HashMap<>(1);
-            if (! StringUtils.isEmpty(roleName)) {
+            if (!StringUtils.isEmpty(roleName)) {
                 new_role_data.put("role_name", roleName);
             }
-            if (! StringUtils.isEmpty(roleDescription)) {
+            if (!StringUtils.isEmpty(roleDescription)) {
                 new_role_data.put("role_description", roleDescription);
             }
 
@@ -231,13 +222,11 @@ public class SecurityRoleController {
      *
      * @param authentication
      * @param roleCode
-     *
      * @return API响应的主要数据
      */
     @DeleteMapping("/assignedRole")
     public String deleteRole(@AuthenticationPrincipal final OAuth2Authentication authentication
-            , @RequestParam(name = "role_code") String roleCode)
-    {
+            , @RequestParam(name = "role_code") String roleCode) {
         try {
             final OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails userAuthenticationDetails = OAuth2AuthenticationUtil.getInstance().getDetails(authentication);
 

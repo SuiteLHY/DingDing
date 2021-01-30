@@ -11,6 +11,7 @@ public interface LogTask {
 
     /**
      * 查询所有日志记录 (分页)
+     *
      * @param pageCount 页码, 从1开始
      * @param pageSize
      * @return
@@ -19,6 +20,7 @@ public interface LogTask {
 
     /**
      * 查询日志记录数量 (分页)
+     *
      * @param pageSize
      * @return
      */
@@ -26,6 +28,7 @@ public interface LogTask {
 
     /**
      * 查询指定用户对应的日志记录 (分页)
+     *
      * @param userid
      * @param pageCount 页码, 从1开始
      * @param pageSize
@@ -35,6 +38,7 @@ public interface LogTask {
 
     /**
      * 查询指定用户对应的日志记录数量 (分页)
+     *
      * @param userid
      * @param pageSize
      * @return
@@ -43,6 +47,7 @@ public interface LogTask {
 
     /**
      * 新增日志记录
+     *
      * @param log
      * @return
      */
@@ -50,6 +55,7 @@ public interface LogTask {
 
     /**
      * 删除日志记录
+     *
      * @param id - 日志记录 id
      * @return
      */

@@ -31,65 +31,62 @@ import dingding.security.core.support.SimpleResponse;
 
 /**
  * 浏览器环境下与安全相关的服务
- * 
- * @author zhailiang
  *
+ * @author zhailiang
  */
 @RestController
 public class BrowserSecurityController
-		extends SocialController {
+        extends SocialController {
 
-	private Logger logger = LoggerFactory.getLogger(getClass());
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
-	private RequestCache requestCache = new HttpSessionRequestCache();
+    private RequestCache requestCache = new HttpSessionRequestCache();
 
-	private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+    private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
-	// 安全配置
-	@Autowired
-	private SecurityProperties securityProperties;
+    // 安全配置
+    @Autowired
+    private SecurityProperties securityProperties;
 
-	// 第三方服务提供商注册工具
-	@Autowired
-	private ProviderSignInUtils providerSignInUtils;
+    // 第三方服务提供商注册工具
+    @Autowired
+    private ProviderSignInUtils providerSignInUtils;
 
-	/**
-	 * 当需要身份认证时，跳转到这里
-	 * 
-	 * @param request
-	 * @param response
-	 * @return
-	 * @throws IOException
-	 */
-	@RequestMapping(SecurityConstants.DEFAULT_UNAUTHENTICATED_URL)
-	@ResponseStatus(code = HttpStatus.UNAUTHORIZED)
-	public SimpleResponse requireAuthentication(HttpServletRequest request, HttpServletResponse response)
-			throws IOException {
-		SavedRequest savedRequest = requestCache.getRequest(request, response);
+    /**
+     * 当需要身份认证时，跳转到这里
+     *
+     * @param request
+     * @param response
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(SecurityConstants.DEFAULT_UNAUTHENTICATED_URL)
+    @ResponseStatus(code = HttpStatus.UNAUTHORIZED)
+    public SimpleResponse requireAuthentication(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        SavedRequest savedRequest = requestCache.getRequest(request, response);
 
-		if (null != savedRequest) {
-			String targetUrl = savedRequest.getRedirectUrl();
-			logger.info("引发跳转的请求是:" + targetUrl);
-			if (StringUtils.endsWithIgnoreCase(targetUrl, ".html")) {
-				redirectStrategy.sendRedirect(request, response, securityProperties.getBrowser().getSignInPage());
-			}
-		}
+        if (null != savedRequest) {
+            String targetUrl = savedRequest.getRedirectUrl();
+            logger.info("引发跳转的请求是:" + targetUrl);
+            if (StringUtils.endsWithIgnoreCase(targetUrl, ".html")) {
+                redirectStrategy.sendRedirect(request, response, securityProperties.getBrowser().getSignInPage());
+            }
+        }
 
-		return new SimpleResponse("访问的服务需要身份认证，请引导用户到登录页");
-	}
+        return new SimpleResponse("访问的服务需要身份认证，请引导用户到登录页");
+    }
 
-	/**
-	 *
-	 * @Description 用户第一次社交登录时, 会引导用户进行用户注册或绑定,
-	 * 	此服务用于在注册或绑定页面获取社交网站用户信息.
-	 * 
-	 * @param request
-	 * @return
-	 */
-	@GetMapping(SecurityConstants.DEFAULT_SOCIAL_USER_INFO_URL)
-	public SocialUserInfo getSocialUserInfo(HttpServletRequest request) {
-		Connection<?> connection = providerSignInUtils.getConnectionFromSession(new ServletWebRequest(request));
-		return buildSocialUserInfo(connection);
-	}
+    /**
+     * @param request
+     * @return
+     * @Description 用户第一次社交登录时, 会引导用户进行用户注册或绑定,
+     * 此服务用于在注册或绑定页面获取社交网站用户信息.
+     */
+    @GetMapping(SecurityConstants.DEFAULT_SOCIAL_USER_INFO_URL)
+    public SocialUserInfo getSocialUserInfo(HttpServletRequest request) {
+        Connection<?> connection = providerSignInUtils.getConnectionFromSession(new ServletWebRequest(request));
+        return buildSocialUserInfo(connection);
+    }
 
 }

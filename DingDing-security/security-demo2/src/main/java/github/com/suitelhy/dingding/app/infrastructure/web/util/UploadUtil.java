@@ -13,9 +13,10 @@ public class UploadUtil {
 
     /**
      * Spring MVC 文件上传
-     * @param request    request
-     * @param folder    上传文件夹
-     * @param userid    用户 Id
+     *
+     * @param request request
+     * @param folder  上传文件夹
+     * @param userid  用户 Id
      * @return 经过处理的 path + fileName
      */
     public String upload(HttpServletRequest request
@@ -40,10 +41,10 @@ public class UploadUtil {
                     // 取得当前上传文件的文件名称
                     String myFileName = file.getOriginalFilename();
                     // 如果名称不为"",说明该文件存在，否则说明该文件不存在
-                    if(myFileName.trim() !=""){
+                    if (myFileName.trim() != "") {
                         System.out.println(myFileName);
                         // 重命名上传后的文件名
-                        String fileName =  userid + "." + prefix;
+                        String fileName = userid + "." + prefix;
                         // 定义上传路径, 格式示例: <code>upload/Amayadream/Amayadream.jpg</code>
                         String path = request.getServletContext().getRealPath("/")
                                 + folder

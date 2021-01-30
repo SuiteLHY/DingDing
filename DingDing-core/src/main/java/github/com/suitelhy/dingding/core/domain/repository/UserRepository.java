@@ -20,7 +20,6 @@ import java.util.Set;
  * 用户信息 - 持久化接口
  *
  * @Description 用户信息 - 实体 (Entity) 持久化接口.
- *
  * @see User
  */
 /*// @Mapper 注解: 标记持久化对象 ({ElementType.TYPE, ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER}).
@@ -49,10 +48,9 @@ public interface UserRepository
      * 判断存在
      *
      * @param username
-     *
      * @return
      */
-    @Transactional(isolation  = Isolation.SERIALIZABLE
+    @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED
             , timeout = 15)
     boolean existsByUsername(@NotNull String username);
@@ -62,10 +60,9 @@ public interface UserRepository
      *
      * @param username
      * @param statusVoSet
-     *
      * @return
      */
-    @Transactional(isolation  = Isolation.SERIALIZABLE
+    @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED
             , timeout = 15)
     boolean existsByUsernameAndStatusIn(@NotNull String username, @NotNull Set<Account.StatusVo> statusVoSet);
@@ -77,58 +74,59 @@ public interface UserRepository
      * @return
      */
     @Override
-    @NotNull Page<User> findAll(Pageable pageable);
+    @NotNull
+    Page<User> findAll(Pageable pageable);
 
     /**
      * 查询用户
      *
      * @param userid
-     *
      * @return {@link Optional}
      */
     /*@Query("select u from User u where u.userid = ?1")*/
-    @Transactional(isolation  = Isolation.SERIALIZABLE
+    @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED
             , timeout = 15)
-    @NotNull Optional<User> findUserByUserid(@NotNull String userid);
+    @NotNull
+    Optional<User> findUserByUserid(@NotNull String userid);
 
     /**
      * 查询用户
      *
      * @param username
-     *
      * @return
      */
-    @Transactional(isolation  = Isolation.SERIALIZABLE
+    @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED
             , timeout = 15)
-    @NotNull Optional<User> findUserByUsername(@NotNull String username);
+    @NotNull
+    Optional<User> findUserByUsername(@NotNull String username);
 
     /**
      * 查询用户
      *
      * @param username
      * @param status
-     *
      * @return
      */
-    @Transactional(isolation  = Isolation.SERIALIZABLE
+    @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED
             , timeout = 15)
-    @NotNull Optional<User> findUserByUsernameAndStatus(@NotNull String username, @NotNull Account.StatusVo status);
+    @NotNull
+    Optional<User> findUserByUsernameAndStatus(@NotNull String username, @NotNull Account.StatusVo status);
 
     /**
      * 查询用户
      *
      * @param username
      * @param statusVoSet
-     *
      * @return
      */
-    @Transactional(isolation  = Isolation.SERIALIZABLE
+    @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED
             , timeout = 15)
-    @NotNull Optional<User> findUserByUsernameAndStatusIn(@NotNull String username, @NotNull Set<Account.StatusVo> statusVoSet);
+    @NotNull
+    Optional<User> findUserByUsernameAndStatusIn(@NotNull String username, @NotNull Set<Account.StatusVo> statusVoSet);
 
     //===== Insert Data =====//
 
@@ -136,7 +134,6 @@ public interface UserRepository
      * 新增(/修改)用户
      *
      * @param user
-     *
      * @return
      */
     @Override
@@ -152,7 +149,6 @@ public interface UserRepository
      *
      * @param status
      * @param username
-     *
      * @return {@link Integer#TYPE}
      */
     @Modifying
@@ -177,17 +173,13 @@ public interface UserRepository
     /**
      * 删除给定的实体
      *
-     * @Description Spring Data JPA 提供的 <method>delete(T entity)</method> 无法保证操作 <b>执行且成功</b>
-     * , 应该换用 <method>deleteById(String id)</method>.
-     *
-     * @Reference
-     * {@link <a href="https://docs.spring.io/spring-data/commons/docs/current/api/org/springframework/data/repository/CrudRepository.html#delete-T-">CrudRepository (Spring Data Core 2.2.3.RELEASE API) # delete-T-</a>}
-     *
-     * @Update 不建议使用!
-     *
      * @param user
      * @throws IllegalArgumentException                               - in case the given entity is null.
      * @throws org.springframework.dao.EmptyResultDataAccessException - in case the given entity is non persistent.
+     * @Description Spring Data JPA 提供的 <method>delete(T entity)</method> 无法保证操作 <b>执行且成功</b>
+     * , 应该换用 <method>deleteById(String id)</method>.
+     * @Reference {@link <a href="https://docs.spring.io/spring-data/commons/docs/current/api/org/springframework/data/repository/CrudRepository.html#delete-T-">CrudRepository (Spring Data Core 2.2.3.RELEASE API) # delete-T-</a>}
+     * @Update 不建议使用!
      */
     @Override
     @Modifying
@@ -198,16 +190,12 @@ public interface UserRepository
     /**
      * 删除给定的 id 所指定的实体
      *
-     * @Description 可以保证删除操作 <b>执行且成功</b>.
-     *
-     * @Reference
-     * {@link <a href="https://stackoverflow.com/questions/31346356/spring-data-jpa-deleteby-query-not-working?noredirect=1&lq=1">Spring Data JPA DeleteBy查询不起作用 - Stack Overflow</a>}
-     * {@link <a href="https://stackoverflow.com/questions/23723025/spring-data-delete-by-is-supported">Spring Data: "delete by" is supported? - Stack Overflow</a>}
-     *
      * @param id
-     *
      * @throws IllegalArgumentException                               - in case the given id is null.
      * @throws org.springframework.dao.EmptyResultDataAccessException - in case the given id -> entity is non persistent.
+     * @Description 可以保证删除操作 <b>执行且成功</b>.
+     * @Reference {@link <a href="https://stackoverflow.com/questions/31346356/spring-data-jpa-deleteby-query-not-working?noredirect=1&lq=1">Spring Data JPA DeleteBy查询不起作用 - Stack Overflow</a>}
+     * {@link <a href="https://stackoverflow.com/questions/23723025/spring-data-delete-by-is-supported">Spring Data: "delete by" is supported? - Stack Overflow</a>}
      */
     @Override
     @Modifying

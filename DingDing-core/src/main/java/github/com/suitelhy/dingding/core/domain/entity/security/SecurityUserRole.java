@@ -57,7 +57,7 @@ public class SecurityUserRole
 
     @Override
     public @NotNull /*Long*/Object[] id() {
-        return new Object[] {
+        return new Object[]{
                 this.username
                 , this.roleCode
         };
@@ -66,20 +66,20 @@ public class SecurityUserRole
     /**
      * 是否无效
      *
-     * @Description 保证 User 的基本业务实现中的合法性.
      * @return
+     * @Description 保证 User 的基本业务实现中的合法性.
      */
     @Override
     public boolean isEmpty() {
-        return ! Validator.USER_ROLE.id(this.id)
-                || ! this.isEntityLegal();
+        return !Validator.USER_ROLE.id(this.id)
+                || !this.isEntityLegal();
     }
 
     /**
      * 是否符合基础数据合法性要求
      *
-     * @Description 只保证数据合法, 不保证业务实现中的合法性.
      * @return
+     * @Description 只保证数据合法, 不保证业务实现中的合法性.
      */
     @Override
     public boolean isEntityLegal() {
@@ -90,10 +90,9 @@ public class SecurityUserRole
     /**
      * 校验 Entity - ID
      *
-     * @Description <abstractClass>AbstractEntityModel</abstractClass> 提供的模板设计.
-     *
-     * @param entityId      {@link this#id()}
+     * @param entityId {@link this#id()}
      * @return
+     * @Description <abstractClass>AbstractEntityModel</abstractClass> 提供的模板设计.
      */
     @Override
     protected boolean validateId(@NotNull /*Long*/Object[] entityId) {
@@ -103,8 +102,8 @@ public class SecurityUserRole
     /**
      * 等效比较
      *
-     * @param user      {@link SecurityUser}
-     * @param role      {@link SecurityRole}
+     * @param user {@link SecurityUser}
+     * @param role {@link SecurityRole}
      * @return
      */
     public boolean equals(@NotNull SecurityUser user, @NotNull SecurityRole role) {
@@ -122,7 +121,7 @@ public class SecurityUserRole
     /**
      * 角色 - 属性校验器
      *
-     * @Description 各个属性的基础校验(注意: 此校验 ≠ 完全校验).
+     * @Description 各个属性的基础校验(注意 : 此校验 ≠ 完全校验).
      */
     public enum Validator
             implements EntityValidator<SecurityUserRole, /*Long*/Object[]> {
@@ -162,23 +161,23 @@ public class SecurityUserRole
     /**
      * 仅用于持久化注入
      */
-    public SecurityUserRole() {}
+    public SecurityUserRole() {
+    }
 
     //===== entity factory =====//
 
     /**
      * (构造器)
      *
-     * @param id            数据 ID
-     * @param username      用户名
-     * @param roleCode      角色编码
+     * @param id       数据 ID
+     * @param username 用户名
+     * @param roleCode 角色编码
      * @throws IllegalArgumentException
      */
     private SecurityUserRole(@Nullable Long id
             , @NotNull String username
             , @NotNull String roleCode)
-            throws IllegalArgumentException
-    {
+            throws IllegalArgumentException {
         if (null == id) {
             //--- 添加功能
         } else {
@@ -227,28 +226,26 @@ public class SecurityUserRole
         /**
          * 创建
          *
-         * @param username      用户名
-         * @param roleCode      角色编码
-         *
+         * @param username 用户名
+         * @param roleCode 角色编码
          * @throws IllegalArgumentException
          */
-        public @NotNull SecurityUserRole create(@NotNull String username, @NotNull String roleCode)
-                throws IllegalArgumentException
-        {
+        public @NotNull
+        SecurityUserRole create(@NotNull String username, @NotNull String roleCode)
+                throws IllegalArgumentException {
             return new SecurityUserRole(null, username, roleCode);
         }
 
         /**
          * 创建
          *
-         * @param user  （安全认证）用户
-         * @param role  （安全认证）角色
-         *
+         * @param user （安全认证）用户
+         * @param role （安全认证）角色
          * @throws IllegalArgumentException
          */
-        public @NotNull SecurityUserRole create(@NotNull SecurityUser user, @NotNull SecurityRole role)
-                throws IllegalArgumentException
-        {
+        public @NotNull
+        SecurityUserRole create(@NotNull SecurityUser user, @NotNull SecurityRole role)
+                throws IllegalArgumentException {
             if (null == user || user.isEmpty()) {
                 throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                         , "[（安全认证）用户]"
@@ -272,14 +269,13 @@ public class SecurityUserRole
         /**
          * 创建
          *
-         * @param user      [（安全认证）用户]
-         * @param roleVo    [（安全认证）角色]
-         *
+         * @param user   [（安全认证）用户]
+         * @param roleVo [（安全认证）角色]
          * @throws IllegalArgumentException
          */
-        public @NotNull SecurityUserRole create(@NotNull SecurityUser user, @NotNull Security.RoleVo roleVo)
-                throws IllegalArgumentException
-        {
+        public @NotNull
+        SecurityUserRole create(@NotNull SecurityUser user, @NotNull Security.RoleVo roleVo)
+                throws IllegalArgumentException {
             if (null == user || user.isEmpty()) {
                 throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                         , "[（安全认证）用户]"
@@ -303,17 +299,16 @@ public class SecurityUserRole
         /**
          * 更新
          *
-         * @param id          数据 ID
-         * @param username    用户名
-         * @param roleCode    角色编码
-         *
+         * @param id       数据 ID
+         * @param username 用户名
+         * @param roleCode 角色编码
          * @throws IllegalArgumentException
          */
-        public @NotNull SecurityUserRole update(@NotNull Long id
+        public @NotNull
+        SecurityUserRole update(@NotNull Long id
                 , @NotNull String username
                 , @Nullable String roleCode)
-                throws IllegalArgumentException
-        {
+                throws IllegalArgumentException {
             if (!Validator.USER_ROLE.id(id)) {
                 //-- 非法输入: [数据 ID]
                 throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
@@ -333,7 +328,8 @@ public class SecurityUserRole
          * @return 非 {@code null}.
          */
         @Override
-        public @NotNull SecurityUserRole createDefault() {
+        public @NotNull
+        SecurityUserRole createDefault() {
             return new SecurityUserRole();
         }
 

@@ -21,7 +21,6 @@ import java.util.Collections;
  * Spring Security 配置
  *
  * @Editor Suite
- *
  */
 @Configuration
 @EnableWebSecurity
@@ -33,70 +32,69 @@ import java.util.Collections;
 //-> 		Spring Security Oauth2 从零到一完整实践（六）踩坑记录 - 黑客派</a></solution>
 @Order(/*Ordered.HIGHEST_PRECEDENCE*/100)
 public class SsoSecurityConfig
-		extends WebSecurityConfigurerAdapter {
+        extends WebSecurityConfigurerAdapter {
 
-	@Autowired
-	@Qualifier("ssoUserDetailsService"/*"dingDingUserDetailsService"*/)
-	private UserDetailsService userDetailsService;
+    @Autowired
+    @Qualifier("ssoUserDetailsService"/*"dingDingUserDetailsService"*/)
+    private UserDetailsService userDetailsService;
 
-	/**
-	 * AuthenticationManager
-	 *
-	 * @Description <a href="https://github.com/jgrandja/spring-security-oauth-2-4-migrate/blob/master/auth-server/src/main/java/org/springframework/security/oauth/samples/config/SecurityConfig.java">
-	 *->     spring-security-oauth-2-4-migrate/SecurityConfig.java at master · jgrandja/spring-security-oauth-2-4-migrate</a>
-	 * @return
-	 * @throws Exception
-	 */
-	@Bean
-	@Override
-	public AuthenticationManager authenticationManagerBean()
-			throws Exception {
-		return super.authenticationManagerBean();
-	}
+    /**
+     * AuthenticationManager
+     *
+     * @return
+     * @throws Exception
+     * @Description <a href="https://github.com/jgrandja/spring-security-oauth-2-4-migrate/blob/master/auth-server/src/main/java/org/springframework/security/oauth/samples/config/SecurityConfig.java">
+     * ->     spring-security-oauth-2-4-migrate/SecurityConfig.java at master · jgrandja/spring-security-oauth-2-4-migrate</a>
+     */
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean()
+            throws Exception {
+        return super.authenticationManagerBean();
+    }
 
-	/**
-	 * 加密器
-	 *
-	 * @return
-	 */
-	@Bean
-	public PasswordEncoder passwordEncoder()	{
-		return new BCryptPasswordEncoder();
-	}
+    /**
+     * 加密器
+     *
+     * @return
+     */
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-	/**
-	 *
-	 * @param auth
-	 * @throws Exception
-	 */
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth)
-			throws Exception {
-		auth
-				.userDetailsService(userDetailsService)
-				.passwordEncoder(passwordEncoder());
+    /**
+     * @param auth
+     * @throws Exception
+     */
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth)
+            throws Exception {
+        auth
+                .userDetailsService(userDetailsService)
+                .passwordEncoder(passwordEncoder());
 		/*auth.inMemoryAuthentication()
 				.withUser("user")
 				.password(passwordEncoder().encode("123456"))
 				.authorities(Collections.emptyList());*/
-	}
+    }
 
-	/**
-	 * 认证授权服务器访问规则
-	 *
-	 * @param http
-	 * @throws Exception
-	 */
-	@Override
-	protected void configure(HttpSecurity http)
-			throws Exception {
-		http/*.formLogin()*/.httpBasic()
-				.and()
-				.authorizeRequests()
-					.antMatchers("/login").permitAll()
-					.anyRequest().authenticated()/* 所有请求都需要认证 */
-				.and()
-					.csrf().disable()/* 关跨域保护 (临时策略) */;
-	}
+    /**
+     * 认证授权服务器访问规则
+     *
+     * @param http
+     * @throws Exception
+     */
+    @Override
+    protected void configure(HttpSecurity http)
+            throws Exception {
+        http/*.formLogin()*/.httpBasic()
+                .and()
+                .authorizeRequests()
+                .antMatchers("/login").permitAll()
+                .anyRequest().authenticated()/* 所有请求都需要认证 */
+                .and()
+                .csrf().disable()/* 关跨域保护 (临时策略) */;
+    }
 
 }

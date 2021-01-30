@@ -18,12 +18,9 @@ import java.io.IOException;
  * HTTP 权限过滤器
  *
  * @Description 自定义过滤器.
- *
- * @Reference
- *->  {@link <a href="https://www.shuzhiduo.com/A/qVdeW1wrJP/">[权限管理系统篇] (五)-Spring security（授权过程分析）</a>}
- *->  {@link <a href="https://github.com/ygsama/ipa/blob/master/oauth2-server/src/main/java/io/github/ygsama/oauth2server/config/LoginSecurityInterceptor.java">ipa/LoginSecurityInterceptor.java at master · ygsama/ipa</a>}
- *->  {@link org.springframework.security.web.access.intercept.FilterSecurityInterceptor}
- *
+ * @Reference ->  {@link <a href="https://www.shuzhiduo.com/A/qVdeW1wrJP/">[权限管理系统篇] (五)-Spring security（授权过程分析）</a>}
+ * ->  {@link <a href="https://github.com/ygsama/ipa/blob/master/oauth2-server/src/main/java/io/github/ygsama/oauth2server/config/LoginSecurityInterceptor.java">ipa/LoginSecurityInterceptor.java at master · ygsama/ipa</a>}
+ * ->  {@link org.springframework.security.web.access.intercept.FilterSecurityInterceptor}
  * @see FilterSecurityInterceptor
  */
 @Component
@@ -67,14 +64,12 @@ public class DingDingFilterSecurityInterceptor
     /**
      * Method that is actually called by the filter chain. Simply delegates to the {@link #invoke(FilterInvocation)} method.
      *
-     * @param request the servlet request
+     * @param request  the servlet request
      * @param response the servlet response
-     * @param chain the filter chain
-     *
-     * @see {@link FilterSecurityInterceptor#doFilter(ServletRequest,ServletResponse,FilterChain)}
-     *
-     * @throws IOException if the filter chain fails
+     * @param chain    the filter chain
+     * @throws IOException      if the filter chain fails
      * @throws ServletException if the filter chain fails
+     * @see {@link FilterSecurityInterceptor#doFilter(ServletRequest, ServletResponse, FilterChain)}
      */
     @Override
     public void doFilter(ServletRequest request
@@ -91,7 +86,6 @@ public class DingDingFilterSecurityInterceptor
      * 鉴权操作
      *
      * @param fi
-     *
      * @throws IOException
      * @throws ServletException
      */

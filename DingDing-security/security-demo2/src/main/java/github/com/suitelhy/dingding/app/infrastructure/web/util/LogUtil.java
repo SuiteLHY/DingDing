@@ -7,7 +7,6 @@ import github.com.suitelhy.dingding.app.infrastructure.domain.vo.HandleType;
 public class LogUtil {
 
     /**
-     *
      * @param userid
      * @param time
      * @param type

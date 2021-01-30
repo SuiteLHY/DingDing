@@ -8,7 +8,8 @@ import java.util.Objects;
 
 /**
  * 值对象 (Value Object) 设计模板
- * @param <VO> <interface>VoModel</interface> 的实现类 (TIPS: 使用了"自限定类型").
+ *
+ * @param <VO>           <interface>VoModel</interface> 的实现类 (TIPS: 使用了"自限定类型").
  * @param <V>
  * @param <_DESCRIPTION>
  */
@@ -24,8 +25,8 @@ public interface VoModel<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V exten
     /**
      * VO 的值对应的业务名称
      *
-     * @Description Unique attribute. 用于对 <tt>value()</tt> 进行补充说明.
      * @return 不为 null
+     * @Description Unique attribute. 用于对 <tt>value()</tt> 进行补充说明.
      */
     @NotNull
     String name();
@@ -33,8 +34,8 @@ public interface VoModel<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V exten
     /**
      * VO 的值
      *
-     * @Description Unique attribute.
      * @return 可为 <code>null</code>
+     * @Description Unique attribute.
      */
     @Nullable
     V value();
@@ -74,7 +75,7 @@ public interface VoModel<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V exten
     /**
      * VO 对象转 String 对象 <- <interface>VoModel</interface>默认实现
      *
-     * @param vo VO 对象
+     * @param vo             VO 对象
      * @param <VO>
      * @param <V>
      * @param <_DESCRIPTION>

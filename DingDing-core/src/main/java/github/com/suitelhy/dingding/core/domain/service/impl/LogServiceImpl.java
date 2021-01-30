@@ -32,8 +32,7 @@ public class LogServiceImpl
 
     @Override
     public Page<Log> selectAll(int pageIndex, int pageSize)
-            throws IllegalArgumentException
-    {
+            throws IllegalArgumentException {
         if (pageIndex < 0) {
             //-- 非法输入: <param>pageIndex</param>
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
@@ -60,8 +59,7 @@ public class LogServiceImpl
 
     @Override
     public Long selectCount(int pageSize)
-            throws IllegalArgumentException
-    {
+            throws IllegalArgumentException {
         if (pageSize < 1) {
             //-- 非法输入: <param>pageSize</param>
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
@@ -81,15 +79,13 @@ public class LogServiceImpl
     /**
      * 查询指定用户对应的日志记录数量
      *
-     * @param username      {@link Log.Validator#operatorUsername(String)}
-     * @param pageSize      分页 - 每页容量
-     *
+     * @param username {@link Log.Validator#operatorUsername(String)}
+     * @param pageSize 分页 - 每页容量
      * @return {@link Long}
      */
     @Override
     public Long selectCountByUsername(@NotNull String username, int pageSize)
-            throws IllegalArgumentException
-    {
+            throws IllegalArgumentException {
         if (!Log.Validator.USER.operatorUsername(username)) {
             //-- 非法输入: [用户 - 用户名称]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
@@ -119,14 +115,12 @@ public class LogServiceImpl
      * 查询指定的日志记录
      *
      * @param id [日志记录 - 编号]
-     *
      * @return {@link Log}
      */
     @Override
     public Log selectLogById(@NotNull String id)
-            throws IllegalArgumentException
-    {
-        if (null == id || ! Log.Validator.LOG.id(id)) {
+            throws IllegalArgumentException {
+        if (null == id || !Log.Validator.LOG.id(id)) {
             //-- 非法输入: [日志记录 - 编号]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                     , "[日志记录 - 编号]"
@@ -143,16 +137,14 @@ public class LogServiceImpl
     /**
      * 查询指定用户对应的日志记录 (分页)
      *
-     * @param username      {@link Log.Validator#operatorUsername(String)}
-     * @param pageIndex     分页索引, 从 0 开始
-     * @param pageSize      分页 - 每页容量
-     *
+     * @param username  {@link Log.Validator#operatorUsername(String)}
+     * @param pageIndex 分页索引, 从 0 开始
+     * @param pageSize  分页 - 每页容量
      * @return {@link List}
      */
     @Override
     public List<Log> selectLogByUsername(@NotNull String username, int pageIndex, int pageSize)
-            throws IllegalArgumentException
-    {
+            throws IllegalArgumentException {
         if (!Log.Validator.USER.operatorUsername(username)) {
             //-- 非法输入: [用户 - 用户名称]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
@@ -189,15 +181,13 @@ public class LogServiceImpl
     /**
      * 新增日志记录
      *
-     * @param log   {@link Log}
-     *
+     * @param log {@link Log}
      * @return 操作是否成功 / 是否已存在有效数据
      */
     @Override
     @Transactional
     public boolean insert(@NotNull Log log)
-            throws IllegalArgumentException
-    {
+            throws IllegalArgumentException {
         if (null == log || !log.isEntityLegal()) {
             //-- 非法输入: 日志记录
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
@@ -216,15 +206,13 @@ public class LogServiceImpl
     /**
      * 删除日志记录
      *
-     * @param id    [日志记录 - 编号] {@link Log.Validator#id(String)}
-     *
+     * @param id [日志记录 - 编号] {@link Log.Validator#id(String)}
      * @return {@link Long}
      */
     @Override
     @Transactional
     public boolean deleteById(@NotNull Long id)
-            throws IllegalArgumentException
-    {
+            throws IllegalArgumentException {
         if (!Log.Validator.LOG.id(id)) {
             //-- 非法输入: [日志记录 - 编号]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"

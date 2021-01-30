@@ -19,9 +19,9 @@ spring:
           client-id: dingding2
           client-secret: dingding_secrect2
           redirect-uri: http://127.0.0.1:8060/client2/index.html
-#          user-authorization-uri: http://127.0.0.1:9999/authorization-server/oauth/authorize
-#        provider:
-#          authorization-uri: http://127.0.0.1:8060/client2/oauth/check_token
+      #          user-authorization-uri: http://127.0.0.1:9999/authorization-server/oauth/authorize
+      #        provider:
+      #          authorization-uri: http://127.0.0.1:8060/client2/oauth/check_token
       # 资源服务器配置: 详见 <class>org.springframework.boot.autoconfigure.security.oauth2.authorization.OAuth2ResourceServerProperties</class>
       resourceserver:
         jwt:

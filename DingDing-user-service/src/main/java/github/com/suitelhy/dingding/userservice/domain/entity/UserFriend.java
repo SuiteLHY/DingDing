@@ -40,6 +40,7 @@ public class UserFriend
     private LocalDateTime dataTime;
 
     //===== AbstractEntityModel =====//
+
     /**
      * 唯一标识 <- Entity 对象
      *
@@ -111,7 +112,8 @@ public class UserFriend
     }
 
     //===== EntityFactory =====//
-    public UserFriend() {}
+    public UserFriend() {
+    }
 
     private UserFriend(@Nullable String id
             , @NotNull String userId

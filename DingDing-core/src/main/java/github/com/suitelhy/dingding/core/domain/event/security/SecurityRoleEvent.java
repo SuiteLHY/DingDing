@@ -29,9 +29,7 @@ import java.util.Set;
  * @see SecurityUser
  * @see SecurityRoleResource
  * @see SecurityUserRole
- *
  * @see SecurityRoleEventImpl
- *
  * @see SecurityRoleService
  * @see SecurityResourceService
  * @see SecurityUserRoleService
@@ -52,11 +50,9 @@ public interface SecurityRoleEvent
     /**
      * 判断是否存在 (关联的) [（安全认证）角色]
      *
-     * @Description 完整的业务流程.
-     *
-     * @param username  用户名称    {@link SecurityUser.Validator#username(String)}
-     *
+     * @param username 用户名称    {@link SecurityUser.Validator#username(String)}
      * @return {@link Boolean#TYPE}
+     * @Description 完整的业务流程.
      */
     boolean existRoleOnUserByUsername(@NotNull String username)
             throws IllegalArgumentException;
@@ -64,11 +60,9 @@ public interface SecurityRoleEvent
     /**
      * 判断[（安全认证）资源]是否存在 (关联的) [（安全认证）角色]
      *
-     * @Description 完整的业务流程.
-     *
-     * @param resourceCode  资源编码    {@link SecurityRoleResource.Validator#resourceCode(String)}
-     *
+     * @param resourceCode 资源编码    {@link SecurityRoleResource.Validator#resourceCode(String)}
      * @return {@link Boolean#TYPE}
+     * @Description 完整的业务流程.
      */
     boolean existRoleOnResourceByResourceCode(@NotNull String resourceCode)
             throws IllegalArgumentException;
@@ -76,11 +70,9 @@ public interface SecurityRoleEvent
     /**
      * 判断[（安全认证）角色]是否存在 (关联的) [（安全认证）资源]
      *
-     * @Description 完整的业务流程.
-     *
-     * @param roleCode  角色编码    {@link SecurityRoleResource.Validator#roleCode(String)}
-     *
+     * @param roleCode 角色编码    {@link SecurityRoleResource.Validator#roleCode(String)}
      * @return {@link Boolean#TYPE}
+     * @Description 完整的业务流程.
      */
     boolean existResourceOnRoleByRoleCode(@NotNull String roleCode)
             throws IllegalArgumentException;
@@ -88,39 +80,35 @@ public interface SecurityRoleEvent
     /**
      * 查询 (指定角色关联的) 资源
      *
-     * @Description 完整的业务流程.
-     *
-     * @param roleCode  角色编码    {@link SecurityRole.Validator#code(String)}
-     *
+     * @param roleCode 角色编码    {@link SecurityRole.Validator#code(String)}
      * @return {@link SecurityResource}
+     * @Description 完整的业务流程.
      */
-    @NotNull List<SecurityResource> selectResourceOnRoleByRoleCode(@NotNull String roleCode)
+    @NotNull
+    List<SecurityResource> selectResourceOnRoleByRoleCode(@NotNull String roleCode)
             throws IllegalArgumentException;
 
     /**
      * 查询 (指定资源关联的) 角色
      *
-     * @Description 完整的业务流程.
-     *
-     * @param resourceCode  资源编码    {@link SecurityResource#getCode()}
-     *
+     * @param resourceCode 资源编码    {@link SecurityResource#getCode()}
      * @return {@link SecurityRole}
+     * @Description 完整的业务流程.
      */
-    @NotNull List<SecurityRole> selectRoleOnResourceByResourceCode(@NotNull String resourceCode)
+    @NotNull
+    List<SecurityRole> selectRoleOnResourceByResourceCode(@NotNull String resourceCode)
             throws IllegalArgumentException;
 
     /**
      * 查询 (关联的) [（安全认证）角色]
      *
-     * @Description 完整的业务流程.
-     *
-     * @param username  用户名称    {@link SecurityUser.Validator#username(String)}
-     *
+     * @param username 用户名称    {@link SecurityUser.Validator#username(String)}
      * @return {@link SecurityRole}
-     *
+     * @Description 完整的业务流程.
      * @see github.com.suitelhy.dingding.core.domain.event.UserEvent#selectRoleOnUserByUsername(String)
      */
-    @NotNull List<SecurityRole> selectRoleOnUserByUsername(@NotNull String username)
+    @NotNull
+    List<SecurityRole> selectRoleOnUserByUsername(@NotNull String username)
             throws IllegalArgumentException;
 
     //===== 添加操作业务 =====//
@@ -128,13 +116,10 @@ public interface SecurityRoleEvent
     /**
      * 新增一个[（安全认证）用户 ←→ 角色]关联关系
      *
-     * @Description 完整的业务流程.
-     *
-     * @param userRole  [（安全认证）用户 ←→ 角色]
-     * @param operator  操作者
-     *
+     * @param userRole [（安全认证）用户 ←→ 角色]
+     * @param operator 操作者
      * @return 操作是否成功 / 是否已存在相同的有效数据
-     *
+     * @Description 完整的业务流程.
      * @see github.com.suitelhy.dingding.core.domain.event.UserEvent#insertUserRoleRelationship(SecurityUserRole, SecurityUser)
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -147,14 +132,11 @@ public interface SecurityRoleEvent
     /**
      * 新增一个[（安全认证）用户 ←→ 角色]关联关系
      *
-     * @Description 完整的业务流程.
-     *
-     * @param user      （安全认证）用户
-     * @param role      （安全认证）角色
-     * @param operator  操作者
-     *
+     * @param user     （安全认证）用户
+     * @param role     （安全认证）角色
+     * @param operator 操作者
      * @return 操作是否成功 / 是否已存在相同的有效数据
-     *
+     * @Description 完整的业务流程.
      * @see github.com.suitelhy.dingding.core.domain.event.UserEvent#insertUserRoleRelationship(SecurityUser, SecurityRole, SecurityUser)
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -162,8 +144,7 @@ public interface SecurityRoleEvent
             , rollbackFor = Exception.class
             , timeout = 15)
     default boolean insertUserRoleRelationship(@NotNull SecurityUser user, @NotNull SecurityRole role, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if (null == user || user.isEmpty()) {
             //-- 非法输入: （安全认证）用户
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
@@ -192,14 +173,11 @@ public interface SecurityRoleEvent
     /**
      * 新增多个[（安全认证）用户 ←→ 角色]关联关系
      *
-     * @Description 完整的业务流程.
-     *
-     * @param user      （安全认证）用户
-     * @param roles     （安全认证）角色
-     * @param operator  操作者
-     *
+     * @param user     （安全认证）用户
+     * @param roles    （安全认证）角色
+     * @param operator 操作者
      * @return 操作是否成功 / 是否已存在完全相同的有效数据集合
-     *
+     * @Description 完整的业务流程.
      * @see github.com.suitelhy.dingding.core.domain.event.UserEvent#insertUserRoleRelationship(SecurityUser, Set, SecurityUser)
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -212,14 +190,11 @@ public interface SecurityRoleEvent
     /**
      * 新增一个[（安全认证）用户 ←→ 角色]关联关系
      *
-     * @Description 完整的业务流程.
-     *
-     * @param user      （安全认证）用户
-     * @param roleVo    [(安全) 用户 -> 角色] {@link Security.RoleVo}, 仅需保证合法性, 不需要保证持久化.
-     * @param operator  操作者
-     *
+     * @param user     （安全认证）用户
+     * @param roleVo   [(安全) 用户 -> 角色] {@link Security.RoleVo}, 仅需保证合法性, 不需要保证持久化.
+     * @param operator 操作者
      * @return 操作是否成功 / 是否已存在相同的有效数据
-     *
+     * @Description 完整的业务流程.
      * @see github.com.suitelhy.dingding.core.domain.event.UserEvent#insertUserRoleRelationship(SecurityUser, Security.RoleVo, SecurityUser)
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -232,21 +207,18 @@ public interface SecurityRoleEvent
     /**
      * 新增[角色 - 资源]关联
      *
-     * @Description 完整的业务流程.
-     *
-     * @param role      [（安全认证）角色], 必须合法且已持久化.  {@link SecurityRole}
-     * @param resource  [（安全认证）资源], 必须合法且已持久化.  {@link SecurityResource}
-     * @param operator  操作者
-     *
+     * @param role     [（安全认证）角色], 必须合法且已持久化.  {@link SecurityRole}
+     * @param resource [（安全认证）资源], 必须合法且已持久化.  {@link SecurityResource}
+     * @param operator 操作者
      * @return 操作是否成功
+     * @Description 完整的业务流程.
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED
             , rollbackFor = Exception.class
             , timeout = 15)
     default boolean insertRoleResourceRelationship(@NotNull SecurityRole role, @NotNull SecurityResource resource, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if (null == role || role.isEmpty()) {
             //-- 非法输入: 角色编码
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -279,21 +251,18 @@ public interface SecurityRoleEvent
     /**
      * 新增[角色 - 资源]关联
      *
-     * @Description 完整的业务流程.
-     *
      * @param role      [（安全认证）角色], 必须合法且已持久化.       {@link SecurityRole}
      * @param resources [（安全认证）资源], 必须全部合法且已持久化.    {@link SecurityResource}
      * @param operator  操作者
-     *
      * @return 操作是否成功
+     * @Description 完整的业务流程.
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED
             , rollbackFor = Exception.class
             , timeout = 15)
     default boolean insertRoleResourceRelationship(@NotNull SecurityRole role, @NotNull Set<SecurityResource> resources, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if (null == role || role.isEmpty()) {
             //-- 非法输入: 角色编码
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -323,21 +292,18 @@ public interface SecurityRoleEvent
     /**
      * 新增[角色 - 资源]关联
      *
-     * @Description 完整的业务流程.
-     *
-     * @param roles     [（安全认证）角色], 必须全部合法且已持久化.   {@link SecurityRole}
-     * @param resource  [（安全认证）资源], 必须合法且已持久化.      {@link SecurityResource}
-     * @param operator  操作者
-     *
+     * @param roles    [（安全认证）角色], 必须全部合法且已持久化.   {@link SecurityRole}
+     * @param resource [（安全认证）资源], 必须合法且已持久化.      {@link SecurityResource}
+     * @param operator 操作者
      * @return 操作是否成功
+     * @Description 完整的业务流程.
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED
             , rollbackFor = Exception.class
             , timeout = 15)
     default boolean insertRoleResourceRelationship(@NotNull Set<SecurityRole> roles, @NotNull SecurityResource resource, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if (null == roles || roles.isEmpty()) {
             //-- 非法输入: 角色编码
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -367,13 +333,11 @@ public interface SecurityRoleEvent
     /**
      * 新增[角色 - 资源]关联
      *
-     * @Description 完整的业务流程.
-     *
-     * @param roles         [（安全认证）角色], 必须全部合法且已持久化.    {@link SecurityRole}
-     * @param resources     [（安全认证）资源], 必须全部合法且已持久化.    {@link SecurityResource}
-     * @param operator      操作者
-     *
+     * @param roles     [（安全认证）角色], 必须全部合法且已持久化.    {@link SecurityRole}
+     * @param resources [（安全认证）资源], 必须全部合法且已持久化.    {@link SecurityResource}
+     * @param operator  操作者
      * @return 操作是否成功
+     * @Description 完整的业务流程.
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED
@@ -387,13 +351,11 @@ public interface SecurityRoleEvent
     /**
      * 更新指定的角色
      *
+     * @param role     [（安全认证）角色]  {@link SecurityRole}
+     * @param operator 操作者
+     * @return 操作是否成功
      * @Description 全量更新.
      * · 完整的业务流程.
-     *
-     * @param role      [（安全认证）角色]  {@link SecurityRole}
-     * @param operator  操作者
-     *
-     * @return 操作是否成功
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED
@@ -405,19 +367,17 @@ public interface SecurityRoleEvent
     /**
      * 更新指定的角色
      *
+     * @param old_role      原始版本业务全量数据.
+     * @param new_role_data 需要更新的数据.
+     *                      · 数据格式:
+     *                      {
+     *                      role_name : [角色名称],
+     *                      role_description : [角色描述]
+     *                      }
+     * @param operator      操作者
+     * @return 操作是否成功
      * @Description 增量更新.
      * · 完整的业务流程.
-     *
-     * @param old_role                          原始版本业务全量数据.
-     * @param new_role_data                     需要更新的数据.
-     * · 数据格式:
-     * {
-     *    role_name : [角色名称],
-     *    role_description : [角色描述]
-     * }
-     * @param operator                          操作者
-     *
-     * @return 操作是否成功
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED
@@ -433,12 +393,10 @@ public interface SecurityRoleEvent
     /**
      * 删除指定的角色
      *
-     * @Description 完整的业务流程.
-     *
-     * @param role      [（安全认证）角色]  {@link SecurityRole}
-     * @param operator  操作者
-     *
+     * @param role     [（安全认证）角色]  {@link SecurityRole}
+     * @param operator 操作者
      * @return 操作是否成功
+     * @Description 完整的业务流程.
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED
@@ -449,14 +407,11 @@ public interface SecurityRoleEvent
     /**
      * 删除[（安全认证）用户 ←→ 角色]关联关系
      *
-     * @Description 完整的业务流程.
-     *
-     * @param user      [（安全认证）用户], 必须合法且已持久化.  {@link SecurityUser}
-     * @param role      [（安全认证）角色], 必须合法且已持久化.  {@link SecurityRole}
-     * @param operator  操作者
-     *
+     * @param user     [（安全认证）用户], 必须合法且已持久化.  {@link SecurityUser}
+     * @param role     [（安全认证）角色], 必须合法且已持久化.  {@link SecurityRole}
+     * @param operator 操作者
      * @return 操作是否成功
-     *
+     * @Description 完整的业务流程.
      * @see github.com.suitelhy.dingding.core.domain.event.UserEvent#deleteUserRoleRelationship(SecurityUser, SecurityRole, SecurityUser)
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -469,13 +424,10 @@ public interface SecurityRoleEvent
     /**
      * 删除指定的[（安全认证）用户]关联的所有[（安全认证）用户 ←→ 角色]关联关系
      *
-     * @Description 完整的业务流程.
-     *
-     * @param user      [（安全认证）用户], 必须合法且已持久化.  {@link SecurityUser}
-     * @param operator  操作者
-     *
+     * @param user     [（安全认证）用户], 必须合法且已持久化.  {@link SecurityUser}
+     * @param operator 操作者
      * @return 操作是否成功
-     *
+     * @Description 完整的业务流程.
      * @see github.com.suitelhy.dingding.core.domain.event.UserEvent#deleteUserRoleRelationshipOnUser(SecurityUser, SecurityUser)
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -488,13 +440,10 @@ public interface SecurityRoleEvent
     /**
      * 删除指定的[（安全认证）角色]关联的所有[（安全认证）用户 ←→ 角色]关联关系
      *
-     * @Description 完整的业务流程.
-     *
-     * @param role      [（安全认证）角色], 必须合法且已持久化.  {@link SecurityRole}
-     * @param operator  操作者
-     *
+     * @param role     [（安全认证）角色], 必须合法且已持久化.  {@link SecurityRole}
+     * @param operator 操作者
      * @return 操作是否成功
-     *
+     * @Description 完整的业务流程.
      * @see github.com.suitelhy.dingding.core.domain.event.UserEvent#deleteUserRoleRelationshipOnRole(SecurityRole, SecurityUser)
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -507,21 +456,18 @@ public interface SecurityRoleEvent
     /**
      * 删除[角色 - 资源]关联
      *
-     * @Description 完整的业务流程.
-     *
-     * @param role      [（安全认证）角色], 必须合法且已持久化.  {@link SecurityRole}
-     * @param resource  [（安全认证）资源], 必须合法且已持久化.  {@link SecurityResource}
-     * @param operator  操作者
-     *
+     * @param role     [（安全认证）角色], 必须合法且已持久化.  {@link SecurityRole}
+     * @param resource [（安全认证）资源], 必须合法且已持久化.  {@link SecurityResource}
+     * @param operator 操作者
      * @return 操作是否成功
+     * @Description 完整的业务流程.
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED
             , rollbackFor = Exception.class
             , timeout = 15)
     default boolean deleteRoleResourceRelationship(@NotNull SecurityRole role, @NotNull SecurityResource resource, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if (null == role || role.isEmpty()) {
             //-- 非法输入: 角色编码
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -553,21 +499,18 @@ public interface SecurityRoleEvent
     /**
      * 删除[角色 - 资源]关联
      *
-     * @Description 完整的业务流程.
-     *
-     * @param role          [（安全认证）角色], 必须合法且已持久化.       {@link SecurityRole}
-     * @param resources     [（安全认证）资源], 必须全部合法且已持久化.    {@link SecurityResource}
-     * @param operator      操作者
-     *
+     * @param role      [（安全认证）角色], 必须合法且已持久化.       {@link SecurityRole}
+     * @param resources [（安全认证）资源], 必须全部合法且已持久化.    {@link SecurityResource}
+     * @param operator  操作者
      * @return 操作是否成功
+     * @Description 完整的业务流程.
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED
             , rollbackFor = Exception.class
             , timeout = 15)
     default boolean deleteRoleResourceRelationship(@NotNull SecurityRole role, @NotNull Set<SecurityResource> resources, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if (null == role || role.isEmpty()) {
             //-- 非法输入: 角色编码
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -596,21 +539,18 @@ public interface SecurityRoleEvent
     /**
      * 删除[角色 - 资源]关联
      *
-     * @Description 完整的业务流程.
-     *
-     * @param roles     [（安全认证）角色], 必须全部合法且已持久化.   {@link SecurityRole}
-     * @param resource  [（安全认证）资源], 必须合法且已持久化.      {@link SecurityResource}
-     * @param operator  操作者
-     *
+     * @param roles    [（安全认证）角色], 必须全部合法且已持久化.   {@link SecurityRole}
+     * @param resource [（安全认证）资源], 必须合法且已持久化.      {@link SecurityResource}
+     * @param operator 操作者
      * @return 操作是否成功
+     * @Description 完整的业务流程.
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED
             , rollbackFor = Exception.class
             , timeout = 15)
     default boolean deleteRoleResourceRelationship(@NotNull Set<SecurityRole> roles, @NotNull SecurityResource resource, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if (null == roles || roles.isEmpty()) {
             //-- 非法输入: 角色编码
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -639,13 +579,11 @@ public interface SecurityRoleEvent
     /**
      * 删除[角色 - 资源]关联
      *
-     * @Description 完整的业务流程.
-     *
-     * @param roles         [（安全认证）角色], 必须全部合法且已持久化.    {@link SecurityRole}
-     * @param resources     [（安全认证）资源], 必须全部合法且已持久化.    {@link SecurityResource}
-     * @param operator      操作者
-     *
+     * @param roles     [（安全认证）角色], 必须全部合法且已持久化.    {@link SecurityRole}
+     * @param resources [（安全认证）资源], 必须全部合法且已持久化.    {@link SecurityResource}
+     * @param operator  操作者
      * @return 操作是否成功
+     * @Description 完整的业务流程.
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED
@@ -657,12 +595,10 @@ public interface SecurityRoleEvent
     /**
      * 删除指定的[（安全认证）角色]关联的所有[（安全认证）角色 ←→ 资源]关联关系
      *
-     * @Description 完整的业务流程.
-     *
-     * @param role      [（安全认证）角色], 必须合法且已持久化.  {@link SecurityRole}
-     * @param operator  操作者
-     *
+     * @param role     [（安全认证）角色], 必须合法且已持久化.  {@link SecurityRole}
+     * @param operator 操作者
      * @return 操作是否成功
+     * @Description 完整的业务流程.
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED
@@ -674,12 +610,10 @@ public interface SecurityRoleEvent
     /**
      * 删除指定的[（安全认证）资源]关联的所有[（安全认证）角色 ←→ 资源]关联关系
      *
-     * @Description 完整的业务流程.
-     *
-     * @param resource      [（安全认证）资源], 必须合法且已持久化.  {@link SecurityResource}
-     * @param operator      操作者
-     *
+     * @param resource [（安全认证）资源], 必须合法且已持久化.  {@link SecurityResource}
+     * @param operator 操作者
      * @return 操作是否成功
+     * @Description 完整的业务流程.
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED

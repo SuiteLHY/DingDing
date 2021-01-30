@@ -6,10 +6,8 @@ import javax.validation.constraints.NotNull;
 import java.util.*;
 
 /**
- * @Description 封装类型.
- *
  * @param <E>
- *
+ * @Description 封装类型.
  * @see java.util.HashSet
  */
 public class HashSet<E>
@@ -29,7 +27,6 @@ public class HashSet<E>
      * (Constructor)
      *
      * @param initialCapacity
-     *
      * @throws IllegalArgumentException – if the initial capacity is less than zero
      */
     public HashSet(int initialCapacity) {
@@ -122,10 +119,8 @@ public class HashSet<E>
     }
 
     /**
-     * @Description 根据 {@link this#equals(Object)} 进行对应的适配设计实现.
-     *
      * @return hashCode
-     *
+     * @Description 根据 {@link this#equals(Object)} 进行对应的适配设计实现.
      * @see super#hashCode()
      */
     @Override
@@ -180,41 +175,41 @@ public class HashSet<E>
     public static void main(String[] args) {
         Set<String[]>/*ContainArrayHashSet<String>*/ urlInfoSet1 = new ContainArrayHashSet<>(1);
 
-        urlInfoSet1.add(new String[] {"1", "1.0"});
-        urlInfoSet1.add(new String[] {"2", "2.0"});
-        urlInfoSet1.add(new String[] {"3", "3.0"});
+        urlInfoSet1.add(new String[]{"1", "1.0"});
+        urlInfoSet1.add(new String[]{"2", "2.0"});
+        urlInfoSet1.add(new String[]{"3", "3.0"});
 
         //=====
         Set<String[]>/*ContainArrayHashSet<String>*/ urlInfoSet2 = new ContainArrayHashSet<>(1);
 
-        urlInfoSet2.add(new String[] {"2", "2.0"});
-        urlInfoSet2.add(new String[] {"1", "1.0"});
-        urlInfoSet2.add(new String[] {"3", "3.0"});
+        urlInfoSet2.add(new String[]{"2", "2.0"});
+        urlInfoSet2.add(new String[]{"1", "1.0"});
+        urlInfoSet2.add(new String[]{"3", "3.0"});
 
         //=====
         Set<String[]> urlInfoSet3 = new java.util.HashSet<>(1);
 
-        urlInfoSet3.add(new String[] {"3", "3.0"});
-        urlInfoSet3.add(new String[] {"2", "2.0"});
-        urlInfoSet3.add(new String[] {"1", "1.0"});
+        urlInfoSet3.add(new String[]{"3", "3.0"});
+        urlInfoSet3.add(new String[]{"2", "2.0"});
+        urlInfoSet3.add(new String[]{"1", "1.0"});
 
         //=====
         List<String[]> urlInfoList1 = new ArrayList<>(1);
-        urlInfoList1.add(new String[] {"1", "1.0"});
-        urlInfoList1.add(new String[] {"2", "2.0"});
-        urlInfoList1.add(new String[] {"3", "3.0"});
+        urlInfoList1.add(new String[]{"1", "1.0"});
+        urlInfoList1.add(new String[]{"2", "2.0"});
+        urlInfoList1.add(new String[]{"3", "3.0"});
 
         //=====
         List<Object[]> urlInfoObjectList1 = new ArrayList<>(1);
-        urlInfoObjectList1.add(new Object[] {"1", "1.0"});
-        urlInfoObjectList1.add(new Object[] {"2", "2.0"});
-        urlInfoObjectList1.add(new Object[] {"3", "3.0"});
+        urlInfoObjectList1.add(new Object[]{"1", "1.0"});
+        urlInfoObjectList1.add(new Object[]{"2", "2.0"});
+        urlInfoObjectList1.add(new Object[]{"3", "3.0"});
 
         //=====
         List<Object[]> urlInfoObjectList2 = new ArrayList<>(1);
-        urlInfoObjectList2.add(new Object[] {"1", "1.0"});
-        urlInfoObjectList2.add(new Object[] {"2", "2.0"});
-        urlInfoObjectList2.add(new Object[] {3, "3.0"});
+        urlInfoObjectList2.add(new Object[]{"1", "1.0"});
+        urlInfoObjectList2.add(new Object[]{"2", "2.0"});
+        urlInfoObjectList2.add(new Object[]{3, "3.0"});
 
         //===== equals(Object) =====//
         DemoUtils.show("//===== equals(Object) =====//");
@@ -307,24 +302,24 @@ public class HashSet<E>
         DemoUtils.show("//===== Contain element =====//");
 
         DemoUtils.show("===== urlInfoSet1.contains(new String[] {\"1\", \"1.0\"}) -> "
-                + urlInfoSet1.contains(new String[] {"1", "1.0"})
+                + urlInfoSet1.contains(new String[]{"1", "1.0"})
                 + " =====");
         DemoUtils.show("===== urlInfoSet2.contains(new String[] {\"1\", \"1.0\"}) -> "
-                + urlInfoSet2.contains(new String[] {"1", "1.0"})
+                + urlInfoSet2.contains(new String[]{"1", "1.0"})
                 + " =====");
         DemoUtils.show("===== urlInfoSet3.contains(new String[] {\"1\", \"1.0\"}) -> "
-                + urlInfoSet3.contains(new String[] {"1", "1.0"})
+                + urlInfoSet3.contains(new String[]{"1", "1.0"})
                 + " =====");
 
         DemoUtils.show(null);
         DemoUtils.show("===== urlInfoSet1.contains(new String[] {\"1.0\", \"1\"}) -> "
-                + urlInfoSet1.contains(new String[] {"1.0", "1"})
+                + urlInfoSet1.contains(new String[]{"1.0", "1"})
                 + " =====");
         DemoUtils.show("===== urlInfoSet2.contains(new String[] {\"1.0\", \"1\"}) -> "
-                + urlInfoSet2.contains(new String[] {"1.0", "1"})
+                + urlInfoSet2.contains(new String[]{"1.0", "1"})
                 + " =====");
         DemoUtils.show("===== urlInfoSet3.contains(new String[] {\"1.0\", \"1\"}) -> "
-                + urlInfoSet3.contains(new String[] {"1.0", "1"})
+                + urlInfoSet3.contains(new String[]{"1.0", "1"})
                 + " =====");
 
         //===== Add element =====//
@@ -341,9 +336,9 @@ public class HashSet<E>
                 + urlInfoSet3.size()
                 + " =====");
 
-        urlInfoSet1.add(new String[] {"1", "1.0"});
-        urlInfoSet2.add(new String[] {"1", "1.0"});
-        urlInfoSet3.add(new String[] {"1", "1.0"});
+        urlInfoSet1.add(new String[]{"1", "1.0"});
+        urlInfoSet2.add(new String[]{"1", "1.0"});
+        urlInfoSet3.add(new String[]{"1", "1.0"});
         DemoUtils.show(null);
         DemoUtils.show("===== (After add <code>new String[] {\"1\", \"1.0\"}</code>) urlInfoSet1.size() -> "
                 + urlInfoSet1.size()
@@ -355,9 +350,9 @@ public class HashSet<E>
                 + urlInfoSet3.size()
                 + " =====");
 
-        urlInfoSet1.add(new String[] {"1.0", "1"});
-        urlInfoSet2.add(new String[] {"1.0", "1"});
-        urlInfoSet3.add(new String[] {"1.0", "1"});
+        urlInfoSet1.add(new String[]{"1.0", "1"});
+        urlInfoSet2.add(new String[]{"1.0", "1"});
+        urlInfoSet3.add(new String[]{"1.0", "1"});
         DemoUtils.show(null);
         DemoUtils.show("===== (After add <code>new String[] {\"1.0\", \"1\"}</code>) urlInfoSet1.size() -> "
                 + urlInfoSet1.size()
@@ -383,9 +378,9 @@ public class HashSet<E>
                 + urlInfoSet3.size()
                 + " =====");
 
-        urlInfoSet1.remove(new String[] {"1", "1.0"});
-        urlInfoSet2.remove(new String[] {"1", "1.0"});
-        urlInfoSet3.remove(new String[] {"1", "1.0"});
+        urlInfoSet1.remove(new String[]{"1", "1.0"});
+        urlInfoSet2.remove(new String[]{"1", "1.0"});
+        urlInfoSet3.remove(new String[]{"1", "1.0"});
         DemoUtils.show(null);
         DemoUtils.show("===== (After remove <code>new String[] {\"1\", \"1.0\"}</code>) urlInfoSet1.size() -> "
                 + urlInfoSet1.size()
@@ -397,9 +392,9 @@ public class HashSet<E>
                 + urlInfoSet3.size()
                 + " =====");
 
-        urlInfoSet1.remove(new String[] {"1.0", "1"});
-        urlInfoSet2.remove(new String[] {"1.0", "1"});
-        urlInfoSet3.remove(new String[] {"1.0", "1"});
+        urlInfoSet1.remove(new String[]{"1.0", "1"});
+        urlInfoSet2.remove(new String[]{"1.0", "1"});
+        urlInfoSet3.remove(new String[]{"1.0", "1"});
         DemoUtils.show(null);
         DemoUtils.show("===== (After remove <code>new String[] {\"1.0\", \"1\"}</code>) urlInfoSet1.size() -> "
                 + urlInfoSet1.size()

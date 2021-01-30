@@ -27,11 +27,8 @@ import java.util.Set;
  * @see User
  * @see UserAccountOperationInfo
  * @see UserPersonInfo
- *
  * @see UserAggregate
- *
  * @see UserEventImpl
- *
  * @see UserService
  * @see UserAccountOperationInfoService
  * @see UserPersonInfoService
@@ -49,116 +46,100 @@ public interface UserEvent
     /**
      * 查询指定的用户 -> 基础信息
      *
-     * @Description 完整的业务流程.
-     *
-     * @param username  {@link User.Validator#username(String)}
-     *
+     * @param username {@link User.Validator#username(String)}
      * @return {@link UserAccountOperationInfo}
-     *
+     * @Description 完整的业务流程.
      * @see User
      */
-    @NotNull User selectUserByUsername(@NotNull String username)
+    @NotNull
+    User selectUserByUsername(@NotNull String username)
             throws IllegalArgumentException;
 
     /**
      * 查询指定的用户 -> 账户操作记录
      *
-     * @Description 完整的业务流程.
-     *
-     * @param username  {@link UserAccountOperationInfo.Validator#username(String)}
-     *
+     * @param username {@link UserAccountOperationInfo.Validator#username(String)}
      * @return {@link UserAccountOperationInfo}
-     *
+     * @Description 完整的业务流程.
      * @see User
      * @see UserAccountOperationInfo
      */
-    @NotNull UserAccountOperationInfo selectUserAccountOperationInfoByUsername(@NotNull String username)
+    @NotNull
+    UserAccountOperationInfo selectUserAccountOperationInfoByUsername(@NotNull String username)
             throws IllegalArgumentException;
 
     /**
      * 查询指定的用户 -> 个人信息
      *
-     * @Description 完整的业务流程.
-     *
-     * @param username  {@link UserPersonInfo.Validator#username(String)}
-     *
+     * @param username {@link UserPersonInfo.Validator#username(String)}
      * @return {@link UserPersonInfo}
-     *
+     * @Description 完整的业务流程.
      * @see UserPersonInfo
      * @see User
      */
-    @NotNull UserPersonInfo selectUserPersonInfoByUsername(@NotNull String username)
+    @NotNull
+    UserPersonInfo selectUserPersonInfoByUsername(@NotNull String username)
             throws IllegalArgumentException;
 
     /**
      * 查询指定的用户 -> [（安全认证）用户]
      *
-     * @Description 完整的业务流程.
-     *
-     * @param username  {@link User.Validator#username(String)}
-     *
+     * @param username {@link User.Validator#username(String)}
      * @return {@link UserAccountOperationInfo}
-     *
+     * @Description 完整的业务流程.
      * @see SecurityUser
      */
-    @NotNull SecurityUser selectSecurityUserByUsername(@NotNull String username)
+    @NotNull
+    SecurityUser selectSecurityUserByUsername(@NotNull String username)
             throws IllegalArgumentException;
 
     /**
      * 查询 (关联的) 角色 -> (关联的) 资源
      *
-     * @Description 完整的业务流程.
-     *
-     * @param username  用户名称    {@link SecurityUser.Validator#username(String)}
-     *
+     * @param username 用户名称    {@link SecurityUser.Validator#username(String)}
      * @return 资源集合 {@link SecurityResource}
-     *
+     * @Description 完整的业务流程.
      * @see github.com.suitelhy.dingding.core.domain.event.security.SecurityResourceEvent#selectResourceOnUserByUsername(String)
      */
-    @NotNull List<SecurityResource> selectResourceOnUserByUsername(@NotNull String username)
+    @NotNull
+    List<SecurityResource> selectResourceOnUserByUsername(@NotNull String username)
             throws IllegalArgumentException;
 
     /**
      * 查询 (关联的) [用户 -> （安全认证）角色]
      *
-     * @Description 完整的业务流程.
-     *
      * @param username 用户名称    {@link SecurityUser.Validator#username(String)}
-     *
      * @return {@link SecurityRole}
-     *
+     * @Description 完整的业务流程.
      * @see github.com.suitelhy.dingding.core.domain.event.security.SecurityRoleEvent#selectRoleOnUserByUsername(String)
      */
-    @NotNull List<SecurityRole> selectRoleOnUserByUsername(@NotNull String username)
+    @NotNull
+    List<SecurityRole> selectRoleOnUserByUsername(@NotNull String username)
             throws IllegalArgumentException;
 
     /**
      * 查询[用户 -> (关联的) 角色 -> (关联的) 资源 -> URL 相关信息]
      *
-     * @Description 完整的业务流程.
-     *
-     * @param username  用户名称    {@link SecurityUser.Validator#username(String)}
-     *
+     * @param username 用户名称    {@link SecurityUser.Validator#username(String)}
      * @return {@link SecurityResourceUrl}
-     *
+     * @Description 完整的业务流程.
      * @see github.com.suitelhy.dingding.core.domain.event.security.SecurityUrlEvent#selectUrlInfoOnUserByUsername(String)
      */
-    @NotNull List<SecurityResourceUrl> selectUrlInfoOnUserByUsername(@NotNull String username)
+    @NotNull
+    List<SecurityResourceUrl> selectUrlInfoOnUserByUsername(@NotNull String username)
             throws IllegalArgumentException;
 
     /**
      * 查询[用户 -> (关联的) 角色 -> (关联的) 资源 -> URL 相关信息]
      *
-     * @Description 完整的业务流程.
-     *
-     * @param username  用户名称         {@link SecurityUser.Validator#username(String)}
-     * @param clientId  [资源服务器 ID]  {@link SecurityResourceUrl#getClientId()}
-     *
+     * @param username 用户名称         {@link SecurityUser.Validator#username(String)}
+     * @param clientId [资源服务器 ID]  {@link SecurityResourceUrl#getClientId()}
      * @return {@link SecurityResourceUrl}
-     *
+     * @Description 完整的业务流程.
      * @see github.com.suitelhy.dingding.core.domain.event.security.SecurityUrlEvent#selectUrlInfoOnUserByUsernameAndClientId(String, String)
      */
-    @NotNull List<SecurityResourceUrl> selectUrlInfoOnUserByUsernameAndClientId(@NotNull String username, @NotNull String clientId)
+    @NotNull
+    List<SecurityResourceUrl> selectUrlInfoOnUserByUsernameAndClientId(@NotNull String username, @NotNull String clientId)
             throws IllegalArgumentException;
 
     //===== 添加操作业务 =====//
@@ -166,13 +147,10 @@ public interface UserEvent
     /**
      * 新增一个[（安全认证）用户 ←→ 角色]关联关系
      *
-     * @Description 完整的业务流程.
-     *
-     * @param userRole  [（安全认证）用户 ←→ 角色]
-     * @param operator  操作者
-     *
+     * @param userRole [（安全认证）用户 ←→ 角色]
+     * @param operator 操作者
      * @return 操作是否成功 / 是否已存在相同的有效数据
-     *
+     * @Description 完整的业务流程.
      * @see github.com.suitelhy.dingding.core.domain.event.security.SecurityRoleEvent#insertUserRoleRelationship(SecurityUserRole, SecurityUser)
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -185,14 +163,11 @@ public interface UserEvent
     /**
      * 新增一个[（安全认证）用户 ←→ 角色]关联关系
      *
-     * @Description 完整的业务流程.
-     *
-     * @param user      （安全认证）用户
-     * @param role      （安全认证）角色
-     * @param operator  操作者
-     *
+     * @param user     （安全认证）用户
+     * @param role     （安全认证）角色
+     * @param operator 操作者
      * @return 操作是否成功 / 是否已存在相同的有效数据
-     *
+     * @Description 完整的业务流程.
      * @see github.com.suitelhy.dingding.core.domain.event.security.SecurityRoleEvent#insertUserRoleRelationship(SecurityUser, SecurityRole, SecurityUser)
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -200,8 +175,7 @@ public interface UserEvent
             , rollbackFor = Exception.class
             , timeout = 15)
     default boolean insertUserRoleRelationship(@NotNull SecurityUser user, @NotNull SecurityRole role, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if (null == user || user.isEmpty()) {
             //-- 非法输入: （安全认证）用户
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
@@ -230,14 +204,11 @@ public interface UserEvent
     /**
      * 新增多个[（安全认证）用户 ←→ 角色]关联关系
      *
-     * @Description 完整的业务流程.
-     *
-     * @param user      （安全认证）用户
-     * @param roles     （安全认证）角色
-     * @param operator  操作者
-     *
+     * @param user     （安全认证）用户
+     * @param roles    （安全认证）角色
+     * @param operator 操作者
      * @return 操作是否成功 / 是否已存在完全相同的有效数据集合
-     *
+     * @Description 完整的业务流程.
      * @see github.com.suitelhy.dingding.core.domain.event.security.SecurityRoleEvent#insertUserRoleRelationship(SecurityUser, Set, SecurityUser)
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -250,14 +221,11 @@ public interface UserEvent
     /**
      * 新增一个[（安全认证）用户 ←→ 角色]关联关系
      *
-     * @Description 完整的业务流程.
-     *
-     * @param user      （安全认证）用户
-     * @param roleVo    [(安全) 用户 -> 角色] {@link Security.RoleVo}, 仅需保证合法性, 不需要保证持久化.
-     * @param operator  操作者
-     *
+     * @param user     （安全认证）用户
+     * @param roleVo   [(安全) 用户 -> 角色] {@link Security.RoleVo}, 仅需保证合法性, 不需要保证持久化.
+     * @param operator 操作者
      * @return 操作是否成功 / 是否已存在相同的有效数据
-     *
+     * @Description 完整的业务流程.
      * @see github.com.suitelhy.dingding.core.domain.event.security.SecurityRoleEvent#insertUserRoleRelationship(SecurityUser, Security.RoleVo, SecurityUser)
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -270,18 +238,14 @@ public interface UserEvent
     /**
      * 新增(=注册)一个用户
      *
-     * @Description 完整的业务流程.
-     *
-     * @param user                      预期新增的用户 -> 用户基础信息               {@link User}
-     * @param userAccountOperationInfo  预期新增的用户 -> [用户 -> 账户操作基础记录]  {@link UserAccountOperationInfo}
-     * @param userPersonInfo            [用户 -> 个人信息]                        {@link UserPersonInfo}
-     * @param operator                  操作者
-     *
+     * @param user                     预期新增的用户 -> 用户基础信息               {@link User}
+     * @param userAccountOperationInfo 预期新增的用户 -> [用户 -> 账户操作基础记录]  {@link UserAccountOperationInfo}
+     * @param userPersonInfo           [用户 -> 个人信息]                        {@link UserPersonInfo}
+     * @param operator                 操作者
      * @return 操作是否成功
-     *
      * @throws IllegalArgumentException
      * @throws BusinessAtomicException
-     *
+     * @Description 完整的业务流程.
      * @see UserAccountOperationInfoService
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -296,12 +260,10 @@ public interface UserEvent
     /**
      * 更新指定的用户 -> 基础信息
      *
-     * @Description 完整的业务流程.
-     *
-     * @param user      被修改的用户 -> 基础信息
-     * @param operator  操作者
-     *
+     * @param user     被修改的用户 -> 基础信息
+     * @param operator 操作者
      * @return 操作是否成功
+     * @Description 完整的业务流程.
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
             , rollbackFor = Exception.class
@@ -312,12 +274,10 @@ public interface UserEvent
     /**
      * 更新指定的用户 -> 账户操作基础记录
      *
-     * @Description 完整的业务流程.
-     *
-     * @param userAccountOperationInfo  被修改的用户 -> 账户操作基础记录  {@link UserAccountOperationInfo}
-     * @param operator                  操作者
-     *
+     * @param userAccountOperationInfo 被修改的用户 -> 账户操作基础记录  {@link UserAccountOperationInfo}
+     * @param operator                 操作者
      * @return 操作是否成功
+     * @Description 完整的业务流程.
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
             , rollbackFor = Exception.class
@@ -328,12 +288,10 @@ public interface UserEvent
     /**
      * 更新指定的用户 -> 个人信息
      *
-     * @Description 完整的业务流程.
-     *
-     * @param userPersonInfo    被修改的用户 -> 个人信息  {@link UserPersonInfo}
-     * @param operator          操作者
-     *
+     * @param userPersonInfo 被修改的用户 -> 个人信息  {@link UserPersonInfo}
+     * @param operator       操作者
      * @return 操作是否成功
+     * @Description 完整的业务流程.
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
             , rollbackFor = Exception.class
@@ -346,12 +304,10 @@ public interface UserEvent
     /**
      * 删除指定的用户
      *
-     * @Description 完整的业务流程.
-     *
-     * @param user      被修改的用户 -> 基础信息
-     * @param operator  操作者
-     *
+     * @param user     被修改的用户 -> 基础信息
+     * @param operator 操作者
      * @return 操作是否成功
+     * @Description 完整的业务流程.
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
             , rollbackFor = Exception.class
@@ -362,14 +318,11 @@ public interface UserEvent
     /**
      * 删除[（安全认证）用户 ←→ 角色]关联关系
      *
-     * @Description 完整的业务流程.
-     *
-     * @param user      [（安全认证）用户], 必须合法且已持久化.  {@link SecurityUser}
-     * @param role      [（安全认证）角色], 必须合法且已持久化.  {@link SecurityRole}
-     * @param operator  操作者
-     *
+     * @param user     [（安全认证）用户], 必须合法且已持久化.  {@link SecurityUser}
+     * @param role     [（安全认证）角色], 必须合法且已持久化.  {@link SecurityRole}
+     * @param operator 操作者
      * @return 操作是否成功
-     *
+     * @Description 完整的业务流程.
      * @see github.com.suitelhy.dingding.core.domain.event.security.SecurityRoleEvent#deleteUserRoleRelationship(SecurityUser, SecurityRole, SecurityUser)
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -382,13 +335,10 @@ public interface UserEvent
     /**
      * 删除指定的[（安全认证）用户]关联的所有[（安全认证）用户 ←→ 角色]关联关系
      *
-     * @Description 完整的业务流程.
-     *
-     * @param user      [（安全认证）用户], 必须合法且已持久化.  {@link SecurityUser}
-     * @param operator  操作者
-     *
+     * @param user     [（安全认证）用户], 必须合法且已持久化.  {@link SecurityUser}
+     * @param operator 操作者
      * @return 操作是否成功
-     *
+     * @Description 完整的业务流程.
      * @see github.com.suitelhy.dingding.core.domain.event.security.SecurityRoleEvent#deleteUserRoleRelationshipOnUser(SecurityUser, SecurityUser)
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -401,13 +351,10 @@ public interface UserEvent
     /**
      * 删除指定的[（安全认证）角色]关联的所有[（安全认证）用户 ←→ 角色]关联关系
      *
-     * @Description 完整的业务流程.
-     *
-     * @param role      [（安全认证）角色], 必须合法且已持久化.  {@link SecurityRole}
-     * @param operator  操作者
-     *
+     * @param role     [（安全认证）角色], 必须合法且已持久化.  {@link SecurityRole}
+     * @param operator 操作者
      * @return 操作是否成功
-     *
+     * @Description 完整的业务流程.
      * @see github.com.suitelhy.dingding.core.domain.event.security.SecurityRoleEvent#deleteUserRoleRelationshipOnRole(SecurityRole, SecurityUser)
      */
     @Transactional(isolation = Isolation.SERIALIZABLE

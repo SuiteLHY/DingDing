@@ -7,9 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Entity 对象 <- 基础业务接口
  *
- * @Description 确保对数据库事务的支持.
- *
  * @author Suite
+ * @Description 确保对数据库事务的支持.
  */
 @Transactional(isolation = Isolation.SERIALIZABLE
         , propagation = Propagation.REQUIRED

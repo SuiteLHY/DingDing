@@ -25,7 +25,6 @@ import java.util.Map;
  * 用户 - 业务 <- 测试单元
  *
  * @Description 测试单元.
- *
  * @see UserService
  */
 @SpringBootTest
@@ -45,7 +44,8 @@ public class UserEventTests {
      *
      * @return {@link SecurityUser}
      */
-    private @NotNull SecurityUser operator() {
+    private @NotNull
+    SecurityUser operator() {
         final SecurityUser securityUser = securityUserService.selectByUsername("admin");
 
         System.err.println("【调试用】获取(测试用的)操作者信息 => "
@@ -67,13 +67,12 @@ public class UserEventTests {
      * 获取测试用的用户相关 {@link EntityModel} 集合
      *
      * @param seed
-     *
      * @return {@link Map}
      * · 数据结构:
      * {
-     *    "user": {@link User},
-     *    "userAccountOperationInfo": {@link UserAccountOperationInfo},
-     *    "userPersonInfo": {@link UserPersonInfo}
+     * "user": {@link User},
+     * "userAccountOperationInfo": {@link UserAccountOperationInfo},
+     * "userPersonInfo": {@link UserPersonInfo}
      * }
      */
     private @NotNull /*User*/Map<String, EntityModel<?>> getEntityForTest(Integer seed) {
@@ -121,7 +120,8 @@ public class UserEventTests {
         return result;
     }
 
-    private @NotNull String ip() {
+    private @NotNull
+    String ip() {
         return "127.0.0.0";
     }
 
@@ -136,8 +136,7 @@ public class UserEventTests {
     @Test
     @Transactional
     public void selectUserByUsername()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         final @NotNull User result;
 
         // 获取必要的测试用身份信息
@@ -152,7 +151,7 @@ public class UserEventTests {
 
         // selectUserByUsername(String)
         result = userEvent.selectUserByUsername(((User) newEntity.get("user")).getUsername());
-        Assert.isTrue(! result.isEmpty()
+        Assert.isTrue(!result.isEmpty()
                 , "===== The result -> is empty!");
 
         System.out.println(result);
@@ -164,8 +163,7 @@ public class UserEventTests {
     @Test
     @Transactional
     public void selectUserAccountOperationInfoByUsername()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         final @NotNull UserAccountOperationInfo result;
 
         // 获取必要的测试用身份信息
@@ -175,14 +173,14 @@ public class UserEventTests {
         final @NotNull Map<String, EntityModel<?>> newEntity = getEntityForTest();
 
         Assert.isTrue(userEvent.registerUser((User) newEntity.get("user")
-                    , (UserAccountOperationInfo) newEntity.get("userAccountOperationInfo")
-                    , (UserPersonInfo) newEntity.get("userPersonInfo")
-                    , operator)
+                , (UserAccountOperationInfo) newEntity.get("userAccountOperationInfo")
+                , (UserPersonInfo) newEntity.get("userPersonInfo")
+                , operator)
                 , "===== 添加测试数据失败!");
 
         // selectUserAccountOperationInfoByUsername(String)
         result = userEvent.selectUserAccountOperationInfoByUsername(((User) newEntity.get("user")).getUsername());
-        Assert.isTrue(! result.isEmpty()
+        Assert.isTrue(!result.isEmpty()
                 , "===== The result -> is empty!");
 
         System.out.println(result);
@@ -194,8 +192,7 @@ public class UserEventTests {
     @Test
     @Transactional
     public void selectUserPersonInfoByUsername()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         final @NotNull UserPersonInfo result;
 
         // 获取必要的测试用身份信息
@@ -205,14 +202,14 @@ public class UserEventTests {
         final @NotNull Map<String, EntityModel<?>> newEntity = getEntityForTest();
 
         Assert.isTrue(userEvent.registerUser((User) newEntity.get("user")
-                    , (UserAccountOperationInfo) newEntity.get("userAccountOperationInfo")
-                    , (UserPersonInfo) newEntity.get("userPersonInfo")
-                    , operator)
+                , (UserAccountOperationInfo) newEntity.get("userAccountOperationInfo")
+                , (UserPersonInfo) newEntity.get("userPersonInfo")
+                , operator)
                 , "===== 添加测试数据失败!");
 
         // selectUserPersonInfoByUsername(String)
         result = userEvent.selectUserPersonInfoByUsername(((User) newEntity.get("user")).getUsername());
-        Assert.isTrue(! result.isEmpty()
+        Assert.isTrue(!result.isEmpty()
                 , "===== The result -> is empty!");
 
         System.out.println(result);
@@ -224,8 +221,7 @@ public class UserEventTests {
     @Test
     @Transactional
     public void selectSecurityUserByUsername()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         final @NotNull SecurityUser result;
 
         // 获取必要的测试用身份信息
@@ -242,22 +238,20 @@ public class UserEventTests {
 
         // selectUserPersonInfoByUsername(String)
         result = userEvent.selectSecurityUserByUsername(((User) newEntity.get("user")).getUsername());
-        Assert.isTrue(! result.isEmpty()
+        Assert.isTrue(!result.isEmpty()
                 , "===== The result -> is empty!");
 
         System.out.println(result);
     }
 
     /**
-     * @see UserEvent#registerUser(User, UserAccountOperationInfo, UserPersonInfo, SecurityUser)
-     *
      * @throws BusinessAtomicException
+     * @see UserEvent#registerUser(User, UserAccountOperationInfo, UserPersonInfo, SecurityUser)
      */
     @Test
     @Transactional
     public void registerUser()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         // 获取必要的测试用身份信息
         final @NotNull SecurityUser operator = operator();
 
@@ -266,25 +260,25 @@ public class UserEventTests {
 
         // registerUser(...)
         Assert.isTrue(userEvent.registerUser((User) newEntity.get("user")
-                    , (UserAccountOperationInfo) newEntity.get("userAccountOperationInfo")
-                    , (UserPersonInfo) newEntity.get("userPersonInfo")
-                    , operator)
+                , (UserAccountOperationInfo) newEntity.get("userAccountOperationInfo")
+                , (UserPersonInfo) newEntity.get("userPersonInfo")
+                , operator)
                 , "===== registerUser(...) -> false");
 
         //=== 验证数据
-        Assert.isTrue(! service.selectUserByUsername(((User) newEntity.get("user")).getUsername())
+        Assert.isTrue(!service.selectUserByUsername(((User) newEntity.get("user")).getUsername())
                         .isEmpty()
                 , "===== registerUser(...) -> [用户 - 基础信息]无效");
-        Assert.isTrue(! userEvent.selectUserAccountOperationInfoByUsername(((User) newEntity.get("user")).getUsername())
+        Assert.isTrue(!userEvent.selectUserAccountOperationInfoByUsername(((User) newEntity.get("user")).getUsername())
                         .isEmpty()
                 , "===== registerUser(...) -> [用户 - 账户操作记录]无效");
-        Assert.isTrue(! userEvent.selectUserPersonInfoByUsername(((User) newEntity.get("user")).getUsername())
+        Assert.isTrue(!userEvent.selectUserPersonInfoByUsername(((User) newEntity.get("user")).getUsername())
                         .isEmpty()
                 , "===== registerUser(...) -> [用户 - 个人信息]无效");
-        Assert.isTrue(! userEvent.selectSecurityUserByUsername(((User) newEntity.get("user")).getUsername())
+        Assert.isTrue(!userEvent.selectSecurityUserByUsername(((User) newEntity.get("user")).getUsername())
                         .isEmpty()
                 , "===== registerUser(...) -> [（安全认证）用户]无效");
-        Assert.isTrue(! userEvent.selectRoleOnUserByUsername(((User) newEntity.get("user")).getUsername())
+        Assert.isTrue(!userEvent.selectRoleOnUserByUsername(((User) newEntity.get("user")).getUsername())
                         .isEmpty()
                 , "===== registerUser(...) -> (关联的) [用户 -> （安全认证）角色]不存在");
 
@@ -292,15 +286,13 @@ public class UserEventTests {
     }
 
     /**
-     * @see UserEvent#updateUser(User, SecurityUser)
-     *
      * @throws BusinessAtomicException
+     * @see UserEvent#updateUser(User, SecurityUser)
      */
     @Test
     @Transactional
     public void updateUser()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         // 获取必要的测试用身份信息
         final @NotNull SecurityUser operator = operator();
 
@@ -308,9 +300,9 @@ public class UserEventTests {
         final @NotNull Map<String, EntityModel<?>> newEntity = getEntityForTest();
 
         Assert.isTrue(userEvent.registerUser((User) newEntity.get("user")
-                    , (UserAccountOperationInfo) newEntity.get("userAccountOperationInfo")
-                    , (UserPersonInfo) newEntity.get("userPersonInfo")
-                    , operator)
+                , (UserAccountOperationInfo) newEntity.get("userAccountOperationInfo")
+                , (UserPersonInfo) newEntity.get("userPersonInfo")
+                , operator)
                 , "===== 添加测试数据失败!");
 
         //=== update(..)
@@ -324,19 +316,19 @@ public class UserEventTests {
 
         //=== 验证数据
 
-        Assert.isTrue(! service.selectUserByUsername(((User) newEntity.get("user")).getUsername())
+        Assert.isTrue(!service.selectUserByUsername(((User) newEntity.get("user")).getUsername())
                         .isEmpty()
                 , "===== registerUser(...) -> [用户 - 基础信息]无效");
-        Assert.isTrue(! userEvent.selectUserAccountOperationInfoByUsername(((User) newEntity.get("user")).getUsername())
+        Assert.isTrue(!userEvent.selectUserAccountOperationInfoByUsername(((User) newEntity.get("user")).getUsername())
                         .isEmpty()
                 , "===== registerUser(...) -> [用户 - 账户操作记录]无效");
-        Assert.isTrue(! userEvent.selectUserPersonInfoByUsername(((User) newEntity.get("user")).getUsername())
+        Assert.isTrue(!userEvent.selectUserPersonInfoByUsername(((User) newEntity.get("user")).getUsername())
                         .isEmpty()
                 , "===== registerUser(...) -> [用户 - 个人信息]无效");
-        Assert.isTrue(! userEvent.selectSecurityUserByUsername(((User) newEntity.get("user")).getUsername())
+        Assert.isTrue(!userEvent.selectSecurityUserByUsername(((User) newEntity.get("user")).getUsername())
                         .isEmpty()
                 , "===== registerUser(...) -> [（安全认证）用户]无效");
-        Assert.isTrue(! userEvent.selectRoleOnUserByUsername(((User) newEntity.get("user")).getUsername())
+        Assert.isTrue(!userEvent.selectRoleOnUserByUsername(((User) newEntity.get("user")).getUsername())
                         .isEmpty()
                 , "===== registerUser(...) -> (关联的) [用户 -> （安全认证）角色]不存在");
     }
@@ -347,8 +339,7 @@ public class UserEventTests {
     @Test
     @Transactional
     public void deleteUser()
-            throws BusinessAtomicException
-    {
+            throws BusinessAtomicException {
         // 获取必要的测试用身份信息
         final @NotNull SecurityUser operator = operator();
 
@@ -358,9 +349,9 @@ public class UserEventTests {
         Assert.isTrue(((User) newEntity.get("user")).isEntityLegal()
                 , "===== getEntityForTest() -> 无效的 Entity");
         Assert.isTrue(userEvent.registerUser((User) newEntity.get("user")
-                    , (UserAccountOperationInfo) newEntity.get("userAccountOperationInfo")
-                    , (UserPersonInfo) newEntity.get("userPersonInfo")
-                    , operator)
+                , (UserAccountOperationInfo) newEntity.get("userAccountOperationInfo")
+                , (UserPersonInfo) newEntity.get("userPersonInfo")
+                , operator)
                 , "===== 添加测试数据失败!");
 
         //=== deleteUser(..)

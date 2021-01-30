@@ -33,9 +33,7 @@ import java.util.Set;
  * @see SecurityUser
  * @see SecurityRoleResource
  * @see SecurityUserRole
- *
  * @see SecurityRoleEvent
- *
  * @see SecurityRoleService
  * @see SecurityResourceService
  * @see SecurityUserRoleService
@@ -79,17 +77,14 @@ public class SecurityRoleEventImpl
     /**
      * 判断是否存在 (关联的) [（安全认证）角色]
      *
-     * @Description 完整的业务流程.
-     *
      * @param username 用户名称    {@link SecurityUser.Validator#username(String)}
-     *
      * @return {@link Boolean#TYPE}
+     * @Description 完整的业务流程.
      */
     @Override
     public boolean existRoleOnUserByUsername(@NotNull String username)
-            throws IllegalArgumentException
-    {
-        if (! SecurityUser.Validator.USER.username(username)) {
+            throws IllegalArgumentException {
+        if (!SecurityUser.Validator.USER.username(username)) {
             //-- 非法输入: 用户名称
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                     , "用户名称"
@@ -105,14 +100,14 @@ public class SecurityRoleEventImpl
         }
 
         @NotNull List<SecurityUserRole> securityUser_userRoles = securityUserRoleService.selectByUsername(securityUser.getUsername());
-        if (! securityUser_userRoles.isEmpty()) {
+        if (!securityUser_userRoles.isEmpty()) {
             for (@NotNull SecurityUserRole eachUserRole : securityUser_userRoles) {
                 if (eachUserRole.isEmpty()) {
                     continue;
                 }
 
                 final @NotNull SecurityRole eachUserRole_role = securityRoleService.selectRoleByCode(eachUserRole.getRoleCode());
-                if (! eachUserRole_role.isEmpty()) {
+                if (!eachUserRole_role.isEmpty()) {
                     return true;
                 }
             }
@@ -124,15 +119,13 @@ public class SecurityRoleEventImpl
     /**
      * 判断[（安全认证）资源]是否存在 (关联的) [（安全认证）角色]
      *
-     * @Description 完整的业务流程.
-     *
      * @param resourceCode 资源编码 {@link SecurityResource.Validator#code(String)}
-     *
      * @return {@link Boolean#TYPE}
+     * @Description 完整的业务流程.
      */
     @Override
     public boolean existRoleOnResourceByResourceCode(@NotNull String resourceCode) {
-        if (! SecurityRoleResource.Validator.ROLE_RESOURCE.resourceCode(resourceCode)) {
+        if (!SecurityRoleResource.Validator.ROLE_RESOURCE.resourceCode(resourceCode)) {
             //-- 非法输入: 资源编码
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "资源编码"
@@ -148,15 +141,13 @@ public class SecurityRoleEventImpl
     /**
      * 判断[（安全认证）角色]是否存在 (关联的) [（安全认证）资源]
      *
-     * @Description 完整的业务流程.
-     *
      * @param roleCode 角色编码 {@link SecurityRole.Validator#code(String)}
-     *
      * @return {@link Boolean#TYPE}
+     * @Description 完整的业务流程.
      */
     @Override
     public boolean existResourceOnRoleByRoleCode(@NotNull String roleCode) {
-        if (! SecurityRoleResource.Validator.ROLE_RESOURCE.roleCode(roleCode)) {
+        if (!SecurityRoleResource.Validator.ROLE_RESOURCE.roleCode(roleCode)) {
             //-- 非法输入: 角色编码
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "角色编码"
@@ -172,17 +163,15 @@ public class SecurityRoleEventImpl
     /**
      * 查询 (指定角色关联的) 资源
      *
-     * @Description 完整的业务流程.
-     *
      * @param roleCode 角色编码    {@link SecurityRole.Validator#code(String)}
-     *
      * @return {@link SecurityResource}
+     * @Description 完整的业务流程.
      */
     @Override
-    public @NotNull List<SecurityResource> selectResourceOnRoleByRoleCode(@NotNull String roleCode)
-            throws IllegalArgumentException
-    {
-        if (! SecurityRole.Validator.ROLE.code(roleCode)) {
+    public @NotNull
+    List<SecurityResource> selectResourceOnRoleByRoleCode(@NotNull String roleCode)
+            throws IllegalArgumentException {
+        if (!SecurityRole.Validator.ROLE.code(roleCode)) {
             //-- 非法输入: 角色编码
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "角色编码"
@@ -200,7 +189,7 @@ public class SecurityRoleEventImpl
         }
 
         @NotNull List<SecurityRoleResource> role_roleResources = securityRoleResourceService.selectByRoleCode(roleCode);
-        if (! role_roleResources.isEmpty()) {
+        if (!role_roleResources.isEmpty()) {
             for (@NotNull SecurityRoleResource eachRoleResource : role_roleResources) {
                 if (eachRoleResource.isEmpty()) {
                     continue;
@@ -220,17 +209,15 @@ public class SecurityRoleEventImpl
     /**
      * 查询 (指定资源关联的) 角色
      *
-     * @Description 完整的业务流程.
-     *
      * @param resourceCode 资源编码    {@link SecurityResource#getCode()}
-     *
      * @return {@link SecurityRole}
+     * @Description 完整的业务流程.
      */
     @Override
-    public @NotNull List<SecurityRole> selectRoleOnResourceByResourceCode(@NotNull String resourceCode)
-            throws IllegalArgumentException
-    {
-        if (! SecurityResource.Validator.RESOURCE.code(resourceCode)) {
+    public @NotNull
+    List<SecurityRole> selectRoleOnResourceByResourceCode(@NotNull String resourceCode)
+            throws IllegalArgumentException {
+        if (!SecurityResource.Validator.RESOURCE.code(resourceCode)) {
             //-- 非法输入: 资源编码
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "资源编码"
@@ -248,7 +235,7 @@ public class SecurityRoleEventImpl
         }
 
         final @NotNull List<SecurityRoleResource> resource_roleResources = securityRoleResourceService.selectByResourceCode(resourceCode);
-        if (! resource_roleResources.isEmpty()) {
+        if (!resource_roleResources.isEmpty()) {
             for (@NotNull SecurityRoleResource eachRoleResource : resource_roleResources) {
                 if (eachRoleResource.isEmpty()) {
                     continue;
@@ -268,19 +255,16 @@ public class SecurityRoleEventImpl
     /**
      * 查询 (关联的) [（安全认证）角色]
      *
-     * @Description 完整的业务流程.
-     *
      * @param username 用户名称    {@link SecurityUser.Validator#username(String)}
-     *
      * @return {@link SecurityRole}
-     *
+     * @Description 完整的业务流程.
      * @see github.com.suitelhy.dingding.core.domain.event.UserEvent#selectRoleOnUserByUsername(String)
      */
     @Override
-    public @NotNull List<SecurityRole> selectRoleOnUserByUsername(@NotNull String username)
-            throws IllegalArgumentException
-    {
-        if (! SecurityUser.Validator.USER.username(username)) {
+    public @NotNull
+    List<SecurityRole> selectRoleOnUserByUsername(@NotNull String username)
+            throws IllegalArgumentException {
+        if (!SecurityUser.Validator.USER.username(username)) {
             //-- 非法输入: 用户名称
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                     , "用户名称"
@@ -298,14 +282,14 @@ public class SecurityRoleEventImpl
         }
 
         @NotNull List<SecurityUserRole> securityUser_userRoles = securityUserRoleService.selectByUsername(securityUser.getUsername());
-        if (! securityUser_userRoles.isEmpty()) {
+        if (!securityUser_userRoles.isEmpty()) {
             for (@NotNull SecurityUserRole eachUserRole : securityUser_userRoles) {
                 if (eachUserRole.isEmpty()) {
                     continue;
                 }
 
                 final @NotNull SecurityRole eachUserRole_role = securityRoleService.selectRoleByCode(eachUserRole.getRoleCode());
-                if (! eachUserRole_role.isEmpty()) {
+                if (!eachUserRole_role.isEmpty()) {
                     result.add(eachUserRole_role);
                 }
             }
@@ -319,19 +303,15 @@ public class SecurityRoleEventImpl
     /**
      * 新增一个[（安全认证）用户 ←→ 角色]关联关系
      *
-     * @Description 完整的业务流程.
-     *
      * @param userRole [（安全认证）用户 ←→ 角色]
      * @param operator 操作者
-     *
      * @return 操作是否成功 / 是否已存在相同的有效数据
-     *
+     * @Description 完整的业务流程.
      * @see UserEvent#insertUserRoleRelationship(SecurityUserRole, SecurityUser)
      */
     @Override
     public boolean insertUserRoleRelationship(@NotNull SecurityUserRole userRole, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if (null == userRole || userRole.isEmpty()) {
             //-- 非法输入: [（安全认证）用户 ←→ 角色]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -363,7 +343,7 @@ public class SecurityRoleEventImpl
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
 
-        if (! securityUserRoleService.insert(userRole, operator, operator_userAccountOperationInfo)) {
+        if (!securityUserRoleService.insert(userRole, operator, operator_userAccountOperationInfo)) {
             //-- 操作失败: 新增[（安全认证）用户 ←→ 角色]关联关系
             throw new BusinessAtomicException(String.format("操作失败:<description>%s</description>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , HandleType.LogVo.SECURITY__SECURITY_USER_ROLE__ADD.name
@@ -379,12 +359,10 @@ public class SecurityRoleEventImpl
     /**
      * 新增多个[（安全认证）用户 ←→ 角色]关联关系
      *
-     * @param user      （安全认证）用户
-     * @param roles     （安全认证）角色
-     * @param operator  操作者
-     *
+     * @param user     （安全认证）用户
+     * @param roles    （安全认证）角色
+     * @param operator 操作者
      * @return 操作是否成功 / 是否已存在完全相同的有效数据集合
-     *
      * @see github.com.suitelhy.dingding.core.domain.event.UserEvent#insertUserRoleRelationship(SecurityUser, Set, SecurityUser)
      */
     @Override
@@ -393,8 +371,7 @@ public class SecurityRoleEventImpl
             , rollbackFor = Exception.class
             , timeout = 15)
     public boolean insertUserRoleRelationship(@NotNull SecurityUser user, @NotNull Set<SecurityRole> roles, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if ((null == user || user.isEmpty())) {
             //-- 非法输入: [（安全认证）用户]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -449,7 +426,7 @@ public class SecurityRoleEventImpl
 
         final @NotNull List<SecurityUserRole> existedUserRoles = securityUserRoleService.selectByUsername(user.getUsername());
 
-        if (! existedUserRoles.isEmpty()) {
+        if (!existedUserRoles.isEmpty()) {
             //--- 角色存在绑定的资源的情况
             for (@NotNull SecurityRole eachRole : roles) {
                 boolean exist = false;
@@ -464,7 +441,7 @@ public class SecurityRoleEventImpl
                 }
 
                 final @NotNull SecurityUserRole eachUserRole = SecurityUserRole.Factory.USER_ROLE.create(user.getUsername(), eachRole.getCode());
-                if (! securityUserRoleService.insert(eachUserRole, operator, operator_userAccountOperationInfo)) {
+                if (!securityUserRoleService.insert(eachUserRole, operator, operator_userAccountOperationInfo)) {
                     //-- 操作失败: 新增[（安全认证）用户 ←→ 角色]关联关系
                     throw new BusinessAtomicException(String.format("操作失败:<description>%s!</description>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , HandleType.LogVo.SECURITY__SECURITY_USER_ROLE__ADD.name
@@ -478,7 +455,7 @@ public class SecurityRoleEventImpl
             //--- 角色不存在绑定的资源的情况
             for (@NotNull SecurityRole each : roles) {
                 final @NotNull SecurityUserRole eachUserRole = SecurityUserRole.Factory.USER_ROLE.create(user.getUsername(), each.getCode());
-                if (! securityUserRoleService.insert(eachUserRole, operator, operator_userAccountOperationInfo)) {
+                if (!securityUserRoleService.insert(eachUserRole, operator, operator_userAccountOperationInfo)) {
                     //-- 操作失败: 新增[（安全认证）用户 ←→ 角色]关联关系
                     throw new BusinessAtomicException(String.format("操作失败:<description>%s!</description>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , HandleType.LogVo.SECURITY__SECURITY_USER_ROLE__ADD.name
@@ -499,9 +476,7 @@ public class SecurityRoleEventImpl
      * @param user     （安全认证）用户
      * @param roleVo   [(安全) 用户 -> 角色] {@link Security.RoleVo}, 仅需保证合法性, 不需要保证持久化.
      * @param operator 操作者
-     *
      * @return 操作是否成功 / 是否已存在相同的有效数据
-     *
      * @see github.com.suitelhy.dingding.core.domain.event.UserEvent#insertUserRoleRelationship(SecurityUser, Security.RoleVo, SecurityUser)
      */
     @Override
@@ -510,8 +485,7 @@ public class SecurityRoleEventImpl
             , rollbackFor = Exception.class
             , timeout = 15)
     public boolean insertUserRoleRelationship(@NotNull SecurityUser user, @NotNull Security.RoleVo roleVo, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if ((null == user || user.isEmpty())) {
             //-- 非法输入: [（安全认证）用户]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -554,7 +528,7 @@ public class SecurityRoleEventImpl
 
         final @NotNull List<SecurityUserRole> existedUserRoles = securityUserRoleService.selectByUsername(user.getUsername());
 
-        if (! existedUserRoles.isEmpty()) {
+        if (!existedUserRoles.isEmpty()) {
             //--- 角色存在绑定的资源的情况
             @NotNull SecurityRole role = SecurityRole.Factory.ROLE.create(roleVo);
 
@@ -584,7 +558,7 @@ public class SecurityRoleEventImpl
             @NotNull SecurityRole role = SecurityRole.Factory.ROLE.create(roleVo);
 
             final @NotNull SecurityUserRole userRole = SecurityUserRole.Factory.USER_ROLE.create(user.getUsername(), role.getCode());
-            if (! securityUserRoleService.insert(userRole, operator, operator_userAccountOperationInfo)) {
+            if (!securityUserRoleService.insert(userRole, operator, operator_userAccountOperationInfo)) {
                 //-- 操作失败: 新增[（安全认证）用户 ←→ 角色]关联关系
                 throw new BusinessAtomicException(String.format("操作失败:<description>%s</description>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                         , HandleType.LogVo.SECURITY__SECURITY_USER_ROLE__ADD.name
@@ -601,20 +575,14 @@ public class SecurityRoleEventImpl
     /**
      * 新增 角色 - 资源 关联
      *
-     * @Description 完整的业务流程.
-     *
-     * @Issue
-     * · 多次单元测试后发现 并发一致性问题 - 读脏数据 的问题 (主要使用成熟方案解决问题, 故没有分配时间进行更多不必要地步进式问题跟踪).
-     * {@link <a href="https://github.com/CyC2018/CS-Notes/blob/master/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86.md#%E8%AF%BB%E8%84%8F%E6%95%B0%E6%8D%AE">CS-Notes/数据库系统原理.md at master · CyC2018/CS-Notes</a>}
-     *
-     * @Solution
-     * · 并发一致性问题解决方案: {@link <a href="https://juejin.im/post/5c1852526fb9a04a0c2e5db6">Spring Boot+SQL/JPA实战悲观锁和乐观锁 - 掘金</a>}
-     *
-     * @param roles         [（安全认证）角色], 必须全部合法且已持久化.    {@link SecurityRole}
-     * @param resources     [（安全认证）资源], 必须全部合法且已持久化.    {@link SecurityResource}
-     * @param operator      操作者
-     *
+     * @param roles     [（安全认证）角色], 必须全部合法且已持久化.    {@link SecurityRole}
+     * @param resources [（安全认证）资源], 必须全部合法且已持久化.    {@link SecurityResource}
+     * @param operator  操作者
      * @return 操作是否成功
+     * @Description 完整的业务流程.
+     * @Issue · 多次单元测试后发现 并发一致性问题 - 读脏数据 的问题 (主要使用成熟方案解决问题, 故没有分配时间进行更多不必要地步进式问题跟踪).
+     * {@link <a href="https://github.com/CyC2018/CS-Notes/blob/master/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86.md#%E8%AF%BB%E8%84%8F%E6%95%B0%E6%8D%AE">CS-Notes/数据库系统原理.md at master · CyC2018/CS-Notes</a>}
+     * @Solution · 并发一致性问题解决方案: {@link <a href="https://juejin.im/post/5c1852526fb9a04a0c2e5db6">Spring Boot+SQL/JPA实战悲观锁和乐观锁 - 掘金</a>}
      */
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -622,8 +590,7 @@ public class SecurityRoleEventImpl
             , rollbackFor = Exception.class
             , timeout = 15)
     public boolean insertRoleResourceRelationship(@NotNull Set<SecurityRole> roles, @NotNull Set<SecurityResource> resources, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if (null == roles || roles.isEmpty()) {
             //-- 非法输入: [（安全认证）角色]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -694,13 +661,13 @@ public class SecurityRoleEventImpl
         boolean result = false;
 
         for (@NotNull SecurityRole each : roles) {
-            if (! securityRoleResourceService.existResourceByRoleCode(each.getCode())) {
+            if (!securityRoleResourceService.existResourceByRoleCode(each.getCode())) {
                 //--- 角色不存在绑定的资源的情况
                 /*System.err.println("角色" + each + "不存在绑定的资源集合");*/
                 for (@NotNull SecurityResource eachResource : resources) {
                     /*System.err.println("== 开始绑定, 资源" + eachResource + "... ==");*/
                     final @NotNull SecurityRoleResource eachRoleResource = SecurityRoleResource.Factory.ROLE_RESOURCE.create(each, eachResource);
-                    if (! securityRoleResourceService.insert(eachRoleResource, operator)) {
+                    if (!securityRoleResourceService.insert(eachRoleResource, operator)) {
                         throw new BusinessAtomicException(String.format("操作失败:<description>%s!</description>->【%s】&【%s】&【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                                 , HandleType.LogVo.SECURITY__SECURITY_ROLE_RESOURCE__ADD.name
                                 , each
@@ -719,7 +686,7 @@ public class SecurityRoleEventImpl
                             , SecurityRoleResource.Factory.ROLE_RESOURCE.create(each.getCode(), eachResource.getCode())
                             , operator
                             , operatorOperationInfo);
-                    if (! logService.insert(newLog_SecurityRoleResource)) {
+                    if (!logService.insert(newLog_SecurityRoleResource)) {
                         throw new BusinessAtomicException(String.format("操作失败:<description>【%s】 <- 【%s】</description>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                                 , HandleType.LogVo.SECURITY__SECURITY_ROLE_RESOURCE__ADD.name
                                 , "生成操作日志记录"
@@ -747,7 +714,7 @@ public class SecurityRoleEventImpl
 
                     /*System.err.println("== 开始绑定, 资源" + eachResource + "... ==");*/
                     final @NotNull SecurityRoleResource eachRoleResource = SecurityRoleResource.Factory.ROLE_RESOURCE.create(each, eachResource);
-                    if (! securityRoleResourceService.insert(eachRoleResource, operator)) {
+                    if (!securityRoleResourceService.insert(eachRoleResource, operator)) {
                         throw new BusinessAtomicException(String.format("操作失败:<description>%s!</description>->【%s】&【%s】&【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                                 , HandleType.LogVo.SECURITY__SECURITY_ROLE_RESOURCE__ADD.name
                                 , each
@@ -766,7 +733,7 @@ public class SecurityRoleEventImpl
                             , SecurityRoleResource.Factory.ROLE_RESOURCE.create(each.getCode(), eachResource.getCode())
                             , operator
                             , operatorOperationInfo);
-                    if (! logService.insert(newLog_SecurityRoleResource)) {
+                    if (!logService.insert(newLog_SecurityRoleResource)) {
                         throw new BusinessAtomicException(String.format("操作失败:<description>【%s】 <- 【%s】</description>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                                 , HandleType.LogVo.SECURITY__SECURITY_ROLE_RESOURCE__ADD.name
                                 , "生成操作日志记录"
@@ -790,13 +757,11 @@ public class SecurityRoleEventImpl
     /**
      * 更新指定的角色
      *
+     * @param role     [（安全认证）角色]  {@link SecurityRole}
+     * @param operator 操作者
+     * @return 操作是否成功
      * @Description 全量更新.
      * · 完整的业务流程.
-     *
-     * @param role      [（安全认证）角色]  {@link SecurityRole}
-     * @param operator  操作者
-     *
-     * @return 操作是否成功
      */
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -804,8 +769,7 @@ public class SecurityRoleEventImpl
             , rollbackFor = Exception.class
             , timeout = 15)
     public boolean updateRole(@NotNull SecurityRole role, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if (null == role || role.isEmpty()) {
             //-- 非法输入: 非法角色
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -843,19 +807,17 @@ public class SecurityRoleEventImpl
     /**
      * 更新指定的角色
      *
+     * @param old_role      原始版本业务全量数据.
+     * @param new_role_data 需要更新的数据.
+     *                      · 数据格式:
+     *                      {
+     *                      role_name : [角色名称],
+     *                      role_description : [角色描述]
+     *                      }
+     * @param operator      操作者
+     * @return 操作是否成功
      * @Description 增量更新.
      * · 完整的业务流程.
-     *
-     * @param old_role                          原始版本业务全量数据.
-     * @param new_role_data                     需要更新的数据.
-     * · 数据格式:
-     * {
-     *    role_name : [角色名称],
-     *    role_description : [角色描述]
-     * }
-     * @param operator                          操作者
-     *
-     * @return 操作是否成功
      */
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -865,9 +827,8 @@ public class SecurityRoleEventImpl
     public boolean updateRole(@NotNull SecurityRole old_role
             , @NotNull Map<String, Object> new_role_data
             , @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
-        if (null == old_role || ! old_role.isEntityLegal()) {
+            throws IllegalArgumentException, BusinessAtomicException {
+        if (null == old_role || !old_role.isEntityLegal()) {
             //-- 非法输入: 原始版本业务全量数据
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "原始版本业务全量数据"
@@ -877,8 +838,7 @@ public class SecurityRoleEventImpl
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
         if (null == new_role_data
-                || (! new_role_data.containsKey("role_name") && ! new_role_data.containsKey("role_description")))
-        {
+                || (!new_role_data.containsKey("role_name") && !new_role_data.containsKey("role_description"))) {
             //-- 非法输入: 需要更新的数据
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "需要更新的数据"
@@ -888,7 +848,7 @@ public class SecurityRoleEventImpl
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
         if (new_role_data.containsKey("role_code")
-                && ! SecurityRole.Validator.ROLE.code((String) new_role_data.get("role_code"))) {
+                && !SecurityRole.Validator.ROLE.code((String) new_role_data.get("role_code"))) {
             //-- 非法输入: 需要更新的数据 => 角色编码
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "需要更新的数据 => 角色编码"
@@ -898,7 +858,7 @@ public class SecurityRoleEventImpl
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
         if (new_role_data.containsKey("role_name")
-                && ! SecurityRole.Validator.ROLE.name((String) new_role_data.get("role_name"))) {
+                && !SecurityRole.Validator.ROLE.name((String) new_role_data.get("role_name"))) {
             //-- 非法输入: 需要更新的数据 => 角色名称
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "需要更新的数据 => 角色名称"
@@ -908,7 +868,7 @@ public class SecurityRoleEventImpl
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
         if (new_role_data.containsKey("role_description")
-                && ! SecurityRole.Validator.ROLE.description((String) new_role_data.get("role_description"))) {
+                && !SecurityRole.Validator.ROLE.description((String) new_role_data.get("role_description"))) {
             //-- 非法输入: 需要更新的数据 => 角色描述
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "需要更新的数据 => 角色描述"
@@ -948,12 +908,10 @@ public class SecurityRoleEventImpl
     /**
      * 删除指定的角色
      *
-     * @Description 完整的业务流程.
-     *
-     * @param role      [（安全认证）角色]  {@link SecurityRole}
-     * @param operator  操作者
-     *
+     * @param role     [（安全认证）角色]  {@link SecurityRole}
+     * @param operator 操作者
      * @return 操作是否成功
+     * @Description 完整的业务流程.
      */
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -961,8 +919,7 @@ public class SecurityRoleEventImpl
             , rollbackFor = Exception.class
             , timeout = 15)
     public boolean deleteRole(@NotNull SecurityRole role, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if (null == role || role.isEmpty()) {
             //-- 非法输入: 非法角色
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -997,13 +954,13 @@ public class SecurityRoleEventImpl
         //===== 删除关联的[（安全认证）用户 ←→ 角色] =====//
 
         @NotNull List<SecurityUserRole> role_userRoles = securityUserRoleService.selectByRoleCode(role.getCode());
-        if (! role_userRoles.isEmpty()) {
+        if (!role_userRoles.isEmpty()) {
             for (@NotNull SecurityUserRole eachUserRole : role_userRoles) {
                 if (eachUserRole.isEmpty()) {
                     continue;
                 }
 
-                if (! securityUserRoleService.delete(eachUserRole, operator, operator_userAccountOperationInfo)) {
+                if (!securityUserRoleService.delete(eachUserRole, operator, operator_userAccountOperationInfo)) {
                     throw new BusinessAtomicException(String.format("操作失败:<description>【%s】 <- %s</description>->【%s】&【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , HandleType.LogVo.SECURITY__SECURITY_ROLE__DELETION.name
                             , HandleType.LogVo.SECURITY__SECURITY_USER_ROLE__DELETION.name
@@ -1019,13 +976,13 @@ public class SecurityRoleEventImpl
         //===== 删除关联的[（安全认证）角色 ←→ 资源] =====//
 
         @NotNull List<SecurityRoleResource> role_roleResources = securityRoleResourceService.selectByRoleCode(role.getCode());
-        if (! role_roleResources.isEmpty()) {
+        if (!role_roleResources.isEmpty()) {
             for (@NotNull SecurityRoleResource eachRoleResource : role_roleResources) {
                 if (eachRoleResource.isEmpty()) {
                     continue;
                 }
 
-                if (! securityRoleResourceService.delete(eachRoleResource, operator, operator_userAccountOperationInfo)) {
+                if (!securityRoleResourceService.delete(eachRoleResource, operator, operator_userAccountOperationInfo)) {
                     throw new BusinessAtomicException(String.format("操作失败:<description>【%s】 <- %s</description>->【%s】&【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , HandleType.LogVo.SECURITY__SECURITY_ROLE__DELETION.name
                             , HandleType.LogVo.SECURITY__SECURITY_ROLE_RESOURCE__DELETION.name
@@ -1040,7 +997,7 @@ public class SecurityRoleEventImpl
 
         //==========//
 
-        if (! securityRoleService.delete(role, operator, operator_userAccountOperationInfo)) {
+        if (!securityRoleService.delete(role, operator, operator_userAccountOperationInfo)) {
             throw new BusinessAtomicException(String.format("操作失败:<description>【%s】 <- 【%s】</description>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , HandleType.LogVo.SECURITY__SECURITY_ROLE__DELETION.name
                     , HandleType.LogVo.SECURITY__SECURITY_ROLE__DELETION.name
@@ -1074,14 +1031,11 @@ public class SecurityRoleEventImpl
     /**
      * 删除[（安全认证）用户 ←→ 角色]关联关系
      *
-     * @Description 完整的业务流程.
-     *
-     * @param user      [（安全认证）用户], 必须合法且已持久化.  {@link SecurityUser}
-     * @param role      [（安全认证）角色], 必须合法且已持久化.  {@link SecurityRole}
-     * @param operator  操作者
-     *
+     * @param user     [（安全认证）用户], 必须合法且已持久化.  {@link SecurityUser}
+     * @param role     [（安全认证）角色], 必须合法且已持久化.  {@link SecurityRole}
+     * @param operator 操作者
      * @return 操作是否成功
-     *
+     * @Description 完整的业务流程.
      * @see github.com.suitelhy.dingding.core.domain.event.UserEvent#deleteUserRoleRelationship(SecurityUser, SecurityRole, SecurityUser)
      */
     @Override
@@ -1090,8 +1044,7 @@ public class SecurityRoleEventImpl
             , rollbackFor = Exception.class
             , timeout = 15)
     public boolean deleteUserRoleRelationship(@NotNull SecurityUser user, @NotNull SecurityRole role, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if (null == user || user.isEmpty()) {
             //-- 非法输入: [（安全认证）用户]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -1154,13 +1107,10 @@ public class SecurityRoleEventImpl
     /**
      * 删除指定的[（安全认证）用户]关联的所有[（安全认证）用户 ←→ 角色]关联关系
      *
-     * @Description 完整的业务流程.
-     *
      * @param user     [（安全认证）用户], 必须合法且已持久化.  {@link SecurityUser}
      * @param operator 操作者
-     *
      * @return 操作是否成功
-     *
+     * @Description 完整的业务流程.
      * @see github.com.suitelhy.dingding.core.domain.event.UserEvent#deleteUserRoleRelationshipOnUser(SecurityUser, SecurityUser)
      */
     @Override
@@ -1169,8 +1119,7 @@ public class SecurityRoleEventImpl
             , rollbackFor = Exception.class
             , timeout = 15)
     public boolean deleteUserRoleRelationshipOnUser(@NotNull SecurityUser user, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if (null == user || user.isEmpty()) {
             //-- 非法输入: [（安全认证）用户]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -1207,7 +1156,7 @@ public class SecurityRoleEventImpl
             return true;
         } else {
             for (@NotNull SecurityUserRole eachUserRole : existedUserRoles) {
-                if (! securityUserRoleService.delete(eachUserRole, operator, operator_userAccountOperationInfo)) {
+                if (!securityUserRoleService.delete(eachUserRole, operator, operator_userAccountOperationInfo)) {
                     throw new BusinessAtomicException(String.format("操作失败:<description>【%s】 <- 【%s】</description>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , HandleType.LogVo.SECURITY__SECURITY_USER_ROLE__DELETION.name
                             , "操作失败"
@@ -1225,13 +1174,10 @@ public class SecurityRoleEventImpl
     /**
      * 删除指定的[（安全认证）角色]关联的所有[（安全认证）用户 ←→ 角色]关联关系
      *
-     * @Description 完整的业务流程.
-     *
-     * @param role      [（安全认证）角色], 必须合法且已持久化.  {@link SecurityRole}
-     * @param operator  操作者
-     *
+     * @param role     [（安全认证）角色], 必须合法且已持久化.  {@link SecurityRole}
+     * @param operator 操作者
      * @return 操作是否成功
-     *
+     * @Description 完整的业务流程.
      * @see github.com.suitelhy.dingding.core.domain.event.UserEvent#deleteUserRoleRelationshipOnRole(SecurityRole, SecurityUser)
      */
     @Override
@@ -1240,8 +1186,7 @@ public class SecurityRoleEventImpl
             , rollbackFor = Exception.class
             , timeout = 15)
     public boolean deleteUserRoleRelationshipOnRole(@NotNull SecurityRole role, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if (null == role || role.isEmpty()) {
             //-- 非法输入: [（安全认证）角色]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -1278,7 +1223,7 @@ public class SecurityRoleEventImpl
             return true;
         } else {
             for (@NotNull SecurityUserRole eachUserRole : existedUserRoles) {
-                if (! securityUserRoleService.delete(eachUserRole, operator, operator_userAccountOperationInfo)) {
+                if (!securityUserRoleService.delete(eachUserRole, operator, operator_userAccountOperationInfo)) {
                     throw new BusinessAtomicException(String.format("操作失败:<description>【%s】 <- 【%s】</description>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , HandleType.LogVo.SECURITY__SECURITY_USER_ROLE__DELETION.name
                             , "操作失败"
@@ -1296,13 +1241,11 @@ public class SecurityRoleEventImpl
     /**
      * 删除[角色 - 资源]关联
      *
-     * @Description 完整的业务流程.
-     *
-     * @param roles         [（安全认证）角色], 必须全部合法且已持久化.    {@link SecurityRole}
-     * @param resources     [（安全认证）资源], 必须全部合法且已持久化.    {@link SecurityResource}
-     * @param operator      操作者
-     *
+     * @param roles     [（安全认证）角色], 必须全部合法且已持久化.    {@link SecurityRole}
+     * @param resources [（安全认证）资源], 必须全部合法且已持久化.    {@link SecurityResource}
+     * @param operator  操作者
      * @return 操作是否成功
+     * @Description 完整的业务流程.
      */
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -1310,8 +1253,7 @@ public class SecurityRoleEventImpl
             , rollbackFor = Exception.class
             , timeout = 15)
     public boolean deleteRoleResourceRelationship(@NotNull Set<SecurityRole> roles, @NotNull Set<SecurityResource> resources, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if ((null == roles || roles.isEmpty())) {
             //-- 非法输入: [（安全认证）角色]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -1379,7 +1321,7 @@ public class SecurityRoleEventImpl
         boolean result = false;
 
         for (@NotNull SecurityRole each : roles) {
-            if (! securityRoleResourceService.existResourceByRoleCode(each.getCode())) {
+            if (!securityRoleResourceService.existResourceByRoleCode(each.getCode())) {
                 //--- 角色不存在绑定的资源的情况
             } else {
                 //--- 角色存在绑定的资源的情况
@@ -1398,7 +1340,7 @@ public class SecurityRoleEventImpl
                     }
 
                     /*if (! securityRoleResourceService.delete(each, eachResource, operator)) {*/
-                    if (! securityRoleResourceService.delete(existedRoleResource, operator, operator_userAccountOperationInfo)) {
+                    if (!securityRoleResourceService.delete(existedRoleResource, operator, operator_userAccountOperationInfo)) {
                         throw new BusinessAtomicException(String.format("操作失败:<description>【%s】 <- 【%s】</description>->【%s】&【%s】&【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                                 , HandleType.LogVo.SECURITY__SECURITY_ROLE_RESOURCE__DELETION.name
                                 , "执行后数据异常"
@@ -1419,15 +1361,14 @@ public class SecurityRoleEventImpl
     }
 
     //
+
     /**
      * 删除指定的 [（安全认证）角色] 的所有[（安全认证）角色 ←→ 资源]关联关系
      *
-     * @Description 完整的业务流程.
-     *
-     * @param role      [（安全认证）角色], 必须合法且已持久化.  {@link SecurityRole}
-     * @param operator  操作者
-     *
+     * @param role     [（安全认证）角色], 必须合法且已持久化.  {@link SecurityRole}
+     * @param operator 操作者
      * @return 操作是否成功
+     * @Description 完整的业务流程.
      */
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -1435,8 +1376,7 @@ public class SecurityRoleEventImpl
             , rollbackFor = Exception.class
             , timeout = 15)
     public boolean deleteRoleResourceRelationshipOnRole(@NotNull SecurityRole role, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if (null == role || role.isEmpty()) {
             //-- 非法输入: [（安全认证）角色]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -1473,7 +1413,7 @@ public class SecurityRoleEventImpl
             return true;
         } else {
             for (@NotNull SecurityRoleResource eachRoleResource : existedRoleResources) {
-                if (! securityRoleResourceService.delete(eachRoleResource, operator, operatorOperationInfo)) {
+                if (!securityRoleResourceService.delete(eachRoleResource, operator, operatorOperationInfo)) {
                     throw new BusinessAtomicException(String.format("操作失败:<description>【%s】 <- 【%s】</description>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , HandleType.LogVo.SECURITY__SECURITY_ROLE_RESOURCE__DELETION.name
                             , "操作失败"
@@ -1491,12 +1431,10 @@ public class SecurityRoleEventImpl
     /**
      * 删除指定的 [（安全认证）资源] 的所有[（安全认证）角色 ←→ 资源]关联关系
      *
-     * @Description 完整的业务流程.
-     *
-     * @param resource      [（安全认证）资源], 必须合法且已持久化.  {@link SecurityResource}
-     * @param operator      操作者
-     *
+     * @param resource [（安全认证）资源], 必须合法且已持久化.  {@link SecurityResource}
+     * @param operator 操作者
      * @return 操作是否成功
+     * @Description 完整的业务流程.
      */
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -1504,8 +1442,7 @@ public class SecurityRoleEventImpl
             , rollbackFor = Exception.class
             , timeout = 15)
     public boolean deleteRoleResourceRelationshipOnResource(@NotNull SecurityResource resource, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if (null == resource || resource.isEmpty()) {
             //-- 非法输入: [（安全认证）资源]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -1540,7 +1477,7 @@ public class SecurityRoleEventImpl
             return true;
         } else {
             for (@NotNull SecurityRoleResource eachRoleResource : existedRoleResources) {
-                if (! securityRoleResourceService.delete(eachRoleResource, operator, operator_userAccountOperationInfo)) {
+                if (!securityRoleResourceService.delete(eachRoleResource, operator, operator_userAccountOperationInfo)) {
                     throw new BusinessAtomicException(String.format("操作失败:<description>【%s】 <- 【%s】</description>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , HandleType.LogVo.SECURITY__SECURITY_ROLE_RESOURCE__DELETION.name
                             , "操作失败"

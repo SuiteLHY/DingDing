@@ -21,9 +21,11 @@ public final class OAuth2AuthenticationUtil {
         private static final OAuth2AuthenticationUtil SINGLETON = new OAuth2AuthenticationUtil();
     }
 
-    private OAuth2AuthenticationUtil() {}
+    private OAuth2AuthenticationUtil() {
+    }
 
-    public static @NotNull OAuth2AuthenticationUtil getInstance() {
+    public static @NotNull
+    OAuth2AuthenticationUtil getInstance() {
         return Factory.SINGLETON;
     }
 
@@ -31,12 +33,10 @@ public final class OAuth2AuthenticationUtil {
      * 获取[身份验证令牌信息 - 用户认证凭据 - 详细信息]
      *
      * @param oAuth2Authentication
-     *
      * @return {@link OAuth2AuthenticationInfo.AbstractUserAuthentication.AbstractDetails}
      */
     public OAuth2AuthenticationInfo.AbstractUserAuthentication.AbstractDetails getDetails(OAuth2Authentication oAuth2Authentication)
-            throws AuthenticationCredentialsNotFoundException, BadCredentialsException
-    {
+            throws AuthenticationCredentialsNotFoundException, BadCredentialsException {
         if (null == oAuth2Authentication) {
             //-- 非法参数: [身份验证信息]
             throw new AuthenticationCredentialsNotFoundException("非法参数: 找不到[身份验证信息]");

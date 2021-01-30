@@ -300,61 +300,61 @@ public class HashMap<K, V>
     public static void main(String[] args) {
         HashMap<String[], Object> urlInfoMap1 = new HashMap<>(1);
 
-        urlInfoMap1.put(new String[] {"1", "1.0"}
+        urlInfoMap1.put(new String[]{"1", "1.0"}
                 , Arrays.asList(1, 1.0));
-        urlInfoMap1.put(new String[] {"2", "2.0"}
+        urlInfoMap1.put(new String[]{"2", "2.0"}
                 , Arrays.asList(2, 2.0));
-        urlInfoMap1.put(new String[] {"3", "3.0"}
+        urlInfoMap1.put(new String[]{"3", "3.0"}
                 , Arrays.asList(3, 3.0));
 
         //=====
         HashMap<String[], Object> urlInfoMap2 = new HashMap<>(1);
 
-        urlInfoMap2.put(new String[] {"2", "2.0"}
+        urlInfoMap2.put(new String[]{"2", "2.0"}
                 , Arrays.asList(2, 2.0));
-        urlInfoMap2.put(new String[] {"1", "1.0"}
+        urlInfoMap2.put(new String[]{"1", "1.0"}
                 , Arrays.asList(1, 1.0));
-        urlInfoMap2.put(new String[] {"3", "3.0"}
+        urlInfoMap2.put(new String[]{"3", "3.0"}
                 , Arrays.asList(3, 3.0));
 
         //=====
         Map<String[], Object> urlInfoMap3 = new java.util.HashMap<>(1);
 
-        urlInfoMap3.put(new String[] {"3", "3.0"}
+        urlInfoMap3.put(new String[]{"3", "3.0"}
                 , Arrays.asList(3, 3.0));
-        urlInfoMap3.put(new String[] {"2", "2.0"}
+        urlInfoMap3.put(new String[]{"2", "2.0"}
                 , Arrays.asList(2, 2.0));
-        urlInfoMap3.put(new String[] {"1", "1.0"}
+        urlInfoMap3.put(new String[]{"1", "1.0"}
                 , Arrays.asList(1, 1.0));
 
         //=====
         Map<String[], Object> urlInfoMap4 = new java.util.LinkedHashMap<>(1);
 
-        urlInfoMap4.put(new String[] {"1", "1.0"}
+        urlInfoMap4.put(new String[]{"1", "1.0"}
                 , Arrays.asList(1, 1.0));
-        urlInfoMap4.put(new String[] {"2", "2.0"}
+        urlInfoMap4.put(new String[]{"2", "2.0"}
                 , Arrays.asList(2, 2.0));
-        urlInfoMap4.put(new String[] {"3", "3.0"}
+        urlInfoMap4.put(new String[]{"3", "3.0"}
                 , Arrays.asList(3, 3.0));
 
         //=====
         Map<Object[], Object> urlInfoObjectMap1 = new java.util.HashMap<>(1);
 
-        urlInfoObjectMap1.put(new Object[] {"1", "1.0"}
+        urlInfoObjectMap1.put(new Object[]{"1", "1.0"}
                 , Arrays.asList(1, 1.0));
-        urlInfoObjectMap1.put(new Object[] {"2", "2.0"}
+        urlInfoObjectMap1.put(new Object[]{"2", "2.0"}
                 , Arrays.asList(2, 2.0));
-        urlInfoObjectMap1.put(new Object[] {"3", "3.0"}
+        urlInfoObjectMap1.put(new Object[]{"3", "3.0"}
                 , Arrays.asList(3, 3.0));
 
         //=====
         Map<Object[], Object> urlInfoObjectMap2 = new java.util.HashMap<>(1);
 
-        urlInfoObjectMap2.put(new Object[] {"1", "1.0"}
+        urlInfoObjectMap2.put(new Object[]{"1", "1.0"}
                 , Arrays.asList(1, 1.0));
-        urlInfoObjectMap2.put(new Object[] {"2", "2.0"}
+        urlInfoObjectMap2.put(new Object[]{"2", "2.0"}
                 , Arrays.asList(2, 2.0));
-        urlInfoObjectMap2.put(new Object[] {3, "3.0"}
+        urlInfoObjectMap2.put(new Object[]{3, "3.0"}
                 , Arrays.asList(3, 3.0));
 
         //===== equals(Object) =====//
@@ -454,24 +454,24 @@ public class HashMap<K, V>
         DemoUtils.show("//===== Contains key =====//");
 
         DemoUtils.show("===== urlInfoMap1.containsKey(new String[] {\"1\", \"1.0\"}) -> "
-                + urlInfoMap1.containsKey(new String[] {"1", "1.0"})
+                + urlInfoMap1.containsKey(new String[]{"1", "1.0"})
                 + " =====");
         DemoUtils.show("===== urlInfoMap2.containsKey(new String[] {\"1\", \"1.0\"}) -> "
-                + urlInfoMap2.containsKey(new String[] {"1", "1.0"})
+                + urlInfoMap2.containsKey(new String[]{"1", "1.0"})
                 + " =====");
         DemoUtils.show("===== urlInfoMap3.containsKey(new String[] {\"1\", \"1.0\"}) -> "
-                + urlInfoMap3.containsKey(new String[] {"1", "1.0"})
+                + urlInfoMap3.containsKey(new String[]{"1", "1.0"})
                 + " =====");
 
         DemoUtils.show(null);
         DemoUtils.show("===== urlInfoMap1.containsKey(new String[] {\"1.0\", \"1\"}) -> "
-                + urlInfoMap1.containsKey(new String[] {"1.0", "1"})
+                + urlInfoMap1.containsKey(new String[]{"1.0", "1"})
                 + " =====");
         DemoUtils.show("===== urlInfoMap2.containsKey(new String[] {\"1.0\", \"1\"}) -> "
-                + urlInfoMap2.containsKey(new String[] {"1.0", "1"})
+                + urlInfoMap2.containsKey(new String[]{"1.0", "1"})
                 + " =====");
         DemoUtils.show("===== urlInfoMap3.containsKey(new String[] {\"1.0\", \"1\"}) -> "
-                + urlInfoMap3.containsKey(new String[] {"1.0", "1"})
+                + urlInfoMap3.containsKey(new String[]{"1.0", "1"})
                 + " =====");
 
         DemoUtils.show(null);
@@ -512,9 +512,9 @@ public class HashMap<K, V>
                 + urlInfoMap3.size()
                 + " =====");
 
-        urlInfoMap1.put(new String[] {"1", "1.0"}, Arrays.asList(1, 2, 3));
-        urlInfoMap2.put(new String[] {"1", "1.0"}, Arrays.asList(1, 2, 3));
-        urlInfoMap3.put(new String[] {"1", "1.0"}, Arrays.asList(1, 2, 3));
+        urlInfoMap1.put(new String[]{"1", "1.0"}, Arrays.asList(1, 2, 3));
+        urlInfoMap2.put(new String[]{"1", "1.0"}, Arrays.asList(1, 2, 3));
+        urlInfoMap3.put(new String[]{"1", "1.0"}, Arrays.asList(1, 2, 3));
         DemoUtils.show(null);
         DemoUtils.show("===== (After put <code>new String[] {\"1\", \"1.0\"}, Arrays.asList(1, 2, 3)</code>) urlInfoMap1.size() -> "
                 + urlInfoMap1.size()
@@ -526,9 +526,9 @@ public class HashMap<K, V>
                 + urlInfoMap3.size()
                 + " =====");
 
-        urlInfoMap1.put(new String[] {"1.0", "1"}, Arrays.asList(1, 2, 3));
-        urlInfoMap2.put(new String[] {"1.0", "1"}, Arrays.asList(1, 2, 3));
-        urlInfoMap3.put(new String[] {"1.0", "1"}, Arrays.asList(1, 2, 3));
+        urlInfoMap1.put(new String[]{"1.0", "1"}, Arrays.asList(1, 2, 3));
+        urlInfoMap2.put(new String[]{"1.0", "1"}, Arrays.asList(1, 2, 3));
+        urlInfoMap3.put(new String[]{"1.0", "1"}, Arrays.asList(1, 2, 3));
         DemoUtils.show(null);
         DemoUtils.show("===== (After put <code>new String[] {\"1.0\", \"1\"}, Arrays.asList(1, 2, 3)</code>) urlInfoMap1.size() -> "
                 + urlInfoMap1.size()
@@ -554,9 +554,9 @@ public class HashMap<K, V>
                 + urlInfoMap3.size()
                 + " =====");
 
-        urlInfoMap1.remove(new String[] {"1", "1.0"});
-        urlInfoMap2.remove(new String[] {"1", "1.0"});
-        urlInfoMap3.remove(new String[] {"1", "1.0"});
+        urlInfoMap1.remove(new String[]{"1", "1.0"});
+        urlInfoMap2.remove(new String[]{"1", "1.0"});
+        urlInfoMap3.remove(new String[]{"1", "1.0"});
         DemoUtils.show(null);
         DemoUtils.show("===== (After remove <code>new String[] {\"1\", \"1.0\"}</code>) urlInfoSet1.size() -> "
                 + urlInfoMap1.size()
@@ -568,9 +568,9 @@ public class HashMap<K, V>
                 + urlInfoMap3.size()
                 + " =====");
 
-        urlInfoMap1.remove(new String[] {"1.0", "1"});
-        urlInfoMap2.remove(new String[] {"1.0", "1"});
-        urlInfoMap3.remove(new String[] {"1.0", "1"});
+        urlInfoMap1.remove(new String[]{"1.0", "1"});
+        urlInfoMap2.remove(new String[]{"1.0", "1"});
+        urlInfoMap3.remove(new String[]{"1.0", "1"});
         DemoUtils.show(null);
         DemoUtils.show("===== (After remove <code>new String[] {\"1.0\", \"1\"}</code>) urlInfoSet1.size() -> "
                 + urlInfoMap1.size()

@@ -21,37 +21,36 @@ import dingding.security.core.support.SimpleResponse;
 
 /**
  * 浏览器环境下登录失败的处理器
- * 
- * @author zhailiang
  *
+ * @author zhailiang
  */
 @Component("dingDingAuthenticationFailureHandler")
 public class DingDingAuthenticationFailureHandler
-		extends SimpleUrlAuthenticationFailureHandler {
+        extends SimpleUrlAuthenticationFailureHandler {
 
-	private Logger logger = LoggerFactory.getLogger(getClass());
-	
-	@Autowired
-	private ObjectMapper objectMapper;
-	
-	@Autowired
-	private SecurityProperties securityProperties;
-	
-	/* (non-Javadoc)
-	 * @see org.springframework.security.web.authentication.AuthenticationFailureHandler#onAuthenticationFailure(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.springframework.security.core.AuthenticationException)
-	 */
-	@Override
-	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
-			AuthenticationException exception) throws IOException, ServletException {
-		logger.info("登录失败");
-		
-		if (LoginResponseType.JSON.equals(securityProperties.getBrowser().getSignInResponseType())) {
-			response.setStatus(HttpStatus.UNAUTHORIZED.value());
-			response.setContentType("application/json;charset=UTF-8");
-			response.getWriter().write(objectMapper.writeValueAsString(new SimpleResponse(exception.getMessage())));
-		} else {
-			super.onAuthenticationFailure(request, response, exception);
-		}
-	}
+    private Logger logger = LoggerFactory.getLogger(getClass());
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @Autowired
+    private SecurityProperties securityProperties;
+
+    /* (non-Javadoc)
+     * @see org.springframework.security.web.authentication.AuthenticationFailureHandler#onAuthenticationFailure(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.springframework.security.core.AuthenticationException)
+     */
+    @Override
+    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
+                                        AuthenticationException exception) throws IOException, ServletException {
+        logger.info("登录失败");
+
+        if (LoginResponseType.JSON.equals(securityProperties.getBrowser().getSignInResponseType())) {
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.setContentType("application/json;charset=UTF-8");
+            response.getWriter().write(objectMapper.writeValueAsString(new SimpleResponse(exception.getMessage())));
+        } else {
+            super.onAuthenticationFailure(request, response, exception);
+        }
+    }
 
 }

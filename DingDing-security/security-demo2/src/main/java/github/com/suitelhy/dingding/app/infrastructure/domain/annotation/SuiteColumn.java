@@ -17,16 +17,18 @@ public @interface SuiteColumn {
 
     /**
      * 定义 - Entity 属性映射字段名称
-     * @Description 缺省值为空字符串，此时使用 POJO 字段名，根据驼峰命名规范
-     *-> 映射下划线的规则推测出对应的数据库表字段名称。
+     *
      * @return Entity 属性映射字段名称
+     * @Description 缺省值为空字符串，此时使用 POJO 字段名，根据驼峰命名规范
+     * -> 映射下划线的规则推测出对应的数据库表字段名称。
      */
     String value() default "";
 
     /**
      * 描述 - Entity 属性映射字段是否可为空值
-     * @Description 缺省值为 true, 此时 Entity 属性映射字段可为空.
+     *
      * @return
+     * @Description 缺省值为 true, 此时 Entity 属性映射字段可为空.
      */
     boolean nullable() default true;
 

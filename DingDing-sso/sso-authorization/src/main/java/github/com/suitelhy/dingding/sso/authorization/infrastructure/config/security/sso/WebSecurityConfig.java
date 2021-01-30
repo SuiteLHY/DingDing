@@ -20,11 +20,9 @@ import org.springframework.security.web.authentication.AnonymousAuthenticationFi
 /**
  * 资源服务器 - 安全配置
  *
- * @Reference
- *-> {@link <a href="https://www.shuzhiduo.com/A/qVdeW1wrJP/">[权限管理系统篇] (五)-Spring security（授权过程分析）</a>}
- *-> {@link <a href="https://github.com/ygsama/ipa/blob/master/oauth2-server/src/main/java/io/github/ygsama/oauth2server/config/LoginSecurityInterceptor.java">ipa/LoginSecurityInterceptor.java at master · ygsama/ipa</a>}
- *
  * @author Suite
+ * @Reference -> {@link <a href="https://www.shuzhiduo.com/A/qVdeW1wrJP/">[权限管理系统篇] (五)-Spring security（授权过程分析）</a>}
+ * -> {@link <a href="https://github.com/ygsama/ipa/blob/master/oauth2-server/src/main/java/io/github/ygsama/oauth2server/config/LoginSecurityInterceptor.java">ipa/LoginSecurityInterceptor.java at master · ygsama/ipa</a>}
  */
 @Configuration
 @EnableWebSecurity
@@ -58,19 +56,19 @@ public class WebSecurityConfig
                 .authorizeRequests()
                 //===
                 .antMatchers(HttpMethod.OPTIONS, "/**")
-                    .permitAll()
+                .permitAll()
                 //=== 权限认证
                 .anyRequest()
                 .authenticated()
                 //===== 退出登录
                 .and()
-                    .logout()
-                        .logoutUrl("/logout")
-                        .clearAuthentication(true)
-                        .deleteCookies("JSESSIONID")/* 从 Cookie 中删除 Session ID */
-                        .invalidateHttpSession(true)
-                        /*.addLogoutHandler(logoutHandler)*/
-                        .logoutSuccessHandler(logoutSuccessHandler);
+                .logout()
+                .logoutUrl("/logout")
+                .clearAuthentication(true)
+                .deleteCookies("JSESSIONID")/* 从 Cookie 中删除 Session ID */
+                .invalidateHttpSession(true)
+                /*.addLogoutHandler(logoutHandler)*/
+                .logoutSuccessHandler(logoutSuccessHandler);
 
         http
                 //=== 自定义权限 Filter
@@ -91,20 +89,15 @@ public class WebSecurityConfig
     /**
      * Spring Security ...
      *
+     * @param web {@link WebSecurity}
+     * @throws Exception
      * @Description Web 策略配置.
      * · 由于 Spring Security 2.x 框架的一些问题, 此处配置不生效; 具体配置移步 {@link DingDingAccessSecurityMetadataSource}.
-     *
-     * @Reference
-     *-> {@link <a href="https://stackoverflow.com/questions/21696592/disable-spring-security-for-options-http-method">java-为选项Http方法禁用Spring Security-代码日志</a>}
-     *
-     * @param web   {@link WebSecurity}
-     *
-     * @throws Exception
+     * @Reference -> {@link <a href="https://stackoverflow.com/questions/21696592/disable-spring-security-for-options-http-method">java-为选项Http方法禁用Spring Security-代码日志</a>}
      */
     @Override
     public void configure(WebSecurity web)
-            throws Exception
-    {
+            throws Exception {
         web
                 .ignoring()
                 .antMatchers(HTTP.MethodVo.OPTIONS.httpMethod, "/**");

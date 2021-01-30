@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package dingding.security.app.rbac.service;
 
@@ -13,7 +13,7 @@ import org.springframework.security.core.Authentication;
  *
  */
 public interface RbacService {
-	
-	boolean hasPermission(HttpServletRequest request, Authentication authentication);
+
+    boolean hasPermission(HttpServletRequest request, Authentication authentication);
 
 }

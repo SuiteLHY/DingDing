@@ -17,40 +17,39 @@ import org.springframework.web.servlet.View;
 
 /**
  * 微信登录配置
- * 
- * @author zhailiang
  *
+ * @author zhailiang
  */
 @Configuration
 @ConditionalOnProperty(prefix = "imooc.security.social.weixin", name = "app-id")
 public class WeixinAutoConfiguration extends SocialConfigurerAdapter {
 
-	@Autowired
-	private SecurityProperties securityProperties;
-	
-	@Override
-	public void addConnectionFactories(ConnectionFactoryConfigurer configurer,
-			Environment environment) {
-		configurer.addConnectionFactory(createConnectionFactory());
-	}
+    @Autowired
+    private SecurityProperties securityProperties;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.springframework.boot.autoconfigure.social.SocialAutoConfigurerAdapter
-	 * #createConnectionFactory()
-	 */
-	protected ConnectionFactory<?> createConnectionFactory() {
-		WeiXinProperties weixinConfig = securityProperties.getSocial().getWeiXin();
-		return new WeixinConnectionFactory(weixinConfig.getProviderId(), weixinConfig.getAppId(),
-				weixinConfig.getAppSecret());
-	}
-	
-	@Bean({"connect/weixinConnect", "connect/weixinConnected"})
-	@ConditionalOnMissingBean(name = "weixinConnectedView")
-	public View weixinConnectedView() {
-		return new ImoocConnectView();
-	}
-	
+    @Override
+    public void addConnectionFactories(ConnectionFactoryConfigurer configurer,
+                                       Environment environment) {
+        configurer.addConnectionFactory(createConnectionFactory());
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * org.springframework.boot.autoconfigure.social.SocialAutoConfigurerAdapter
+     * #createConnectionFactory()
+     */
+    protected ConnectionFactory<?> createConnectionFactory() {
+        WeiXinProperties weixinConfig = securityProperties.getSocial().getWeiXin();
+        return new WeixinConnectionFactory(weixinConfig.getProviderId(), weixinConfig.getAppId(),
+                weixinConfig.getAppSecret());
+    }
+
+    @Bean({"connect/weixinConnect", "connect/weixinConnected"})
+    @ConditionalOnMissingBean(name = "weixinConnectedView")
+    public View weixinConnectedView() {
+        return new ImoocConnectView();
+    }
+
 }

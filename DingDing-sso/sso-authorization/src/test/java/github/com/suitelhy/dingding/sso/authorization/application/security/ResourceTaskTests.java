@@ -48,15 +48,12 @@ public class ResourceTaskTests {
      * 用户（安全认证）基本信息
      *
      * @Description {@link AbstractSecurityUser} 的项目定制化实现.
-     *
      * @Design {@link AbstractSecurityUser}
      * · 【安全设计】使用[静态的嵌套类]能够有效地限制[对 {@link DingDingUserDetailsService.SecurityUser} 的滥用].
-     *
      * @see AbstractSecurityUser
      */
     public static class SecurityUserTestClass
-            extends DingDingUserDetailsService.SecurityUser
-    {
+            extends DingDingUserDetailsService.SecurityUser {
 
         /**
          * (Constructor)
@@ -68,7 +65,6 @@ public class ResourceTaskTests {
          * @param accountNonLocked      {@link this#isAccountNonLocked()}
          * @param credentialsNonExpired {@link this#isCredentialsNonExpired()}
          * @param enabled               {@link this#isEnabled()}
-         *
          * @throws AccountStatusException
          * @throws IllegalArgumentException
          */
@@ -79,8 +75,7 @@ public class ResourceTaskTests {
                 , boolean accountNonLocked
                 , boolean credentialsNonExpired
                 , boolean enabled)
-                throws AccountStatusException, IllegalArgumentException
-        {
+                throws AccountStatusException, IllegalArgumentException {
             super(username, password, authorities
                     , accountNonExpired, accountNonLocked, credentialsNonExpired
                     , enabled);
@@ -89,9 +84,8 @@ public class ResourceTaskTests {
         /**
          * 判断是否正常
          *
-         * @Description 综合判断.
-         *
          * @return {@link Boolean#TYPE}
+         * @Description 综合判断.
          */
         public boolean isNormal() {
             return this.isAccountNonExpired()
@@ -106,10 +100,8 @@ public class ResourceTaskTests {
      * [用户 - 身份验证令牌信息]
      *
      * @Description {@link github.com.suitelhy.dingding.core.infrastructure.web.OAuth2AuthenticationInfo.AbstractUserAuthentication.AbstractDetails} 的项目定制化实现.
-     *
      * @Design {@link github.com.suitelhy.dingding.core.infrastructure.web.OAuth2AuthenticationInfo.AbstractUserAuthentication.AbstractDetails}
      * · 【安全设计】使用[静态的嵌套类]能够有效地限制[对 {@link github.com.suitelhy.dingding.core.infrastructure.web.OAuth2AuthenticationInfo.AbstractUserAuthentication.AbstractDetails} 的滥用].
-     *
      * @see github.com.suitelhy.dingding.core.infrastructure.web.OAuth2AuthenticationInfo.AbstractUserAuthentication.AbstractDetails
      */
     private static final class OAuth2AuthenticationInfo {
@@ -131,26 +123,25 @@ public class ResourceTaskTests {
 
                 private final Collection<String> authorities;
 
-                private final @NotNull String clientId;
+                private final @NotNull
+                String clientId;
 
                 private final Collection<String> scope;
 
-                private final @NotNull String userName;
+                private final @NotNull
+                String userName;
 
                 /**
                  * (Constructor)
-                 *
-                 * @Description 限制 {@link github.com.suitelhy.dingding.core.infrastructure.web.OAuth2AuthenticationInfo.AbstractUserAuthentication.AbstractDetails} 实现类的构造.
                  *
                  * @param active      是否处于活动状态
                  * @param authorities 权限集合
                  * @param clientId    (凭证对应的)客户端编号
                  * @param scope       可操作范围
                  * @param userName    (凭证对应的)用户名称
-                 *
                  * @throws BadCredentialsException             非法的凭证参数
                  * @throws InsufficientAuthenticationException 不满足构建[用户认证凭据 - 详细信息]的必要条件
-                 *
+                 * @Description 限制 {@link github.com.suitelhy.dingding.core.infrastructure.web.OAuth2AuthenticationInfo.AbstractUserAuthentication.AbstractDetails} 实现类的构造.
                  * @see this#isActive()
                  * @see this#getAuthorities()
                  * @see this#getClientId()
@@ -159,8 +150,7 @@ public class ResourceTaskTests {
                  */
                 protected UserDetails(Boolean active, @NotNull Collection<String> authorities, @NotNull String clientId
                         , @NotNull Collection<String> scope, @NotNull String userName)
-                        throws BadCredentialsException, InsufficientAuthenticationException, IllegalArgumentException
-                {
+                        throws BadCredentialsException, InsufficientAuthenticationException, IllegalArgumentException {
                     super(active, authorities, clientId, scope, userName);
 
                     this.active = active;
@@ -176,22 +166,26 @@ public class ResourceTaskTests {
                 }
 
                 @Override
-                public @NotNull Collection<String> getAuthorities() {
+                public @NotNull
+                Collection<String> getAuthorities() {
                     return this.authorities;
                 }
 
                 @Override
-                public @NotNull String getClientId() {
+                public @NotNull
+                String getClientId() {
                     return this.clientId;
                 }
 
                 @Override
-                public @NotNull Collection<String> getScope() {
+                public @NotNull
+                Collection<String> getScope() {
                     return this.scope;
                 }
 
                 @Override
-                public @NotNull String getUserName() {
+                public @NotNull
+                String getUserName() {
                     return this.userName;
                 }
 
@@ -265,7 +259,8 @@ public class ResourceTaskTests {
      *
      * @return {@link SecurityUserTestClass}
      */
-    private @NotNull OAuth2AuthenticationInfo.AbstractUserAuthentication.UserDetails operator_OAuth2_UserDetails() {
+    private @NotNull
+    OAuth2AuthenticationInfo.AbstractUserAuthentication.UserDetails operator_OAuth2_UserDetails() {
         final User user = userEvent.selectUserByUsername("admin");
 
         if (null == user) {
@@ -304,7 +299,6 @@ public class ResourceTaskTests {
      * 获取(测试用的)[(安全) 角色]
      *
      * @param seed
-     *
      * @return {@link RoleDto}
      */
     @NotNull
@@ -335,7 +329,6 @@ public class ResourceTaskTests {
      * 获取(测试用的)[(安全) 角色]
      *
      * @param seed
-     *
      * @return {@link RoleDto}
      */
     @NotNull
@@ -370,7 +363,6 @@ public class ResourceTaskTests {
      * 获取(测试用的)[URL 信息]
      *
      * @param seed
-     *
      * @return {@link String[]}
      */
     @NotNull
@@ -382,7 +374,7 @@ public class ResourceTaskTests {
             salt.concat(Integer.toString(seed));
         }
 
-        return new String[] {
+        return new String[]{
                 String.format("test_url_%s", salt)
                 , String.format("/test_%s/**", salt)
                 , HTTP.MethodVo.GET.name
@@ -402,16 +394,13 @@ public class ResourceTaskTests {
     /**
      * 获取测试用的用户信息
      *
-     * @param securityUser  {@link AbstractSecurityUser}
-     *
+     * @param securityUser {@link AbstractSecurityUser}
      * @return {@link UserDto}
-     *
      * @throws IllegalAccessException
      */
     @NotNull
     private UserDto getUserInfo(@NotNull AbstractSecurityUser securityUser)
-            throws IllegalAccessException
-    {
+            throws IllegalAccessException {
         final @NotNull User user = userEvent.selectUserByUsername(securityUser.getUsername());
         if (null == user || user.isEmpty()) {
             throw new IllegalArgumentException("非法输入:<param>securityUser</param> <- 无效的用户");
@@ -479,13 +468,13 @@ public class ResourceTaskTests {
         final @NotNull ResourceDto newResourceDto = getResourceForTest();
         final @NotNull TaskResult<ResourceDto> newResourceDto_TaskResult;
         Assert.isTrue((newResourceDto_TaskResult = resourceTask.addResource(newResourceDto.getCode()
-                    , newResourceDto.getIcon()
-                    , newResourceDto.getLink()
-                    , newResourceDto.getName()
-                    , newResourceDto.getParentCode()
-                    , newResourceDto.getSort()
-                    , newResourceDto.getType().value()
-                    , operator_OAuth2_UserDetails)).isSuccess()
+                , newResourceDto.getIcon()
+                , newResourceDto.getLink()
+                , newResourceDto.getName()
+                , newResourceDto.getParentCode()
+                , newResourceDto.getSort()
+                , newResourceDto.getType().value()
+                , operator_OAuth2_UserDetails)).isSuccess()
                 , String.format("添加测试数据 - 添加（测试用的）资源数据 -> false => %s", newResourceDto_TaskResult));
 
         //=== selectResourceByCode(..)
@@ -508,22 +497,22 @@ public class ResourceTaskTests {
         final @NotNull RoleDto newRoleDto = getRoleForTest();
         final @NotNull TaskResult<RoleDto> newRole_TaskResult;
         Assert.isTrue((newRole_TaskResult = roleTask.addRole(newRoleDto.getCode()
-                    , newRoleDto.getName()
-                    , newRoleDto.getDescription()
-                    , operator_OAuth2_UserDetails)).isSuccess()
+                , newRoleDto.getName()
+                , newRoleDto.getDescription()
+                , operator_OAuth2_UserDetails)).isSuccess()
                 , String.format("添加测试数据 - 添加（测试用的）角色数据 -> false => %s", newRole_TaskResult));
 
         // 添加（测试用的）资源数据
         final @NotNull ResourceDto newResourceDto = getResourceForTest();
         final @NotNull TaskResult<ResourceDto> newResource_TaskResult;
         Assert.isTrue((newResource_TaskResult = resourceTask.addResource(newResourceDto.getCode()
-                    , newResourceDto.getIcon()
-                    , newResourceDto.getLink()
-                    , newResourceDto.getName()
-                    , newResourceDto.getParentCode()
-                    , newResourceDto.getSort()
-                    , newResourceDto.getType().value()
-                    , operator_OAuth2_UserDetails)).isSuccess()
+                , newResourceDto.getIcon()
+                , newResourceDto.getLink()
+                , newResourceDto.getName()
+                , newResourceDto.getParentCode()
+                , newResourceDto.getSort()
+                , newResourceDto.getType().value()
+                , operator_OAuth2_UserDetails)).isSuccess()
                 , String.format("添加（测试用的）资源数据 -> false => %s", newResource_TaskResult));
 
         // 添加（测试用的）[角色 - 资源]关联数据
@@ -540,8 +529,7 @@ public class ResourceTaskTests {
     @Test
     @Transactional
     public void selectResourceByUsername()
-            throws IllegalAccessException
-    {
+            throws IllegalAccessException {
         final @NotNull TaskResult<List<ResourceDto>> result;
 
         // 获取必要的测试用[操作者 - 身份验证令牌信息 - 用户认证凭据 - 详细信息]
@@ -553,22 +541,22 @@ public class ResourceTaskTests {
         final @NotNull ResourceDto newResourceDto = getResourceForTest();
         final @NotNull TaskResult<ResourceDto> newResource_TaskResult;
         Assert.isTrue((newResource_TaskResult = resourceTask.addResource(newResourceDto.getCode()
-                    , newResourceDto.getIcon()
-                    , newResourceDto.getLink()
-                    , newResourceDto.getName()
-                    , newResourceDto.getParentCode()
-                    , newResourceDto.getSort()
-                    , newResourceDto.getType().value()
-                    , operator_OAuth2_UserDetails)).isSuccess()
+                , newResourceDto.getIcon()
+                , newResourceDto.getLink()
+                , newResourceDto.getName()
+                , newResourceDto.getParentCode()
+                , newResourceDto.getSort()
+                , newResourceDto.getType().value()
+                , operator_OAuth2_UserDetails)).isSuccess()
                 , String.format("添加测试数据 - 添加（测试用的）资源数据 -> false => %s", newResource_TaskResult));
 
         // 添加（测试用的）角色数据
         final @NotNull RoleDto newRoleDto = getRoleForTest();
         final @NotNull TaskResult<RoleDto> newRole_TaskResult;
         Assert.isTrue((newRole_TaskResult = roleTask.addRole(newRoleDto.getCode()
-                    , newRoleDto.getName()
-                    , newRoleDto.getDescription()
-                    , operator_OAuth2_UserDetails)).isSuccess()
+                , newRoleDto.getName()
+                , newRoleDto.getDescription()
+                , operator_OAuth2_UserDetails)).isSuccess()
                 , String.format("添加测试数据 - 添加（测试用的）角色数据 -> false => %s", newRole_TaskResult));
 
         // 添加（测试用的）用户数据
@@ -608,13 +596,13 @@ public class ResourceTaskTests {
         final @NotNull ResourceDto newResourceDto = getResourceForTest();
         final @NotNull TaskResult<ResourceDto> newResource_TaskResult;
         Assert.isTrue((newResource_TaskResult = resourceTask.addResource(newResourceDto.getCode()
-                    , newResourceDto.getIcon()
-                    , newResourceDto.getLink()
-                    , newResourceDto.getName()
-                    , newResourceDto.getParentCode()
-                    , newResourceDto.getSort()
-                    , newResourceDto.getType().value()
-                    , operator_OAuth2_UserDetails)).isSuccess()
+                , newResourceDto.getIcon()
+                , newResourceDto.getLink()
+                , newResourceDto.getName()
+                , newResourceDto.getParentCode()
+                , newResourceDto.getSort()
+                , newResourceDto.getType().value()
+                , operator_OAuth2_UserDetails)).isSuccess()
                 , String.format("添加（测试用的）资源数据 -> false => %s", newResource_TaskResult));
 
         // 获取(测试用的)[URL 信息]
@@ -647,13 +635,13 @@ public class ResourceTaskTests {
         final @NotNull ResourceDto newResourceDto = getResourceForTest();
         final @NotNull TaskResult<ResourceDto> newRole_TaskResult;
         Assert.isTrue((newRole_TaskResult = resourceTask.addResource(newResourceDto.getCode()
-                    , newResourceDto.getIcon()
-                    , newResourceDto.getLink()
-                    , newResourceDto.getName()
-                    , newResourceDto.getParentCode()
-                    , newResourceDto.getSort()
-                    , newResourceDto.getType().value()
-                    , operator)).isSuccess()
+                , newResourceDto.getIcon()
+                , newResourceDto.getLink()
+                , newResourceDto.getName()
+                , newResourceDto.getParentCode()
+                , newResourceDto.getSort()
+                , newResourceDto.getType().value()
+                , operator)).isSuccess()
                 , String.format("添加测试数据 - addResource(...) -> false => %s", newRole_TaskResult));
 
         //=== 验证测试数据
@@ -676,13 +664,13 @@ public class ResourceTaskTests {
         final @NotNull ResourceDto newResourceDto = getResourceForTest();
         final @NotNull TaskResult<ResourceDto> newRole_TaskResult;
         Assert.isTrue((newRole_TaskResult = resourceTask.addResource(newResourceDto.getCode()
-                    , newResourceDto.getIcon()
-                    , newResourceDto.getLink()
-                    , newResourceDto.getName()
-                    , newResourceDto.getParentCode()
-                    , newResourceDto.getSort()
-                    , newResourceDto.getType().value()
-                    , operator_OAuth2_UserDetails)).isSuccess()
+                , newResourceDto.getIcon()
+                , newResourceDto.getLink()
+                , newResourceDto.getName()
+                , newResourceDto.getParentCode()
+                , newResourceDto.getSort()
+                , newResourceDto.getType().value()
+                , operator_OAuth2_UserDetails)).isSuccess()
                 , String.format("添加测试数据 - addResource(...) -> false => %s", newRole_TaskResult));
 
         //=== 验证测试数据
@@ -707,22 +695,22 @@ public class ResourceTaskTests {
         final @NotNull RoleDto newRoleDto = getRoleForTest();
         final @NotNull TaskResult<RoleDto> newRole_TaskResult;
         Assert.isTrue((newRole_TaskResult = roleTask.addRole(newRoleDto.getCode()
-                    , newRoleDto.getName()
-                    , newRoleDto.getDescription()
-                    , operator)).isSuccess()
+                , newRoleDto.getName()
+                , newRoleDto.getDescription()
+                , operator)).isSuccess()
                 , String.format("添加测试数据 - 添加（测试用的）角色数据 -> false => %s", newRole_TaskResult));
 
         // 添加（测试用的）资源数据
         final @NotNull ResourceDto newResourceDto = getResourceForTest();
         final @NotNull TaskResult<ResourceDto> newResource_TaskResult;
         Assert.isTrue((newResource_TaskResult = resourceTask.addResource(newResourceDto.getCode()
-                    , newResourceDto.getIcon()
-                    , newResourceDto.getLink()
-                    , newResourceDto.getName()
-                    , newResourceDto.getParentCode()
-                    , newResourceDto.getSort()
-                    , newResourceDto.getType().value()
-                    , operator)).isSuccess()
+                , newResourceDto.getIcon()
+                , newResourceDto.getLink()
+                , newResourceDto.getName()
+                , newResourceDto.getParentCode()
+                , newResourceDto.getSort()
+                , newResourceDto.getType().value()
+                , operator)).isSuccess()
                 , String.format("添加（测试用的）资源数据 -> false => %s", newResource_TaskResult));
 
         // addResourceToRole(...)
@@ -750,22 +738,22 @@ public class ResourceTaskTests {
         final @NotNull RoleDto newRoleDto = getRoleForTest();
         final @NotNull TaskResult<RoleDto> newRole_TaskResult;
         Assert.isTrue((newRole_TaskResult = roleTask.addRole(newRoleDto.getCode()
-                    , newRoleDto.getName()
-                    , newRoleDto.getDescription()
-                    , operator_OAuth2_UserDetails)).isSuccess()
+                , newRoleDto.getName()
+                , newRoleDto.getDescription()
+                , operator_OAuth2_UserDetails)).isSuccess()
                 , String.format("添加测试数据 - 添加（测试用的）角色数据 -> false => %s", newRole_TaskResult));
 
         // 添加（测试用的）资源数据
         final @NotNull ResourceDto newResourceDto = getResourceForTest();
         final @NotNull TaskResult<ResourceDto> newResource_TaskResult;
         Assert.isTrue((newResource_TaskResult = resourceTask.addResource(newResourceDto.getCode()
-                    , newResourceDto.getIcon()
-                    , newResourceDto.getLink()
-                    , newResourceDto.getName()
-                    , newResourceDto.getParentCode()
-                    , newResourceDto.getSort()
-                    , newResourceDto.getType().value()
-                    , operator_OAuth2_UserDetails)).isSuccess()
+                , newResourceDto.getIcon()
+                , newResourceDto.getLink()
+                , newResourceDto.getName()
+                , newResourceDto.getParentCode()
+                , newResourceDto.getSort()
+                , newResourceDto.getType().value()
+                , operator_OAuth2_UserDetails)).isSuccess()
                 , String.format("添加（测试用的）资源数据 -> false => %s", newResource_TaskResult));
 
         // addResourceToRole(...)
@@ -795,13 +783,13 @@ public class ResourceTaskTests {
         final @NotNull ResourceDto newResourceDto = getResourceForTest();
         final @NotNull TaskResult<ResourceDto> newResource_TaskResult;
         Assert.isTrue((newResource_TaskResult = resourceTask.addResource(newResourceDto.getCode()
-                    , newResourceDto.getIcon()
-                    , newResourceDto.getLink()
-                    , newResourceDto.getName()
-                    , newResourceDto.getParentCode()
-                    , newResourceDto.getSort()
-                    , newResourceDto.getType().value()
-                    , operator)).isSuccess()
+                , newResourceDto.getIcon()
+                , newResourceDto.getLink()
+                , newResourceDto.getName()
+                , newResourceDto.getParentCode()
+                , newResourceDto.getSort()
+                , newResourceDto.getType().value()
+                , operator)).isSuccess()
                 , String.format("添加（测试用的）资源数据 -> false => %s", newResource_TaskResult));
 
         // 获取(测试用的)[URL 信息]
@@ -832,13 +820,13 @@ public class ResourceTaskTests {
         final @NotNull ResourceDto newResourceDto = getResourceForTest();
         final @NotNull TaskResult<ResourceDto> newResource_TaskResult;
         Assert.isTrue((newResource_TaskResult = resourceTask.addResource(newResourceDto.getCode()
-                    , newResourceDto.getIcon()
-                    , newResourceDto.getLink()
-                    , newResourceDto.getName()
-                    , newResourceDto.getParentCode()
-                    , newResourceDto.getSort()
-                    , newResourceDto.getType().value()
-                    , operator_OAuth2_UserDetails)).isSuccess()
+                , newResourceDto.getIcon()
+                , newResourceDto.getLink()
+                , newResourceDto.getName()
+                , newResourceDto.getParentCode()
+                , newResourceDto.getSort()
+                , newResourceDto.getType().value()
+                , operator_OAuth2_UserDetails)).isSuccess()
                 , String.format("添加（测试用的）资源数据 -> false => %s", newResource_TaskResult));
 
         // 获取(测试用的)[URL 信息]
@@ -871,13 +859,13 @@ public class ResourceTaskTests {
         final @NotNull ResourceDto newResourceDto = getResourceForTest();
         final @NotNull TaskResult<ResourceDto> newRole_TaskResult;
         Assert.isTrue((newRole_TaskResult = resourceTask.addResource(newResourceDto.getCode()
-                    , newResourceDto.getIcon()
-                    , newResourceDto.getLink()
-                    , newResourceDto.getName()
-                    , newResourceDto.getParentCode()
-                    , newResourceDto.getSort()
-                    , newResourceDto.getType().value()
-                    , operator)).isSuccess()
+                , newResourceDto.getIcon()
+                , newResourceDto.getLink()
+                , newResourceDto.getName()
+                , newResourceDto.getParentCode()
+                , newResourceDto.getSort()
+                , newResourceDto.getType().value()
+                , operator)).isSuccess()
                 , String.format("添加测试数据 - 添加（测试用的）资源数据 -> false => %s", newRole_TaskResult));
 
         // updateResource(...)
@@ -901,8 +889,8 @@ public class ResourceTaskTests {
 
         final @NotNull TaskResult<ResourceDto> newResource_TaskResult1;
         Assert.isTrue((newResource_TaskResult1 = resourceTask.updateResource(old_resource_data
-                    , new_resource_data
-                    , operator)).isSuccess()
+                , new_resource_data
+                , operator)).isSuccess()
                 , String.format("添加测试数据 - 添加（测试用的）资源数据 -> false => %s", newResource_TaskResult1));
 
         //=== 验证测试数据
@@ -927,13 +915,13 @@ public class ResourceTaskTests {
         final @NotNull ResourceDto newResourceDto = getResourceForTest();
         final @NotNull TaskResult<ResourceDto> newRole_TaskResult;
         Assert.isTrue((newRole_TaskResult = resourceTask.addResource(newResourceDto.getCode()
-                    , newResourceDto.getIcon()
-                    , newResourceDto.getLink()
-                    , newResourceDto.getName()
-                    , newResourceDto.getParentCode()
-                    , newResourceDto.getSort()
-                    , newResourceDto.getType().value()
-                    , operator_OAuth2_UserDetails)).isSuccess()
+                , newResourceDto.getIcon()
+                , newResourceDto.getLink()
+                , newResourceDto.getName()
+                , newResourceDto.getParentCode()
+                , newResourceDto.getSort()
+                , newResourceDto.getType().value()
+                , operator_OAuth2_UserDetails)).isSuccess()
                 , String.format("添加测试数据 - 添加（测试用的）资源数据 -> false => %s", newRole_TaskResult));
 
         // updateResource(...)
@@ -957,8 +945,8 @@ public class ResourceTaskTests {
 
         final @NotNull TaskResult<ResourceDto> newResource_TaskResult1;
         Assert.isTrue((newResource_TaskResult1 = resourceTask.updateResource(old_resource_data
-                    , new_resource_data
-                    , operator_OAuth2_UserDetails)).isSuccess()
+                , new_resource_data
+                , operator_OAuth2_UserDetails)).isSuccess()
                 , String.format("添加测试数据 - 添加（测试用的）资源数据 -> false => %s", newResource_TaskResult1));
 
         //=== 验证测试数据
@@ -985,13 +973,13 @@ public class ResourceTaskTests {
         final @NotNull ResourceDto newResourceDto = getResourceForTest();
         final @NotNull TaskResult<ResourceDto> newResource_TaskResult;
         Assert.isTrue((newResource_TaskResult = resourceTask.addResource(newResourceDto.getCode()
-                    , newResourceDto.getIcon()
-                    , newResourceDto.getLink()
-                    , newResourceDto.getName()
-                    , newResourceDto.getParentCode()
-                    , newResourceDto.getSort()
-                    , newResourceDto.getType().value()
-                    , operator)).isSuccess()
+                , newResourceDto.getIcon()
+                , newResourceDto.getLink()
+                , newResourceDto.getName()
+                , newResourceDto.getParentCode()
+                , newResourceDto.getSort()
+                , newResourceDto.getType().value()
+                , operator)).isSuccess()
                 , String.format("添加(测试用的)资源数据 -> false => 【%s】", newResource_TaskResult));
 
         //=== 验证[添加测试数据]
@@ -1019,13 +1007,13 @@ public class ResourceTaskTests {
         final @NotNull ResourceDto newResourceDto = getResourceForTest();
         final @NotNull TaskResult<ResourceDto> newResource_TaskResult;
         Assert.isTrue((newResource_TaskResult = resourceTask.addResource(newResourceDto.getCode()
-                    , newResourceDto.getIcon()
-                    , newResourceDto.getLink()
-                    , newResourceDto.getName()
-                    , newResourceDto.getParentCode()
-                    , newResourceDto.getSort()
-                    , newResourceDto.getType().value()
-                    , operator_OAuth2_UserDetails)).isSuccess()
+                , newResourceDto.getIcon()
+                , newResourceDto.getLink()
+                , newResourceDto.getName()
+                , newResourceDto.getParentCode()
+                , newResourceDto.getSort()
+                , newResourceDto.getType().value()
+                , operator_OAuth2_UserDetails)).isSuccess()
                 , String.format("添加(测试用的)资源数据 -> false => 【%s】", newResource_TaskResult));
 
         //=== 验证[添加测试数据]

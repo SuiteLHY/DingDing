@@ -6,7 +6,7 @@ public class DemoUtils {
         if (null != arg) {
             String content = (arg instanceof String) ? (String) arg : arg.toString();
             System.out.println(content);
-        }else{
+        } else {
             System.out.println();
         }
     }

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package dingding.security.app.app.social;
 
@@ -18,25 +18,25 @@ import dingding.security.core.social.support.DingDingSpringSocialConfigurer;
 @Component
 public class SpringSocialConfigurerPostProcessor implements BeanPostProcessor {
 
-	/* (non-Javadoc)
-	 * @see org.springframework.beans.factory.config.BeanPostProcessor#postProcessBeforeInitialization(java.lang.Object, java.lang.String)
-	 */
-	@Override
-	public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-		return bean;
-	}
+    /* (non-Javadoc)
+     * @see org.springframework.beans.factory.config.BeanPostProcessor#postProcessBeforeInitialization(java.lang.Object, java.lang.String)
+     */
+    @Override
+    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+        return bean;
+    }
 
-	/* (non-Javadoc)
-	 * @see org.springframework.beans.factory.config.BeanPostProcessor#postProcessAfterInitialization(java.lang.Object, java.lang.String)
-	 */
-	@Override
-	public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-		if(StringUtils.equals(beanName, "imoocSocialSecurityConfig")){
-			DingDingSpringSocialConfigurer config = (DingDingSpringSocialConfigurer)bean;
-			config.signupUrl(SecurityConstants.DEFAULT_SOCIAL_USER_INFO_URL);
-			return config;
-		}
-		return bean;
-	}
+    /* (non-Javadoc)
+     * @see org.springframework.beans.factory.config.BeanPostProcessor#postProcessAfterInitialization(java.lang.Object, java.lang.String)
+     */
+    @Override
+    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+        if (StringUtils.equals(beanName, "imoocSocialSecurityConfig")) {
+            DingDingSpringSocialConfigurer config = (DingDingSpringSocialConfigurer) bean;
+            config.signupUrl(SecurityConstants.DEFAULT_SOCIAL_USER_INFO_URL);
+            return config;
+        }
+        return bean;
+    }
 
 }

@@ -1,23 +1,22 @@
 package dingding.security.app.rbac.web.controller.support;
 
 /**
- *
  * @author zhailiang
  */
 public class SimpleResponse {
-	
-	public SimpleResponse(Object content){
-		this.content = content;
-	}
-	
-	private Object content;
 
-	public Object getContent() {
-		return content;
-	}
+    public SimpleResponse(Object content) {
+        this.content = content;
+    }
 
-	public void setContent(Object content) {
-		this.content = content;
-	}
-	
+    private Object content;
+
+    public Object getContent() {
+        return content;
+    }
+
+    public void setContent(Object content) {
+        this.content = content;
+    }
+
 }

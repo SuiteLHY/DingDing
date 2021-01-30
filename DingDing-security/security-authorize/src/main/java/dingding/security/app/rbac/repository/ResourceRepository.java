@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package dingding.security.app.rbac.repository;
 
@@ -13,8 +13,8 @@ import dingding.security.app.rbac.domain.Resource;
  */
 @Repository
 public interface ResourceRepository
-		extends DingDingRepository<Resource> {
+        extends DingDingRepository<Resource> {
 
-	Resource findByName(String name);
+    Resource findByName(String name);
 
 }

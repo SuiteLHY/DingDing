@@ -2,57 +2,56 @@ package dingding.security.core.properties;
 
 /**
  * 微信登录配置项
- * 
- * @author zhailiang
  *
+ * @author zhailiang
  */
 public class WeiXinProperties {
-	
-	/**
-	 * Application id.
-	 */
-	private String appId;
 
-	/**
-	 * Application secret.
-	 */
-	private String appSecret;
+    /**
+     * Application id.
+     */
+    private String appId;
 
-	/**
-	 * 第三方id，用来决定发起第三方登录的url，默认是 weixin。
-	 */
-	private String providerId = "weixin";
+    /**
+     * Application secret.
+     */
+    private String appSecret;
 
-	//===== Getter and Setter =====//
+    /**
+     * 第三方id，用来决定发起第三方登录的url，默认是 weixin。
+     */
+    private String providerId = "weixin";
 
-	public String getAppId() {
-		return this.appId;
-	}
+    //===== Getter and Setter =====//
 
-	public void setAppId(String appId) {
-		this.appId = appId;
-	}
+    public String getAppId() {
+        return this.appId;
+    }
 
-	public String getAppSecret() {
-		return this.appSecret;
-	}
+    public void setAppId(String appId) {
+        this.appId = appId;
+    }
 
-	public void setAppSecret(String appSecret) {
-		this.appSecret = appSecret;
-	}
+    public String getAppSecret() {
+        return this.appSecret;
+    }
 
-	/**
-	 * @return the providerId
-	 */
-	public String getProviderId() {
-		return providerId;
-	}
+    public void setAppSecret(String appSecret) {
+        this.appSecret = appSecret;
+    }
 
-	/**
-	 * @param providerId the providerId to set
-	 */
-	public void setProviderId(String providerId) {
-		this.providerId = providerId;
-	}
-	
+    /**
+     * @return the providerId
+     */
+    public String getProviderId() {
+        return providerId;
+    }
+
+    /**
+     * @param providerId the providerId to set
+     */
+    public void setProviderId(String providerId) {
+        this.providerId = providerId;
+    }
+
 }

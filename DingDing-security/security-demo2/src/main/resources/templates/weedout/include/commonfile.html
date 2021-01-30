@@ -15,16 +15,16 @@
     var path = '${ctx}';
 </script>-->
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-    <link rel="stylesheet" th:href="@{/static/plugins/amaze/css/amazeui.min.css}"/>
-    <link rel="stylesheet" th:href="@{/static/plugins/amaze/css/admin.css}"/>
-    <link rel="stylesheet" th:href="@{/static/plugins/contextjs/css/context.standalone.css}"/>
-    <script th:src="@{/static/plugins/jquery/jquery-2.1.4.min.js}"></script>
-    <script th:src="@{/static/plugins/amaze/js/amazeui.min.js}"></script>
-    <script th:src="@{/static/plugins/amaze/js/app.js}"></script>
-    <script th:src="@{/static/plugins/layer/layer.js}"></script>
-    <script th:src="@{/static/plugins/laypage/laypage.js}"></script>
-    <script th:src="@{/static/plugins/contextjs/js/context.js}"></script>
-    <script>
-        var path = /*'${ctx}'*/[[${#httpServletRequest.getContextPath()}]];
-    </script>
+<link rel="stylesheet" th:href="@{/static/plugins/amaze/css/amazeui.min.css}"/>
+<link rel="stylesheet" th:href="@{/static/plugins/amaze/css/admin.css}"/>
+<link rel="stylesheet" th:href="@{/static/plugins/contextjs/css/context.standalone.css}"/>
+<script th:src="@{/static/plugins/jquery/jquery-2.1.4.min.js}"></script>
+<script th:src="@{/static/plugins/amaze/js/amazeui.min.js}"></script>
+<script th:src="@{/static/plugins/amaze/js/app.js}"></script>
+<script th:src="@{/static/plugins/layer/layer.js}"></script>
+<script th:src="@{/static/plugins/laypage/laypage.js}"></script>
+<script th:src="@{/static/plugins/contextjs/js/context.js}"></script>
+<script>
+    var path = /*'${ctx}'*/[[${#httpServletRequest.getContextPath()}]];
+</script>
 </html>

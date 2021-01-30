@@ -7,8 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Entity 对象 <- 持久化接口
  *
- * @Description  与 <interface>org.springframework.data.repository.Repository</interface> 并用.
- *
+ * @Description 与 <interface>org.springframework.data.repository.Repository</interface> 并用.
  */
 @Transactional(isolation = Isolation.READ_COMMITTED
         , propagation = Propagation/*.REQUIRED*/.MANDATORY

@@ -127,8 +127,8 @@ public class UserDto implements DtoModel<User, String> {
     /**
      * 是否无效 <- DTO 对象
      *
-     * @Description 使用默认实现.
      * @return
+     * @Description 使用默认实现.
      */
     @Override
     public boolean isEmpty() {
@@ -141,6 +141,7 @@ public class UserDto implements DtoModel<User, String> {
 
         /**
          * 创建用户 DTO
+         *
          * @param user
          * @return
          */
@@ -151,14 +152,14 @@ public class UserDto implements DtoModel<User, String> {
         /**
          * 创建用户 DTO
          *
-         * @param age           用户 - 年龄
-         * @param firsttime     注册时间
-         * @param nickname      用户 - 昵称
-         * @param password      用户密码
-         * @param profile       用户 - 简介
-         * @param profilehead   用户 - 头像
-         * @param username      用户名称
-         * @param sex           用户 - 性别
+         * @param age         用户 - 年龄
+         * @param firsttime   注册时间
+         * @param nickname    用户 - 昵称
+         * @param password    用户密码
+         * @param profile     用户 - 简介
+         * @param profilehead 用户 - 头像
+         * @param username    用户名称
+         * @param sex         用户 - 性别
          * @throws IllegalArgumentException
          */
         public UserDto create(@Nullable Integer age
@@ -181,18 +182,18 @@ public class UserDto implements DtoModel<User, String> {
         /**
          * 更新用户 DTO
          *
-         * @param id            用户ID
-         * @param age           用户 - 年龄
-         * @param firsttime     注册时间
-         * @param ip            最后登陆IP
-         * @param lasttime      最后登录时间
-         * @param nickname      用户 - 昵称
-         * @param password      用户 - 密码
-         * @param profile       用户 - 简介
-         * @param profilehead   用户 - 头像
-         * @param sex           用户 - 性别
-         * @throws IllegalArgumentException 此时 <param>id</param> 非法
+         * @param id          用户ID
+         * @param age         用户 - 年龄
+         * @param firsttime   注册时间
+         * @param ip          最后登陆IP
+         * @param lasttime    最后登录时间
+         * @param nickname    用户 - 昵称
+         * @param password    用户 - 密码
+         * @param profile     用户 - 简介
+         * @param profilehead 用户 - 头像
+         * @param sex         用户 - 性别
          * @return 可为 null, 此时输入参数非法
+         * @throws IllegalArgumentException 此时 <param>id</param> 非法
          */
         public UserDto update(@NotNull String id
                 , @Nullable Integer age
@@ -214,9 +215,10 @@ public class UserDto implements DtoModel<User, String> {
 
         /**
          * 销毁 DTO
+         *
          * @param userDto
          * @return {<code>true</code> : <b>销毁成功</b>
-         *->      , <code>false</code> : <b>销毁失败; 此时 <param>user</param></b> 无效或无法销毁}
+         * ->      , <code>false</code> : <b>销毁失败; 此时 <param>user</param></b> 无效或无法销毁}
          */
         public boolean delete(@NotNull UserDto userDto) {
             if (null != userDto && !userDto.isEmpty()) {
@@ -267,7 +269,7 @@ public class UserDto implements DtoModel<User, String> {
      * @return {true: <tt>密码相同</tt>, false: <tt>密码不相同</tt>, null: <tt>DTO无效</tt>}
      */
     public Boolean equalsPassword(String password) {
-        if (dtoId().isEmpty() ) {
+        if (dtoId().isEmpty()) {
             return null;
         }
         return dtoId().equalsPassword(password);

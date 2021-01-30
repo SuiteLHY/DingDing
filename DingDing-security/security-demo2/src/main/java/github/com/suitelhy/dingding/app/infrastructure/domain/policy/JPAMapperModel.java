@@ -46,8 +46,10 @@ import java.util.*;
 public class JPAMapperModel<E extends EntityModel> {
 
     //===== static basic properties and methods =====//
+
     /**
      * 获取数据库表字段名
+     *
      * @param entityClazz - Entity 的类对象
      * @param <T>
      * @return
@@ -67,6 +69,7 @@ public class JPAMapperModel<E extends EntityModel> {
 
     /**
      * 获取数据库表字段名
+     *
      * @param entity - Entity
      * @param <T>
      * @return
@@ -77,8 +80,9 @@ public class JPAMapperModel<E extends EntityModel> {
 
     /**
      * 获取数据库表字段名
+     *
      * @param entityClazz
-     * @param fieldNames - 指定的(Entity对象的)字段名集合
+     * @param fieldNames  - 指定的(Entity对象的)字段名集合
      * @param <T>
      * @return
      */
@@ -100,6 +104,7 @@ public class JPAMapperModel<E extends EntityModel> {
 
     /**
      * 获取数据库表字段名
+     *
      * @param entity
      * @param fieldNames - 指定的(Entity对象的)字段名集合
      * @param <T>
@@ -136,10 +141,11 @@ public class JPAMapperModel<E extends EntityModel> {
 
     /**
      * 获取用于生成 SQL 的 {数据库表字段名 - Entity 属性名称SQL表示} 映射集合
-     * @Description 非公开方法.
+     *
      * @param entityClazz
      * @param <T>
      * @return [{<tt>数据库表字段名</tt>=<tt>Entity属性名称SQL表示</tt>}, ...]
+     * @Description 非公开方法.
      */
     protected static <T extends EntityModel> Map<String, String> getColumnsMapForSQL(@NotNull Class<T> entityClazz) {
         Map<String, String> result = new LinkedHashMap<>(0);
@@ -163,11 +169,12 @@ public class JPAMapperModel<E extends EntityModel> {
 
     /**
      * 获取用于生成 SQL 的 {数据库表字段名 - Entity 属性名称SQL表示} 映射集合
-     * @Description Entity 属性名称SQL表示中将会注入合法的SQL语句 <param>prefixSql</param> 作为前缀
+     *
      * @param entityClazz
      * @param prefixSql
      * @param <T>
      * @return
+     * @Description Entity 属性名称SQL表示中将会注入合法的SQL语句 <param>prefixSql</param> 作为前缀
      */
     protected static <T extends EntityModel> Map<String, String> getColumnsMapForSQL(@NotNull Class<T> entityClazz
             , @NotNull String prefixSql) {
@@ -192,6 +199,7 @@ public class JPAMapperModel<E extends EntityModel> {
 
     /**
      * 获取用于生成 SQL 的 {数据库表字段名 - Entity 属性名称SQL表示} 映射集合
+     *
      * @param entity
      * @param <T>
      * @return [{<tt>数据库表字段名</tt>=<tt>Entity属性名称SQL表示</tt>}, ...]
@@ -202,11 +210,12 @@ public class JPAMapperModel<E extends EntityModel> {
 
     /**
      * 获取用于生成 SQL 的 {数据库表字段名 - Entity 属性名称SQL表示} 映射集合
-     * @Description Entity 属性名称SQL表示中将会注入合法的SQL语句 <param>prefixSql</param> 作为前缀
+     *
      * @param entity
      * @param prefixSql
      * @param <T>
      * @return
+     * @Description Entity 属性名称SQL表示中将会注入合法的SQL语句 <param>prefixSql</param> 作为前缀
      */
     public static <T extends EntityModel> Map<String, String> getColumnsMapForSQL(@NotNull T entity
             , @Nullable String prefixSql) {
@@ -215,6 +224,7 @@ public class JPAMapperModel<E extends EntityModel> {
 
     /**
      * 获取 <code>Field</code> 对象对应的数据库表字段名
+     *
      * @param field
      * @param <T>
      * @return 可为 null, 此时 <param>field</param> 没有映射到数据库表字段
@@ -243,9 +253,10 @@ public class JPAMapperModel<E extends EntityModel> {
 
     /**
      * 获取 Entity 指定属性对应的数据库表字段名
+     *
      * @param entityClazz -> Entity 的类对象
-     * @param fieldName -> Entity 的指定属性名称
-     * @param <T> -> Entity 类型
+     * @param fieldName   -> Entity 的指定属性名称
+     * @param <T>         -> Entity 类型
      * @return 可为 null, 此时 Entity类对象 的指定属性不存在, 或者没有映射到数据库表字段
      */
     public static <T extends EntityModel> String getColumn(@NotNull Class<T> entityClazz
@@ -263,9 +274,10 @@ public class JPAMapperModel<E extends EntityModel> {
 
     /**
      * 获取 Entity 指定属性对应的SQL表示
+     *
      * @param entityClazz -> Entity 的类对象
-     * @param fieldName -> Entity 的指定属性名称
-     * @param <T> -> Entity 类型
+     * @param fieldName   -> Entity 的指定属性名称
+     * @param <T>         -> Entity 类型
      * @return 可为 null, 此时 Entity对象 的指定属性不存在, 或者没有映射到数据库表字段
      */
     public static <T extends EntityModel> String getColumnValueForSQL(@NotNull Class<T> entityClazz
@@ -287,6 +299,7 @@ public class JPAMapperModel<E extends EntityModel> {
 
     /**
      * 获取数据库表名
+     *
      * @param entityClazz -> Entity类对象
      * @param <T>
      * @return

@@ -3,10 +3,10 @@
 <head>
     <title>GetUserMedia实例</title>
 
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 <body>
-    <video id="video" autoplay></video>
+<video id="video" autoplay></video>
 </body>
 
 <script type="text/javascript">
@@ -20,16 +20,16 @@
             video: true
             , audio: true
         }
-        , function(localMediaStream) {
+        , function (localMediaStream) {
             var video = document.getElementById('video');
             video.src = window.URL.createObjectURL(localMediaStream);
-            video.onloadedmetadata = function(e) {
+            video.onloadedmetadata = function (e) {
                 console.log("Label: " + localMediaStream.label);
-                console.log("AudioTracks" , localMediaStream.getAudioTracks());
-                console.log("VideoTracks" , localMediaStream.getVideoTracks());
+                console.log("AudioTracks", localMediaStream.getAudioTracks());
+                console.log("VideoTracks", localMediaStream.getVideoTracks());
             };
         }
-        , function(e) {
+        , function (e) {
             console.log('Reeeejected!', e);
         }
     );

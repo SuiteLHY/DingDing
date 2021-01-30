@@ -46,10 +46,8 @@ public interface SecurityRoleRepository
     /**
      * 判断存在
      *
-     * @param entityId      {@link SecurityRole#id()}
-     *
+     * @param entityId {@link SecurityRole#id()}
      * @return 判断结果
-     *
      * @see SecurityRole#id()
      */
     /*@Lock(LockModeType.PESSIMISTIC_WRITE)*/
@@ -69,7 +67,7 @@ public interface SecurityRoleRepository
     /**
      * 查询指定角色
      *
-     * @param entityId      {@link SecurityRole#id()}
+     * @param entityId {@link SecurityRole#id()}
      * @return {@link Optional}
      * @see SecurityRole#id()
      */
@@ -96,15 +94,15 @@ public interface SecurityRoleRepository
      */
     @Query(nativeQuery = true
             , value = "select resource.`code` as code "
-                    + ", resource.icon as icon "
-                    + ", resource.link as link "
-                    + ", resource.`name` as name "
-                    + ", resource.parent_code as parent_code "
-                    + ", resource.sort as sort "
-                    + ", resource.type as type "
-                    + "from SECURITY_RESOURCE resource "
-                    + "left join SECURITY_ROLE_RESOURCE rr on rr.resource_code = resource.code "
-                    + "where rr.role_code = :code ")
+            + ", resource.icon as icon "
+            + ", resource.link as link "
+            + ", resource.`name` as name "
+            + ", resource.parent_code as parent_code "
+            + ", resource.sort as sort "
+            + ", resource.type as type "
+            + "from SECURITY_RESOURCE resource "
+            + "left join SECURITY_ROLE_RESOURCE rr on rr.resource_code = resource.code "
+            + "where rr.role_code = :code ")
     List<Map<String, Object>> selectResourceByCode(@Param("code") String code);
 
     /**
@@ -115,10 +113,10 @@ public interface SecurityRoleRepository
      */
     @Query(nativeQuery = true
             , value = "select ru.url_path as url_path "
-                    + "from SECURITY_RESOURCE_URL ru "
-                    + "left join SECURITY_RESOURCE r on r.code = ru.code "
-                    + "left join SECURITY_ROLE_RESOURCE rr on rr.resource_code = r.code "
-                    + "where rr.role_code = :code ")
+            + "from SECURITY_RESOURCE_URL ru "
+            + "left join SECURITY_RESOURCE r on r.code = ru.code "
+            + "left join SECURITY_ROLE_RESOURCE rr on rr.resource_code = r.code "
+            + "where rr.role_code = :code ")
     List<Map<String, Object>> selectUrlByCode(@Param("code") String code);
 
 
@@ -141,7 +139,7 @@ public interface SecurityRoleRepository
     /**
      * 删除指定角色
      *
-     * @param id    ID
+     * @param id ID
      */
     @Override
     @Modifying
@@ -152,7 +150,7 @@ public interface SecurityRoleRepository
     /**
      * 删除指定角色
      *
-     * @param code  角色编码
+     * @param code 角色编码
      */
     @Modifying
     @Transactional(isolation = Isolation.SERIALIZABLE

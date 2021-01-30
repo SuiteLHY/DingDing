@@ -12,11 +12,9 @@ import java.util.Map;
 /**
  * 农历工具类
  *
- * @Description 目前仅精确到：年 -> 月 -> 日
- *
- * @Source <a href="http://www.it610.com/article/271380.htm">java 获取当前时间的农历（阴历）时间 - it610.com</a>
- *
  * @author Suite
+ * @Description 目前仅精确到：年 -> 月 -> 日
+ * @Source <a href="http://www.it610.com/article/271380.htm">java 获取当前时间的农历（阴历）时间 - it610.com</a>
  */
 class LunarCalendarUtil {
 
@@ -127,14 +125,12 @@ class LunarCalendarUtil {
     /**
      * <code>LunarCalendarUtil</code>有参构造方法
      *
+     * @param cal
+     * @return
      * @Description 传出y年m月d日对应的农历.
      * yearCyl3:农历年与1864的相差数 ?
      * monCyl4:从1900年1月31日以来,闰月数
      * dayCyl5:与1900年1月31日相差的天数,再加40 ?
-     *
-     * @param cal
-     *
-     * @return
      */
     public LunarCalendarUtil(Calendar cal) {
         if (null == baseDate) {
@@ -211,7 +207,6 @@ class LunarCalendarUtil {
      * 传回农历 y年的总天数
      *
      * @param y
-     *
      * @return
      */
     final private static Integer yearDays(@NotNull Integer y) {
@@ -228,7 +223,6 @@ class LunarCalendarUtil {
      * 传回农历 y年闰月的天数
      *
      * @param y
-     *
      * @return
      */
     final private static Integer leapDays(@NotNull Integer y) {
@@ -245,7 +239,6 @@ class LunarCalendarUtil {
      * 传回农历 y年闰哪个月 1-12 , 没闰传回 0
      *
      * @param y
-     *
      * @return
      */
     final private static Integer leapMonth(@NotNull Integer y) {
@@ -257,7 +250,6 @@ class LunarCalendarUtil {
      *
      * @param y
      * @param m
-     *
      * @return
      */
     final private static Integer monthDays(@NotNull Integer y
@@ -268,8 +260,7 @@ class LunarCalendarUtil {
     /**
      * 传入月日的offset 传回干支, 0=甲子
      *
-     * @param num   <b>(年份对应的)农历纪年数</b>（容错模式处理）
-     *
+     * @param num <b>(年份对应的)农历纪年数</b>（容错模式处理）
      * @return <b>(农历纪年数对应的)干支纪年数</b>
      */
     private final static String cycle(@NotNull Integer num) {
@@ -294,8 +285,7 @@ class LunarCalendarUtil {
     /**
      * 计算指定年份对应的农历中的生肖
      *
-     * @param year  <b>年份</b>
-     *
+     * @param year <b>年份</b>
      * @return
      */
     public final static String getZodiacAnimals(@NotNull Integer year) {
@@ -314,11 +304,9 @@ class LunarCalendarUtil {
     /**
      * 获取农历的(当月)日数
      *
-     * @Description 容错模式
-     *
      * @param day
-     *
      * @return
+     * @Description 容错模式
      */
     public static String getChineseDay(@NotNull Integer day) {
         if (day > 30) return "";
@@ -412,7 +400,6 @@ public class CalendarController {
      * 月份
      *
      * @Description base on 1
-     *
      * @example <b>1月</b>对应<code>1</code>
      */
     protected int month;
@@ -421,7 +408,6 @@ public class CalendarController {
      * 天数(当月的天数)
      *
      * @Description base on 1
-     *
      * @example <b>当月第1天</b>对应<code>1</code>
      */
     protected int day;
@@ -429,9 +415,8 @@ public class CalendarController {
     /**
      * 时[24时制]
      *
-     * @example
-     *-> <b>0点</b>对应<code>0</code></br>
-     *-> <b>23点</b>对应<code>23</code>
+     * @example -> <b>0点</b>对应<code>0</code></br>
+     * -> <b>23点</b>对应<code>23</code>
      */
     protected int hour;
 
@@ -640,8 +625,7 @@ public class CalendarController {
     /**
      * 计算指定年份对应的农历中的生肖
      *
-     * @param year  年份
-     *
+     * @param year 年份
      * @return 生肖名称
      */
     public static final String getZodiacAnimals(@NotNull Integer year) {
@@ -663,7 +647,6 @@ public class CalendarController {
      * 将时间转换为模板
      *
      * @param date
-     *
      * @return
      */
     public static String format(Date date) {
@@ -675,9 +658,7 @@ public class CalendarController {
      *
      * @param pattern - <b>用于解析的时间模板</b>
      * @param date    - <b>被解析的时间类型对象</b>
-     *
      * @return the formatted time string.
-     *
      * @since 临时策略;暂无更优策略
      */
     public static String format(String pattern, Date date) {
@@ -688,9 +669,7 @@ public class CalendarController {
      * 根据标准模板解析并转换时间
      *
      * @param data
-     *
      * @return
-     *
      * @throws ParseException
      */
     public static Date parse(@NotNull String data) throws ParseException {
@@ -706,7 +685,6 @@ public class CalendarController {
      * 根据标准模板, 判断能否解析
      *
      * @param data
-     *
      * @return
      */
     public static boolean isParse(@NotNull String data) {
@@ -721,16 +699,13 @@ public class CalendarController {
     /**
      * 根据指定模板解析并转换时间
      *
-     * @param pattern   指定模板
-     * @param data      [预期符合时间格式]的字符串
-     *
+     * @param pattern 指定模板
+     * @param data    [预期符合时间格式]的字符串
      * @return {@link Date}
-     *
      * @throws ParseException
      */
     public static Date parse(String pattern, String data)
-            throws ParseException
-    {
+            throws ParseException {
         try {
             return safeSdf(pattern).parse(data);
         } catch (ParseException e) {

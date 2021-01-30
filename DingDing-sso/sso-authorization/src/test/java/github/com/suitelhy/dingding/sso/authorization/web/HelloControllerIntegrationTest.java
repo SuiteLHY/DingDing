@@ -17,14 +17,12 @@ import static org.assertj.core.api.Assertions.assertThat;
  * HelloController Web 层动态测试 (启动服务)
  *
  * @Description 使用随机端口.
- * @Reference
- *-> <a href="https://blog.codeleak.pl/2019/09/spring-boot-testing-with-junit-5.html#spring-boot-test-with-mocked-web-layer">
- *->     使用JUnit 5进行Spring Boot测试</a>
- *-> , <a href="https://github.com/kolorobot/spring-boot-junit5/blob/master/src/test/java/pl/codeleak/samples/springbootjunit5/todo/TaskControllerIntegrationTest.java">
- *->     spring-boot-junit5/TaskControllerIntegrationTest.java at master · kolorobot/spring-boot-junit5</a>
- *-> , <a href="https://stackoverflow.com/questions/8297215/spring-resttemplate-get-with-parameters">
- *->     java - Spring RestTemplate GET with parameters - Stack Overflow</a>
- *
+ * @Reference -> <a href="https://blog.codeleak.pl/2019/09/spring-boot-testing-with-junit-5.html#spring-boot-test-with-mocked-web-layer">
+ * ->     使用JUnit 5进行Spring Boot测试</a>
+ * -> , <a href="https://github.com/kolorobot/spring-boot-junit5/blob/master/src/test/java/pl/codeleak/samples/springbootjunit5/todo/TaskControllerIntegrationTest.java">
+ * ->     spring-boot-junit5/TaskControllerIntegrationTest.java at master · kolorobot/spring-boot-junit5</a>
+ * -> , <a href="https://stackoverflow.com/questions/8297215/spring-resttemplate-get-with-parameters">
+ * ->     java - Spring RestTemplate GET with parameters - Stack Overflow</a>
  */
 
 /**

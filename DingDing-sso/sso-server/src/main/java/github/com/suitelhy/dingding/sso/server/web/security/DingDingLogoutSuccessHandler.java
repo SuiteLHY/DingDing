@@ -21,7 +21,6 @@ import java.io.IOException;
  * DingDing - 注销成功处理器
  *
  * @Description 项目自定义处理器.
- *
  * @see LogoutSuccessHandler
  */
 @Component
@@ -36,16 +35,13 @@ public class DingDingLogoutSuccessHandler
     private TokenStore tokenStore;
 
     /**
-     * @Description 成功退出时调用.
-     *
      * @param request
      * @param response
      * @param authentication
-     *
-     * @see LogoutSuccessHandler#onLogoutSuccess(HttpServletRequest, HttpServletResponse, Authentication)
-     *
      * @throws IOException
      * @throws ServletException
+     * @Description 成功退出时调用.
+     * @see LogoutSuccessHandler#onLogoutSuccess(HttpServletRequest, HttpServletResponse, Authentication)
      */
     @Override
     public void onLogoutSuccess(HttpServletRequest request
@@ -72,7 +68,7 @@ public class DingDingLogoutSuccessHandler
                             .concat(cancelled_access_token)
                             .concat("} 注销成功")))
             );
-        } else  {
+        } else {
             response.getWriter().write(
                     toJSONString.writeValueAsString(new DingDingResponse("注销失败"))
             );

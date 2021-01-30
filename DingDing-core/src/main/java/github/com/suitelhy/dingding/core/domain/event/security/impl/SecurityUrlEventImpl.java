@@ -29,9 +29,7 @@ import java.util.List;
  *
  * @see SecurityResource
  * @see SecurityResourceUrl
- *
  * @see SecurityUrlEvent
- *
  * @see SecurityResourceService
  * @see SecurityResourceUrlService
  * @see UserAccountOperationInfoService
@@ -79,17 +77,14 @@ public class SecurityUrlEventImpl
     /**
      * 判断[（安全认证）角色]是否存在 (关联的) [（安全认证）资源]
      *
-     * @Description 完整的业务流程.
-     *
      * @param urlInfo URL相关信息.    {@link SecurityResourceUrl.Validator#urlInfo(String[])}
-     *
      * @return {@link Boolean#TYPE}
+     * @Description 完整的业务流程.
      */
     @Override
     public boolean existResourceOnUrlInfo(@NotNull String[] urlInfo)
-            throws IllegalArgumentException
-    {
-        if (! SecurityResourceUrl.Validator.RESOURCE_URL.urlInfo(urlInfo)) {
+            throws IllegalArgumentException {
+        if (!SecurityResourceUrl.Validator.RESOURCE_URL.urlInfo(urlInfo)) {
             //-- 非法输入: [URL 相关信息]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "[URL 相关信息]"
@@ -105,17 +100,14 @@ public class SecurityUrlEventImpl
     /**
      * 判断[（安全认证）资源]是否存在 (关联的) [URL 相关信息]
      *
-     * @Description 完整的业务流程.
-     *
      * @param resourceCode 资源编码    {@link SecurityResource.Validator#code(String)}
-     *
      * @return {@link Boolean#TYPE}
+     * @Description 完整的业务流程.
      */
     @Override
     public boolean existUrlInfoOnResourceByResourceCode(@NotNull String resourceCode)
-            throws IllegalArgumentException
-    {
-        if (! SecurityResourceUrl.Validator.RESOURCE_URL.code(resourceCode)) {
+            throws IllegalArgumentException {
+        if (!SecurityResourceUrl.Validator.RESOURCE_URL.code(resourceCode)) {
             //-- 非法输入: 资源编码
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "资源编码"
@@ -131,19 +123,16 @@ public class SecurityUrlEventImpl
     /**
      * 查询[URL 相关信息]
      *
-     * @Description 完整的业务流程.
-     *
      * @param resourceCode 资源编码    {@link SecurityResourceUrl.Validator#code(String)}
-     *
      * @return {@link SecurityResourceUrl}
-     *
+     * @Description 完整的业务流程.
      * @see github.com.suitelhy.dingding.core.domain.event.security.SecurityResourceEvent#selectUrlInfoOnResourceByResourceCode(String)
      */
     @Override
-    public @NotNull List<SecurityResourceUrl> selectUrlInfoOnResourceByResourceCode(@NotNull String resourceCode)
-            throws IllegalArgumentException
-    {
-        if (! SecurityResourceUrl.Validator.RESOURCE_URL.code(resourceCode)) {
+    public @NotNull
+    List<SecurityResourceUrl> selectUrlInfoOnResourceByResourceCode(@NotNull String resourceCode)
+            throws IllegalArgumentException {
+        if (!SecurityResourceUrl.Validator.RESOURCE_URL.code(resourceCode)) {
             //-- 非法输入: 资源编码
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "资源编码"
@@ -159,19 +148,16 @@ public class SecurityUrlEventImpl
     /**
      * 查询[用户 -> (关联的) 角色 -> (关联的) 资源 -> URL 相关信息]
      *
-     * @Description 完整的业务流程.
-     *
      * @param username 用户名称    {@link SecurityUser.Validator#username(String)}
-     *
      * @return {@link SecurityResourceUrl}
-     *
+     * @Description 完整的业务流程.
      * @see UserEvent#selectUrlInfoOnUserByUsername(String)
      */
     @Override
-    public @NotNull List<SecurityResourceUrl> selectUrlInfoOnUserByUsername(@NotNull String username)
-            throws IllegalArgumentException
-    {
-        if (! SecurityUser.Validator.USER.username(username)) {
+    public @NotNull
+    List<SecurityResourceUrl> selectUrlInfoOnUserByUsername(@NotNull String username)
+            throws IllegalArgumentException {
+        if (!SecurityUser.Validator.USER.username(username)) {
             //-- 非法输入: 用户名称
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                     , "用户名称"
@@ -194,7 +180,7 @@ public class SecurityUrlEventImpl
         }
 
         final @NotNull List<SecurityUserRole> user_userRoles = securityUserRoleService.selectByUsername(username);
-        if (! user_userRoles.isEmpty()) {
+        if (!user_userRoles.isEmpty()) {
             for (@NotNull SecurityUserRole eachUserRole : user_userRoles) {
                 if (eachUserRole.isEmpty()) {
                     continue;
@@ -206,7 +192,7 @@ public class SecurityUrlEventImpl
                 }
 
                 final @NotNull List<SecurityRoleResource> role_roleResources = securityRoleResourceService.selectByRoleCode(eachUserRole_role.getCode());
-                if (! role_roleResources.isEmpty()) {
+                if (!role_roleResources.isEmpty()) {
                     for (@NotNull SecurityRoleResource eachRoleResource : role_roleResources) {
                         if (eachRoleResource.isEmpty()) {
                             continue;
@@ -218,7 +204,7 @@ public class SecurityUrlEventImpl
                         }
 
                         final @NotNull List<SecurityResourceUrl> eachRoleResource_resource_resourceUrl = securityResourceUrlService.selectByResourceCode(eachRoleResource_resource.getCode());
-                        if (! eachRoleResource_resource_resourceUrl.isEmpty()) {
+                        if (!eachRoleResource_resource_resourceUrl.isEmpty()) {
                             for (@NotNull SecurityResourceUrl eachResourceUrl : eachRoleResource_resource_resourceUrl) {
                                 if (eachResourceUrl.isEmpty()) {
                                     continue;
@@ -238,20 +224,17 @@ public class SecurityUrlEventImpl
     /**
      * 查询[用户 -> (关联的) 角色 -> (关联的) 资源 -> URL 相关信息]
      *
-     * @Description 完整的业务流程.
-     *
      * @param username 用户名称         {@link SecurityUser.Validator#username(String)}
      * @param clientId [资源服务器 ID]  {@link SecurityResourceUrl#getClientId()}
-     *
      * @return {@link SecurityResourceUrl}
-     *
+     * @Description 完整的业务流程.
      * @see UserEvent#selectUrlInfoOnUserByUsernameAndClientId(String, String)
      */
     @Override
-    public @NotNull List<SecurityResourceUrl> selectUrlInfoOnUserByUsernameAndClientId(@NotNull String username, @NotNull String clientId)
-            throws IllegalArgumentException
-    {
-        if (! SecurityUser.Validator.USER.username(username)) {
+    public @NotNull
+    List<SecurityResourceUrl> selectUrlInfoOnUserByUsernameAndClientId(@NotNull String username, @NotNull String clientId)
+            throws IllegalArgumentException {
+        if (!SecurityUser.Validator.USER.username(username)) {
             //-- 非法输入: 用户名称
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                     , "用户名称"
@@ -260,7 +243,7 @@ public class SecurityUrlEventImpl
                     , Thread.currentThread().getStackTrace()[1].getMethodName()
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
-        if (! SecurityResourceUrl.Validator.RESOURCE_URL.clientId(clientId)) {
+        if (!SecurityResourceUrl.Validator.RESOURCE_URL.clientId(clientId)) {
             //-- 非法输入: [资源服务器 ID]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                     , "[资源服务器 ID]"
@@ -283,7 +266,7 @@ public class SecurityUrlEventImpl
         }
 
         final @NotNull List<SecurityUserRole> user_userRoles = securityUserRoleService.selectByUsername(username);
-        if (! user_userRoles.isEmpty()) {
+        if (!user_userRoles.isEmpty()) {
             for (@NotNull SecurityUserRole eachUserRole : user_userRoles) {
                 if (eachUserRole.isEmpty()) {
                     continue;
@@ -295,7 +278,7 @@ public class SecurityUrlEventImpl
                 }
 
                 final @NotNull List<SecurityRoleResource> role_roleResources = securityRoleResourceService.selectByRoleCode(eachUserRole_role.getCode());
-                if (! role_roleResources.isEmpty()) {
+                if (!role_roleResources.isEmpty()) {
                     for (@NotNull SecurityRoleResource eachRoleResource : role_roleResources) {
                         if (eachRoleResource.isEmpty()) {
                             continue;
@@ -307,11 +290,11 @@ public class SecurityUrlEventImpl
                         }
 
                         final @NotNull List<SecurityResourceUrl> eachRoleResource_resource_resourceUrl = securityResourceUrlService.selectByResourceCode(eachRoleResource_resource.getCode());
-                        if (! eachRoleResource_resource_resourceUrl.isEmpty()) {
+                        if (!eachRoleResource_resource_resourceUrl.isEmpty()) {
                             for (@NotNull SecurityResourceUrl eachResourceUrl : eachRoleResource_resource_resourceUrl) {
                                 if (eachResourceUrl.isEmpty()) {
                                     continue;
-                                } else if (! eachResourceUrl.getClientId().equals(clientId)) {
+                                } else if (!eachResourceUrl.getClientId().equals(clientId)) {
                                     continue;
                                 }
 
@@ -329,18 +312,16 @@ public class SecurityUrlEventImpl
     /**
      * 查询[URL 相关信息]
      *
-     * @Description 完整的业务流程.
-     *
      * @param clientId [资源服务器 ID]             {@link SecurityResourceUrl.Validator#clientId(String)}
      * @param urlPath  [资源对应的 URL (Path部分)] {@link SecurityResourceUrl.Validator#urlPath(String)}
-     *
      * @return {@link SecurityResourceUrl}
+     * @Description 完整的业务流程.
      */
     @Override
-    public @NotNull List<SecurityResourceUrl> selectUrlInfoByClientIdAndUrlPath(@NotNull String clientId, @NotNull String urlPath)
-            throws IllegalArgumentException
-    {
-        if (! SecurityResourceUrl.Validator.RESOURCE_URL.clientId(clientId)) {
+    public @NotNull
+    List<SecurityResourceUrl> selectUrlInfoByClientIdAndUrlPath(@NotNull String clientId, @NotNull String urlPath)
+            throws IllegalArgumentException {
+        if (!SecurityResourceUrl.Validator.RESOURCE_URL.clientId(clientId)) {
             //-- 非法输入: [资源服务器 ID]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "[资源服务器 ID]"
@@ -349,7 +330,7 @@ public class SecurityUrlEventImpl
                     , Thread.currentThread().getStackTrace()[1].getMethodName()
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
-        if (! SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(urlPath)) {
+        if (!SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(urlPath)) {
             //-- 非法输入: [资源对应的 URL (Path部分)]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "[资源对应的 URL (Path部分)]"
@@ -365,17 +346,15 @@ public class SecurityUrlEventImpl
     /**
      * 查询[（安全认证）资源 ←→ URL]
      *
-     * @Description 完整的业务流程.
-     *
      * @param resourceCode 资源编码    {@link SecurityResourceUrl.Validator#code(String)}
-     *
      * @return {@link SecurityResourceUrl}
+     * @Description 完整的业务流程.
      */
     @Override
-    public @NotNull List<SecurityResourceUrl> selectResourceUrlRelationshipOnResourceByResourceCode(@NotNull String resourceCode)
-            throws IllegalArgumentException
-    {
-        if (! SecurityResourceUrl.Validator.RESOURCE_URL.code(resourceCode)) {
+    public @NotNull
+    List<SecurityResourceUrl> selectResourceUrlRelationshipOnResourceByResourceCode(@NotNull String resourceCode)
+            throws IllegalArgumentException {
+        if (!SecurityResourceUrl.Validator.RESOURCE_URL.code(resourceCode)) {
             //-- 非法输入: 资源编码
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "资源编码"
@@ -391,18 +370,16 @@ public class SecurityUrlEventImpl
     /**
      * 查询[（安全认证）资源 ←→ URL]
      *
-     * @Description 完整的业务流程.
-     *
      * @param clientId [资源服务器 ID]             {@link SecurityResourceUrl.Validator#clientId(String)}
      * @param urlPath  [资源对应的 URL (Path部分)] {@link SecurityResourceUrl.Validator#urlPath(String)}
-     *
      * @return {@link SecurityResourceUrl}
+     * @Description 完整的业务流程.
      */
     @Override
-    public @NotNull List<SecurityResourceUrl> selectResourceUrlRelationshipOnUrlInfoByClientIdAndUrlPath(@NotNull String clientId, @NotNull String urlPath)
-            throws IllegalArgumentException
-    {
-        if (! SecurityResourceUrl.Validator.RESOURCE_URL.clientId(clientId)) {
+    public @NotNull
+    List<SecurityResourceUrl> selectResourceUrlRelationshipOnUrlInfoByClientIdAndUrlPath(@NotNull String clientId, @NotNull String urlPath)
+            throws IllegalArgumentException {
+        if (!SecurityResourceUrl.Validator.RESOURCE_URL.clientId(clientId)) {
             //-- 非法输入: [资源服务器 ID]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "[资源服务器 ID]"
@@ -411,7 +388,7 @@ public class SecurityUrlEventImpl
                     , Thread.currentThread().getStackTrace()[1].getMethodName()
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
-        if (! SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(urlPath)) {
+        if (!SecurityResourceUrl.Validator.RESOURCE_URL.urlPath(urlPath)) {
             //-- 非法输入: [资源对应的 URL (Path部分)]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "[资源对应的 URL (Path部分)]"
@@ -429,18 +406,15 @@ public class SecurityUrlEventImpl
     /**
      * 新增一个[URL 相关信息]
      *
-     * @Description 完整的业务流程.
-     *
      * @param resource [（安全认证）资源], 必须合法且已持久化.   {@link SecurityResource}
      * @param urlInfo  [URL 相关信息]                       {@link SecurityResourceUrl.Validator#urlInfo(String[])}
      * @param operator 操作者
-     *
      * @return 操作是否成功
+     * @Description 完整的业务流程.
      */
     @Override
     public boolean insertUrlInfo(@NotNull SecurityResource resource, @NotNull String[] urlInfo, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if (null == resource || resource.isEmpty()) {
             //-- 非法输入: [（安全认证）资源]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -450,7 +424,7 @@ public class SecurityUrlEventImpl
                     , Thread.currentThread().getStackTrace()[1].getMethodName()
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
-        if (! SecurityResourceUrl.Validator.RESOURCE_URL.urlInfo(urlInfo)) {
+        if (!SecurityResourceUrl.Validator.RESOURCE_URL.urlInfo(urlInfo)) {
             //-- 非法输入: [URL 相关信息]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "[URL 相关信息]"
@@ -492,7 +466,7 @@ public class SecurityUrlEventImpl
         }
 
         final @NotNull SecurityResourceUrl resourceUrl = SecurityResourceUrl.Factory.RESOURCE_URL.create(resource, urlInfo);
-        if (! securityResourceUrlService.insert(resourceUrl, operator, operator_userAccountOperationInfo)) {
+        if (!securityResourceUrlService.insert(resourceUrl, operator, operator_userAccountOperationInfo)) {
             throw new BusinessAtomicException(String.format("操作失败:<description>【%s】 <- 【%s】</description>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , HandleType.LogVo.SECURITY__SECURITY_RESOURCE_URL__ADD.name
                     , HandleType.LogVo.SECURITY__SECURITY_RESOURCE_URL__ADD.name
@@ -508,12 +482,10 @@ public class SecurityUrlEventImpl
     /**
      * 新增一个[（安全认证）资源 ←→ URL]关联关系
      *
-     * @Description 完整的业务流程.
-     *
      * @param resourceUrl [（安全认证）资源 ←→ URL]   {@link SecurityResourceUrl}
      * @param operator    操作者
-     *
      * @return 操作是否成功 / 是否已存在相同的有效数据
+     * @Description 完整的业务流程.
      */
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -521,9 +493,8 @@ public class SecurityUrlEventImpl
             , rollbackFor = Exception.class
             , timeout = 15)
     public boolean insertResourceUrlRelationship(@NotNull SecurityResourceUrl resourceUrl, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
-        if (null == resourceUrl || ! resourceUrl.isEntityLegal()) {
+            throws IllegalArgumentException, BusinessAtomicException {
+        if (null == resourceUrl || !resourceUrl.isEntityLegal()) {
             //-- 非法输入: [（安全认证）资源 ←→ URL]关联关系
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "[（安全认证）资源 ←→ URL]关联关系"
@@ -564,7 +535,7 @@ public class SecurityUrlEventImpl
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
 
-        if (! securityResourceUrlService.insert(resourceUrl, operator, operator_userAccountOperationInfo)) {
+        if (!securityResourceUrlService.insert(resourceUrl, operator, operator_userAccountOperationInfo)) {
             throw new BusinessAtomicException(String.format("操作失败:<description>【%s】 <- 【%s】</description>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , HandleType.LogVo.SECURITY__SECURITY_RESOURCE_URL__ADD.name
                     , HandleType.LogVo.SECURITY__SECURITY_RESOURCE_URL__ADD.name
@@ -580,13 +551,11 @@ public class SecurityUrlEventImpl
     /**
      * 新增一个[（安全认证）资源 ←→ URL]关联关系
      *
-     * @Description 完整的业务流程.
-     *
      * @param resource [（安全认证）资源], 必须合法且已持久化.   {@link SecurityResource}
      * @param urlInfo  [URL 相关信息]                       {@link SecurityResourceUrl.Validator#urlInfo(String[])}
      * @param operator 操作者
-     *
      * @return 操作是否成功
+     * @Description 完整的业务流程.
      */
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -596,8 +565,7 @@ public class SecurityUrlEventImpl
     public boolean insertResourceUrlRelationship(@NotNull SecurityResource resource
             , @NotNull String[] urlInfo
             , @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if (null == resource || resource.isEmpty()) {
             //-- 非法输入: [（安全认证）资源]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -607,7 +575,7 @@ public class SecurityUrlEventImpl
                     , Thread.currentThread().getStackTrace()[1].getMethodName()
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
-        if (! SecurityResourceUrl.Validator.RESOURCE_URL.urlInfo(urlInfo)) {
+        if (!SecurityResourceUrl.Validator.RESOURCE_URL.urlInfo(urlInfo)) {
             //-- 非法输入: [URL 相关信息]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "[URL 相关信息]"
@@ -649,7 +617,7 @@ public class SecurityUrlEventImpl
         }
 
         final @NotNull SecurityResourceUrl resourceUrl = SecurityResourceUrl.Factory.RESOURCE_URL.create(resource, urlInfo);
-        if (! securityResourceUrlService.insert(resourceUrl, operator, operator_userAccountOperationInfo)) {
+        if (!securityResourceUrlService.insert(resourceUrl, operator, operator_userAccountOperationInfo)) {
             throw new BusinessAtomicException(String.format("操作失败:<description>【%s】 <- 【%s】</description>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , HandleType.LogVo.SECURITY__SECURITY_RESOURCE_URL__ADD.name
                     , HandleType.LogVo.SECURITY__SECURITY_RESOURCE_URL__ADD.name
@@ -669,19 +637,15 @@ public class SecurityUrlEventImpl
     /**
      * 删除指定的[URL 相关信息]
      *
-     * @Description
-     * · 完整的业务流程.
-     *
-     * @param urlInfo   [URL 相关信息]   {@link SecurityResourceUrl.Validator#urlInfo(String[])}
-     * @param operator  操作者
-     *
+     * @param urlInfo  [URL 相关信息]   {@link SecurityResourceUrl.Validator#urlInfo(String[])}
+     * @param operator 操作者
      * @return 操作是否成功
+     * @Description · 完整的业务流程.
      */
     @Override
     public boolean deleteUrlInfo(@NotNull String[] urlInfo, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
-        if (! SecurityResourceUrl.Validator.RESOURCE_URL.urlInfo(urlInfo)) {
+            throws IllegalArgumentException, BusinessAtomicException {
+        if (!SecurityResourceUrl.Validator.RESOURCE_URL.urlInfo(urlInfo)) {
             //-- 非法输入: [URL 信息]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "[URL 信息]"
@@ -718,18 +682,15 @@ public class SecurityUrlEventImpl
     /**
      * 删除指定的[（安全认证）资源]关联的所有[URL 相关信息]
      *
-     * @Description · 完整的业务流程.
-     *
      * @param resource [（安全认证）资源]  {@link SecurityResource}
      * @param operator 操作者
-     *
      * @return 操作是否成功
+     * @Description · 完整的业务流程.
      */
     @Override
     public boolean deleteUrlInfoOnResource(@NotNull SecurityResource resource, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
-        if (null == resource || ! resource.isEmpty()) {
+            throws IllegalArgumentException, BusinessAtomicException {
+        if (null == resource || !resource.isEmpty()) {
             //-- 非法输入: [（安全认证）资源]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "[（安全认证）资源]"
@@ -759,9 +720,9 @@ public class SecurityUrlEventImpl
         }
 
         final @NotNull List<SecurityResourceUrl> existedResourceUrls = securityResourceUrlService.selectByResourceCode(resource.getCode());
-        if (! existedResourceUrls.isEmpty()) {
+        if (!existedResourceUrls.isEmpty()) {
             for (@NotNull SecurityResourceUrl eachResourceUrl : existedResourceUrls) {
-                if (! securityResourceUrlService.delete(eachResourceUrl, operator, operator_userAccountOperationInfo)) {
+                if (!securityResourceUrlService.delete(eachResourceUrl, operator, operator_userAccountOperationInfo)) {
                     throw new BusinessAtomicException(String.format("操作失败:<description>【%s】 <- 【%s】</description>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , HandleType.LogVo.SECURITY__SECURITY_RESOURCE_URL__DELETION.name
                             , HandleType.LogVo.SECURITY__SECURITY_RESOURCE_URL__DELETION.name
@@ -779,12 +740,10 @@ public class SecurityUrlEventImpl
     /**
      * 删除指定的[（安全认证）资源 ←→ URL]关联关系
      *
-     * @Description · 完整的业务流程.
-     *
      * @param resourceUrl [（安全认证）资源 ←→ URL]   {@link SecurityResourceUrl}
      * @param operator    操作者
-     *
      * @return 操作是否成功
+     * @Description · 完整的业务流程.
      */
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -792,9 +751,8 @@ public class SecurityUrlEventImpl
             , rollbackFor = Exception.class
             , timeout = 15)
     public boolean deleteResourceUrlRelationship(@NotNull SecurityResourceUrl resourceUrl, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
-        if (null == resourceUrl || ! resourceUrl.isEmpty()) {
+            throws IllegalArgumentException, BusinessAtomicException {
+        if (null == resourceUrl || !resourceUrl.isEmpty()) {
             //-- 非法输入: [（安全认证）资源 ←→ URL]关联关系
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "[（安全认证）资源 ←→ URL]关联关系"
@@ -823,7 +781,7 @@ public class SecurityUrlEventImpl
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
 
-        if (! securityResourceUrlService.delete(resourceUrl, operator, operator_userAccountOperationInfo)) {
+        if (!securityResourceUrlService.delete(resourceUrl, operator, operator_userAccountOperationInfo)) {
             throw new BusinessAtomicException(String.format("操作失败:<description>【%s】 <- 【%s】</description>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , HandleType.LogVo.SECURITY__SECURITY_RESOURCE_URL__DELETION.name
                     , HandleType.LogVo.SECURITY__SECURITY_RESOURCE_URL__DELETION.name
@@ -839,13 +797,11 @@ public class SecurityUrlEventImpl
     /**
      * 删除指定的[（安全认证）资源 ←→ URL]关联关系
      *
-     * @Description · 完整的业务流程.
-     *
      * @param resource [（安全认证）资源], 必须合法且已持久化.  {@link SecurityResource}
      * @param urlInfo  [URL 相关信息]                      {@link SecurityResourceUrl.Validator#urlInfo(String[])}
      * @param operator 操作者
-     *
      * @return 操作是否成功
+     * @Description · 完整的业务流程.
      */
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -853,9 +809,8 @@ public class SecurityUrlEventImpl
             , rollbackFor = Exception.class
             , timeout = 15)
     public boolean deleteResourceUrlRelationship(@NotNull SecurityResource resource, @NotNull String[] urlInfo, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
-        if (null == resource || ! resource.isEmpty()) {
+            throws IllegalArgumentException, BusinessAtomicException {
+        if (null == resource || !resource.isEmpty()) {
             //-- 非法输入: [（安全认证）资源]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "[（安全认证）资源]"
@@ -864,7 +819,7 @@ public class SecurityUrlEventImpl
                     , Thread.currentThread().getStackTrace()[1].getMethodName()
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
-        if (! SecurityResourceUrl.Validator.RESOURCE_URL.urlInfo(urlInfo)) {
+        if (!SecurityResourceUrl.Validator.RESOURCE_URL.urlInfo(urlInfo)) {
             //-- 非法输入: [URL 相关信息]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "[URL 相关信息]"
@@ -894,7 +849,7 @@ public class SecurityUrlEventImpl
         }
 
         final @NotNull SecurityResourceUrl resourceUrl = SecurityResourceUrl.Factory.RESOURCE_URL.create(resource, urlInfo);
-        if (! securityResourceUrlService.delete(resourceUrl, operator, operator_userAccountOperationInfo)) {
+        if (!securityResourceUrlService.delete(resourceUrl, operator, operator_userAccountOperationInfo)) {
             throw new BusinessAtomicException(String.format("操作失败:<description>【%s】 <- 【%s】</description>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , HandleType.LogVo.SECURITY__SECURITY_RESOURCE_URL__DELETION.name
                     , HandleType.LogVo.SECURITY__SECURITY_RESOURCE_URL__DELETION.name
@@ -910,18 +865,15 @@ public class SecurityUrlEventImpl
     /**
      * 删除指定的[（安全认证）资源]关联的所有[（安全认证）资源 ←→ URL]关联关系
      *
-     * @Description · 完整的业务流程.
-     *
      * @param resource [（安全认证）资源]  {@link SecurityResource}
      * @param operator 操作者
-     *
      * @return 操作是否成功
+     * @Description · 完整的业务流程.
      */
     @Override
     public boolean deleteResourceUrlRelationshipOnResource(@NotNull SecurityResource resource, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
-        if (null == resource || ! resource.isEmpty()) {
+            throws IllegalArgumentException, BusinessAtomicException {
+        if (null == resource || !resource.isEmpty()) {
             //-- 非法输入: [（安全认证）资源]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "[（安全认证）资源]"
@@ -951,9 +903,9 @@ public class SecurityUrlEventImpl
         }
 
         final @NotNull List<SecurityResourceUrl> existedResourceUrls = securityResourceUrlService.selectByResourceCode(resource.getCode());
-        if (! existedResourceUrls.isEmpty()) {
+        if (!existedResourceUrls.isEmpty()) {
             for (@NotNull SecurityResourceUrl eachResourceUrl : existedResourceUrls) {
-                if (! securityResourceUrlService.delete(eachResourceUrl, operator, operator_userAccountOperationInfo)) {
+                if (!securityResourceUrlService.delete(eachResourceUrl, operator, operator_userAccountOperationInfo)) {
                     throw new BusinessAtomicException(String.format("操作失败:<description>【%s】 <- 【%s】</description>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                             , HandleType.LogVo.SECURITY__SECURITY_RESOURCE_URL__DELETION.name
                             , HandleType.LogVo.SECURITY__SECURITY_RESOURCE_URL__DELETION.name
@@ -971,19 +923,15 @@ public class SecurityUrlEventImpl
     /**
      * 删除指定的[URL 信息]关联的所有[（安全认证）资源 ←→ URL]关联关系
      *
-     * @Description
-     * · 完整的业务流程.
-     *
      * @param urlInfo  [URL 信息]    {@link SecurityResourceUrl.Validator#urlInfo(String[])}
      * @param operator 操作者
-     *
      * @return 操作是否成功
+     * @Description · 完整的业务流程.
      */
     @Override
     public boolean deleteResourceUrlRelationshipOnUrlInfo(@NotNull String[] urlInfo, @NotNull SecurityUser operator)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
-        if (! SecurityResourceUrl.Validator.RESOURCE_URL.urlInfo(urlInfo)) {
+            throws IllegalArgumentException, BusinessAtomicException {
+        if (!SecurityResourceUrl.Validator.RESOURCE_URL.urlInfo(urlInfo)) {
             //-- 非法输入: [URL 信息]
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "[URL 信息]"

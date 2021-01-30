@@ -6,13 +6,13 @@ logging:
 
 spring:
   security:
-#    oauth2:
-#      client:
-#        registration:
-#          client-id: dingding1
-#          client-secret: dingding_secret1
-#          authorization-grant-type: authorization_code
-#          redirect-uri: https://www.baidu.com/
-#          scope: all
+    #    oauth2:
+    #      client:
+    #        registration:
+    #          client-id: dingding1
+    #          client-secret: dingding_secret1
+    #          authorization-grant-type: authorization_code
+    #          redirect-uri: https://www.baidu.com/
+    #          scope: all
     user:
       password: 123456

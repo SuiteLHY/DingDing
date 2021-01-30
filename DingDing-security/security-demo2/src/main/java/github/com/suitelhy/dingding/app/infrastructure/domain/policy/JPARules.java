@@ -13,6 +13,7 @@ public final class JPARules {
 
     /**
      * 驼峰命名风格转下划线风格
+     *
      * @param fieldName - 字段名
      * @return
      */
@@ -34,6 +35,7 @@ public final class JPARules {
 
     /**
      * 根据字段名获取对应的 Getter 方法名
+     *
      * @param field - 字段名
      * @return 可以为 null, 此时字段名不符合 JPA - POJO 属性命名规则
      */

@@ -18,7 +18,6 @@ import java.io.IOException;
  * DingDing - 注销成功处理器
  *
  * @Description 项目自定义处理器.
- *
  * @see LogoutSuccessHandler
  */
 @Component
@@ -30,16 +29,13 @@ public class DingDingLogoutSuccessHandler
     private ObjectMapper toJSONString;
 
     /**
-     * @Description 成功退出时调用.
-     *
      * @param request
      * @param response
      * @param authentication
-     *
-     * @see LogoutSuccessHandler#onLogoutSuccess(HttpServletRequest, HttpServletResponse, Authentication)
-     *
      * @throws IOException
      * @throws ServletException
+     * @Description 成功退出时调用.
+     * @see LogoutSuccessHandler#onLogoutSuccess(HttpServletRequest, HttpServletResponse, Authentication)
      */
     @Override
     public void onLogoutSuccess(HttpServletRequest request

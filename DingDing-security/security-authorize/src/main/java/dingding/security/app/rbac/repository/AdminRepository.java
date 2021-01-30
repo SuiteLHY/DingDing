@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package dingding.security.app.rbac.repository;
 
@@ -14,6 +14,6 @@ import dingding.security.app.rbac.domain.Admin;
 @Repository
 public interface AdminRepository extends DingDingRepository<Admin> {
 
-	Admin findByUsername(String username);
+    Admin findByUsername(String username);
 
 }

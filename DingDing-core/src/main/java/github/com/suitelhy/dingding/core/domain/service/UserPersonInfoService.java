@@ -38,9 +38,8 @@ public interface UserPersonInfoService
     /**
      * 查询记录列表
      *
-     * @param pageIndex     分页索引, 从0开始
-     * @param pageSize      分页 - 每页容量
-     *
+     * @param pageIndex 分页索引, 从0开始
+     * @param pageSize  分页 - 每页容量
      * @return {@link Page}
      */
     Page<UserPersonInfo> selectAll(int pageIndex, int pageSize);
@@ -48,8 +47,7 @@ public interface UserPersonInfoService
     /**
      * 查询记录列表 - 分页 - 总页数
      *
-     * @param pageSize  分页 - 每页容量
-     *
+     * @param pageSize 分页 - 每页容量
      * @return 分页 - 总页数
      */
     Long selectCount(int pageSize);
@@ -57,8 +55,7 @@ public interface UserPersonInfoService
     /**
      * 查询指定的记录
      *
-     * @param id    数据 ID   {@link UserPersonInfo.Validator#id(String)}
-     *
+     * @param id 数据 ID   {@link UserPersonInfo.Validator#id(String)}
      * @return {@link UserPersonInfo}
      */
     UserPersonInfo selectById(@NotNull String id);
@@ -66,8 +63,7 @@ public interface UserPersonInfoService
     /**
      * 查询指定的记录
      *
-     * @param username  用户名称    {@link User.Validator#username(String)}
-     *
+     * @param username 用户名称    {@link User.Validator#username(String)}
      * @return {@link UserPersonInfo}
      */
     UserPersonInfo selectByUsername(@NotNull String username);
@@ -75,8 +71,7 @@ public interface UserPersonInfoService
     /**
      * 查询指定的记录
      *
-     * @param nickname  用户 - 昵称 {@link UserPersonInfo.Validator#nickname(String)}
-     *
+     * @param nickname 用户 - 昵称 {@link UserPersonInfo.Validator#nickname(String)}
      * @return {@link UserPersonInfo}
      */
     UserPersonInfo selectByNickname(@NotNull String nickname);
@@ -84,9 +79,8 @@ public interface UserPersonInfoService
     /**
      * 新增一条记录
      *
-     * @param user      [用户 -> 个人信息]    {@link UserPersonInfo}
-     * @param operator  操作者               {@link SecurityUser}
-     *
+     * @param user     [用户 -> 个人信息]    {@link UserPersonInfo}
+     * @param operator 操作者               {@link SecurityUser}
      * @return 操作是否成功
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -98,9 +92,8 @@ public interface UserPersonInfoService
     /**
      * 更新指定的记录
      *
-     * @param user      [用户 -> 个人信息]    {@link UserPersonInfo}
-     * @param operator  操作者               {@link SecurityUser}
-     *
+     * @param user     [用户 -> 个人信息]    {@link UserPersonInfo}
+     * @param operator 操作者               {@link SecurityUser}
      * @return 操作是否成功
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -112,9 +105,8 @@ public interface UserPersonInfoService
     /**
      * 删除指定的记录
      *
-     * @param user      [用户 -> 个人信息]    {@link UserPersonInfo}
-     * @param operator  操作者               {@link SecurityUser}
-     *
+     * @param user     [用户 -> 个人信息]    {@link UserPersonInfo}
+     * @param operator 操作者               {@link SecurityUser}
      * @return 操作是否成功
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -126,12 +118,10 @@ public interface UserPersonInfoService
     /**
      * 删除指定的记录
      *
-     * @Description 删除成功后校验持久化数据; 主要是避免在未提交的事务中进行对操作结果的非预期判断.
-     *
-     * @param user      [用户 -> 个人信息]    {@link UserPersonInfo}
-     * @param operator  操作者               {@link SecurityUser}
-     *
+     * @param user     [用户 -> 个人信息]    {@link UserPersonInfo}
+     * @param operator 操作者               {@link SecurityUser}
      * @return 操作是否成功
+     * @Description 删除成功后校验持久化数据; 主要是避免在未提交的事务中进行对操作结果的非预期判断.
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
             , rollbackFor = Exception.class

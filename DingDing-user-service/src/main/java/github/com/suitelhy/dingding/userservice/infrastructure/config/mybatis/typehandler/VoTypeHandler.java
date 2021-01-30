@@ -11,15 +11,13 @@ package github.com.suitelhy.dingding.userservice.infrastructure.config.mybatis.t
 /**
  * (弃用) Mybatis配置 -> 针对 VO 类型的 类型处理器(TypeHandler)
  *
- * @Reference
- *-> <a href="https://mybatis.org/mybatis-3/zh/configuration.html#typeHandlers">
- *->     mybatis – MyBatis 3 | 配置#类型处理器（typeHandlers）</a>
- *-> , <a href="https://blog.csdn.net/ned_mahone/article/details/82870173">
- *->     mybatis自定义类型处理器-TypehHandler_Ned_mahone的博客-CSDN博客</a>
- *-> , (jar包源码) <jar>mybatis-3.5.3.jar</jar>-<class>org.apache.ibatis.type.EnumTypeHandler</class>
- *-> &<class>org.apache.ibatis.type.EnumOrdinalTypeHandler</class>
- *-> , <a href="https://github.com/abel533/mybatis-enum">abel533/mybatis-enum: MyBatis 枚举全面使用指南</a>
- *
+ * @Reference -> <a href="https://mybatis.org/mybatis-3/zh/configuration.html#typeHandlers">
+ * ->     mybatis – MyBatis 3 | 配置#类型处理器（typeHandlers）</a>
+ * -> , <a href="https://blog.csdn.net/ned_mahone/article/details/82870173">
+ * ->     mybatis自定义类型处理器-TypehHandler_Ned_mahone的博客-CSDN博客</a>
+ * -> , (jar包源码) <jar>mybatis-3.5.3.jar</jar>-<class>org.apache.ibatis.type.EnumTypeHandler</class>
+ * -> &<class>org.apache.ibatis.type.EnumOrdinalTypeHandler</class>
+ * -> , <a href="https://github.com/abel533/mybatis-enum">abel533/mybatis-enum: MyBatis 枚举全面使用指南</a>
  */
 //@MappedJdbcTypes(value = {JdbcType.TINYINT, JdbcType.SMALLINT, JdbcType.INTEGER}
 //        , includeNullJdbcType = true)

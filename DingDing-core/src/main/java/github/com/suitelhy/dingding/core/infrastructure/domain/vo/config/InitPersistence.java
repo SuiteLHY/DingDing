@@ -15,9 +15,7 @@ import org.springframework.stereotype.Component;
  * VO 初始持久化
  *
  * @Description 配置类.
- *
  * @Reference <a href="https://www.javatt.com/p/28644">Spring boot初始化Mongo数据库(将.json文件持久化到Mongo数据库) - Java天堂</a>
- *
  * @see github.com.suitelhy.dingding.core.infrastructure.domain.vo
  */
 @Component
@@ -32,9 +30,8 @@ public class InitPersistence
      * 是否执行初始持久化
      *
      * @Description 配置属性.
-     *
      * @Reference <a href="https://www.choupangxia.com/2019/12/25/springboot-spring-value/">
-     *->     SpringBoot之Spring@Value属性注入使用详解 – 程序新视界</a>
+     * ->     SpringBoot之Spring@Value属性注入使用详解 – 程序新视界</a>
      */
     @Value("${dingding.domain.vo.init_persistence:}")
     private Boolean initPersistence;

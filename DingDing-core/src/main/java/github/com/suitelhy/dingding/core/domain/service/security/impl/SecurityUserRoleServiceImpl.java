@@ -29,7 +29,6 @@ import java.util.*;
  * （安全认证）用户 ←→ 角色
  *
  * @Description [（安全认证）用户 ←→ 角色]关联关系 - 业务接口.
- *
  * @see SecurityUserRole
  * @see SecurityUserRoleRepository
  * @see SecurityUserRoleServiceImpl
@@ -93,10 +92,9 @@ public class SecurityUserRoleServiceImpl
     /**
      * 查询所有
      *
-     * @param pageIndex     分页索引, 从0开始
-     * @param pageSize      分页 - 每页容量
-     *
-     * @return  {@link Page)
+     * @param pageIndex 分页索引, 从0开始
+     * @param pageSize  分页 - 每页容量
+     * @return {@link Page)
      */
     @Override
     public Page<SecurityUserRole> selectAll(int pageIndex, int pageSize) {
@@ -129,14 +127,13 @@ public class SecurityUserRoleServiceImpl
     /**
      * 查询总页数
      *
-     * @Description 查询数据列表 - 分页 - 总页数
-     *
      * @param pageSize 分页 - 每页容量
-     *
      * @return 分页 - 总页数
+     * @Description 查询数据列表 - 分页 - 总页数
      */
     @Override
-    public @NotNull Long selectCount(int pageSize) {
+    public @NotNull
+    Long selectCount(int pageSize) {
         if (pageSize < 1) {
             //-- 非法输入: <param>pageSize</param>
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
@@ -157,12 +154,12 @@ public class SecurityUserRoleServiceImpl
      * 查询
      *
      * @param username
-     *
      * @return {@link SecurityUserRole}
      */
     @Override
-    public @NotNull List<SecurityUserRole> selectByUsername(@NotNull String username) {
-        if (! SecurityUserRole.Validator.USER_ROLE.username(username)) {
+    public @NotNull
+    List<SecurityUserRole> selectByUsername(@NotNull String username) {
+        if (!SecurityUserRole.Validator.USER_ROLE.username(username)) {
             //-- 非法输入: 用户名称
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                     , "用户名称"
@@ -179,12 +176,12 @@ public class SecurityUserRoleServiceImpl
      * 查询
      *
      * @param roleCode
-     *
      * @return {@link SecurityUserRole}
      */
     @Override
-    public @NotNull List<SecurityUserRole> selectByRoleCode(@NotNull String roleCode) {
-        if (! SecurityUserRole.Validator.USER_ROLE.roleCode(roleCode)) {
+    public @NotNull
+    List<SecurityUserRole> selectByRoleCode(@NotNull String roleCode) {
+        if (!SecurityUserRole.Validator.USER_ROLE.roleCode(roleCode)) {
             //-- 非法输入: 角色编码
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                     , "角色编码"
@@ -200,14 +197,14 @@ public class SecurityUserRoleServiceImpl
     /**
      * 查询
      *
-     * @param username  用户名称    {@link SecurityUserRole.Validator#username(String)}
-     * @param roleCode  角色编码    {@link SecurityUserRole.Validator#roleCode(String)}
-     *
+     * @param username 用户名称    {@link SecurityUserRole.Validator#username(String)}
+     * @param roleCode 角色编码    {@link SecurityUserRole.Validator#roleCode(String)}
      * @return {@link SecurityUserRole}
      */
     @Override
-    public @NotNull SecurityUserRole selectByUsernameAndRoleCode(@NotNull String username, @NotNull String roleCode) {
-        if (! SecurityUserRole.Validator.USER_ROLE.username(username)) {
+    public @NotNull
+    SecurityUserRole selectByUsernameAndRoleCode(@NotNull String username, @NotNull String roleCode) {
+        if (!SecurityUserRole.Validator.USER_ROLE.username(username)) {
             //-- 非法输入: 用户名称
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                     , "用户名称"
@@ -216,7 +213,7 @@ public class SecurityUserRoleServiceImpl
                     , Thread.currentThread().getStackTrace()[1].getMethodName()
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
-        if (! SecurityUserRole.Validator.USER_ROLE.roleCode(roleCode)) {
+        if (!SecurityUserRole.Validator.USER_ROLE.roleCode(roleCode)) {
             //-- 非法输入: 角色编码
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                     , "角色编码"
@@ -278,7 +275,6 @@ public class SecurityUserRoleServiceImpl
      * @param userRole                          [（安全认证）用户 ←→ 角色]    {@link SecurityUserRole}
      * @param operator                          操作者
      * @param operator_userAccountOperationInfo [操作者 - 账户操作基础记录]
-     *
      * @return 操作是否成功 / 是否已存在相同的有效数据
      */
     @Override
@@ -287,9 +283,8 @@ public class SecurityUserRoleServiceImpl
             , rollbackFor = Exception.class
             , timeout = 15)
     public boolean insert(@NotNull SecurityUserRole userRole, @NotNull SecurityUser operator, @NotNull UserAccountOperationInfo operator_userAccountOperationInfo)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
-        if (null == userRole || ! userRole.isEntityLegal()) {
+            throws IllegalArgumentException, BusinessAtomicException {
+        if (null == userRole || !userRole.isEntityLegal()) {
             //-- 非法输入: [（安全认证）用户 ←→ 角色]关联关系
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "[（安全认证）用户 ←→ 角色]关联关系"
@@ -310,8 +305,7 @@ public class SecurityUserRoleServiceImpl
         /*final @NotNull UserAccountOperationInfo operator_userAccountOperationInfo = userAccountOperationInfoService.selectByUsername(operator.getUsername());*/
         if (null == operator_userAccountOperationInfo
                 || operator_userAccountOperationInfo.isEmpty()
-                || ! operator_userAccountOperationInfo.equals(operator))
-        {
+                || !operator_userAccountOperationInfo.equals(operator)) {
             //-- 非法输入: 操作者 <- 无[有效的账户操作基础记录]
             throw new IllegalArgumentException(String.format("非法参数:<description>【%s】 <- %s!</description>->【%s】&【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , "操作者"
@@ -325,7 +319,7 @@ public class SecurityUserRoleServiceImpl
 
         if (repository.existsByUsernameAndRoleCode(userRole.getUsername(), userRole.getRoleCode())) {
             //--- 已存在相同数据 (根据 EntityID) 的情况
-            return ! repository.findByUsernameAndRoleCode(userRole.getUsername(), userRole.getRoleCode())
+            return !repository.findByUsernameAndRoleCode(userRole.getUsername(), userRole.getRoleCode())
                     .orElse(SecurityUserRole.Factory.USER_ROLE.createDefault())
                     .isEmpty();
         }
@@ -347,7 +341,7 @@ public class SecurityUserRoleServiceImpl
                 , userRole
                 , operator
                 , operator_userAccountOperationInfo);
-        if (! logService.insert(newLog_UserRole)) {
+        if (!logService.insert(newLog_UserRole)) {
             throw new BusinessAtomicException(String.format("操作失败:<description>【%s】 <- %s!</description>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
                     , HandleType.LogVo.SECURITY__SECURITY_USER_ROLE__ADD.name
                     , "生成操作日志记录"
@@ -650,14 +644,12 @@ public class SecurityUserRoleServiceImpl
     /**
      * 删除指定的[（安全认证）用户 ←→ 角色]关联关系
      *
-     * @Description 删除成功后校验持久化数据;
-     * 主要为了避免在未提交的事务中进行对操作结果的非预期判断.
-     *
      * @param userRole                          [（安全认证）用户 ←→ 角色]    {@link SecurityUserRole}
      * @param operator                          操作者
      * @param operator_userAccountOperationInfo [操作者 -> 账户操作基础记录]
-     *
      * @return 操作是否成功
+     * @Description 删除成功后校验持久化数据;
+     * 主要为了避免在未提交的事务中进行对操作结果的非预期判断.
      */
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -665,8 +657,7 @@ public class SecurityUserRoleServiceImpl
             , rollbackFor = Exception.class
             , timeout = 15)
     public boolean delete(@NotNull SecurityUserRole userRole, @NotNull SecurityUser operator, @NotNull UserAccountOperationInfo operator_userAccountOperationInfo)
-            throws IllegalArgumentException, BusinessAtomicException
-    {
+            throws IllegalArgumentException, BusinessAtomicException {
         if (null == userRole || userRole.isEmpty()) {
             //-- 非法输入: [（安全认证）用户 ←→ 角色]关联关系
             throw new IllegalArgumentException(String.format("非法参数:<param>%s</param>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
@@ -688,8 +679,7 @@ public class SecurityUserRoleServiceImpl
         /*final @NotNull UserAccountOperationInfo operator_userAccountOperationInfo = userAccountOperationInfoService.selectByUsername(operator.getUsername());*/
         if (null == operator_userAccountOperationInfo
                 || operator_userAccountOperationInfo.isEmpty()
-                || ! operator_userAccountOperationInfo.equals(operator))
-        {
+                || !operator_userAccountOperationInfo.equals(operator)) {
             //-- 非法输入: 操作者 <- 无[有效的账户操作基础记录]
             throw new IllegalArgumentException(String.format("非法参数:<description>【%s】 <- %s!</description>->【%s】&【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                     , "操作者"
@@ -701,7 +691,7 @@ public class SecurityUserRoleServiceImpl
                     , Thread.currentThread().getStackTrace()[1].getLineNumber()));
         }
 
-        if (! repository.existsById(userRole.getId())) {
+        if (!repository.existsById(userRole.getId())) {
             return true;
         } else {
             repository.deleteById(userRole.getId());
@@ -722,7 +712,7 @@ public class SecurityUserRoleServiceImpl
                     , userRole
                     , operator
                     , operator_userAccountOperationInfo);
-            if (! logService.insert(newLog_UserRole)) {
+            if (!logService.insert(newLog_UserRole)) {
                 throw new BusinessAtomicException(String.format("操作失败:<description>【%s】 <- %s!</description>->【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                         , HandleType.LogVo.SECURITY__SECURITY_USER_ROLE__DELETION.name
                         , "生成操作日志记录"

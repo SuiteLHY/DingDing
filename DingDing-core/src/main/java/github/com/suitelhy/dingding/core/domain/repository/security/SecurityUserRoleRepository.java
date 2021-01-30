@@ -40,10 +40,9 @@ public interface SecurityUserRoleRepository
     /**
      * 判断存在
      *
-     * @Description Returns whether an entity with the given parameters exists.
-     *
-     * @param roleCode      {@link SecurityUserRole.Validator#roleCode(String)}
+     * @param roleCode {@link SecurityUserRole.Validator#roleCode(String)}
      * @return
+     * @Description Returns whether an entity with the given parameters exists.
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED)
@@ -52,10 +51,9 @@ public interface SecurityUserRoleRepository
     /**
      * 判断存在
      *
-     * @Description Returns whether an entity with the given parameters exists.
-     *
-     * @param username      {@link SecurityUserRole#getUsername()}
+     * @param username {@link SecurityUserRole#getUsername()}
      * @return
+     * @Description Returns whether an entity with the given parameters exists.
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED)
@@ -64,11 +62,10 @@ public interface SecurityUserRoleRepository
     /**
      * 判断存在
      *
-     * @Description Returns whether an entity with the given parameters exists.
-     *
-     * @param username      {@link SecurityUserRole#getUsername()}
-     * @param roleCode      {@link SecurityUserRole#getRoleCode()}
+     * @param username {@link SecurityUserRole#getUsername()}
+     * @param roleCode {@link SecurityUserRole#getRoleCode()}
      * @return
+     * @Description Returns whether an entity with the given parameters exists.
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED)
@@ -77,9 +74,8 @@ public interface SecurityUserRoleRepository
     /**
      * 查询
      *
-     * @param username      {@link SecurityUserRole.Validator#username(String)}
-     * @param roleCode      {@link SecurityUserRole.Validator#roleCode(String)}
-     *
+     * @param username {@link SecurityUserRole.Validator#username(String)}
+     * @param roleCode {@link SecurityUserRole.Validator#roleCode(String)}
      * @return {@link Page}
      */
     Optional<SecurityUserRole> findByUsernameAndRoleCode(@NotNull String username, @NotNull String roleCode);
@@ -87,9 +83,8 @@ public interface SecurityUserRoleRepository
     /**
      * 查询所有
      *
-     * @param username      {@link SecurityUserRole#getUsername()}
-     * @param pageable      {@link Pageable}
-     *
+     * @param username {@link SecurityUserRole#getUsername()}
+     * @param pageable {@link Pageable}
      * @return {@link Page}
      */
     Page<SecurityUserRole> findAllByUsername(@NotNull String username, Pageable pageable);
@@ -97,8 +92,7 @@ public interface SecurityUserRoleRepository
     /**
      * 查询所有
      *
-     * @param username      {@link SecurityUserRole#getUsername()}
-     *
+     * @param username {@link SecurityUserRole#getUsername()}
      * @return {@link List}
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -108,9 +102,8 @@ public interface SecurityUserRoleRepository
     /**
      * 查询所有
      *
-     * @param rodeCode      {@link SecurityUserRole#getRoleCode()}
-     * @param pageable      {@link Pageable}
-     *
+     * @param rodeCode {@link SecurityUserRole#getRoleCode()}
+     * @param pageable {@link Pageable}
      * @return {@link Page}
      */
     Page<SecurityUserRole> findAllByRoleCode(@NotNull String rodeCode, Pageable pageable);
@@ -118,8 +111,7 @@ public interface SecurityUserRoleRepository
     /**
      * 查询所有
      *
-     * @param rodeCode      {@link SecurityUserRole#getRoleCode()}
-     *
+     * @param rodeCode {@link SecurityUserRole#getRoleCode()}
      * @return {@link List}
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -130,22 +122,20 @@ public interface SecurityUserRoleRepository
      * 查询 (关联的) 角色
      *
      * @param username
-     *
      * @return {@link SecurityRole}, {@link Map}
-     *
      * @see SecurityUser
      * @see SecurityUserRole
      * @see SecurityRole
      */
     @Query(nativeQuery = true
             , value = "select r.id as role_id \n"
-                    + ", r.`code` as role_code \n"
-                    + ", r.name as role_name \n"
-                    + ", r.description as role_description \n"
-                    + "from security_user u \n"
-                    + "left join security_user_role ur on ur.username = u.username \n"
-                    + "left join security_role r on r.`code` = ur.role_code \n"
-                    + "where u.username = :username ")
+            + ", r.`code` as role_code \n"
+            + ", r.name as role_name \n"
+            + ", r.description as role_description \n"
+            + "from security_user u \n"
+            + "left join security_user_role ur on ur.username = u.username \n"
+            + "left join security_role r on r.`code` = ur.role_code \n"
+            + "where u.username = :username ")
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED)
     List<Map<String, Object>> selectRoleByUsername(@NotNull @Param("username") String username);
@@ -169,7 +159,7 @@ public interface SecurityUserRoleRepository
     /**
      * 删除
      *
-     * @param id    数据ID        {@link SecurityUserRole#getId()}
+     * @param id 数据ID        {@link SecurityUserRole#getId()}
      */
     @Override
     @Modifying
@@ -180,7 +170,7 @@ public interface SecurityUserRoleRepository
     /**
      * 删除
      *
-     * @param username  用户名     {@link SecurityUserRole#getUsername()}
+     * @param username 用户名     {@link SecurityUserRole#getUsername()}
      * @return
      */
     @Modifying
@@ -191,7 +181,7 @@ public interface SecurityUserRoleRepository
     /**
      * 删除
      *
-     * @param roleCode  角色编码    {@link SecurityUserRole#getRoleCode()}
+     * @param roleCode 角色编码    {@link SecurityUserRole#getRoleCode()}
      * @return
      */
     @Modifying
@@ -202,8 +192,8 @@ public interface SecurityUserRoleRepository
     /**
      * 删除
      *
-     * @param username  用户名     {@link SecurityUserRole#getUsername()}
-     * @param roleCode  角色编码    {@link SecurityUserRole#getRoleCode()}
+     * @param username 用户名     {@link SecurityUserRole#getUsername()}
+     * @param roleCode 角色编码    {@link SecurityUserRole#getRoleCode()}
      * @return
      */
     @Modifying

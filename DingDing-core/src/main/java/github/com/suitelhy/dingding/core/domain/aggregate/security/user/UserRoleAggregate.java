@@ -50,8 +50,8 @@ public class UserRoleAggregate
                 if (null != role && !role.isEmpty()) {
                     if (repository.existsByUsernameAndRoleCode(UserRoleAggregate.this.root().getUsername(), role.getCode())
                             || !repository
-                                    .saveAndFlush(SecurityUserRole.Factory.USER_ROLE.create(UserRoleAggregate.this.root().getUsername(), role.getCode()))
-                                    .isEmpty()) {
+                            .saveAndFlush(SecurityUserRole.Factory.USER_ROLE.create(UserRoleAggregate.this.root().getUsername(), role.getCode()))
+                            .isEmpty()) {
                         return super.add(role);
                     }
                     return false;
@@ -106,7 +106,7 @@ public class UserRoleAggregate
     @Override
     public int hashCode() {
         return /*root.hashCode() * roles.hashCode()*/
-                ObjectUtils.nullSafeHashCode(new Object[] {this.root(), this.roles});
+                ObjectUtils.nullSafeHashCode(new Object[]{this.root(), this.roles});
     }
 
 }

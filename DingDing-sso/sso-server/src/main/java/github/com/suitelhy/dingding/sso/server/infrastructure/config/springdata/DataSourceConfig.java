@@ -17,16 +17,13 @@ import java.util.Map;
  * 数据源配置
  *
  * @Description 多数据源, 主从分离.
- *
- * @Reference
- *-> {@link <a href="https://github.com/ityouknow/spring-boot-examples/blob/master/spring-boot-jpa/spring-boot-multi-Jpa/src/main/java/com/neo/config/DataSourceConfig.java">spring-boot-examples/DataSourceConfig.java at master · ityouknow/spring-boot-examples</a>}
- *-> · Spring boot - version 2.2.2 -> 踩坑(...):
- *->    {@link <a href="https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-2.2-Release-Notes">Spring Boot 2.2发行说明·spring-projects / spring-boot Wiki</a>}
- *-> · Spring 官方 Docs 链接的官方 Demo:
- *->    {@link <a href="https://github.com/spring-projects/spring-data-examples"spring-projects/spring-data-examples: Spring Data Example Projects</a>}, 2019年12月的, 最后只能靠自己
- *-> · Spring Data JPA:
- *->    {@link <a href="https://github.com/spring-projects/spring-data-examples/tree/master/jpa">spring-projects/spring-data-examples/jpa/</a>}
- *
+ * @Reference -> {@link <a href="https://github.com/ityouknow/spring-boot-examples/blob/master/spring-boot-jpa/spring-boot-multi-Jpa/src/main/java/com/neo/config/DataSourceConfig.java">spring-boot-examples/DataSourceConfig.java at master · ityouknow/spring-boot-examples</a>}
+ * -> · Spring boot - version 2.2.2 -> 踩坑(...):
+ * ->    {@link <a href="https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-2.2-Release-Notes">Spring Boot 2.2发行说明·spring-projects / spring-boot Wiki</a>}
+ * -> · Spring 官方 Docs 链接的官方 Demo:
+ * ->    {@link <a href="https://github.com/spring-projects/spring-data-examples"spring-projects/spring-data-examples: Spring Data Example Projects</a>}, 2019年12月的, 最后只能靠自己
+ * -> · Spring Data JPA:
+ * ->    {@link <a href="https://github.com/spring-projects/spring-data-examples/tree/master/jpa">spring-projects/spring-data-examples/jpa/</a>}
  */
 @Configuration
 public class DataSourceConfig {
@@ -41,6 +38,7 @@ public class DataSourceConfig {
 
     /**
      * 主数据源
+     *
      * @return
      */
     @Bean(name = "primaryDataSource")
@@ -52,6 +50,7 @@ public class DataSourceConfig {
 
     /**
      * 辅助数据源
+     *
      * @return
      */
     @Bean(name = "secondaryDataSource")
@@ -62,6 +61,7 @@ public class DataSourceConfig {
 
     /**
      * 数据源供应商属性
+     *
      * @return
      */
     @Bean(name = "vendorProperties")

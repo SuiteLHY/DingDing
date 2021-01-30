@@ -20,13 +20,12 @@ import java.util.Map;
  * 主数据源配置
  *
  * @Reference <a href="https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#core.repository-populators">
- *->     Spring Data JPA-参考文档</a>
- *
+ * ->     Spring Data JPA-参考文档</a>
  */
 @Configuration
-@EnableJpaRepositories(basePackages= {"github.com.suitelhy.dingding.app.domain.repository"}
-        , entityManagerFactoryRef="primaryEntityManagerFactory"
-        , transactionManagerRef="primaryTransactionManager")
+@EnableJpaRepositories(basePackages = {"github.com.suitelhy.dingding.app.domain.repository"}
+        , entityManagerFactoryRef = "primaryEntityManagerFactory"
+        , transactionManagerRef = "primaryTransactionManager")
 @EnableTransactionManagement
 public class PrimaryDataSourceConfig {
 
@@ -40,6 +39,7 @@ public class PrimaryDataSourceConfig {
 
     /**
      * 配置 事务管理器 (TransactionManager)
+     *
      * @param builder
      * @return
      */
@@ -53,6 +53,7 @@ public class PrimaryDataSourceConfig {
 
     /**
      * 配置 实体管理器工厂 (EntityManagerFactory)
+     *
      * @return
      */
     @Bean(name = "primaryEntityManagerFactory")
@@ -74,6 +75,7 @@ public class PrimaryDataSourceConfig {
 
     /**
      * 配置 实体管理器 (EntityManager)
+     *
      * @param builder
      * @return
      */

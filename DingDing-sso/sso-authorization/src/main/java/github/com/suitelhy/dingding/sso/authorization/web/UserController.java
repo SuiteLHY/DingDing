@@ -26,9 +26,7 @@ import java.util.Map;
  * 用户业务
  *
  * @Description 用户相关业务.
- *
- * @Issue
- * · 关于 $ref 的 Swagger UI 前端页面输出的问题描述:
+ * @Issue · 关于 $ref 的 Swagger UI 前端页面输出的问题描述:
  * {@link <a href="https://swagger.io/docs/specification/using-ref/">Using $ref | Swagger</a>}
  * {@Solution <a href="https://github.com/springfox/springfox/issues/2563">无法解析指针：/ definitions /列表在文档中不存在·问题＃2563·springfox / springfox</a>}
  */
@@ -47,7 +45,6 @@ public class UserController {
      * 查询用户 - 安全认证基础信息
      *
      * @param authentication
-     *
      * @return API 相应的主要数据
      */
     @ApiOperation(value = "测试接口", httpMethod = "GET")

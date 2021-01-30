@@ -17,8 +17,10 @@ public interface LogRepository
         extends JpaRepository<Log, Long> {
 
     //===== select data =====//
+
     /**
      * 查询日志记录总数
+     *
      * @return
      */
     @Override
@@ -26,6 +28,7 @@ public interface LogRepository
 
     /**
      * 查询指定用户对应的日志记录数
+     *
      * @param userid
      * @return
      */
@@ -33,6 +36,7 @@ public interface LogRepository
 
     /**
      * 查询所有日志记录
+     *
      * @param pageable
      * @return
      */
@@ -41,6 +45,7 @@ public interface LogRepository
 
     /**
      * 查询指定用户的日志记录
+     *
      * @param userid
      * @param pageable
      * @return
@@ -48,8 +53,10 @@ public interface LogRepository
     List<Log> findByUserid(String userid, Pageable pageable);
 
     //===== insert data =====//
+
     /**
      * 新增/更新日志记录
+     *
      * @param log
      * @return
      */
@@ -57,8 +64,10 @@ public interface LogRepository
     Log saveAndFlush(Log log);
 
     //===== delete data =====//
+
     /**
      * 删除指定的日志记录
+     *
      * @param id 记录ID
      */
     @Override
@@ -66,6 +75,7 @@ public interface LogRepository
 
     /**
      * 删除指定用户对应的所有日志记录
+     *
      * @param userid
      */
     long removeByUserid(String userid);

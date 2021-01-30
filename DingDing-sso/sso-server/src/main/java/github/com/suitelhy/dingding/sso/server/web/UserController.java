@@ -19,9 +19,7 @@ import java.security.Principal;
  * 用户业务
  *
  * @Description 用户相关业务.
- *
- * @Issue
- * · 关于 $ref 的 Swagger UI 前端页面输出的问题描述:
+ * @Issue · 关于 $ref 的 Swagger UI 前端页面输出的问题描述:
  * {@link <a href="https://swagger.io/docs/specification/using-ref/">Using $ref | Swagger</a>}
  * {@Solution <a href="https://github.com/springfox/springfox/issues/2563">无法解析指针：/ definitions /列表在文档中不存在·问题＃2563·springfox / springfox</a>}
  */

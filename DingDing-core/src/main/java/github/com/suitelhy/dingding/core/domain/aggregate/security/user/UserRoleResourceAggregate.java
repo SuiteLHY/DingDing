@@ -42,7 +42,7 @@ public class UserRoleResourceAggregate
                     String roleCode = roleResource.root().getCode();
                     if (repository.existsByUsernameAndRoleCode(username, roleCode)
                             || !repository.saveAndFlush(SecurityUserRole.Factory.USER_ROLE.create(username, roleCode))
-                                    .isEmpty()) {
+                            .isEmpty()) {
                         return super.add(roleResource);
                     }
                     return false;
@@ -92,7 +92,7 @@ public class UserRoleResourceAggregate
     @Override
     public int hashCode() {
         return /*root().hashCode() * roleResources.hashCode()*/
-                ObjectUtils.nullSafeHashCode(new Object[] {this.root(), this.roleResources});
+                ObjectUtils.nullSafeHashCode(new Object[]{this.root(), this.roleResources});
     }
 
 }

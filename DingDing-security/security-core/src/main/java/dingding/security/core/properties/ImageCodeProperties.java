@@ -2,43 +2,42 @@ package dingding.security.core.properties;
 
 /**
  * 图片验证码配置项
- * 
- * @author zhailiang
  *
+ * @author zhailiang
  */
 public class ImageCodeProperties
-		extends SmsCodeProperties {
-	
-	public ImageCodeProperties() {
-		setLength(4);
-	}
-	
-	/**
-	 * 图片宽
-	 */
-	private int width = 67;
+        extends SmsCodeProperties {
 
-	/**
-	 * 图片高
-	 */
-	private int height = 23;
+    public ImageCodeProperties() {
+        setLength(4);
+    }
 
-	//===== Getter and Setter =====//
+    /**
+     * 图片宽
+     */
+    private int width = 67;
 
-	public int getWidth() {
-		return width;
-	}
+    /**
+     * 图片高
+     */
+    private int height = 23;
 
-	public void setWidth(int width) {
-		this.width = width;
-	}
+    //===== Getter and Setter =====//
 
-	public int getHeight() {
-		return height;
-	}
+    public int getWidth() {
+        return width;
+    }
 
-	public void setHeight(int height) {
-		this.height = height;
-	}
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
 
 }

@@ -20,17 +20,16 @@ import java.util.Map;
  * 主数据源配置
  *
  * @Reference <a href="https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#core.repository-populators">
- *->     Spring Data JPA-参考文档</a>
- *
+ * ->     Spring Data JPA-参考文档</a>
  */
 @Configuration
 // {@Note 项目复用 - copy 代码以后, 一定要记得这些配置类中的所有配置项必需要彻底检查;
 //->      出问题的时候, 没想起来, Context加载失败报错找不到repository的bean; 最后是找控制面板信息发现
 //->      ".s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 9ms. Found 0 JPA repository interfaces."}
-@EnableJpaRepositories(basePackages= {"github.com.suitelhy.dingding.userservice.domain.repository"
-            , "github.com.suitelhy.dingding.core.domain.repository"
-        }, entityManagerFactoryRef="primaryEntityManagerFactory"
-        , transactionManagerRef="primaryTransactionManager")
+@EnableJpaRepositories(basePackages = {"github.com.suitelhy.dingding.userservice.domain.repository"
+        , "github.com.suitelhy.dingding.core.domain.repository"
+}, entityManagerFactoryRef = "primaryEntityManagerFactory"
+        , transactionManagerRef = "primaryTransactionManager")
 @EnableTransactionManagement
 public class PrimaryDataSourceConfig {
 
@@ -44,6 +43,7 @@ public class PrimaryDataSourceConfig {
 
     /**
      * 配置 事务管理器 (TransactionManager)
+     *
      * @param builder
      * @return
      */
@@ -57,6 +57,7 @@ public class PrimaryDataSourceConfig {
 
     /**
      * 配置 实体管理器工厂 (EntityManagerFactory)
+     *
      * @return
      */
     @Bean(name = "primaryEntityManagerFactory")
@@ -77,6 +78,7 @@ public class PrimaryDataSourceConfig {
 
     /**
      * 配置 实体管理器 (EntityManager)
+     *
      * @param builder
      * @return
      */

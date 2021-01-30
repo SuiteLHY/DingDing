@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 
 /**
  * 用户附件 -> VO
+ *
  * @param <VO>
  * @param <V>
  * @param <_DESCRIPTION>
@@ -16,8 +17,7 @@ public interface UserAttach<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V ex
         extends VoModel<VO, V, _DESCRIPTION> {
 
     enum AttachTypeVo implements VoModel<AttachTypeVo, Integer, String> {
-        FACE_IMAGE(1, "头像", "用户头像")
-        , QR_CODE(2, "二维码", "用户二维码");
+        FACE_IMAGE(1, "头像", "用户头像"), QR_CODE(2, "二维码", "用户二维码");
 
         public final int code;
 
@@ -85,7 +85,8 @@ public interface UserAttach<VO extends Enum & VoModel<VO, V, _DESCRIPTION>, V ex
          * @return
          */
         @Override
-        public @NotNull String showName() {
+        public @NotNull
+        String showName() {
             return this.name;
         }
 

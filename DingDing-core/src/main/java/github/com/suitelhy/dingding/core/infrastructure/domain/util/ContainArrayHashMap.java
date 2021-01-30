@@ -3,10 +3,9 @@ package github.com.suitelhy.dingding.core.infrastructure.domain.util;
 import java.util.*;
 
 /**
- * @Description 键只能使用数组, 且不允许 {@link null} 和 空数组.
- *
  * @param <K>
  * @param <V>
+ * @Description 键只能使用数组, 且不允许 {@link null} 和 空数组.
  */
 public class ContainArrayHashMap<K, V>
         extends HashMap<K[], V> {

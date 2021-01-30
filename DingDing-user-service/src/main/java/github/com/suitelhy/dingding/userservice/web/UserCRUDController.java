@@ -34,7 +34,6 @@ public class UserCRUDController {
      * 查询用户 - 非安全认证基础信息
      *
      * @param authentication
-     *
      * @return
      */
     @GetMapping("/userDetail")
@@ -54,7 +53,6 @@ public class UserCRUDController {
      * 添加一个用户
      *
      * @param authentication
-     *
      * @return
      */
     @GetMapping("/addUser")
@@ -71,7 +69,6 @@ public class UserCRUDController {
         }
         return WebResult.Factory.DEFAULT.createDefault().toString();
     }
-
 
 
 }

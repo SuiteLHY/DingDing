@@ -13,13 +13,9 @@ import java.util.*;
  * 用户（安全认证）基本信息
  *
  * @Description Spring Security 认证所需 {@link UserDetails} 实例.
- *
  * @Design {@link UserDetails} 定制化抽象实现.
  * · 【安全设计】使用抽象类型且对构造方法进行限制是出于安全性考虑(其中很大一部分原因是为了杜绝开发人员的<b>不规范</b>操作).
- *
- * @Solution
- * · {@link <a href="https://blog.csdn.net/a1064072510/article/details/103848966">OAuth2  [org.springframework.data.redis.serializer.SerializationException: Cannot serialize_知我饭否-CSDN博客_springcloud oauth2.0 tokenstore serializationexcep</a>}
- *
+ * @Solution · {@link <a href="https://blog.csdn.net/a1064072510/article/details/103848966">OAuth2  [org.springframework.data.redis.serializer.SerializationException: Cannot serialize_知我饭否-CSDN博客_springcloud oauth2.0 tokenstore serializationexcep</a>}
  * @see UserDetails
  */
 @Slf4j
@@ -84,7 +80,6 @@ public abstract class AbstractSecurityUser
      * @param accountNonLocked      {@link this#isAccountNonLocked()}
      * @param credentialsNonExpired {@link this#isCredentialsNonExpired()}
      * @param enabled               {@link this#isEnabled()}
-     *
      * @throws AccountStatusException
      * @throws IllegalArgumentException
      */
@@ -95,8 +90,7 @@ public abstract class AbstractSecurityUser
             , boolean accountNonLocked
             , boolean credentialsNonExpired
             , boolean enabled)
-            throws AccountStatusException, IllegalArgumentException
-    {
+            throws AccountStatusException, IllegalArgumentException {
         if (!User.Validator.USER.username(username)) {
             throw new IllegalArgumentException("无效的 <param>username</param>");
         }
@@ -209,9 +203,8 @@ public abstract class AbstractSecurityUser
     /**
      * 判断 {@link AbstractSecurityUser} 对象是否可用
      *
-     * @Description 综合判断.
-     *
      * @return {@link Boolean#TYPE}
+     * @Description 综合判断.
      */
     public boolean isEmpty() {
         return !this.isAccountNonExpired()

@@ -36,7 +36,6 @@ public interface SecurityResourceUrlRepository
      * 判断存在
      *
      * @param resourceCode
-     *
      * @return
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -49,7 +48,6 @@ public interface SecurityResourceUrlRepository
      * @param clientId
      * @param urlPath
      * @param urlMethod
-     *
      * @return
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -63,7 +61,6 @@ public interface SecurityResourceUrlRepository
      * @param clientId
      * @param urlPath
      * @param urlMethod
-     *
      * @return
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -74,8 +71,7 @@ public interface SecurityResourceUrlRepository
     /**
      * 查询所有
      *
-     * @param resourceCode  资源编码
-     *
+     * @param resourceCode 资源编码
      * @return
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -85,8 +81,8 @@ public interface SecurityResourceUrlRepository
     /**
      * 查询所有
      *
-     * @param resourceCode  资源编码
-     * @param pageable      {@link org.springframework.data.domain.Pageable}
+     * @param resourceCode 资源编码
+     * @param pageable     {@link org.springframework.data.domain.Pageable}
      * @return {@link Page}
      */
     Page<SecurityResourceUrl> findAllByCode(@NotNull String resourceCode, Pageable pageable);
@@ -94,9 +90,8 @@ public interface SecurityResourceUrlRepository
     /**
      * 查询所有
      *
-     * @param clientId      资源服务器 ID
-     * @param urlPath       资源对应的 URL (Path部分)
-     *
+     * @param clientId 资源服务器 ID
+     * @param urlPath  资源对应的 URL (Path部分)
      * @return
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -106,10 +101,9 @@ public interface SecurityResourceUrlRepository
     /**
      * 查询所有
      *
-     * @param clientId      资源服务器 ID
-     * @param urlPath       资源对应的 URL (Path部分)
-     * @param pageable      {@link org.springframework.data.domain.Pageable}
-     *
+     * @param clientId 资源服务器 ID
+     * @param urlPath  资源对应的 URL (Path部分)
+     * @param pageable {@link org.springframework.data.domain.Pageable}
      * @return {@link Page}
      */
     Page<SecurityResourceUrl> findAllByClientIdAndUrlPath(@NotNull String clientId
@@ -119,10 +113,9 @@ public interface SecurityResourceUrlRepository
     /**
      * 查询所有
      *
-     * @param clientId      资源服务器 ID
-     * @param urlPath       资源对应的 URL (Path部分)
-     * @param urlMethod     资源对应的 URL Method
-     *
+     * @param clientId  资源服务器 ID
+     * @param urlPath   资源对应的 URL (Path部分)
+     * @param urlMethod 资源对应的 URL Method
      * @return
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -132,11 +125,10 @@ public interface SecurityResourceUrlRepository
     /**
      * 查询所有
      *
-     * @param clientId      资源服务器 ID
-     * @param urlPath       资源对应的 URL (Path部分)
-     * @param urlMethod     资源对应的 URL Method
-     * @param pageable      {@link org.springframework.data.domain.Pageable}
-     *
+     * @param clientId  资源服务器 ID
+     * @param urlPath   资源对应的 URL (Path部分)
+     * @param urlMethod 资源对应的 URL Method
+     * @param pageable  {@link org.springframework.data.domain.Pageable}
      * @return {@link Page}
      */
     Page<SecurityResourceUrl> findAllByClientIdAndUrlPathAndUrlMethod(@NotNull String clientId, @NotNull String urlPath, @NotNull String urlMethod
@@ -145,16 +137,16 @@ public interface SecurityResourceUrlRepository
     /**
      * 查询所有
      *
-     * @param code          资源编码
-     * @param clientId      资源服务器 ID
-     * @param urlPath       资源对应的 URL (Path部分)
-     * @param urlMethod     资源对应的 URL Method
-     *
+     * @param code      资源编码
+     * @param clientId  资源服务器 ID
+     * @param urlPath   资源对应的 URL (Path部分)
+     * @param urlMethod 资源对应的 URL Method
      * @return {@link SecurityResourceUrl}
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED)
-    @NotNull Optional<SecurityResourceUrl> findSecurityResourceUrlByCodeAndClientIdAndUrlPathAndUrlMethod(@NotNull String code
+    @NotNull
+    Optional<SecurityResourceUrl> findSecurityResourceUrlByCodeAndClientIdAndUrlPathAndUrlMethod(@NotNull String code
             , @NotNull String clientId
             , @NotNull String urlPath
             , @NotNull String urlMethod);
@@ -162,12 +154,11 @@ public interface SecurityResourceUrlRepository
     /**
      * 查询所有
      *
-     * @param code          资源编码
-     * @param clientId      资源服务器 ID
-     * @param urlPath       资源对应的 URL (Path部分)
-     * @param urlMethod     资源对应的 URL Method
-     * @param pageable      {@link org.springframework.data.domain.Pageable}
-     *
+     * @param code      资源编码
+     * @param clientId  资源服务器 ID
+     * @param urlPath   资源对应的 URL (Path部分)
+     * @param urlMethod 资源对应的 URL Method
+     * @param pageable  {@link org.springframework.data.domain.Pageable}
      * @return {@link Page}
      */
     Page<SecurityResourceUrl> findAllByCodeAndClientIdAndUrlPathAndUrlMethod(@NotNull String code, @NotNull String clientId, @NotNull String urlPath
@@ -178,9 +169,8 @@ public interface SecurityResourceUrlRepository
     /**
      * 新增/更新日志记录
      *
-     * @param entity    {@link SecurityResourceUrl}
-     *
-     * @return  {@link SecurityResourceUrl}
+     * @param entity {@link SecurityResourceUrl}
+     * @return {@link SecurityResourceUrl}
      */
     @Override
     @Modifying
@@ -193,7 +183,7 @@ public interface SecurityResourceUrlRepository
     /**
      * 删除
      *
-     * @param id    数据ID
+     * @param id 数据ID
      */
     @Override
     @Modifying
@@ -204,8 +194,7 @@ public interface SecurityResourceUrlRepository
     /**
      * 删除
      *
-     * @param resourceCode  资源编码
-     *
+     * @param resourceCode 资源编码
      * @return
      */
     @Modifying
@@ -216,9 +205,8 @@ public interface SecurityResourceUrlRepository
     /**
      * 删除
      *
-     * @param clientId      资源服务器 ID
-     * @param urlPath       资源对应的 URL (Path部分)
-     *
+     * @param clientId 资源服务器 ID
+     * @param urlPath  资源对应的 URL (Path部分)
      * @return
      */
     @Modifying
@@ -229,10 +217,9 @@ public interface SecurityResourceUrlRepository
     /**
      * 删除
      *
-     * @param resourceCode  资源编码
-     * @param clientId      资源服务器 ID
-     * @param urlPath       资源对应的 URL (Path部分)
-     *
+     * @param resourceCode 资源编码
+     * @param clientId     资源服务器 ID
+     * @param urlPath      资源对应的 URL (Path部分)
      * @return
      */
     @Modifying
@@ -243,10 +230,9 @@ public interface SecurityResourceUrlRepository
     /**
      * 删除
      *
-     * @param clientId      资源服务器 ID
-     * @param urlPath       资源对应的 URL (Path部分)
-     * @param urlMethod     资源对应的 URL Method
-     *
+     * @param clientId  资源服务器 ID
+     * @param urlPath   资源对应的 URL (Path部分)
+     * @param urlMethod 资源对应的 URL Method
      * @return
      */
     @Modifying

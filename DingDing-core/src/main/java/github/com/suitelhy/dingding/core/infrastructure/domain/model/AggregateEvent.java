@@ -7,9 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * 复杂业务接口
  *
- * @Description 确保对事务的支持.
- *
  * @author Suite
+ * @Description 确保对事务的支持.
  */
 @Transactional(isolation = Isolation.SERIALIZABLE
         , propagation = Propagation.REQUIRED

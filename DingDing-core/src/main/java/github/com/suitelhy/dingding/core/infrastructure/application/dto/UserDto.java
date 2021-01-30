@@ -55,11 +55,10 @@ public class UserDto
     /**
      * User - 拓展属性
      *
-     * @Design
-     *-> {
-     *->    userAccountOperationInfo: [用户 -> 账户操作基础记录]
-     *->    , userPersonInfo: [用户 -> 个人信息]
-     *-> }
+     * @Design -> {
+     * ->    userAccountOperationInfo: [用户 -> 账户操作基础记录]
+     * ->    , userPersonInfo: [用户 -> 个人信息]
+     * -> }
      */
     @NotNull
     private final transient Map<String, Object> dtoIdExtension;
@@ -78,15 +77,13 @@ public class UserDto
     /**
      * (Constructor)
      *
-     * @param dtoId                         {@link User}
-     * @param dtoIdAccountOperationInfo     {@link UserAccountOperationInfo}
-     * @param dtoIdPersonInfo               {@link UserPersonInfo}
-     *
+     * @param dtoId                     {@link User}
+     * @param dtoIdAccountOperationInfo {@link UserAccountOperationInfo}
+     * @param dtoIdPersonInfo           {@link UserPersonInfo}
      * @throws IllegalArgumentException
      */
     protected UserDto(@NotNull User dtoId, @NotNull UserAccountOperationInfo dtoIdAccountOperationInfo, @NotNull UserPersonInfo dtoIdPersonInfo)
-            throws IllegalArgumentException
-    {
+            throws IllegalArgumentException {
         super(dtoId);
 
         if (!dtoId.isEntityLegal()) {
@@ -130,13 +127,11 @@ public class UserDto
     /**
      * (Constructor)
      *
-     * @param userDto   {@link UserDto}
-     *
+     * @param userDto {@link UserDto}
      * @throws IllegalArgumentException
      */
     protected UserDto(@NotNull UserDto userDto)
-            throws IllegalArgumentException
-    {
+            throws IllegalArgumentException {
         super(userDto);
 
         if (!userDto.isDtoLegal() || !userDto.isEntityLegal()) {
@@ -200,7 +195,6 @@ public class UserDto
      *
      * @param username          用户名
      * @param passwordPlaintext 用户密码（明文）
-     *
      * @return The unique identify of the DTO, or null.
      */
     @Nullable
@@ -221,7 +215,6 @@ public class UserDto
      * 唯一标识 <- DTO 对象
      *
      * @param dtoId User
-     *
      * @return The unique identify of the DTO, or null.
      */
     @Nullable
@@ -254,7 +247,6 @@ public class UserDto
      * 获取[用户 -> 账户操作基础记录]
      *
      * @param dtoId User
-     *
      * @return [用户 -> 账户操作基础记录]
      */
     @Nullable
@@ -270,7 +262,6 @@ public class UserDto
      * 获取[用户 -> 个人信息]
      *
      * @param dtoId User
-     *
      * @return [用户 -> 个人信息]
      */
     @Nullable
@@ -305,9 +296,8 @@ public class UserDto
     /**
      * 是否符合业务要求
      *
-     * @Description 需要实现类实现该接口
-     *
      * @return
+     * @Description 需要实现类实现该接口
      */
     @Override
     public boolean isEntityLegal() {
@@ -317,18 +307,17 @@ public class UserDto
     /**
      * 是否无效 <- DTO 对象
      *
-     * @Description 使用默认实现.
-     *
      * @return
+     * @Description 使用默认实现.
      */
     @Override
     public boolean isEmpty() {
         return DtoModel.isEmpty(this);
     }
 
-    @NotNull
     @Override
-    public String toString() {
+    public @NotNull
+    String toString() {
         return this.toJSONString();
     }
 
@@ -341,18 +330,16 @@ public class UserDto
         /**
          * 创建用户 DTO
          *
-         * @param age               用户 - 年龄
-         * @param registrationTime  注册时间
-         * @param ip                最后登陆 IP
-         * @param lastLoginTime     最后登录时间
-         * @param nickname          用户 - 昵称
-         * @param password          用户 - 密码
-         * @param introduction      用户 - 简介
-         * @param faceImage         用户 - 头像
-         * @param sex               用户 - 性别
-         *
+         * @param age              用户 - 年龄
+         * @param registrationTime 注册时间
+         * @param ip               最后登陆 IP
+         * @param lastLoginTime    最后登录时间
+         * @param nickname         用户 - 昵称
+         * @param password         用户 - 密码
+         * @param introduction     用户 - 简介
+         * @param faceImage        用户 - 头像
+         * @param sex              用户 - 性别
          * @return 可为 null, 此时输入参数非法
-         *
          * @throws IllegalArgumentException 此时 <param>id</param> 非法
          */
         public UserDto create(@Nullable Integer age
@@ -365,8 +352,7 @@ public class UserDto
                 , @Nullable String faceImage
                 , @NotNull String username
                 , @Nullable String sex)
-                throws IllegalAccessException
-        {
+                throws IllegalAccessException {
             final User user = User.Factory.USER.create(username, password);
             final UserAccountOperationInfo userAccountOperationInfo = UserAccountOperationInfo.Factory.USER.create(username
                     , ip
@@ -396,29 +382,25 @@ public class UserDto
         /**
          * 创建用户 DTO
          *
-         * @param user                  [用户 - 基础信息]           {@link User}
-         * @param userOperationInfo     [用户 -> 账户操作基础记录]    {@link UserAccountOperationInfo}
-         * @param userPersonInfo        [用户 -> 个人信息]          {@link UserPersonInfo}
-         *
+         * @param user              [用户 - 基础信息]           {@link User}
+         * @param userOperationInfo [用户 -> 账户操作基础记录]    {@link UserAccountOperationInfo}
+         * @param userPersonInfo    [用户 -> 个人信息]          {@link UserPersonInfo}
          * @return {@link UserDto}
          */
         @NotNull
         public UserDto create(@NotNull User user, @NotNull UserAccountOperationInfo userOperationInfo, @NotNull UserPersonInfo userPersonInfo)
-                throws IllegalAccessException
-        {
+                throws IllegalAccessException {
             if (null == user || !user.isEntityLegal()) {
                 throw new IllegalAccessException("非法参数: 用户基础信息");
             }
             if (null == userOperationInfo
                     || !userOperationInfo.isEntityLegal()
-                    || !userOperationInfo.equals(user))
-            {
+                    || !userOperationInfo.equals(user)) {
                 throw new IllegalAccessException("非法参数: [用户 -> 账户操作基础记录]");
             }
             if (null == userPersonInfo
                     || !userPersonInfo.isEntityLegal()
-                    || !userPersonInfo.equals(user))
-            {
+                    || !userPersonInfo.equals(user)) {
                 throw new IllegalAccessException("非法参数: [用户 -> 个人信息]");
             }
 
@@ -459,17 +441,14 @@ public class UserDto
         /**
          * 更新用户 DTO
          *
-         * @param user                      用户基础信息              {@link User}
-         * @param userAccountOperationInfo  [用户 -> 账户操作基础记录]  {@link UserAccountOperationInfo}
-         * @param userPersonInfo            [用户 -> 个人信息]        {@link UserPersonInfo}
-         *
+         * @param user                     用户基础信息              {@link User}
+         * @param userAccountOperationInfo [用户 -> 账户操作基础记录]  {@link UserAccountOperationInfo}
+         * @param userPersonInfo           [用户 -> 个人信息]        {@link UserPersonInfo}
          * @return {@link UserDto}
-         *
          * @throws IllegalAccessException
          */
         public UserDto update(@NotNull User user, @NotNull UserAccountOperationInfo userAccountOperationInfo, @NotNull UserPersonInfo userPersonInfo)
-                throws IllegalAccessException
-        {
+                throws IllegalAccessException {
             if (null == user || user.isEmpty()) {
                 throw new IllegalAccessException("非法参数: 用户基础信息");
             }
@@ -488,19 +467,17 @@ public class UserDto
         /**
          * 更新用户 DTO
          *
-         * @param id                用户 ID
-         * @param age               用户 - 年龄
-         * @param registrationTime  注册时间
-         * @param ip                最后登陆 IP
-         * @param lastLoginTime     最后登录时间
-         * @param nickname          用户 - 昵称
-         * @param password          用户 - 密码
-         * @param introduction      用户 - 简介
-         * @param faceImage         用户 - 头像
-         * @param sex               用户 - 性别
-         *
+         * @param id               用户 ID
+         * @param age              用户 - 年龄
+         * @param registrationTime 注册时间
+         * @param ip               最后登陆 IP
+         * @param lastLoginTime    最后登录时间
+         * @param nickname         用户 - 昵称
+         * @param password         用户 - 密码
+         * @param introduction     用户 - 简介
+         * @param faceImage        用户 - 头像
+         * @param sex              用户 - 性别
          * @return 可为 null, 此时输入参数非法
-         *
          * @throws IllegalArgumentException 此时 <param>id</param> 非法
          */
         public UserDto update(@NotNull String id
@@ -514,8 +491,7 @@ public class UserDto
                 , @Nullable String faceImage
                 , @NotNull String username
                 , @Nullable String sex)
-                throws IllegalAccessException
-        {
+                throws IllegalAccessException {
             if (!User.Validator.USER.entity_id(id)) {
                 throw new IllegalAccessException("非法参数: 用户 ID");
             }
@@ -549,13 +525,11 @@ public class UserDto
         /**
          * 销毁 DTO
          *
-         * @param userDto   {@link UserDto}
-         *
-         * @return
-         *-> {
-         *->    <code>true</code> : <b>销毁成功</b>
-         *->    , <code>false</code> : <b>销毁失败; 此时 <param>user</param></b> 无效或无法销毁
-         *-> }
+         * @param userDto {@link UserDto}
+         * @return -> {
+         * ->    <code>true</code> : <b>销毁成功</b>
+         * ->    , <code>false</code> : <b>销毁失败; 此时 <param>user</param></b> 无效或无法销毁
+         * -> }
          */
         public boolean delete(@NotNull UserDto userDto) {
             if (null != userDto && !userDto.isEmpty()) {
@@ -615,7 +589,6 @@ public class UserDto
      * 判断密码是否相同
      *
      * @param password
-     *
      * @return {true: <tt>密码相同</tt>, false: <tt>密码不相同</tt>, null: <tt>DTO无效</tt>}
      */
     public Boolean equalsPassword(@NotNull String password) {

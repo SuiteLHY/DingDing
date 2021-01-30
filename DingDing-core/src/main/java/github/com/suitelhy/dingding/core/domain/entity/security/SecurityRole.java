@@ -35,9 +35,7 @@ public class SecurityRole
      * ID
      *
      * @Description 数据 ID.
-     *
      * @Design {@link github.com.suitelhy.dingding.core.infrastructure.domain.vo.security.Security.RoleVo#code}
-     *
      * @see github.com.suitelhy.dingding.core.infrastructure.domain.vo.security.Security.RoleVo#code
      */
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,9 +47,7 @@ public class SecurityRole
      * 角色编码
      *
      * @Description 业务唯一.
-     *
      * @Design {@link Security.RoleVo#name()}
-     *
      * @see Security.RoleVo#name()
      */
     @Column(nullable = false, unique = true, length = 20)
@@ -61,9 +57,7 @@ public class SecurityRole
      * 角色描述
      *
      * @Description 可为空.
-     *
      * @Design {@link github.com.suitelhy.dingding.core.infrastructure.domain.vo.security.Security.RoleVo#description}
-     *
      * @see github.com.suitelhy.dingding.core.infrastructure.domain.vo.security.Security.RoleVo#description
      */
     @Column(length = 200)
@@ -73,7 +67,6 @@ public class SecurityRole
      * 角色名称
      *
      * @Design {@link github.com.suitelhy.dingding.core.infrastructure.domain.vo.security.Security.RoleVo#name}
-     *
      * @see github.com.suitelhy.dingding.core.infrastructure.domain.vo.security.Security.RoleVo#name
      */
     @Column(nullable = false, length = 50)
@@ -82,15 +75,16 @@ public class SecurityRole
     //===== Entity Model =====//
 
     @Override
-    public @NotNull String id() {
+    public @NotNull
+    String id() {
         return this.code;
     }
 
     /**
      * 是否无效
      *
-     * @Description 保证 Entity 的基本业务实现中的合法性.
      * @return
+     * @Description 保证 Entity 的基本业务实现中的合法性.
      */
     @Override
     public boolean isEmpty() {
@@ -101,8 +95,8 @@ public class SecurityRole
     /**
      * 是否符合基础数据合法性要求
      *
-     * @Description 只保证 Entity 的数据合法, 不保证 Entity 的业务实现中的合法性.
      * @return
+     * @Description 只保证 Entity 的数据合法, 不保证 Entity 的业务实现中的合法性.
      */
     @Override
     public boolean isEntityLegal() {
@@ -114,9 +108,9 @@ public class SecurityRole
     /**
      * 校验 Entity - ID
      *
-     * @Description <abstractClass>AbstractEntityModel</abstractClass>提供的模板设计.
      * @param id <method>id()</method>
      * @return
+     * @Description <abstractClass>AbstractEntityModel</abstractClass>提供的模板设计.
      */
     @Override
     protected boolean validateId(@NotNull String id) {
@@ -128,7 +122,7 @@ public class SecurityRole
     /**
      * 角色 - 属性校验器
      *
-     * @Description 各个属性的基础校验(注意: 此校验 ≠ 完全校验).
+     * @Description 各个属性的基础校验(注意 : 此校验 ≠ 完全校验).
      */
     public enum Validator
             implements EntityValidator<SecurityRole, String> {
@@ -172,11 +166,9 @@ public class SecurityRole
         /**
          * 判断是否属于[具有管理员权限的]角色
          *
-         * @Description (拓展的业务校验)
-         *
-         * @param role  {@link SecurityRole}
-         *
+         * @param role {@link SecurityRole}
          * @return {@link Boolean#TYPE}
+         * @Description (拓展的业务校验)
          */
         public static boolean isAdminRole(@NotNull SecurityRole role) {
             if (null != role && !role.isEmpty()) {
@@ -198,26 +190,25 @@ public class SecurityRole
     /**
      * 仅用于持久化注入
      */
-    public SecurityRole() {}
+    public SecurityRole() {
+    }
 
     //===== entity factory =====//
 
     /**
      * 创建/更新
      *
-     * @param id            数据 ID
-     * @param code          角色编码
-     * @param name          角色名称
-     * @param description   角色描述
-     *
+     * @param id          数据 ID
+     * @param code        角色编码
+     * @param name        角色名称
+     * @param description 角色描述
      * @throws IllegalArgumentException
      */
     private SecurityRole(@NotNull Long id
             , @NotNull String code
             , @NotNull String name
             , @NotNull String description)
-            throws IllegalArgumentException
-    {
+            throws IllegalArgumentException {
         if (null == id) {
             //--- 添加功能
         } else {
@@ -277,17 +268,15 @@ public class SecurityRole
         /**
          * 创建
          *
-         * @param code          角色编码
-         * @param name          角色名称
-         * @param description   角色描述
-         *
+         * @param code        角色编码
+         * @param name        角色名称
+         * @param description 角色描述
          * @throws IllegalArgumentException
          */
         public SecurityRole create(@NotNull String code
                 , @NotNull String name
                 , @NotNull String description)
-                throws IllegalArgumentException
-        {
+                throws IllegalArgumentException {
             return new SecurityRole(null, code, name, description);
         }
 
@@ -295,12 +284,10 @@ public class SecurityRole
          * 创建
          *
          * @param roleVo {@link Security.RoleVo}
-         *
          * @throws IllegalArgumentException
          */
         public SecurityRole create(@NotNull Security.RoleVo roleVo)
-                throws IllegalArgumentException
-        {
+                throws IllegalArgumentException {
             return new SecurityRole(null, roleVo.name(), roleVo.name
                     , roleVo.description);
         }
@@ -308,21 +295,18 @@ public class SecurityRole
         /**
          * 更新
          *
-         * @param id            数据 ID
-         * @param code          角色编码
-         * @param name          角色名称
-         * @param description   角色描述
-         *
+         * @param id          数据 ID
+         * @param code        角色编码
+         * @param name        角色名称
+         * @param description 角色描述
          * @return {@link SecurityRole}
-         *
          * @throws IllegalArgumentException 此时 {@param id} 非法
          */
         public SecurityRole update(@NotNull Long id
                 , @NotNull String code
                 , @NotNull String name
                 , @NotNull String description)
-                throws IllegalArgumentException
-        {
+                throws IllegalArgumentException {
             if (!Validator.ROLE.id(id)) {
                 throw new IllegalArgumentException(String.format("非法参数:<param>%s</param> -> 【%s】 <= [<class>%s</class>-<method>%s</method> <- 第%s行]"
                         , "[数据 ID]"
@@ -352,13 +336,10 @@ public class SecurityRole
     /**
      * 等效比较
      *
-     * @Tips
-     * · 覆盖另一个方法的方法一定不能重新定义参数约束配置;
-     * {@link this#equals(Security.RoleVo)} 不能重新定义 {@link Object#equals(Object)} 的配置.
-     *
-     * @param roleVo    {@link Security.RoleVo}
-     *
+     * @param roleVo {@link Security.RoleVo}
      * @return 判断结果
+     * @Tips · 覆盖另一个方法的方法一定不能重新定义参数约束配置;
+     * {@link this#equals(Security.RoleVo)} 不能重新定义 {@link Object#equals(Object)} 的配置.
      */
     public boolean equals(/*@NotNull */Security.RoleVo roleVo) {
         return null != roleVo

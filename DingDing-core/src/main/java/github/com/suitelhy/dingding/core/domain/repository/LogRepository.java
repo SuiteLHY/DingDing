@@ -18,7 +18,6 @@ import java.util.Optional;
  * 日志记录 - 基础业务
  *
  * @Description 日志记录数据 - 基础交互业务接口.
- *
  * @see Log
  */
 /*// 此处选择使用 Mybatis-Spring 的XML文件配置方式实现 mapper, 用来演示复杂SQL情景下的一种设计思路:
@@ -40,8 +39,7 @@ public interface LogRepository
     /**
      * 查询日志记录数量
      *
-     * @param operatorUsername  [操作者 - 用户名称]
-     *
+     * @param operatorUsername [操作者 - 用户名称]
      * @return {@link Long#TYPE}
      */
     long countByOperatorUsername(@NotNull String operatorUsername);
@@ -49,8 +47,7 @@ public interface LogRepository
     /**
      * 查询日志记录数量
      *
-     * @param targetId  [被操作对象 - 用于日志追踪的 ID]
-     *
+     * @param targetId [被操作对象 - 用于日志追踪的 ID]
      * @return {@link Long#TYPE}
      */
     long countByTargetId(@NotNull String targetId);
@@ -59,7 +56,6 @@ public interface LogRepository
      * 查询所有日志记录
      *
      * @param pageable
-     *
      * @return
      */
     @Override
@@ -68,8 +64,7 @@ public interface LogRepository
     /**
      * 查询指定的日志记录
      *
-     * @param id    [日志记录 - 编号]
-     *
+     * @param id [日志记录 - 编号]
      * @return {@link Optional}
      */
     @NotNull
@@ -80,9 +75,8 @@ public interface LogRepository
     /**
      * 查询指定的日志记录
      *
-     * @param operatorUsername  [操作者 - 用户名称]
+     * @param operatorUsername [操作者 - 用户名称]
      * @param pageable
-     *
      * @return {@link List}
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -92,9 +86,8 @@ public interface LogRepository
     /**
      * 查询指定的日志记录
      *
-     * @param targetId  [被操作对象 - 用于日志追踪的 ID]
+     * @param targetId [被操作对象 - 用于日志追踪的 ID]
      * @param pageable
-     *
      * @return
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -107,7 +100,6 @@ public interface LogRepository
      * 新增/更新日志记录
      *
      * @param log
-     *
      * @return {@link Log}
      */
     @Override
@@ -132,8 +124,7 @@ public interface LogRepository
     /**
      * 删除指定用户对应的所有日志记录
      *
-     * @param operatorUsername  [操作者 - 用户名称]
-     *
+     * @param operatorUsername [操作者 - 用户名称]
      * @return {@link Long#TYPE}
      */
     @Modifying

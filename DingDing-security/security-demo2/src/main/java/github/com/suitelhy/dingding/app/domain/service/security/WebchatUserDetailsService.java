@@ -13,7 +13,6 @@ import javax.validation.constraints.NotNull;
 
 /**
  * Spring Security <- 项目定制化 <interface>UserDetailsService</interface> 实现
- *
  */
 @Service
 public class WebchatUserDetailsService implements UserDetailsService {

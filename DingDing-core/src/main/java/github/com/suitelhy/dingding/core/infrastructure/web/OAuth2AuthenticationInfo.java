@@ -34,17 +34,14 @@ public final class OAuth2AuthenticationInfo {
             /**
              * (Constructor)
              *
+             * @param active      是否处于活动状态
+             * @param authorities 权限集合
+             * @param clientId    (凭证对应的)客户端编号
+             * @param scope       可操作范围
+             * @param userName    (凭证对应的)用户名称
+             * @throws BadCredentialsException             非法的凭证参数
+             * @throws InsufficientAuthenticationException 不满足构建[用户认证凭据 - 详细信息]的必要条件
              * @Description 限制 {@link OAuth2AuthenticationInfo.AbstractUserAuthentication.AbstractDetails} 实现类的构造.
-             *
-             * @param active        是否处于活动状态
-             * @param authorities   权限集合
-             * @param clientId      (凭证对应的)客户端编号
-             * @param scope         可操作范围
-             * @param userName      (凭证对应的)用户名称
-             *
-             * @throws BadCredentialsException  非法的凭证参数
-             * @throws InsufficientAuthenticationException  不满足构建[用户认证凭据 - 详细信息]的必要条件
-             *
              * @see this#isActive()
              * @see this#getAuthorities()
              * @see this#getClientId()
@@ -53,8 +50,7 @@ public final class OAuth2AuthenticationInfo {
              */
             protected AbstractDetails(Boolean active, @NotNull Collection<String> authorities, @NotNull String clientId
                     , @NotNull Collection<String> scope, @NotNull String userName)
-                    throws BadCredentialsException, InsufficientAuthenticationException, IllegalArgumentException
-            {
+                    throws BadCredentialsException, InsufficientAuthenticationException, IllegalArgumentException {
                 if (null == authorities) {
                     //-- 非法参数: [权限集合]
                     throw new BadCredentialsException(String.format("非法参数:<param>%s</param>->【%s】 <= 【<class>%s</class>-<method>%s</method> <- 第%s行】"
@@ -101,13 +97,17 @@ public final class OAuth2AuthenticationInfo {
 
             public abstract Boolean isActive();
 
-            public abstract @NotNull Collection<String> getAuthorities();
+            public abstract @NotNull
+            Collection<String> getAuthorities();
 
-            public abstract @NotNull String getClientId();
+            public abstract @NotNull
+            String getClientId();
 
-            public abstract @NotNull Collection<String> getScope();
+            public abstract @NotNull
+            Collection<String> getScope();
 
-            public abstract @NotNull String getUserName();
+            public abstract @NotNull
+            String getUserName();
 
             //==========//
 
@@ -116,19 +116,16 @@ public final class OAuth2AuthenticationInfo {
         /**
          * 获取[用户认证凭据 - 详细信息]
          *
-         * @param userAuthentication    用户认证凭据
-         *
+         * @param userAuthentication 用户认证凭据
          * @return [用户认证凭据 - 详细信息]
-         *
          * @throws AuthenticationCredentialsNotFoundException 此时 {@param userAuthentication} 非法
-         * @throws BadCredentialsException  此时 {@param userAuthentication} 无效, 或无法从 {@param userAuthentication} 中提取有效的 {@link AbstractDetails}
-         * @throws IllegalArgumentException 此时 {@param userAuthentication} 无效, 或无法从 {@param userAuthentication} 中提取有效的 {@link AbstractDetails}
-         *
+         * @throws BadCredentialsException                    此时 {@param userAuthentication} 无效, 或无法从 {@param userAuthentication} 中提取有效的 {@link AbstractDetails}
+         * @throws IllegalArgumentException                   此时 {@param userAuthentication} 无效, 或无法从 {@param userAuthentication} 中提取有效的 {@link AbstractDetails}
          * @see AbstractDetails
          */
-        public static @NotNull AbstractDetails getDetails(@NotNull org.springframework.security.core.Authentication userAuthentication)
-                throws AuthenticationCredentialsNotFoundException, BadCredentialsException, IllegalArgumentException
-        {
+        public static @NotNull
+        AbstractDetails getDetails(@NotNull org.springframework.security.core.Authentication userAuthentication)
+                throws AuthenticationCredentialsNotFoundException, BadCredentialsException, IllegalArgumentException {
             if (null == userAuthentication) {
                 //-- 非法参数: 无效的[用户认证凭据]
                 throw new AuthenticationCredentialsNotFoundException("非法参数: 找不到[用户认证凭据]");

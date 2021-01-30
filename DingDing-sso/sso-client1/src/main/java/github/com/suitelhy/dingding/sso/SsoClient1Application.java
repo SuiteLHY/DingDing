@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package github.com.suitelhy.dingding.sso;
 
@@ -30,14 +30,14 @@ import org.springframework.web.bind.annotation.RestController;
 @EnableOAuth2Client
 /*@EnableResourceServer*/
 public class SsoClient1Application {
-	
-	@GetMapping("/user")
-	public Authentication user(Authentication user) {
-		return user;
-	}
 
-	public static void main(String[] args) {
-		SpringApplication.run(SsoClient1Application.class, args);
-	}
-	
+    @GetMapping("/user")
+    public Authentication user(Authentication user) {
+        return user;
+    }
+
+    public static void main(String[] args) {
+        SpringApplication.run(SsoClient1Application.class, args);
+    }
+
 }

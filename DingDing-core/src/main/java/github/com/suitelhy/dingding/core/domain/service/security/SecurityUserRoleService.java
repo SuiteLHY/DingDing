@@ -23,12 +23,9 @@ import java.util.Set;
  * （安全认证）用户 ←→ 角色
  *
  * @Description [（安全认证）用户 ←→ 角色]关联关系 - 业务接口.
- *
  * @see SecurityUserRole
  * @see SecurityUserRoleRepository
- *
  * @see SecurityUserRoleServiceImpl
- *
  * @see UserAccountOperationInfoService
  * @see LogService
  */
@@ -52,9 +49,8 @@ public interface SecurityUserRoleService
     /**
      * 查询所有
      *
-     * @param pageIndex     分页索引, 从0开始
-     * @param pageSize      分页 - 每页容量
-     *
+     * @param pageIndex 分页索引, 从0开始
+     * @param pageSize  分页 - 每页容量
      * @return {@link Page}
      */
     Page<SecurityUserRole> selectAll(int pageIndex, int pageSize)
@@ -63,44 +59,43 @@ public interface SecurityUserRoleService
     /**
      * 查询总页数
      *
+     * @param pageSize 分页 - 每页容量
+     * @return 分页 - 总页数
      * @Description 查询数据列表 - 分页 - 总页数
-     *
-     * @param pageSize      分页 - 每页容量
-     *
-     * @return              分页 - 总页数
      */
-    @NotNull Long selectCount(int pageSize)
+    @NotNull
+    Long selectCount(int pageSize)
             throws IllegalArgumentException;
 
     /**
      * 查询
      *
-     * @param username  用户名称    {@link SecurityUserRole.Validator#username(String)}
-     *
+     * @param username 用户名称    {@link SecurityUserRole.Validator#username(String)}
      * @return {@link SecurityUserRole}
      */
-    @NotNull List<SecurityUserRole> selectByUsername(@NotNull String username)
+    @NotNull
+    List<SecurityUserRole> selectByUsername(@NotNull String username)
             throws IllegalArgumentException;
 
     /**
      * 查询
      *
-     * @param roleCode  角色编码    {@link SecurityUserRole.Validator#roleCode(String)}
-     *
+     * @param roleCode 角色编码    {@link SecurityUserRole.Validator#roleCode(String)}
      * @return {@link SecurityUserRole}
      */
-    @NotNull List<SecurityUserRole> selectByRoleCode(@NotNull String roleCode)
+    @NotNull
+    List<SecurityUserRole> selectByRoleCode(@NotNull String roleCode)
             throws IllegalArgumentException;
 
     /**
      * 查询
      *
-     * @param username  用户名称    {@link SecurityUserRole.Validator#username(String)}
-     * @param roleCode  角色编码    {@link SecurityUserRole.Validator#roleCode(String)}
-     *
+     * @param username 用户名称    {@link SecurityUserRole.Validator#username(String)}
+     * @param roleCode 角色编码    {@link SecurityUserRole.Validator#roleCode(String)}
      * @return {@link SecurityUserRole}
      */
-    @NotNull SecurityUserRole selectByUsernameAndRoleCode(@NotNull String username, @NotNull String roleCode)
+    @NotNull
+    SecurityUserRole selectByUsernameAndRoleCode(@NotNull String username, @NotNull String roleCode)
             throws IllegalArgumentException;
 
 //    /**
@@ -119,7 +114,6 @@ public interface SecurityUserRoleService
      * @param userRole                          [（安全认证）用户 ←→ 角色]    {@link SecurityUserRole}
      * @param operator                          操作者
      * @param operator_userAccountOperationInfo [操作者 - 账户操作基础记录]
-     *
      * @return 操作是否成功 / 是否已存在相同的有效数据
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
@@ -207,14 +201,12 @@ public interface SecurityUserRoleService
     /**
      * 删除指定的[（安全认证）用户 ←→ 角色]关联关系
      *
-     * @Description 删除成功后校验持久化数据;
-     * 主要为了避免在未提交的事务中进行对操作结果的非预期判断.
-     *
      * @param userRole                          [（安全认证）用户 ←→ 角色]    {@link SecurityUserRole}
      * @param operator                          操作者
      * @param operator_userAccountOperationInfo [操作者 -> 账户操作基础记录]
-     *
      * @return 操作是否成功
+     * @Description 删除成功后校验持久化数据;
+     * 主要为了避免在未提交的事务中进行对操作结果的非预期判断.
      */
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED

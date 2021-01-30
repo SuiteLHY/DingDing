@@ -13,15 +13,15 @@ import io.netty.util.CharsetUtil;
  * Pipeline - Handler (自定义操作类)
  *
  * @Description 自定义操作类; 相当于【入站】(Inbound).
- *
  * @Api <a href="https://netty.io/4.1/api/io/netty/channel/ChannelInboundHandler.html">
- *->     ChannelInboundHandler（Netty API参考（4.1.45.Final））</a>
+ * ->     ChannelInboundHandler（Netty API参考（4.1.45.Final））</a>
  */
 public class CustomHandler
         extends SimpleChannelInboundHandler<SocksMessage> {
 
     /**
      * Channel -> 注册动作 -> 动作
+     *
      * @param ctx
      * @throws Exception
      */
@@ -32,6 +32,7 @@ public class CustomHandler
 
     /**
      * Channel -> 销毁动作 -> 动作
+     *
      * @param ctx
      * @throws Exception
      */
@@ -42,6 +43,7 @@ public class CustomHandler
 
     /**
      * Channel -> 活跃状态 -> 动作
+     *
      * @param ctx
      * @throws Exception
      */
@@ -52,6 +54,7 @@ public class CustomHandler
 
     /**
      * Channel -> 不活跃状态 -> 动作
+     *
      * @param ctx
      * @throws Exception
      */
@@ -62,6 +65,7 @@ public class CustomHandler
 
     /**
      * Channel -> 读取完毕 -> 动作
+     *
      * @param ctx
      * @throws Exception
      */
@@ -72,6 +76,7 @@ public class CustomHandler
 
     /**
      * Channel -> 用户事件触发 -> 动作
+     *
      * @param ctx
      * @param evt
      * @throws Exception
@@ -83,6 +88,7 @@ public class CustomHandler
 
     /**
      * Channel - 可写性状态 -> 被更改 -> 动作
+     *
      * @param ctx
      * @throws Exception
      */
@@ -93,6 +99,7 @@ public class CustomHandler
 
     /**
      * Channel -> 捕获到异常 -> 动作
+     *
      * @param ctx
      * @param cause
      * @throws Exception
@@ -104,6 +111,7 @@ public class CustomHandler
 
     /**
      * Channel -> 操作类添加 -> 动作
+     *
      * @param ctx
      * @throws Exception
      */
@@ -114,6 +122,7 @@ public class CustomHandler
 
     /**
      * Channel -> 操作类移除 -> 动作
+     *
      * @param ctx
      * @throws Exception
      */
@@ -124,6 +133,7 @@ public class CustomHandler
 
     /**
      * Channel -> 从对等方读取消息时 -> 动作
+     *
      * @param context
      * @param socksMessage
      * @throws Exception
@@ -131,7 +141,7 @@ public class CustomHandler
     @Override
     protected void channelRead0(ChannelHandlerContext context, SocksMessage socksMessage)
             throws Exception {
-        Channel channel =  context.channel();
+        Channel channel = context.channel();
 
         if (socksMessage instanceof HttpRequest) {
             //===== HTTP Request 响应

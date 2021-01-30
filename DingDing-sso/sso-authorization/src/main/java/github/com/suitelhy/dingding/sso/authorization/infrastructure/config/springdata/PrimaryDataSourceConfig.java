@@ -27,8 +27,8 @@ import java.util.Map;
 //->      出问题的时候, 没想起来, Context加载失败报错找不到repository的bean; 最后是找控制面板信息发现
 //->      ".s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 9ms. Found 0 JPA repository interfaces."}
 @EnableJpaRepositories(basePackages = {"github.com.suitelhy.dingding.sso.authorization.domain.repository"
-            , "github.com.suitelhy.dingding.core.domain.repository"
-        }, entityManagerFactoryRef = "primaryEntityManagerFactory"
+        , "github.com.suitelhy.dingding.core.domain.repository"
+}, entityManagerFactoryRef = "primaryEntityManagerFactory"
         , transactionManagerRef = "primaryTransactionManager")
 @EnableTransactionManagement
 public class PrimaryDataSourceConfig {

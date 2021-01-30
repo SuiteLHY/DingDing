@@ -53,6 +53,7 @@ enum NetUtilConfig {
 
     /**
      * 配置项集合 - 代理服务请求头
+     *
      * @return 可接受的代理服务请求头
      */
     String[] getProxyServerRequestHeaders() {
@@ -61,6 +62,7 @@ enum NetUtilConfig {
 
     /**
      * 配置项 - 正则表达式 - IP
+     *
      * @return 校验 IP 格式的正则表达式
      */
     String getRegexIp() {
@@ -79,9 +81,10 @@ public class NetUtil {
 
     /**
      * 校验 IP 地址格式
+     *
      * @param ip
      * @return {<code>true</code> : <p>符合 IP 地址格式</p>
-     *-> , <code>false</code> : <p>参数 ip 为空或不符合 IP 地址格式</p>}
+     * -> , <code>false</code> : <p>参数 ip 为空或不符合 IP 地址格式</p>}
      */
     public static boolean validateIpAddress(@NotNull String ip) {
         return null != ip
@@ -91,13 +94,13 @@ public class NetUtil {
 
     /**
      * 从 Request 中获取 IP 地址
-     *
+     * <p>
      * 相关资料:
-     *-> <a href="https://juejin.im/post/5dde34bef265da060a52181c">
-     *->     X-Forward-For 看破红尘，代理 IP 无所遁形 - 掘金</a>,
+     * -> <a href="https://juejin.im/post/5dde34bef265da060a52181c">
+     * ->     X-Forward-For 看破红尘，代理 IP 无所遁形 - 掘金</a>,
      * 相关 Python 爬虫资料:
-     *-> <a href="https://juejin.im/post/5e05a58b6fb9a0164f2955b2">一线大厂在用的反爬虫手段，看我破！ - 掘金</a>
-     *-> <a href="https://l1905.github.io/%E5%85%A5%E9%97%A8/2019/07/16/ip-proxy-01/">IP代理池理解 | 生活的自留地</a>
+     * -> <a href="https://juejin.im/post/5e05a58b6fb9a0164f2955b2">一线大厂在用的反爬虫手段，看我破！ - 掘金</a>
+     * -> <a href="https://l1905.github.io/%E5%85%A5%E9%97%A8/2019/07/16/ip-proxy-01/">IP代理池理解 | 生活的自留地</a>
      *
      * @param request
      * @return

@@ -12,54 +12,52 @@ import org.springframework.web.client.RestTemplate;
 import java.nio.charset.Charset;
 
 /**
- *
  * @author zhailiang
- *
  */
 public class QQOAuth2Template
-		extends OAuth2Template {
-	
-	private Logger logger = LoggerFactory.getLogger(getClass());
+        extends OAuth2Template {
 
-	public QQOAuth2Template(String clientId, String clientSecret, String authorizeUrl, String accessTokenUrl) {
-		super(clientId, clientSecret, authorizeUrl, accessTokenUrl);
-		setUseParametersForClientAuthentication(true);
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.springframework.social.oauth2.OAuth2Template#postForAccessGrant(java.lang.String, org.springframework.util.MultiValueMap)
-	 */
-	@Override
-	protected AccessGrant postForAccessGrant(String accessTokenUrl, MultiValueMap<String, String> parameters) {
-		String responseStr = getRestTemplate().postForObject(accessTokenUrl, parameters, String.class);
-		
-		logger.info("获取accessToke的响应："+responseStr);
-		
-		String[] items = StringUtils.splitByWholeSeparatorPreserveAllTokens(responseStr, "&");
-		
-		String accessToken = StringUtils.substringAfterLast(items[0], "=");
-		Long expiresIn = new Long(StringUtils.substringAfterLast(items[1], "="));
-		String refreshToken = StringUtils.substringAfterLast(items[2], "=");
-		
-		return new AccessGrant(accessToken, null, refreshToken, expiresIn);
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.springframework.social.oauth2.OAuth2Template#createRestTemplate()
-	 */
-	@Override
-	protected RestTemplate createRestTemplate() {
-		RestTemplate restTemplate = super.createRestTemplate();
-		restTemplate.getMessageConverters().add(new StringHttpMessageConverter(Charset.forName("UTF-8")));
-		return restTemplate;
-	}
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
-	
-	public static void main(String[] args) {
-		Long id1 = 12345L;
-		Long id2 = 12345L;
-		System.out.println(id1.equals(id2));
-		System.out.println(id1 == id2);
-	}
+    public QQOAuth2Template(String clientId, String clientSecret, String authorizeUrl, String accessTokenUrl) {
+        super(clientId, clientSecret, authorizeUrl, accessTokenUrl);
+        setUseParametersForClientAuthentication(true);
+    }
+
+    /* (non-Javadoc)
+     * @see org.springframework.social.oauth2.OAuth2Template#postForAccessGrant(java.lang.String, org.springframework.util.MultiValueMap)
+     */
+    @Override
+    protected AccessGrant postForAccessGrant(String accessTokenUrl, MultiValueMap<String, String> parameters) {
+        String responseStr = getRestTemplate().postForObject(accessTokenUrl, parameters, String.class);
+
+        logger.info("获取accessToke的响应：" + responseStr);
+
+        String[] items = StringUtils.splitByWholeSeparatorPreserveAllTokens(responseStr, "&");
+
+        String accessToken = StringUtils.substringAfterLast(items[0], "=");
+        Long expiresIn = new Long(StringUtils.substringAfterLast(items[1], "="));
+        String refreshToken = StringUtils.substringAfterLast(items[2], "=");
+
+        return new AccessGrant(accessToken, null, refreshToken, expiresIn);
+    }
+
+    /* (non-Javadoc)
+     * @see org.springframework.social.oauth2.OAuth2Template#createRestTemplate()
+     */
+    @Override
+    protected RestTemplate createRestTemplate() {
+        RestTemplate restTemplate = super.createRestTemplate();
+        restTemplate.getMessageConverters().add(new StringHttpMessageConverter(Charset.forName("UTF-8")));
+        return restTemplate;
+    }
+
+
+    public static void main(String[] args) {
+        Long id1 = 12345L;
+        Long id2 = 12345L;
+        System.out.println(id1.equals(id2));
+        System.out.println(id1 == id2);
+    }
 
 }
