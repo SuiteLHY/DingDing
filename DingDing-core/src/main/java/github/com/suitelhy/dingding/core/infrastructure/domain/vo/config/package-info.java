@@ -1,1 +1,0 @@
-package github.com.suitelhy.dingding.core.infrastructure.domain.vo.config;

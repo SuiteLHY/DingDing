@@ -1,14 +1,13 @@
 package github.com.suitelhy.dingding.sso.authorization.web.security;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import github.com.suitelhy.dingding.core.application.task.security.RoleTask;
-import github.com.suitelhy.dingding.core.infrastructure.application.dto.security.RoleDto;
 import github.com.suitelhy.dingding.core.infrastructure.application.model.TaskResult;
-import github.com.suitelhy.dingding.core.infrastructure.web.AbstractSecurityUser;
-import github.com.suitelhy.dingding.core.infrastructure.web.OAuth2AuthenticationInfo;
+import github.com.suitelhy.dingding.core.infrastructure.domain.Page;
 import github.com.suitelhy.dingding.core.infrastructure.web.model.WebResult;
-import github.com.suitelhy.dingding.sso.authorization.infrastructure.web.security.util.OAuth2AuthenticationUtil;
+import github.com.suitelhy.dingding.security.service.api.infrastructure.web.OAuth2AuthenticationInfo;
+import github.com.suitelhy.dingding.security.service.api.infrastructure.web.util.OAuth2AuthenticationUtil;
+import github.com.suitelhy.dingding.sso.authorization.application.task.RoleTask;
+import github.com.suitelhy.dingding.sso.authorization.infrastructure.application.dto.RoleDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -29,9 +28,6 @@ import java.util.*;
 @Slf4j
 public class SecurityRoleController {
 
-//    @Autowired
-//    private ObjectMapper toJSONString;
-
     @Autowired
     private RoleTask roleTask;
 
@@ -39,16 +35,22 @@ public class SecurityRoleController {
      * 获取当前用户角色列表
      *
      * @param authentication
+     * @param pageIndex
+     * @param pageSize
+     *
      * @return API响应的主要数据
      */
     @GetMapping("/roleList")
-    public String getRoleList(final @AuthenticationPrincipal OAuth2Authentication authentication) {
-        WebResult<List<RoleDto>> result;
+    public String getRoleList(final @AuthenticationPrincipal OAuth2Authentication authentication
+            , @RequestParam(defaultValue = "0") int pageIndex
+            , @RequestParam(defaultValue = "10") int pageSize)
+    {
+        @NotNull WebResult<Page<RoleDto>> result;
         try {
 //            final Map<String, Object> oAuth2Details = (Map<String, Object>) authentication.getUserAuthentication().getDetails();
             final OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails userAuthenticationDetails = OAuth2AuthenticationUtil.getInstance().getDetails(authentication);
 
-            @NotNull TaskResult<List<RoleDto>> taskResult_RoleDto = roleTask.selectRoleByUsername(userAuthenticationDetails.getUserName()
+            @NotNull TaskResult<Page<RoleDto>> taskResult_RoleDto = roleTask.selectRoleByUsername(userAuthenticationDetails.getUserName(), pageIndex, pageSize
                     , userAuthenticationDetails);
 
             result = WebResult.Factory.DEFAULT.create(taskResult_RoleDto);
@@ -58,7 +60,7 @@ public class SecurityRoleController {
             e.printStackTrace();
 
             result = WebResult.Factory.DEFAULT.createUnknown("接口异常!"
-                    , new ArrayList<>(0)
+                    , Page.empty()
                     , ""
                     , "");
             /*result.extra.put(TaskResult.Vo.ExtraPropertyVo.EXCEPTION.key, e.getMessage());*/
@@ -73,17 +75,19 @@ public class SecurityRoleController {
      * @param authentication
      * @param pageIndex
      * @param pageSize
+     *
      * @return API响应的主要数据
      */
     @GetMapping("/allRoleList")
     public String getAllRoleList(final @AuthenticationPrincipal OAuth2Authentication authentication
             , @RequestParam(defaultValue = "0") String pageIndex
-            , @RequestParam(defaultValue = "10") String pageSize) {
-        @NotNull WebResult<List<RoleDto>> result;
+            , @RequestParam(defaultValue = "10") String pageSize)
+    {
+        @NotNull WebResult<Page<RoleDto>> result;
         try {
             final OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails userAuthenticationDetails = OAuth2AuthenticationUtil.getInstance().getDetails(authentication);
 
-            final TaskResult<List<RoleDto>> TaskResult_RoleDtoList = roleTask.selectAllRole(Integer.parseInt(pageIndex)
+            final TaskResult<Page<RoleDto>> TaskResult_RoleDtoList = roleTask.selectAllRole(Integer.parseInt(pageIndex)
                     , Integer.parseInt(pageSize)
                     , userAuthenticationDetails);
 
@@ -92,7 +96,7 @@ public class SecurityRoleController {
         } catch (NumberFormatException e) {
             result = WebResult.Factory.DEFAULT.createFailure(WebResult.Vo.StatusVo.FAILURE
                     , "请求参数非法!"
-                    , new ArrayList<>(0)
+                    , Page.empty()
                     , ""
                     , WebResult.Vo.ErrorVo.BAD_REQUEST
                     , "");
@@ -101,7 +105,7 @@ public class SecurityRoleController {
             e.printStackTrace();
 
             result = WebResult.Factory.DEFAULT.createUnknown("接口异常!"
-                    , new ArrayList<>(0)
+                    , Page.empty()
                     , ""
                     , "");
         }
@@ -111,19 +115,22 @@ public class SecurityRoleController {
     /**
      * 添加角色
      *
+     * @Description 添加单个角色.
+     *
      * @param authentication
      * @param roleCode
      * @param roleName
      * @param roleDescription
+     *
      * @return API响应的主要数据
-     * @Description 添加单个角色.
      */
     @PutMapping("/assignedRole")
     public String addRole(@AuthenticationPrincipal final OAuth2Authentication authentication
             , @RequestParam(name = "code") String roleCode
             , @RequestParam(name = "name") String roleName
             , @RequestParam(name = "description") String roleDescription)
-            throws JsonProcessingException {
+            throws JsonProcessingException
+    {
         /*final Map<String, Object> result = new LinkedHashMap<>(3);*/
         try {
             final OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails userAuthenticationDetails = OAuth2AuthenticationUtil.getInstance().getDetails(authentication);
@@ -176,14 +183,16 @@ public class SecurityRoleController {
     /**
      * 更新指定角色
      *
+     * @Description 局部更新.
+     *
      * @param authentication
      * @param old_roleCode
      * @param old_roleName
      * @param old_roleDescription
      * @param roleName
      * @param roleDescription
+     *
      * @return API响应的主要数据
-     * @Description 局部更新.
      */
     @PatchMapping("/assignedRole")
     public String updateRole(@AuthenticationPrincipal final OAuth2Authentication authentication
@@ -191,15 +200,16 @@ public class SecurityRoleController {
             , @RequestParam(name = "old_name") String old_roleName
             , @RequestParam(name = "old_description") String old_roleDescription
             , @RequestParam(name = "new_name", required = false) String roleName
-            , @RequestParam(name = "new_description", required = false) String roleDescription) {
+            , @RequestParam(name = "new_description", required = false) String roleDescription)
+    {
         try {
             final OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails userAuthenticationDetails = OAuth2AuthenticationUtil.getInstance().getDetails(authentication);
 
             Map<String, Object> new_role_data = new HashMap<>(1);
-            if (!StringUtils.isEmpty(roleName)) {
+            if (! StringUtils.isEmpty(roleName)) {
                 new_role_data.put("role_name", roleName);
             }
-            if (!StringUtils.isEmpty(roleDescription)) {
+            if (! StringUtils.isEmpty(roleDescription)) {
                 new_role_data.put("role_description", roleDescription);
             }
 
@@ -209,7 +219,9 @@ public class SecurityRoleController {
                     , new_role_data
                     , userAuthenticationDetails);
 
-            return WebResult.Factory.DEFAULT.create(taskResult_updateRole).toString();
+            return WebResult.Factory.DEFAULT
+                    .create(taskResult_updateRole)
+                    .toString();
         } catch (Exception e) {
             log.error("SecurityRoleController#deleteRole", e);
             e.printStackTrace();
@@ -222,11 +234,13 @@ public class SecurityRoleController {
      *
      * @param authentication
      * @param roleCode
+     *
      * @return API响应的主要数据
      */
     @DeleteMapping("/assignedRole")
     public String deleteRole(@AuthenticationPrincipal final OAuth2Authentication authentication
-            , @RequestParam(name = "role_code") String roleCode) {
+            , @RequestParam(name = "role_code") String roleCode)
+    {
         try {
             final OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails userAuthenticationDetails = OAuth2AuthenticationUtil.getInstance().getDetails(authentication);
 

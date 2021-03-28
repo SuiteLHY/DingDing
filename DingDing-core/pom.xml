@@ -4,14 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>github.com.SuiteLHY.dingding</groupId>
+    <groupId>github.com.suitelhy.dingding</groupId>
     <artifactId>core</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <name>DingDing-core</name>
     <description>DingDing-基础配置</description>
 
     <!--<parent>
-        <groupId>github.com.SuiteLHY</groupId>
+        <groupId>github.com.suitelhy</groupId>
         <artifactId>DingDing-parent</artifactId>
         <version>0.0.1-SNAPSHOT</version>
         <relativePath>../DingDing-parent</relativePath>
@@ -25,6 +25,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <!--<resource.delimiter>@</resource.delimiter>-->
+
         <springframework.boot.version>2.2.2.RELEASE</springframework.boot.version>
     </properties>
 
@@ -100,5 +101,4 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
 </project>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>github.com.suitelhy.dingding</groupId>
+        <artifactId>security-service</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../../security-service</relativePath>
+    </parent>
+
+    <artifactId>security-service-api</artifactId>
+    <version>${security-service-api.version}</version>
+    <name>security-service-api</name>
+    <description>安全模块基础业务-服务接口</description>
+
+    <dependencies>
+        <!-- DingDing-基础配置 -->
+        <dependency>
+            <groupId>github.com.suitelhy.dingding</groupId>
+            <artifactId>core</artifactId>
+            <version>${dingding.core.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- ===== DingDing-业务接口引用 ===== -->
+
+        <!-- 用户基础业务-服务接口 -->
+        <!--<dependency>
+            <groupId>github.com.suitelhy.dingding</groupId>
+            <artifactId>user-service-api</artifactId>
+            <version>${user-service-api.version}</version>
+            <scope>provided</scope>
+        </dependency>-->
+
+        <!-- ========== -->
+
+        <!-- Web -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- === Spring Security OAuth2 === -->
+        <dependency>
+            <groupId>org.springframework.security.oauth</groupId>
+            <artifactId>spring-security-oauth2</artifactId>
+            <version>${spring.security.oauth2.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security.oauth.boot</groupId>
+            <artifactId>spring-security-oauth2-autoconfigure</artifactId>
+            <version>${spring.security.oauth2.autoconfigure.version}</version>
+        </dependency>
+        <!-- ====== -->
+    </dependencies>
+
+</project>

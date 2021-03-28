@@ -7,10 +7,12 @@ import javax.validation.constraints.NotNull;
 /**
  * 实体验证器模板
  *
+ * @Description
+ * · 实体验证器主要用于校验实体属性.
+ * · 实体验证器的存在是为了集中和规范对实体属性的校验操作.
+ * · 可以根据实际业务设计和项目开发情况进行取舍.
+ *
  * @param <E>
- * @Description 实体验证器主要用于校验实体属性.
- * -> 实体验证器的存在是为了集中和规范对实体属性的校验操作.
- * -> 可以根据实际业务设计和项目开发情况进行取舍.
  */
 public interface EntityValidator<E extends EntityModel<ID>, ID> {
 
@@ -18,7 +20,8 @@ public interface EntityValidator<E extends EntityModel<ID>, ID> {
      * 校验 Entity - ID
      *
      * @param entity
-     * @return
+     *
+     * @return {@linkplain Boolean#TYPE 检验结果}
      */
     default boolean validateId(@NotNull E entity) {
         return null != entity
@@ -30,16 +33,19 @@ public interface EntityValidator<E extends EntityModel<ID>, ID> {
      * 校验 Entity - ID
      *
      * @param id
-     * @return
+     *
+     * @return {@linkplain Boolean#TYPE 检验结果}
      */
     boolean entity_id(@NotNull ID id);
 
     /**
      * 校验 Entity - ID
      *
-     * @param id
-     * @return
      * @Description 实体验证器模板提供的默认实现.
+     *
+     * @param id
+     *
+     * @return {@linkplain Boolean#TYPE 检验结果}
      */
     static boolean entity_id(@NotNull String id) {
         return EntityUtil.Regex.validateId(id);

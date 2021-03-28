@@ -3,7 +3,7 @@ package github.com.suitelhy.dingding.sso.authorization.domain.service.security;
 import java.net.URI;
 import java.util.*;
 
-import github.com.suitelhy.dingding.core.infrastructure.web.OAuth2AuthenticationInfo;
+import github.com.suitelhy.dingding.security.service.api.infrastructure.web.OAuth2AuthenticationInfo;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.boot.autoconfigure.security.oauth2.resource.AuthoritiesExtractor;
@@ -33,8 +33,11 @@ import javax.validation.constraints.NotNull;
  * Token - 用户认证业务
  *
  * @Description 自定义设计, 解决一些 Spring Security OAuth 2.0 框架的 BUG.
- * @Solution · Spring Security OAuth 2.0 实现的设计更改后, 相关的策略没有及时更新.
+ *
+ * @Solution
+ * · Spring Security OAuth 2.0 实现的设计更改后, 相关的策略没有及时更新.
  * {@link <a href="https://github.com/spring-projects/spring-security-oauth/issues/1710">CheckTokenEndpoint should restrict to POST method only · Issue #1710 · spring-projects/spring-security-oauth</a>}
+ *
  * @see org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoTokenServices
  * @see ResourceServerTokenServices
  */
@@ -47,28 +50,27 @@ public class DingDingUserInfoTokenServices
 
         private final Boolean active;
 
-        private final @NotNull
-        Collection<String> authorities;
+        private final @NotNull Collection<String> authorities;
 
-        private final @NotNull
-        String clientId;
+        private final @NotNull String clientId;
 
-        private final @NotNull
-        Collection<String> scope;
+        private final @NotNull Collection<String> scope;
 
-        private final @NotNull
-        String userName;
+        private final @NotNull String userName;
 
         /**
          * (Constructor)
+         *
+         * @Description 限制 {@link OAuth2AuthenticationInfo.AbstractUserAuthentication.AbstractDetails} 实现类的构造.
          *
          * @param active      是否处于活动状态
          * @param authorities 权限集合
          * @param clientId    (凭证对应的)客户端编号
          * @param scope       可操作范围
          * @param userName    (凭证对应的)用户名称
+         *
          * @throws InsufficientAuthenticationException 不满足构建[用户认证凭据 - 详细信息]的必要条件
-         * @Description 限制 {@link OAuth2AuthenticationInfo.AbstractUserAuthentication.AbstractDetails} 实现类的构造.
+         *
          * @see this#isActive()
          * @see this#getAuthorities()
          * @see this#getClientId()
@@ -76,7 +78,8 @@ public class DingDingUserInfoTokenServices
          * @see this#getUserName()
          */
         private AuthenticationDetails(Boolean active, Collection<String> authorities, @NotNull String clientId
-                , Collection<String> scope, @NotNull String userName) {
+                , Collection<String> scope, @NotNull String userName)
+        {
             super(active
                     , (null != authorities) ? authorities : (authorities = new ArrayList<>(0))
                     , clientId
@@ -96,32 +99,27 @@ public class DingDingUserInfoTokenServices
         }
 
         @Override
-        public @NotNull
-        Collection<String> getAuthorities() {
+        public @NotNull Collection<String> getAuthorities() {
             return this.authorities;
         }
 
         @Override
-        public @NotNull
-        String getClientId() {
+        public @NotNull String getClientId() {
             return this.clientId;
         }
 
         @Override
-        public @NotNull
-        Collection<String> getScope() {
+        public @NotNull Collection<String> getScope() {
             return this.scope;
         }
 
         @Override
-        public @NotNull
-        String getUserName() {
+        public @NotNull String getUserName() {
             return this.userName;
         }
 
         @Override
-        public @NotNull
-        String toString() {
+        public @NotNull String toString() {
             return String.format("{active=%s, user_name=%s, authorities=%s, client_id=%s, scope=%s}"
                     , this.active
                     , this.userName
@@ -164,18 +162,23 @@ public class DingDingUserInfoTokenServices
     /**
      * Load the credentials for the specified access token.
      *
+     * @Description 获取身份凭证信息.【重要方法】
+     *
      * @param accessToken
+     *
      * @return {@link OAuth2Authentication}
+     *
      * @throws AuthenticationException
      * @throws InvalidTokenException
-     * @Description 获取身份凭证信息.【重要方法】
+     *
      * @see ResourceServerTokenServices#loadAuthentication(String)
      * @see this#getMap(String, String)
      * @see this#extractAuthentication(Map)
      */
     @Override
     public OAuth2Authentication loadAuthentication(String accessToken)
-            throws AuthenticationException, InvalidTokenException {
+            throws AuthenticationException, InvalidTokenException
+    {
         Map<String, Object> map = getMap(this.userInfoEndpointUrl, accessToken);
 
         if (map.containsKey("error")) {
@@ -241,10 +244,13 @@ public class DingDingUserInfoTokenServices
     /**
      * 从 {@param path} 对应的 API 获取基于 {@param accessToken} 的身份凭证信息
      *
+     * @Description 重点: 此处修改请求方式.
+     *
      * @param path        远程请求路径
      * @param accessToken 远程请求所需的令牌
+     *
      * @return 基于 {@param accessToken} 的身份凭证信息
-     * @Description 重点: 此处修改请求方式.
+     *
      * @see this#loadAuthentication(String)
      * @see RestTemplate#postForEntity(URI, Object, Class)
      */
@@ -270,7 +276,8 @@ public class DingDingUserInfoTokenServices
 
             OAuth2AccessToken existingToken = restTemplate.getOAuth2ClientContext().getAccessToken();
             if (null == existingToken
-                    || !accessToken.equals(existingToken.getValue())) {
+                    || ! accessToken.equals(existingToken.getValue()))
+            {
                 DefaultOAuth2AccessToken token = new DefaultOAuth2AccessToken(accessToken);
 
                 token.setTokenType(this.tokenType);

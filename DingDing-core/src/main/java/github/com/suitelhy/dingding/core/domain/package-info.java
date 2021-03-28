@@ -35,7 +35,4 @@
  * <p>
  * 出于对该即时通讯 Web 项目的性能和可伸缩性考虑，ORM框架选择符合国内主流趋势的 Mybatis (一种不完全的 ORM 框架).
  */
-/**
- * 出于对该即时通讯 Web 项目的性能和可伸缩性考虑，ORM框架选择符合国内主流趋势的 Mybatis (一种不完全的 ORM 框架).
- */
 package github.com.suitelhy.dingding.core.domain;

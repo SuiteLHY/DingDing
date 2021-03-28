@@ -1,16 +1,12 @@
 package github.com.suitelhy.dingding.sso.authorization.web;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import github.com.suitelhy.dingding.core.application.task.UserTask;
-import github.com.suitelhy.dingding.core.infrastructure.application.dto.UserDto;
-import github.com.suitelhy.dingding.core.infrastructure.web.OAuth2AuthenticationInfo;
 import github.com.suitelhy.dingding.core.infrastructure.web.model.WebResult;
-import github.com.suitelhy.dingding.sso.authorization.infrastructure.web.security.util.OAuth2AuthenticationUtil;
+import github.com.suitelhy.dingding.security.service.api.infrastructure.web.OAuth2AuthenticationInfo;
+import github.com.suitelhy.dingding.security.service.api.infrastructure.web.util.OAuth2AuthenticationUtil;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,16 +14,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 /**
  * 用户业务
  *
  * @Description 用户相关业务.
+ *
  * @Issue · 关于 $ref 的 Swagger UI 前端页面输出的问题描述:
  * {@link <a href="https://swagger.io/docs/specification/using-ref/">Using $ref | Swagger</a>}
+ *
  * {@Solution <a href="https://github.com/springfox/springfox/issues/2563">无法解析指针：/ definitions /列表在文档中不存在·问题＃2563·springfox / springfox</a>}
  */
 @RequestMapping("/user")
@@ -36,15 +31,13 @@ import java.util.Map;
 public class UserController {
 
     /*@Autowired
-    private ObjectMapper toJSONString;*/
-
-    @Autowired
-    private UserTask userTask;
+    private UserTask userTask;*/
 
     /**
      * 查询用户 - 安全认证基础信息
      *
      * @param authentication
+     *
      * @return API 相应的主要数据
      */
     @ApiOperation(value = "测试接口", httpMethod = "GET")
@@ -66,24 +59,6 @@ public class UserController {
     public String getUser(@AuthenticationPrincipal /*Authentication*/OAuth2Authentication authentication) {
         @NotNull WebResult<String> result;
         try {
-            /*Object oAuth2Details = authentication.getUserAuthentication().getDetails();
-
-            if (null != oAuth2Details) {
-                result = WebResult.Factory.DEFAULT.create(WebResult.Vo.StatusVo.SUCCESS
-                        , null
-                        , oAuth2Details.toString()
-                        , "");
-            } else {
-                result = WebResult.Factory.DEFAULT.createFailure(WebResult.Vo.StatusVo.FAILURE
-                        , null
-                        , ""
-                        , ""
-                        , WebResult.Vo.ErrorVo.INTERNAL_SERVER_ERROR
-                        , "");
-            }*/
-            /*return (null != oAuth2Details)
-                    ? oAuth2Details.toString()
-                    : "{}";*/
             final OAuth2AuthenticationInfo.AbstractUserAuthentication.@NotNull AbstractDetails userAuthenticationDetails = OAuth2AuthenticationUtil.getInstance().getDetails(authentication);
 
             if (null != userAuthenticationDetails) {

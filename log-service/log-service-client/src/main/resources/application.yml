@@ -1,0 +1,40 @@
+dubbo:
+  cloud:
+    # 用于服务消费方订阅服务提供方的应用名称的列表. (多个应用使用{@code ,}分隔. 不推荐使用默认值{@code *}, 此时将订阅所有应用.)
+    subscribed-services: dingding-log-service-provider,dingding-user-service-provider,dingding-security-service-provider
+
+spring:
+  application:
+    # Spring 应用名称
+    name: dingding-log-service-client
+#  # Spring Data JPA
+#  #-> <a href="https://blog.csdn.net/WZH577/article/details/99698187">Hibernate数据库配置项中命名策略说明</a>
+#  jpa:
+#    database: mysql
+#    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+#    hibernate:
+#      # {@Description 设计: 数据库结构不应该被框架操作.}
+#      ddl-auto: none
+#    # {@Tips 策略配置参照相应接口实现类的 API Docs (<class>SpringImplicitNamingStrategy</class>的实现有点坑).}
+#    naming:
+#      implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+#      physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+#    properties:
+#      format_sql: true
+#    show-sql: true
+#    open-in-view: true
+  main:
+    # Spring 容器的 Bean 覆盖方式 (在 Spring Boot 2.1 及以上版本增加该设定)
+    allow-bean-definition-overriding: true
+  # 加载配置文件
+  profiles:
+    active: dev
+    include: security
+
+#eureka:
+#  client:
+#    register-with-eureka: true
+#    fetch-registry: true
+#    # 配置注册中心地址
+#    service-url:
+#      defaultZone: http://replica1:8001/eureka/

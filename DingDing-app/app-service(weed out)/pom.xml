@@ -19,7 +19,7 @@
     <dependencies>
         <!-- DingDing - security - browser 配置 -->
         <!--<dependency>
-            <groupId>github.com.SuiteLHY</groupId>
+            <groupId>github.com.suitelhy</groupId>
             <artifactId>DingDing-security-browser</artifactId>
             <version>{dingding.security.browser.version}</version>
         </dependency>-->

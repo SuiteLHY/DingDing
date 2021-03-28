@@ -1,6 +1,6 @@
 package github.com.suitelhy.dingding.sso.authorization.infrastructure.web.security;
 
-import github.com.suitelhy.dingding.core.infrastructure.domain.vo.security.Security;
+import github.com.suitelhy.dingding.security.service.api.domain.vo.Security;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
@@ -12,9 +12,12 @@ import java.util.List;
  * 匿名用户过滤器
  *
  * @Description 主要是设置定制化的默认角色标识.
- * @Reference -> {@link <a href="http://blog.joylau.cn/2019/08/19/SpringBoot-SpringSecurity-Anonymous/">Spring Security 禁用匿名用户（anonymous().disable()）后无限重定向到登录页的问题解决 - JoyLau's Blog | JoyLau</a>}
- * -> {@link <a href="https://bbs.csdn.net/topics/390167935">An Authentication object was not found in the SecurityContex 异常-CSDN论坛</a>}
- * -> {@link <a href="https://stackoverflow.com/questions/39683987/spring-security-define-a-custom-anonymous-filter">java - Spring Security define a custom anonymous filter - Stack Overflow</a>}
+ *
+ * @Reference
+ * {@link <a href="http://blog.joylau.cn/2019/08/19/SpringBoot-SpringSecurity-Anonymous/">Spring Security 禁用匿名用户（anonymous().disable()）后无限重定向到登录页的问题解决 - JoyLau's Blog | JoyLau</a>}
+ * {@link <a href="https://bbs.csdn.net/topics/390167935">An Authentication object was not found in the SecurityContex 异常-CSDN论坛</a>}
+ * {@link <a href="https://stackoverflow.com/questions/39683987/spring-security-define-a-custom-anonymous-filter">java - Spring Security define a custom anonymous filter - Stack Overflow</a>}
+ *
  * @see AnonymousAuthenticationFilter
  * @see Security.RoleVo
  */
@@ -52,7 +55,8 @@ public class DingDingAnonymousAuthenticationFilter
      */
     public DingDingAnonymousAuthenticationFilter(String key
             , Object principal
-            , List<GrantedAuthority> authorities) {
+            , List<GrantedAuthority> authorities)
+    {
         super(key, principal, authorities);
     }
 

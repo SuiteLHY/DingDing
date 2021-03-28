@@ -19,8 +19,8 @@ import java.util.Map;
 /**
  * 主数据源配置
  *
- * @Reference <a href="https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#core.repository-populators">
- * ->     Spring Data JPA-参考文档</a>
+ * @Reference
+ * {@link <a href="https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#core.repository-populators">Spring Data JPA-参考文档</a>}
  */
 @Configuration
 // {@Note 项目复用 - copy 代码以后, 一定要记得这些配置类中的所有配置项必需要彻底检查;

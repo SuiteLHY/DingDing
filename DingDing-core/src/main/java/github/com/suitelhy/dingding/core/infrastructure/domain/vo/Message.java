@@ -253,8 +253,7 @@ public interface Message<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V e
                 super(ChatMessageVo.class);
             }
 
-            @NotNull
-            public static Converter getInstance() {
+            public static @NotNull Converter getInstance() {
                 return Factory.SINGLETON;
             }
 
@@ -262,15 +261,11 @@ public interface Message<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V e
 
         private final int code;
 
-        @NotNull
-        private final String name;
+        private final @NotNull String name;
 
-        @NotNull
-        private final String description;
+        private final @NotNull String description;
 
-        ChatMessageVo(int code
-                , @NotNull String name
-                , @NotNull String description) {
+        ChatMessageVo(int code, @NotNull String name, @NotNull String description) {
             this.code = code;
             this.name = name;
             this.description = description;
@@ -279,8 +274,9 @@ public interface Message<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V e
         /**
          * VO 的值
          *
-         * @return 可为 <code>null</code>
          * @Description Unique attribute.
+         *
+         * @return 可为 <code>null</code>
          */
         @Override
         public Integer value() {
@@ -303,8 +299,7 @@ public interface Message<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V e
          * @return
          */
         @Override
-        public @NotNull
-        String displayName() {
+        public @NotNull String displayName() {
             return this.name;
         }
 
@@ -327,9 +322,8 @@ public interface Message<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V e
          * @Design 为持久化类型转换功能提供支持.
          */
         @Override
-        @NotNull
         @SuppressWarnings("unchecked")
-        public Converter voAttributeConverter() {
+        public @NotNull Converter voAttributeConverter() {
             return Converter.getInstance();
         }
 
@@ -466,15 +460,14 @@ public interface Message<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V e
              * @Design (单例模式 - 登记式)
              */
             private static class Factory {
-                private static final Converter SINGLETON = new Converter();
+                private static final @NotNull Converter SINGLETON = new Converter();
             }
 
             private Converter() {
                 super(GroupChatMessageVo.class);
             }
 
-            @NotNull
-            public static Converter getInstance() {
+            public static @NotNull Converter getInstance() {
                 return Factory.SINGLETON;
             }
 
@@ -482,15 +475,11 @@ public interface Message<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V e
 
         private final int code;
 
-        @NotNull
-        private final String name;
+        private final @NotNull String name;
 
-        @NotNull
-        private final String description;
+        private final @NotNull String description;
 
-        GroupChatMessageVo(int code
-                , @NotNull String name
-                , @NotNull String description) {
+        GroupChatMessageVo(int code, @NotNull String name, @NotNull String description) {
             this.code = code;
             this.name = name;
             this.description = description;
@@ -499,8 +488,9 @@ public interface Message<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V e
         /**
          * VO 的值
          *
-         * @return 可为 <code>null</code>
          * @Description Unique attribute.
+         *
+         * @return 可为 <code>null</code>
          */
         @Override
         public Integer value() {
@@ -523,8 +513,7 @@ public interface Message<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V e
          * @return
          */
         @Override
-        public @NotNull
-        String displayName() {
+        public @NotNull String displayName() {
             return this.name;
         }
 
@@ -547,9 +536,8 @@ public interface Message<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V e
          * @Design 为持久化类型转换功能提供支持.
          */
         @Override
-        @NotNull
         @SuppressWarnings("unchecked")
-        public Converter voAttributeConverter() {
+        public @NotNull Converter voAttributeConverter() {
             return Converter.getInstance();
         }
 
@@ -593,17 +581,13 @@ public interface Message<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V e
 
                 }
 
-                private final int code;
+                public final int code;
 
-                @NotNull
-                private final String name;
+                public final @NotNull String name;
 
-                @NotNull
-                private final String description;
+                public final @NotNull String description;
 
-                AcceptStatusVo(int code
-                        , @NotNull String name
-                        , @NotNull String description) {
+                AcceptStatusVo(int code, @NotNull String name, @NotNull String description) {
                     this.code = code;
                     this.name = name;
                     this.description = description;
@@ -612,8 +596,9 @@ public interface Message<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V e
                 /**
                  * VO 的值
                  *
-                 * @return 可为 <code>null</code>
                  * @Description Unique attribute.
+                 *
+                 * @return 可为 <code>null</code>
                  */
                 @Override
                 public Integer value() {
@@ -636,8 +621,7 @@ public interface Message<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V e
                  * @return
                  */
                 @Override
-                public @NotNull
-                String displayName() {
+                public @NotNull String displayName() {
                     return this.name;
                 }
 
@@ -650,7 +634,7 @@ public interface Message<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V e
                  * @return the name of this enum constant
                  */
                 @Override
-                public String toString() {
+                public @NotNull String toString() {
                     return VoModel.toString(this);
                 }
 
@@ -660,8 +644,7 @@ public interface Message<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V e
                  * @Design 为持久化类型转换功能提供支持.
                  */
                 @Override
-                @NotNull
-                public Converter voAttributeConverter() {
+                public @NotNull Converter voAttributeConverter() {
                     return Converter.getInstance();
                 }
 

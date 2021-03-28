@@ -1,8 +1,8 @@
 package github.com.suitelhy.dingding.sso.server.web;
 
-import github.com.suitelhy.dingding.core.application.task.LogTask;
-import github.com.suitelhy.dingding.core.application.task.UserTask;
-import github.com.suitelhy.dingding.core.infrastructure.web.AbstractSecurityUser;
+import github.com.suitelhy.dingding.security.service.api.infrastructure.web.AbstractSecurityUser;
+import github.com.suitelhy.dingding.sso.server.application.task.LogTask;
+import github.com.suitelhy.dingding.sso.server.application.task.UserTask;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -19,8 +19,11 @@ import java.security.Principal;
  * 用户业务
  *
  * @Description 用户相关业务.
- * @Issue · 关于 $ref 的 Swagger UI 前端页面输出的问题描述:
+ *
+ * @Issue
+ * · 关于 $ref 的 Swagger UI 前端页面输出的问题描述:
  * {@link <a href="https://swagger.io/docs/specification/using-ref/">Using $ref | Swagger</a>}
+ *
  * {@Solution <a href="https://github.com/springfox/springfox/issues/2563">无法解析指针：/ definitions /列表在文档中不存在·问题＃2563·springfox / springfox</a>}
  */
 @RestController
@@ -35,9 +38,6 @@ public class UserController {
     // 日志记录业务 Task
     @Autowired
     private LogTask logTask;
-
-//    @Autowired
-//    private ObjectMapper toJSONString;
 
     @ApiOperation(value = "测试接口", httpMethod = "GET")
     @ApiImplicitParams({

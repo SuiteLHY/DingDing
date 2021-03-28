@@ -1,0 +1,1 @@
+package github.com.suitelhy.dingding.user.service.provider.infrastructure.config.nacos;

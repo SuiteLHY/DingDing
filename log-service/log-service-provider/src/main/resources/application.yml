@@ -1,0 +1,13 @@
+server:
+  port: 8003
+
+spring:
+  application:
+    # Spring 应用名称
+    name: dingding-log-service-provider
+  main:
+    # Spring 容器的 Bean 覆盖方式 (在 Spring Boot 2.1 及以上版本增加该设定)
+    allow-bean-definition-overriding: true
+  # 加载配置文件
+  profiles:
+    active: dev

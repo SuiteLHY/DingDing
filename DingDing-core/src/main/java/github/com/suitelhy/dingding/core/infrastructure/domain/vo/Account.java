@@ -10,12 +10,20 @@ import java.util.Set;
 
 /**
  * 账户特性
+ *
+ * @param <VO>
+ * @param <V>
+ * @param <_DESCRIPTION>
+ *
+ * @see VoModel
  */
 public interface Account<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V extends Number, _DESCRIPTION>
         extends VoModel<VO, V, _DESCRIPTION> {
 
     /**
      * 账户 - 状态
+     *
+     * @see VoModel
      */
     enum StatusVo
             implements VoModel<StatusVo, Integer, String> {
@@ -47,8 +55,7 @@ public interface Account<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V e
                 super(StatusVo.class);
             }
 
-            @NotNull
-            public static Converter getInstance() {
+            public static @NotNull Converter getInstance() {
                 return Factory.SINGLETON;
             }
 
@@ -56,8 +63,7 @@ public interface Account<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V e
 
         public final Integer code;
 
-        @NotNull
-        public final String name;
+        public final @NotNull String name;
 
         public final String description;
 
@@ -66,8 +72,7 @@ public interface Account<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V e
          *
          * @Description 用于判断[账户 - 状态]是否属于[账户可正常使用].
          */
-        @NotNull
-        public static final Set<StatusVo> DATA_AVAILABILITY_CERTIFICATE;
+        public static final @NotNull Set<StatusVo> DATA_AVAILABILITY_CERTIFICATE;
 
         static {
             DATA_AVAILABILITY_CERTIFICATE = new HashSet<>(1);
@@ -79,8 +84,7 @@ public interface Account<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V e
          *
          * @Description 用于判断[账户 - 状态]是否属于[账户存在].
          */
-        @NotNull
-        public static final Set<StatusVo> DATA_EXISTENCE_CERTIFICATE;
+        public static final @NotNull Set<StatusVo> DATA_EXISTENCE_CERTIFICATE;
 
         static {
             DATA_EXISTENCE_CERTIFICATE = new HashSet<>(3);
@@ -94,8 +98,7 @@ public interface Account<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V e
          *
          * @Description 用于判断[账户 - 状态]是否属于[账户存在且不可正常使用].
          */
-        @NotNull
-        public static final Set<StatusVo> DATA_UNAVAILABILITY_CERTIFICATE;
+        public static final @NotNull Set<StatusVo> DATA_UNAVAILABILITY_CERTIFICATE;
 
         static {
             DATA_UNAVAILABILITY_CERTIFICATE = new HashSet<>(2);
@@ -103,7 +106,14 @@ public interface Account<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V e
             DATA_UNAVAILABILITY_CERTIFICATE.add(LOCKED);
         }
 
-        StatusVo(Integer code, String name, String description) {
+        /**
+         * (Constructor)
+         *
+         * @param code
+         * @param name
+         * @param description
+         */
+        StatusVo(Integer code, @NotNull String name, String description) {
             this.code = code;
             this.name = name;
             this.description = description;
@@ -135,7 +145,7 @@ public interface Account<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V e
          * @return
          */
         @Override
-        public String displayName() {
+        public @NotNull String displayName() {
             return this.name;
         }
 
@@ -143,14 +153,15 @@ public interface Account<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V e
          * 备注: <method>equals(Object)</method>
          *
          * @param value
-         * @return
+         *
+         * @return {@linkplain Boolean#TYPE 判断结果}
          */
         public boolean equals(@Nullable Integer value) {
             return equalsValue(value);
         }
 
         @Override
-        public String toString() {
+        public @NotNull String toString() {
             return VoModel.toString(this);
         }
 
@@ -159,10 +170,9 @@ public interface Account<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V e
          *
          * @Design 为持久化类型转换功能提供支持.
          */
-        @NotNull
         @Override
         @SuppressWarnings("unchecked")
-        public Converter voAttributeConverter() {
+        public @NotNull Converter voAttributeConverter() {
             return Converter.getInstance();
         }
 

@@ -12,7 +12,7 @@ import java.io.StringWriter;
  * 定制化异常信息处理器
  *
  * @Reference <a href="https://github.com/SuiteLHY/SuiteLHY/blob/master/src/main/java/spring/example/SpringWebMVC/web/exception/MyExceptionHandler.java">
- * ->     SuiteLHY/MyExceptionHandler.java at master · SuiteLHY/SuiteLHY</a>
+ * ->     suitelhy/MyExceptionHandler.java at master · suitelhy/suitelhy</a>
  */
 @Component
 @Slf4j

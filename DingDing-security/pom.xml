@@ -17,7 +17,7 @@
         <relativePath>../../DingDing</relativePath>
     </parent>
     <!--<parent>
-        <groupId>github.com.SuiteLHY</groupId>
+        <groupId>github.com.suitelhy</groupId>
         <artifactId>DingDing-parent</artifactId>
         <version>0.0.1-SNAPSHOT</version>
         <relativePath>../DingDing-parent</relativePath>

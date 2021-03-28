@@ -28,19 +28,20 @@ public class ArrayUtil {
         private OneDimensionalArrayUtil() {
         }
 
-        @NotNull
-        public static OneDimensionalArrayUtil getInstance() {
+        public static @NotNull OneDimensionalArrayUtil getInstance() {
             return OneDimensionalArrayUtil.Factory.SINGLETON;
         }
 
         /**
          * 判断类型归属
          *
+         * @Description {@param targetClass} 是否是 {@param array} 的父类类型或者一致类型.
+         *
          * @param targetClass
          * @param array
          * @param <T>
+         *
          * @return {@link Boolean#TYPE}
-         * @Description {@param targetClass} 是否是 {@param array} 的父类类型或者一致类型.
          */
         public <T> boolean belongToArray(@NotNull Class<?> targetClass, @NotNull T array) {
             Class<?> type;
@@ -89,11 +90,13 @@ public class ArrayUtil {
         /**
          * 判断类型一致
          *
+         * @Description {@param targetClass} 与 {@param array} 类型一致.
+         *
          * @param targetClass
          * @param array
          * @param <T>
+         *
          * @return {@link Boolean#TYPE}
-         * @Description {@param targetClass} 与 {@param array} 类型一致.
          */
         public <T> boolean isArray(@NotNull Class<?> targetClass, @NotNull T array) {
             Class<?> type;
@@ -122,18 +125,19 @@ public class ArrayUtil {
     private ArrayUtil() {
     }
 
-    public static @NotNull
-    ArrayUtil getInstance() {
+    public static @NotNull ArrayUtil getInstance() {
         return ArrayUtil.Factory.SINGLETON;
     }
 
     /**
      * 数组转集合
      *
+     * @Description 支持多维数组.
+     *
      * @param array
      * @param <T>
+     *
      * @return {@link List}
-     * @Description 支持多维数组.
      */
     private static <T> List<Object> arrayToList(@NotNull T[] array) {
         List<Object> result = null;
@@ -153,10 +157,12 @@ public class ArrayUtil {
     /**
      * 转换为集合
      *
+     * @Description 数组或非数组类型的对象转换为集合. 支持多维数组.
+     *
      * @param arrayOrObj
      * @param <T>
+     *
      * @return {@link Object}
-     * @Description 数组或非数组类型的对象转换为集合. 支持多维数组.
      */
     public static <T> Object toList(@NotNull T arrayOrObj) {
         Class<?> type;

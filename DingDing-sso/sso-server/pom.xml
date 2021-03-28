@@ -5,12 +5,6 @@
     <modelVersion>4.0.0</modelVersion>
     <!--<packaging>jar</packaging>-->
 
-    <!--<parent>
-        <groupId>github.com.SuiteLHY</groupId>
-        <artifactId>DingDing-sso</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
-        <relativePath>../../DingDing-sso</relativePath>
-    </parent>-->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -18,7 +12,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>github.com.SuiteLHY.dingding</groupId>
+    <groupId>github.com.suitelhy.dingding</groupId>
     <artifactId>sso-server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>sso-server</name>
@@ -30,17 +24,112 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <!-- ====== -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <resource.delimiter>@</resource.delimiter>
+
+        <!-- === DingDing 业务组件 === -->
+        <security-service-api.version>1.0.0-SNAPSHOT</security-service-api.version>
+
         <dingding.core.version>1.0.0-SNAPSHOT</dingding.core.version>
         <dingding.sso.core.version>1.0.0-SNAPSHOT</dingding.sso.core.version>
-        <spring-cloud.version>Hoxton.SR3</spring-cloud.version>
+
+        <log-service-api.version>1.0.0-SNAPSHOT</log-service-api.version>
+        <user-service-api.version>1.0.0-SNAPSHOT</user-service-api.version>
+        <!-- ====== -->
+
+        <alibaba.version>2.2.0.RELEASE</alibaba.version>
+
+        <!-- Apache Dubbo -->
+        <dubbo.version>2.7.5</dubbo.version>
+
+        <spring-cloud.version>Hoxton.RELEASE</spring-cloud.version>
+
         <spring.security.version>2.4.0.RELEASE</spring.security.version>
         <spring.security.oauth2.version>2.4.0.RELEASE</spring.security.oauth2.version>
         <spring.security.oauth2.autoconfigure.version>2.2.1.RELEASE</spring.security.oauth2.autoconfigure.version>
         <spring.security.jwt.version>1.1.0.RELEASE</spring.security.jwt.version>
-        <nimbus.jose.jwt.version>8.2.1</nimbus.jose.jwt.version>
+        <!--<nimbus.jose.jwt.version>8.2.1</nimbus.jose.jwt.version>-->
     </properties>
 
+    <!-- {@Note <p><code><dependencyManagement></code>标签组中声明的依赖项必须显式声明版本号, 故屏蔽不正确的配置项.</p>} -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${alibaba.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
+        <!-- DingDing-基础配置 -->
+        <dependency>
+            <groupId>github.com.suitelhy.dingding</groupId>
+            <artifactId>core</artifactId>
+            <version>${dingding.core.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!--<dependency>
+            <groupId>github.com.suitelhy</groupId>
+            <artifactId>DingDing-security-core</artifactId>
+            <version>{dingding.security.core.version}</version>
+            <scope>compile</scope>
+        </dependency>-->
+        <dependency>
+            <groupId>github.com.suitelhy.dingding</groupId>
+            <artifactId>sso-core</artifactId>
+            <version>${dingding.sso.core.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!--<dependency>
+            <groupId>github.com.suitelhy</groupId>
+            <artifactId>DingDing-security-authorize</artifactId>
+            <version>{dingding.security.authorize.version}</version>
+            <scope>compile</scope>
+        </dependency>-->
+
+        <!-- ===== DingDing-业务接口引用 ===== -->
+
+        <!-- DingDing - 安全模块基础业务-服务接口 -->
+        <dependency>
+            <groupId>github.com.suitelhy.dingding</groupId>
+            <artifactId>security-service-api</artifactId>
+            <version>${security-service-api.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- DingDing - 用户基础业务-服务接口 -->
+        <dependency>
+            <groupId>github.com.suitelhy.dingding</groupId>
+            <artifactId>user-service-api</artifactId>
+            <version>${user-service-api.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- DingDing - 日志记录基础业务-服务接口 -->
+        <dependency>
+            <groupId>github.com.suitelhy.dingding</groupId>
+            <artifactId>log-service-api</artifactId>
+            <version>${log-service-api.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- ========== -->
+
         <!-- Spring Data JPA -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -98,11 +187,11 @@
             <version>${spring.security.jwt.version}</version>
         </dependency>
 
-        <dependency>
+        <!--<dependency>
             <groupId>com.nimbusds</groupId>
             <artifactId>nimbus-jose-jwt</artifactId>
             <version>${nimbus.jose.jwt.version}</version>
-        </dependency>
+        </dependency>-->
         <!-- ====== -->
 
         <!--
@@ -174,6 +263,29 @@
         </dependency>
         <!-- ===== -->
 
+        <!-- === Dubbo === -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-dubbo</artifactId>
+        </dependency>
+        <!-- ====== -->
+
+        <!-- === Nacos === -->
+
+        <!-- Nacos 注册中心 -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+
+        <!-- Nacos 配置中心 -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </dependency>
+
+        <!-- ====== -->
+
         <!-- Spring FrameWork 相关依赖资源 -->
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
@@ -181,33 +293,6 @@
             <version>3.0.1</version>
         </dependency>
 
-        <!-- DingDing-基础配置 -->
-        <dependency>
-            <groupId>github.com.SuiteLHY.dingding</groupId>
-            <artifactId>core</artifactId>
-            <version>${dingding.core.version}</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <!--<dependency>
-            <groupId>github.com.SuiteLHY</groupId>
-            <artifactId>DingDing-security-core</artifactId>
-            <version>{dingding.security.core.version}</version>
-            <scope>compile</scope>
-        </dependency>-->
-        <dependency>
-            <groupId>github.com.SuiteLHY.dingding</groupId>
-            <artifactId>sso-core</artifactId>
-            <version>${dingding.sso.core.version}</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <!--<dependency>
-            <groupId>github.com.SuiteLHY</groupId>
-            <artifactId>DingDing-security-authorize</artifactId>
-            <version>{dingding.security.authorize.version}</version>
-            <scope>compile</scope>
-        </dependency>-->
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
@@ -217,20 +302,6 @@
             <artifactId>hibernate-validator</artifactId>
         </dependency>
     </dependencies>
-
-    <!-- {@Note <p><code><dependencyManagement></code>标签组中声明的依赖项必须显式声明版本号, 故屏蔽不正确的配置项.</p>} -->
-    <dependencyManagement>
-        <dependencies>
-            <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-dependencies -->
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring-cloud.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <build>
         <plugins>

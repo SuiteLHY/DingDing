@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <!--<parent>
-        <groupId>github.com.SuiteLHY</groupId>
+        <groupId>github.com.suitelhy</groupId>
         <artifactId>DingDing-sso</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>-->
@@ -16,8 +16,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>github.com.SuiteLHY.dingding</groupId>
+    <groupId>github.com.suitelhy.dingding</groupId>
     <artifactId>sso-authorization</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
     <name>sso-authorization</name>
     <description>DingDing-sso-authorization</description>
 
@@ -27,21 +28,191 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <!-- ====== -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <resource.delimiter>@</resource.delimiter>
+
+        <!-- === DingDing 业务组件 === -->
+        <security-service-api.version>1.0.0-SNAPSHOT</security-service-api.version>
+
         <dingding.core.version>1.0.0-SNAPSHOT</dingding.core.version>
         <dingding.sso.core.version>1.0.0-SNAPSHOT</dingding.sso.core.version>
+
+        <log-service-api.version>1.0.0-SNAPSHOT</log-service-api.version>
+        <user-service-api.version>1.0.0-SNAPSHOT</user-service-api.version>
+        <!-- ====== -->
+
+        <alibaba.version>2.2.0.RELEASE</alibaba.version>
+
+        <!-- Apache Dubbo -->
+        <!--<dubbo.version>2.7.4</dubbo.version>-->
+
         <spring-cloud.version>Hoxton.SR3</spring-cloud.version>
+
         <spring.security.version>2.4.0.RELEASE</spring.security.version>
         <spring.security.oauth2.version>2.4.0.RELEASE</spring.security.oauth2.version>
         <spring.security.oauth2.autoconfigure.version>2.2.1.RELEASE</spring.security.oauth2.autoconfigure.version>
         <spring.security.jwt.version>1.1.0.RELEASE</spring.security.jwt.version>
     </properties>
 
+    <!-- {@Note <p><code><dependencyManagement></code>标签组中声明的依赖项必须显式声明版本号, 故屏蔽不正确的配置项.</p>} -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${alibaba.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
-        <!-- Spring Data JPA -->
+        <!-- DingDing-基础配置 -->
+        <dependency>
+            <groupId>github.com.suitelhy.dingding</groupId>
+            <artifactId>core</artifactId>
+            <version>${dingding.core.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- ===== DingDing-业务接口引用 ===== -->
+
+        <!-- DingDing - 安全模块基础业务-服务接口 -->
+        <dependency>
+            <groupId>github.com.suitelhy.dingding</groupId>
+            <artifactId>security-service-api</artifactId>
+            <version>${security-service-api.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- DingDing - 用户基础业务-服务接口 -->
+        <dependency>
+            <groupId>github.com.suitelhy.dingding</groupId>
+            <artifactId>user-service-api</artifactId>
+            <version>${user-service-api.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- DingDing - 日志记录基础业务-服务接口 -->
+        <dependency>
+            <groupId>github.com.suitelhy.dingding</groupId>
+            <artifactId>log-service-api</artifactId>
+            <version>${log-service-api.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- ========== -->
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+        <!-- Spring boot - 热部署(开发)工具 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+            <!-- 仅开发环境下启用 -->
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+        </dependency>
+
+        <!-- lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+        </dependency>
+
+        <!-- === Spring Security === -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- ====== -->
+
+        <!-- === Spring Security OAuth2 === -->
+        <dependency>
+            <groupId>org.springframework.security.oauth</groupId>
+            <artifactId>spring-security-oauth2</artifactId>
+            <version>${spring.security.oauth2.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security.oauth.boot</groupId>
+            <artifactId>spring-security-oauth2-autoconfigure</artifactId>
+            <version>${spring.security.oauth2.autoconfigure.version}</version>
+        </dependency>
+        <!-- ====== -->
+
+        <!-- === Dubbo === -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-dubbo</artifactId>
+        </dependency>
+        <!-- ====== -->
+
+        <!-- === Nacos === -->
+
+        <!-- Nacos 注册中心 -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+
+        <!-- Nacos 配置中心 -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </dependency>
+
+        <!-- ====== -->
+
+        <!-- Spring Data JPA -->
+        <!--<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>-->
 
         <!-- Redis -->
         <dependency>
@@ -53,35 +224,6 @@
             <artifactId>commons-pool2</artifactId>
         </dependency>
 
-        <!-- Web -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
-        <!-- Security -->
-        <!--<dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-oauth2</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-security</artifactId>
-        </dependency>-->
-
-        <!-- === Spring Security OAuth2 === -->
-        <dependency>
-            <groupId>org.springframework.security.oauth</groupId>
-            <artifactId>spring-security-oauth2</artifactId>
-            <version>${spring.security.oauth2.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security.oauth.boot</groupId>
-            <artifactId>spring-security-oauth2-autoconfigure</artifactId>
-            <version>${spring.security.oauth2.autoconfigure.version}</version>
-        </dependency>
-        <!-- ====== -->
-
         <!-- === JWT === -->
         <dependency>
             <groupId>org.springframework.security</groupId>
@@ -89,71 +231,13 @@
             <version>${spring.security.jwt.version}</version>
         </dependency>
 
-        <!-- Spring Test -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-            <exclusions>
-                <!-- 排除 JUnit Vintage(兼容并启用已淘汰的 Junit 4 & 3) -->
-                <exclusion>
-                    <groupId>org.junit.vintage</groupId>
-                    <artifactId>junit-vintage-engine</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <!-- Spring boot - 热部署(开发)工具 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <optional>true</optional>
-            <!-- 仅开发环境下启用 -->
-            <scope>test</scope>
-        </dependency>
-
-        <!-- MySQL 连接 -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
-
-        <!-- lombok -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
-
         <!--<dependency>
-            <groupId>github.com.SuiteLHY</groupId>
+            <groupId>github.com.suitelhy</groupId>
             <artifactId>DingDing-security-authorize</artifactId>
             <version>{dingding.security.authorize.version}</version>
             <scope>compile</scope>
         </dependency>-->
-
-        <!-- DingDing-基础配置 -->
-        <dependency>
-            <groupId>github.com.SuiteLHY.dingding</groupId>
-            <artifactId>core</artifactId>
-            <version>${dingding.core.version}</version>
-            <scope>compile</scope>
-        </dependency>
-
     </dependencies>
-
-    <!-- {@Note <p><code><dependencyManagement></code>标签组中声明的依赖项必须显式声明版本号, 故屏蔽不正确的配置项.</p>} -->
-    <dependencyManagement>
-        <dependencies>
-            <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-dependencies -->
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring-cloud.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <build>
         <plugins>

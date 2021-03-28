@@ -1,0 +1,1 @@
+package github.com.suitelhy.dingding.user.service.api.domain.event;

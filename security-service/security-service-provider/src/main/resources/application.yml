@@ -1,0 +1,21 @@
+#dubbo:
+#  application:
+#    name: ${spring.application.name}
+
+spring:
+  application:
+    # Spring 应用名称
+    name: dingding-security-service-provider
+  main:
+    # Spring 容器的 Bean 覆盖方式 (在 Spring Boot 2.1 及以上版本增加该设定)
+    allow-bean-definition-overriding: true
+  mvc:
+    ### 配置静态资源访问前缀
+    ###-> {@Reference <class>org.springframework.boot.autoconfigure.web.servlet.WebMvcProperties</class>}
+    static-path-pattern: /static/**
+  # 加载配置文件
+  profiles:
+    active: dev
+  ## 配置静态资源路径 (默认配置失效)
+  resources:
+    static-locations[0]: classpath:/static/

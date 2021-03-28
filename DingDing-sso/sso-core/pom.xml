@@ -4,13 +4,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <!--<parent>
-        <groupId>github.com.SuiteLHY</groupId>
+        <groupId>github.com.suitelhy</groupId>
         <artifactId>DingDing-sso</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../../DingDing-sso</relativePath>
     </parent>-->
 
-    <groupId>github.com.SuiteLHY.dingding</groupId>
+    <groupId>github.com.suitelhy.dingding</groupId>
     <artifactId>sso-core</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <name>sso-core</name>

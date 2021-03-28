@@ -6,13 +6,13 @@
     <packaging>pom</packaging>
 
     <!--<parent>
-        <groupId>github.com.SuiteLHY</groupId>
+        <groupId>github.com.suitelhy</groupId>
         <artifactId>DingDing</artifactId>
         <version>0.0.1-SNAPSHOT</version>
         <relativePath>../../DingDing</relativePath>
     </parent>-->
 
-    <groupId>github.com.SuiteLHY.dingding</groupId>
+    <groupId>github.com.suitelhy.dingding</groupId>
     <artifactId>sso</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <name>sso</name>
@@ -27,6 +27,7 @@
 
     <properties>
         <dingding.sso.core.version>1.0.0-SNAPSHOT</dingding.sso.core.version>
+
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <java.version>1.8</java.version>
         <!-- === (Maven 指定项目 JDK 版本) === -->
@@ -36,19 +37,23 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <resource.delimiter>@</resource.delimiter>
+
         <spring-cloud.version>Hoxton.SR3</spring-cloud.version>
+
         <!--<spring.boot.security.version>2.2.2.RELEASE</spring.boot.security.version>-->
         <spring.security.oauth2.version>2.4.0.RELEASE<!--2.3.3.RELEASE--></spring.security.oauth2.version>
         <spring.security.oauth2.autoconfigure.version>2.2.1.RELEASE</spring.security.oauth2.autoconfigure.version>
         <spring.security.jwt.version>1.1.0.RELEASE</spring.security.jwt.version>
-        <springframework.boot.version><!--2.2.2.RELEASE-->2.2.5.RELEASE</springframework.boot.version>
+
+        <springframework.boot.version>2.2.2.RELEASE</springframework.boot.version>
+
         <nimbus.jose.jwt.version>8.2.1</nimbus.jose.jwt.version>
     </properties>
 
     <!--<dependencies>
         &lt;!&ndash; === DingDing 组件 === &ndash;&gt;
         <dependency>
-            <groupId>github.com.SuiteLHY</groupId>
+            <groupId>github.com.suitelhy</groupId>
             <artifactId>DingDing-core</artifactId>
             <version>{dingding.core.version}</version>
             <optional>true</optional>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>pom</packaging>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.2.2.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <groupId>github.com.suitelhy.dingding</groupId>
+    <artifactId>security-service</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>security-service</name>
+    <description>安全模块基础业务</description>
+
+    <properties>
+        <failOnMissingWebXml>false</failOnMissingWebXml>
+
+        <java.version>1.8</java.version>
+        <!-- === (Maven 指定项目 JDK 版本) === -->
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <!-- ====== -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <resource.delimiter>@</resource.delimiter>
+
+        <!-- === DingDing 业务组件 === -->
+        <security-service-api.version>1.0.0-SNAPSHOT</security-service-api.version>
+        <security-service-provider.version>1.0.0-SNAPSHOT</security-service-provider.version>
+        <user-service-api.version>1.0.0-SNAPSHOT</user-service-api.version>
+
+        <dingding.core.version>1.0.0-SNAPSHOT</dingding.core.version>
+        <!-- ====== -->
+
+        <alibaba.version>2.2.0.RELEASE</alibaba.version>
+
+        <!-- Apache Dubbo -->
+        <!--<dubbo.version>2.7.4</dubbo.version>-->
+
+        <spring-cloud.version>Hoxton.SR3</spring-cloud.version>
+
+        <spring.security.version>2.4.0.RELEASE</spring.security.version>
+        <spring.security.oauth2.version>2.4.0.RELEASE</spring.security.oauth2.version>
+        <spring.security.oauth2.autoconfigure.version>2.2.1.RELEASE</spring.security.oauth2.autoconfigure.version>
+        <spring-social.version>1.1.6.RELEASE</spring-social.version>
+    </properties>
+
+    <modules>
+        <module>security-service-api</module>
+        <module>security-service-provider</module>
+    </modules>
+
+</project>

@@ -16,8 +16,9 @@ import java.util.List;
 /**
  * 全局跨域访问配置
  *
- * @Description -> {@link <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Access_control_CORS">HTTP访问控制（CORS） - HTTP | MDN</a>}
- * @Reference -> {@link <a href="https://blog.csdn.net/niugang0920/article/details/79817763">Spring、Spring-Boot、Spring-Security中对CORS（跨域资源共享）的支持_盲目的拾荒者的博客-CSDN博客_springsecurity cors</a>}
+ * @Description {@link <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Access_control_CORS">HTTP访问控制（CORS） - HTTP | MDN</a>}
+ *
+ * @Reference {@link <a href="https://blog.csdn.net/niugang0920/article/details/79817763">Spring、Spring-Boot、Spring-Security中对CORS（跨域资源共享）的支持_盲目的拾荒者的博客-CSDN博客_springsecurity cors</a>}
  */
 @Configuration
 @ConfigurationProperties(prefix = "dingding.security.cross")

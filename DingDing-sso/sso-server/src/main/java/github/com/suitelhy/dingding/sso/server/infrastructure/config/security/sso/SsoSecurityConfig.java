@@ -20,11 +20,13 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 /**
  * Spring Security 配置
  *
- * @Reference · 排坑:
- * -> {@link <a href="https://github.com/spring-projects/spring-security-oauth/issues/993">ResourceServerProperties DEFAULT filterOrder is not 0. #993</a>}
- * -> {@link <a href="https://github.com/spring-projects/spring-boot/issues/5072">non-sensitive actuator endpoints require full authentication when @EnableResourceServer is used (oauth2) #5072</a>}
- * -> {@Description 最后一个雷: 通过 {@link Order} 设置的优先级，如果不恰当，会导致必要的过滤器不被调用.}
- * -> {@link <solution><a href="https://hacpai.com/article/1579503779901#%E7%B3%BB%E5%88%97%E6%96%87%E7%AB%A0">Spring Security Oauth2 从零到一完整实践（六）踩坑记录 - 黑客派</a></solution>}
+ * @Reference
+ * · 排坑:
+ * {@link <a href="https://github.com/spring-projects/spring-security-oauth/issues/993">ResourceServerProperties DEFAULT filterOrder is not 0. #993</a>}
+ * {@link <a href="https://github.com/spring-projects/spring-boot/issues/5072">non-sensitive actuator endpoints require full authentication when @EnableResourceServer is used (oauth2) #5072</a>}
+ * {@Description 最后一个雷: 通过 {@link Order} 设置的优先级，如果不恰当，会导致必要的过滤器不被调用.}
+ * {@link <solution><a href="https://hacpai.com/article/1579503779901#%E7%B3%BB%E5%88%97%E6%96%87%E7%AB%A0">Spring Security Oauth2 从零到一完整实践（六）踩坑记录 - 黑客派</a></solution>}
+ *
  * @Editor Suite
  */
 @Configuration
@@ -37,6 +39,10 @@ public class SsoSecurityConfig
     @Qualifier(/*"ssoUserDetailsService"*/"dingDingUserDetailsService")
     private UserDetailsService userDetailsService;
 
+//    @Autowired
+//    @Qualifier("dingDingLoginSuccessHandler")
+//    private AuthenticationSuccessHandler authenticationSuccessHandler;
+
     @Autowired
     @Qualifier("dingDingLogoutSuccessHandler")
     private LogoutSuccessHandler logoutSuccessHandler;
@@ -44,15 +50,18 @@ public class SsoSecurityConfig
     /**
      * AuthenticationManager
      *
+     * @Description
+     * {@linkplain <a href="https://github.com/jgrandja/spring-security-oauth-2-4-migrate/blob/master/auth-server/src/main/java/org/springframework/security/oauth/samples/config/SecurityConfig.java">spring-security-oauth-2-4-migrate/SecurityConfig.java at master · jgrandja/spring-security-oauth-2-4-migrate</a> 参考资料}
+     *
      * @return {@link AuthenticationManager}
+     *
      * @throws Exception
-     * @Description <a href="https://github.com/jgrandja/spring-security-oauth-2-4-migrate/blob/master/auth-server/src/main/java/org/springframework/security/oauth/samples/config/SecurityConfig.java">
-     * ->     spring-security-oauth-2-4-migrate/SecurityConfig.java at master · jgrandja/spring-security-oauth-2-4-migrate</a>
      */
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean()
-            throws Exception {
+            throws Exception
+    {
         return super.authenticationManagerBean();
     }
 
@@ -68,11 +77,13 @@ public class SsoSecurityConfig
 
     /**
      * @param auth
+     *
      * @throws Exception
      */
     @Override
     protected void configure(AuthenticationManagerBuilder auth)
-            throws Exception {
+            throws Exception
+    {
         auth
                 .userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder());
@@ -86,12 +97,17 @@ public class SsoSecurityConfig
      * 认证授权服务器访问规则
      *
      * @param http
+     *
      * @throws Exception
      */
     @Override
     protected void configure(HttpSecurity http)
-            throws Exception {
-        http.formLogin()/*.httpBasic()*/
+            throws Exception
+    {
+        http
+                //===== 登录
+                .formLogin()/*.httpBasic()*/
+//                /*.successHandler(authenticationSuccessHandler)*/
                 //===== 请求认证基本配置
                 .and()
                 .authorizeRequests()
@@ -99,7 +115,7 @@ public class SsoSecurityConfig
                 .permitAll()
                 .anyRequest()
                 .authenticated()/* 所有请求都需要认证 */
-                //===== 退出登录
+                //===== 登出
                 .and()
                 .logout()
                 .logoutUrl("/logout")
@@ -118,13 +134,18 @@ public class SsoSecurityConfig
     /**
      * Spring Security ...
      *
-     * @param web
-     * @throws Exception
      * @Description Web 策略配置.
-     * @Reference -> {@link <a href="https://stackoverflow.com/questions/21696592/disable-spring-security-for-options-http-method">java-为选项Http方法禁用Spring Security-代码日志</a>}
+     *
+     * @Reference {@link <a href="https://stackoverflow.com/questions/21696592/disable-spring-security-for-options-http-method">java-为选项Http方法禁用Spring Security-代码日志</a>}
+     *
+     * @param web
+     *
+     * @throws Exception
      */
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(WebSecurity web)
+            throws Exception
+    {
         web
                 .ignoring()
                 .antMatchers(HttpMethod.OPTIONS, "/**");

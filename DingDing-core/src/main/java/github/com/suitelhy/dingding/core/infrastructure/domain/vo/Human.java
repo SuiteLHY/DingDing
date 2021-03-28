@@ -21,7 +21,9 @@ public interface Human<VO extends Enum<VO> & VoModel<VO, V, _DESCRIPTION>, V ext
      */
     enum SexVo
             implements VoModel<SexVo, Integer, String> {
-        UNKNOWN(null, "未知"), FEMALE(0, "女"), MALE(1, "男");
+        UNKNOWN(null, "未知"),
+        FEMALE(0, "女"),
+        MALE(1, "男");
 
         /**
          * 为持久化类型转换器提供支持

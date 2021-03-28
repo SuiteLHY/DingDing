@@ -55,7 +55,8 @@ enum RegexUtilCache {
         Pattern pattern;
         if (null != regex
                 && REGEX_PATTERN_MAP.size() != MAX_CAPACITY
-                && null != (pattern = pattern(regex))) {
+                && null != (pattern = pattern(regex)))
+        {
             //--- (并发环境下保证一致性)
             synchronized (REGEX_PATTERN_MAP) {
                 REGEX_PATTERN_MAP.put(regex, pattern);
@@ -66,7 +67,7 @@ enum RegexUtilCache {
     }
 
     public Pattern create(@NotNull String regex) {
-        return null != get(regex)
+        return (null != get(regex))
                 ? get(regex)
                 : (add(regex) ? get(regex) : pattern(regex));
     }
@@ -75,6 +76,7 @@ enum RegexUtilCache {
      * 从缓存池中获取 {@link Pattern} 实例, 若不存在则创建并添加至缓存池
      *
      * @param regex
+     *
      * @return {@link Pattern}  可为 {@code null}, 此时 {@param regex} 不符合正则表达式的模式.
      */
     public Pattern get(@NotNull String regex) {
@@ -89,7 +91,8 @@ enum RegexUtilCache {
  * Regex 工具类
  *
  * @Description 使用缓存池提高性能、精简资源占用.
- * @Reference -> <a href="https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html">Pattern (Java Platform SE 7 )</a>
+ *
+ * @Reference {@link <a href="https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html">Pattern (Java Platform SE 7 )</a>}
  */
 public final class RegexUtil {
 

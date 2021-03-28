@@ -1,1 +1,0 @@
-package github.com.suitelhy.dingding.sso.resource.config;

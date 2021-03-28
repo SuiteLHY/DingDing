@@ -1,11 +1,11 @@
 package github.com.suitelhy.dingding.sso.authorization.web.security;
 
-import github.com.suitelhy.dingding.core.application.task.security.ResourceTask;
-import github.com.suitelhy.dingding.core.infrastructure.application.dto.security.ResourceDto;
 import github.com.suitelhy.dingding.core.infrastructure.application.model.TaskResult;
-import github.com.suitelhy.dingding.core.infrastructure.web.OAuth2AuthenticationInfo;
 import github.com.suitelhy.dingding.core.infrastructure.web.model.WebResult;
-import github.com.suitelhy.dingding.sso.authorization.infrastructure.web.security.util.OAuth2AuthenticationUtil;
+import github.com.suitelhy.dingding.security.service.api.infrastructure.web.OAuth2AuthenticationInfo;
+import github.com.suitelhy.dingding.security.service.api.infrastructure.web.util.OAuth2AuthenticationUtil;
+import github.com.suitelhy.dingding.sso.authorization.application.task.ResourceTask;
+import github.com.suitelhy.dingding.sso.authorization.infrastructure.application.dto.ResourceDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -37,6 +37,7 @@ public class SecurityResourceController {
      * 查询用户关联的资源（集）
      *
      * @param authentication
+     *
      * @return
      */
     @GetMapping("/resourceList")
@@ -46,7 +47,9 @@ public class SecurityResourceController {
 
             @NotNull TaskResult<List<ResourceDto>> taskResult_selectResourceByUsername = resourceTask.selectResourceByUsername(userAuthenticationDetails.getUserName(), userAuthenticationDetails);
 
-            return WebResult.Factory.DEFAULT.create(taskResult_selectResourceByUsername).toString();
+            return WebResult.Factory.DEFAULT
+                    .create(taskResult_selectResourceByUsername)
+                    .toString();
         } catch (Exception e) {
             log.error("SecurityResourceController#getResourceList", e);
             e.printStackTrace();

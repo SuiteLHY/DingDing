@@ -83,16 +83,21 @@ public class NetUtil {
      * 校验 IP 地址格式
      *
      * @param ip [IP 地址]
-     * @return {@link Boolean#TYPE}
-     * -> {
-     * ->    {@code true}:<p>符合 IP 地址格式</p>
-     * ->    , {@code false}:<p>参数 ip 为空或不符合 IP 地址格式</p>
-     * -> }
+     *
+     * @return {@linkplain Boolean#TYPE 校验结果}
+     * · 数据格式:
+     * {
+     *  {@code true}:<p>符合 IP 地址格式</p>
+     *  , {@code false}:<p>参数 ip 为空或不符合 IP 地址格式</p>
+     * }
      */
-    public static boolean validateIpAddress(@NotNull String ip) {
+    public /*static */boolean validateIpAddress(@NotNull String ip) {
         return null != ip
-                && !ip.isEmpty()
-                && RegexUtil.getInstance().getPattern(NET_UTIL_CONFIG.getRegexIp()).matcher(ip).matches();
+                && ! ip.isEmpty()
+                && RegexUtil.getInstance()
+                    .getPattern(NET_UTIL_CONFIG.getRegexIp())
+                    .matcher(ip)
+                    .matches();
     }
 
     /**
@@ -105,12 +110,13 @@ public class NetUtil {
      * {@link <a href="https://l1905.github.io/%E5%85%A5%E9%97%A8/2019/07/16/ip-proxy-01/">IP代理池理解 | 生活的自留地</a>}
      *
      * @param request
-     * @return
+     *
+     * @return {@linkplain String IP地址}
      */
     // 参考项目中, 此方法的实现过于草率(...), 于是上网查到
     //-> <a href="https://blog.csdn.net/hhhh222222/article/details/77878510">根据HttpServletRequest获取用户真实IP地址_hhhh222222的博客-CSDN博客</a>
     // 总之, 黑猫白猫, 能干好活就是好猫, coding after thinking, 避免不必要的错误(...).
-    public static String getIpAddress(@NotNull HttpServletRequest request) {
+    public /*static */String getIpAddress(@NotNull HttpServletRequest request) {
         String ipAddress = null;
         for (String requestHeader : NET_UTIL_CONFIG.getProxyServerRequestHeaders()) {
             ipAddress = request.getHeader(requestHeader);
@@ -118,7 +124,7 @@ public class NetUtil {
                 break;
             }
         }
-        if (!validateIpAddress(ipAddress)) {
+        if (! validateIpAddress(ipAddress)) {
             //--- 有些网络通过多层代理，那么获取到的IP就会有多个, 其中获取到的IP串
             //-> 一般是通过逗号<code>,</code>分割开来, 且第一个IP为客户端的IP
             try {
@@ -128,22 +134,24 @@ public class NetUtil {
                         break;
                     }
                 }
-                if (!validateIpAddress(ipAddress)) {
+                if (! validateIpAddress(ipAddress)) {
                     throw new NullPointerException();
                 }
             } catch (Exception e) {
                 //-- 获取不到 IP 地址的情况
-                throw new RuntimeException(new StringBuilder(NetUtil.class.getSimpleName())
-                        .append(" - ")
-                        .append("getIpAddress(HttpServletRequest request)")
-                        .append(" -> 从 Request 中获取 IP 地址出错!")
-                        .toString()
-                        , e);
             }
         }
-        if (!validateIpAddress(ipAddress)) {
+        if (! validateIpAddress(ipAddress)) {
             // 获取最后握手的IP, 作为缺省项
             ipAddress = request.getRemoteAddr();
+        }
+        if (! validateIpAddress(ipAddress)) {
+            //-- 最终获取不到 IP 地址的情况
+            throw new RuntimeException(String.format("%s%s%s%s"
+                    , NetUtil.class.getSimpleName()
+                    , " - "
+                    , "getIpAddress(HttpServletRequest request)"
+                    , " -> 从 Request 中获取 IP 地址出错!"));
         }
         return ipAddress;
     }
@@ -155,11 +163,13 @@ public class NetUtil {
         private static final NetUtil SINGLETON = new NetUtil();
     }
 
-    public static @NotNull
-    NetUtil getInstance() {
+    public static @NotNull NetUtil getInstance() {
         return Factory.SINGLETON;
     }
 
+    /**
+     * (Constructor)
+     */
     private NetUtil() {
     }
 

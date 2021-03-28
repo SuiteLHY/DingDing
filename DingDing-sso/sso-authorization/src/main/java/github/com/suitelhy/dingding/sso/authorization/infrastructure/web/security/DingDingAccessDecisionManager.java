@@ -23,6 +23,7 @@ import java.util.Collection;
  * @Description 自定义鉴权管理器，根据 URL资源权限 和 用户角色权限 进行鉴权.
  * 被鉴权决策管理器 {@link AbstractSecurityInterceptor} 调用进行鉴权;
  * 框架默认实现是 {@link UnanimousBased}.
+ *
  * @Reference {@link <a href="https://www.shuzhiduo.com/A/qVdeW1wrJP/">[权限管理系统篇] (五)-Spring security（授权过程分析）</a>}
  * {@link <a href="https://github.com/ygsama/ipa/blob/master/oauth2-server/src/main/java/io/github/ygsama/oauth2server/config/LoginSecurityInterceptor.java">ipa/LoginSecurityInterceptor.java at master · ygsama/ipa</a>}
  * {@link AccessDecisionManager}
@@ -44,7 +45,8 @@ public class DingDingAccessDecisionManager
     public void decide(@NotNull Authentication authentication
             , Object object
             , @NotNull Collection<ConfigAttribute> configAttributes)
-            throws AccessDeniedException, InsufficientAuthenticationException {
+            throws AccessDeniedException, InsufficientAuthenticationException
+    {
 
 //        log.info("[资源权限]: {}", configAttributes);
 //        log.info("[用户权限]: {}", authentication.getAuthorities());

@@ -1,8 +1,8 @@
 package github.com.suitelhy.dingding.sso.authorization.web.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import github.com.suitelhy.dingding.core.infrastructure.web.AbstractSecurityUser;
 import github.com.suitelhy.dingding.core.infrastructure.web.model.DingDingResponse;
+import github.com.suitelhy.dingding.security.service.api.infrastructure.web.AbstractSecurityUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -18,6 +18,7 @@ import java.io.IOException;
  * DingDing - 注销成功处理器
  *
  * @Description 项目自定义处理器.
+ *
  * @see LogoutSuccessHandler
  */
 @Component
@@ -29,12 +30,15 @@ public class DingDingLogoutSuccessHandler
     private ObjectMapper toJSONString;
 
     /**
+     * @Description 成功退出时调用.
+     *
      * @param request
      * @param response
      * @param authentication
+     *
      * @throws IOException
      * @throws ServletException
-     * @Description 成功退出时调用.
+     *
      * @see LogoutSuccessHandler#onLogoutSuccess(HttpServletRequest, HttpServletResponse, Authentication)
      */
     @Override

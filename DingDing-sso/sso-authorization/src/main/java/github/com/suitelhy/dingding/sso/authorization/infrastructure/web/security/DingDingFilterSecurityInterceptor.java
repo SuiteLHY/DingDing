@@ -46,7 +46,8 @@ public class DingDingFilterSecurityInterceptor
 
     @Autowired
     public DingDingFilterSecurityInterceptor(DingDingAccessSecurityMetadataSource securityMetadataSource
-            , DingDingAccessDecisionManager accessDecisionManager) {
+            , DingDingAccessDecisionManager accessDecisionManager)
+    {
         this.securityMetadataSource = securityMetadataSource;
         this.accessDecisionManager = accessDecisionManager;
     }
@@ -69,15 +70,18 @@ public class DingDingFilterSecurityInterceptor
      * @param request  the servlet request
      * @param response the servlet response
      * @param chain    the filter chain
+     *
      * @throws IOException      if the filter chain fails
      * @throws ServletException if the filter chain fails
+     *
      * @see {@link org.springframework.security.web.access.intercept.FilterSecurityInterceptor#doFilter(ServletRequest, ServletResponse, FilterChain)}
      */
     @Override
     public void doFilter(ServletRequest request
             , ServletResponse response
             , FilterChain chain)
-            throws IOException, ServletException {
+            throws IOException, ServletException
+    {
 
         FilterInvocation fi = new FilterInvocation(request, response, chain);
 
@@ -88,12 +92,14 @@ public class DingDingFilterSecurityInterceptor
      * 鉴权操作
      *
      * @param fi
+     *
      * @throws IOException
      * @throws ServletException
      */
     @Override
     public void invoke(FilterInvocation fi)
-            throws IOException, ServletException {
+            throws IOException, ServletException
+    {
         /*boolean observeOncePerRequest = true;
         if ((null != fi.getRequest())
                 && (null != fi.getRequest().getAttribute(FILTER_APPLIED))

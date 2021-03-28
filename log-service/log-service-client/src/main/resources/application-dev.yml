@@ -1,0 +1,83 @@
+# develop environment
+
+# 服务配置
+server:
+  port: 8081
+  servlet:
+    context-path: /log-service-client
+
+# Slf4j 日志配置
+#-> 配置项参见 <jar>org.springframework.boot.context.logging.LoggingApplicationListener</jar>
+#-> @Reference
+#-> {@link <a href="https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/context/logging/LoggingApplicationListener.html">LoggingApplicationListener (Spring Boot Docs 2.2.2.RELEASE API)</a>}
+#-> {@link <a href="https://docs.spring.io/spring-boot/docs/1.5.6.RELEASE/reference/htmlsingle/#boot-features-logging">26. Logging</a>}
+logging:
+  # 输出级别
+  level:
+    com.favorites: DEBUG
+    org.hibernate: ERROR
+    org.springframework.web: DEBUG
+    github.com.suitelhy.dingding.domain.repository.*: DEBUG
+  # {@Reference <jar>org.springframework.boot.logging.LogFile</jar>}
+  file:
+    # ↓ (建议使用) 将会在项目路径下的<relativePath>/output/log/dingding</relativePath>之下生成<file>dingding.log</file>.
+    name: ./output/log/dingding/dingding.log
+
+# 项目个性化配置
+dingding:
+  # 数据源配置
+  #-> TIPS: 个性化配置不应该与 Spring 等开发框架共用同一个命名空间, 故迁移.
+  datasource:
+    # 主数据源
+    user:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      # Spring Boot 2.xx 将默认的JDBC连接池从Tomcat更改为更快更好的HikariCP, 导致<item>url</item>需要改为<item>jdbc-url</item>
+      jdbc-url: jdbc:mysql://localhost:3306/dingding?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false
+      username: User
+      password: 123456
+    # 测试用的数据源
+    test:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://localhost:3306/test?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false
+      username: User
+      password: 123456
+  # Domain 层配置
+  domain:
+    vo:
+      init_persistence: true
+
+dubbo:
+  # Dubbo 服务注册中心相关配置
+  registry:
+    # 本地服务挂载到 Spring Cloud 服务注册中心
+    address: spring-cloud://localhost
+
+# Spring 生态 - 配置
+spring:
+  cloud:
+    nacos:
+      # 使用 Nacos 实现的 Spring Cloud 服务配置中心
+      config:
+        # 服务对应的 {@code Data ID} 的前缀
+        prefix: ${spring.application.name}
+        # 服务器地址
+        server-addr: 127.0.0.1:8848
+      # 使用 Nacos 实现的 Spring Cloud 服务发现与注册中心
+      discovery:
+        # 服务器地址
+        server-addr: 127.0.0.1:8848
+  # 开发环境关闭 Thymeleaf 的缓存
+  thymeleaf:
+    cache: false
+    # {@Reference <a href="https://stackoverflow.com/questions/28624768/thymeleaf-strict-html-parsing-issue">Thymeleaf - Strict HTML parsing issue - Stack Overflow</a>}
+    mode: LEGACYHTML5
+  datasource:
+    dbcp2:
+      # 开发环境关缓存
+      cache-state: off
+
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: *

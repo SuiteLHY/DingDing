@@ -10,7 +10,7 @@
     <description>DingDing-security-demo2</description>
 
     <!--<parent>
-        <groupId>github.com.SuiteLHY</groupId>
+        <groupId>github.com.suitelhy</groupId>
         <artifactId>DingDing-security</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../../DingDing-security</relativePath>
