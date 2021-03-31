@@ -1,5 +1,7 @@
 package github.com.suitelhy.dingding.sso.server.infrastructure.config.security;
 
+import github.com.suitelhy.dingding.core.infrastructure.web.vo.HTTP;
+import github.com.suitelhy.dingding.sso.server.infrastructure.web.DingDingCorsProcessor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -25,16 +27,20 @@ import java.util.List;
 @Slf4j
 public class GlobalCorsConfig {
 
-    private static final List<String> allowedMethods = Arrays.asList(HttpMethod.GET.name()
-            , HttpMethod.POST.name()
-            , HttpMethod.OPTIONS.name());
+    private static final List<String> allowedMethods = Arrays.asList(HTTP.MethodVo.GET.name()
+            , HTTP.MethodVo.POST.name()
+            , HTTP.MethodVo.PUT.name()
+            , HTTP.MethodVo.PATCH.name()
+            , HTTP.MethodVo.DELETE.name()
+            , HTTP.MethodVo.OPTIONS.name());
 
     private static final List<String> allowOrigins = new ArrayList<>(1);
 
     @Bean
     public CorsFilter corsFilter() {
-        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        final CorsFilter result;
 
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
         // 是否允许证书
         corsConfiguration.setAllowCredentials(true);
         // 设置允许跨域请求的域名
@@ -47,7 +53,10 @@ public class GlobalCorsConfig {
         UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
         urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
 
-        return new CorsFilter(urlBasedCorsConfigurationSource);
+        result = new CorsFilter(urlBasedCorsConfigurationSource);
+        result.setCorsProcessor(DingDingCorsProcessor.Regex.getInstance());
+
+        return result;
     }
 
     //===== Setter =====//

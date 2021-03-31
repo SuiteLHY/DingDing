@@ -1,7 +1,7 @@
 dingding:
   security:
     cross:
-      allow-origin-host: http://localhost:8080, http://localhost:8848
+      allow-origin-host: http://localhost:80[0-9]{2}, http://localhost:8848
     signing-key: dingding
 
 logging:
