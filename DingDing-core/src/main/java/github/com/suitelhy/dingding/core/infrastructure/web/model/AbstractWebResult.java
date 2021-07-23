@@ -39,26 +39,32 @@ public abstract class AbstractWebResult<_STATUS extends VoModel, _DATA, _EXTRA>
          *
          * @see super#toString()
          */
+        @NotNull
         @Override
-        public @NotNull
-        String toString() {
+        public String toString() {
+
             Iterator<Entry<String, String>> i = entrySet().iterator();
-            if (!i.hasNext()) {
+            if (! i.hasNext()) {
                 return "{}";
             }
 
             StringBuilder sb = new StringBuilder();
             sb.append('{');
+
             for (; ; ) {
+
                 Entry<String, String> e = i.next();
                 String key = e.getKey();
                 String value = e.getValue();
+
                 sb.append('\"').append(key).append('\"');
                 sb.append(':');
                 sb.append('\"').append(value).append('\"');
-                if (!i.hasNext()) {
+
+                if (! i.hasNext()) {
                     return sb.append('}').toString();
                 }
+
                 sb.append(',').append(' ');
             }
         }
@@ -75,6 +81,7 @@ public abstract class AbstractWebResult<_STATUS extends VoModel, _DATA, _EXTRA>
     protected AbstractWebResult(@NotNull _STATUS status, @NotNull _DATA data, @NotNull _EXTRA extra
             , @NotNull String requestId)
             throws IllegalArgumentException {
+
         super(status, data, extra);
 
         if (null == requestId) {
@@ -93,7 +100,7 @@ public abstract class AbstractWebResult<_STATUS extends VoModel, _DATA, _EXTRA>
      * 同时 {@link this#isSuccess()} 的返回值必定为 {@code false}.
      * · 【补充说明】该方法的返回值为 {@code false} 的情况下, 代表着当前执行结果({@link AbstractWebResult}的实现)不属于[预期内失败的情况];
      * 同时 {@link this#isSuccess()} 的返回值不受影响 (可能为 {@code true} 也可能为 {@code false}).
-     * @see this#isSuccess()
+     * @see #isSuccess()
      */
     abstract boolean isFailure();
 
@@ -114,8 +121,8 @@ public abstract class AbstractWebResult<_STATUS extends VoModel, _DATA, _EXTRA>
      *
      * @return 当前对象的字符串表示
      */
+    @NotNull
     @Override
-    abstract public @NotNull
-    String toString();
+    abstract public String toString();
 
 }

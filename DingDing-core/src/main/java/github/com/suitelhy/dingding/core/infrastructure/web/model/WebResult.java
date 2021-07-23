@@ -167,7 +167,7 @@ public class WebResult<_DATA>
              *
              * @return 比较结果
              *
-             * @see this#equals(Object)
+             * @see #equals(Object)
              */
             public boolean equals(@Nullable Integer value) {
                 return equalsValue(value);
@@ -291,18 +291,22 @@ public class WebResult<_DATA>
              */
             ErrorVo(@NotNull Integer code, @NotNull String name, @NotNull String type
                     , @NotNull String description)
-                    throws IllegalArgumentException
-            {
+                    throws IllegalArgumentException {
+
                 if (null == code) {
+
                     throw new IllegalArgumentException("非法参数: [错误信息 - 编码]");
                 }
                 if (null == name) {
+
                     throw new IllegalArgumentException("非法参数: [错误信息 - 名称]");
                 }
                 if (null == type) {
+
                     throw new IllegalArgumentException("非法参数: [错误信息 - 类型]");
                 }
                 if (null == description) {
+
                     throw new IllegalArgumentException("非法参数: [错误信息 - 描述]");
                 }
 
@@ -349,7 +353,7 @@ public class WebResult<_DATA>
              *
              * @return 比较结果
              *
-             * @see this#equals(Object)
+             * @see #equals(Object)
              */
             public boolean equals(@Nullable Integer value) {
                 return equalsValue(value);
@@ -452,21 +456,26 @@ public class WebResult<_DATA>
              */
             ExtraPropertyVo(@NotNull Integer code, @NotNull String name, @NotNull String description
                     , @NotNull String key, @NotNull Class valueClass)
-                    throws IllegalArgumentException
-            {
+                    throws IllegalArgumentException {
+
                 if (null == code) {
+
                     throw new IllegalArgumentException("非法参数: [状态 - 编码]");
                 }
                 if (null == name) {
+
                     throw new IllegalArgumentException("非法参数: [状态 - 名称]");
                 }
                 if (null == description) {
+
                     throw new IllegalArgumentException("非法参数: [状态 - 描述]");
                 }
                 if (null == key) {
+
                     throw new IllegalArgumentException("非法参数: [属性 -> Key 名称]");
                 }
                 if (null == valueClass) {
+
                     throw new IllegalArgumentException("非法参数: [属性 -> Value 类型]");
                 }
 
@@ -514,7 +523,7 @@ public class WebResult<_DATA>
              *
              * @return 比较结果
              *
-             * @see this#equals(Object)
+             * @see #equals(Object)
              */
             public boolean equals(@Nullable Integer value) {
                 return equalsValue(value);
@@ -754,6 +763,7 @@ public class WebResult<_DATA>
      */
     protected WebResult(@NotNull WebResult.Vo.StatusVo statusVo, @Nullable String message, @NotNull _DATA data
             , @NotNull String requestId, @Nullable Vo.ErrorVo errorVo, @Nullable String errorTraceId) {
+
         super(statusVo, data, new HashMap<String, Object>(1) {
                     /**
                      * 转换为字符串
@@ -763,8 +773,8 @@ public class WebResult<_DATA>
                      * @see super#toString()
                      */
                     @Override
-                    public @NotNull
-                    String toString() {
+                    public @NotNull String toString() {
+
                         Iterator<Entry<String, Object>> i = entrySet().iterator();
                         if (! i.hasNext()) {
                             return "{}";
@@ -772,16 +782,25 @@ public class WebResult<_DATA>
 
                         StringBuilder sb = new StringBuilder();
                         sb.append('{');
+
                         for (; ; ) {
+
                             Entry<String, Object> e = i.next();
                             String key = e.getKey();
                             Object value = e.getValue();
-                            sb.append('\"').append(key).append('\"');
+
+                            sb.append('\"')
+                                    .append(key)
+                                    .append('\"');
                             sb.append(':');
-                            sb.append(value instanceof String ? '\"' : "").append(value).append(value instanceof String ? '\"' : "");
+                            sb.append(value instanceof String ? '\"' : "")
+                                    .append(value)
+                                    .append(value instanceof String ? '\"' : "");
+
                             if (! i.hasNext()) {
                                 return sb.append('}').toString();
                             }
+
                             sb.append(',').append(' ');
                         }
                     }
@@ -800,25 +819,34 @@ public class WebResult<_DATA>
                  * @see super#toString()
                  */
                 @Override
-                public @NotNull
-                String toString() {
+                public @NotNull String toString() {
+
                     Iterator<Entry<String, Object>> i = entrySet().iterator();
-                    if (!i.hasNext()) {
+                    if (! i.hasNext()) {
                         return "{}";
                     }
 
                     StringBuilder sb = new StringBuilder();
                     sb.append('{');
+
                     for (; ; ) {
+
                         Entry<String, Object> e = i.next();
                         String key = e.getKey();
                         Object value = e.getValue();
-                        sb.append('\"').append(key).append('\"');
+
+                        sb.append('\"')
+                                .append(key)
+                                .append('\"');
                         sb.append(':');
-                        sb.append(value instanceof String ? '\"' : "").append(value).append(value instanceof String ? '\"' : "");
+                        sb.append(value instanceof String ? '\"' : "")
+                                .append(value)
+                                .append(value instanceof String ? '\"' : "");
+
                         if (! i.hasNext()) {
                             return sb.append('}').toString();
                         }
+
                         sb.append(',').append(' ');
                     }
                 }
@@ -828,7 +856,7 @@ public class WebResult<_DATA>
             error.put("name", (null != errorVo) ? errorVo.name : Vo.ErrorVo.UNKNOWN.name);
             error.put("type", (null != errorVo) ? errorVo.type : Vo.ErrorVo.UNKNOWN.type);
             error.put("description", (null != errorVo) ? errorVo.description : Vo.ErrorVo.UNKNOWN.description);
-            error.put("trace_id", (null != errorTraceId) ? errorTraceId : "");
+            error.put(/*"trace_id"*/"traceId", (null != errorTraceId) ? errorTraceId : "");
 
             this.errors.add(error);
         }
@@ -846,10 +874,11 @@ public class WebResult<_DATA>
      *
      * @return 判断结果
      *
-     * @see this#isSuccess()
+     * @see #isSuccess()
      */
     @Override
     boolean isFailure() {
+
         if (isSuccess()) {
             return false;
         }
