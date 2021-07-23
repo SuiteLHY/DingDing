@@ -29,17 +29,20 @@ public interface SecurityRoleRepository
 
     /**
      * 查询总数
+     * <p></p>
      *
-     * @return
+     * @return {@link Long#TYPE}
      */
     @Override
     long count();
 
     /**
      * 查询指定的角色名对应的数据数量
+     * <p></p>
      *
      * @param name
-     * @return
+     *
+     * @return {@link Long#TYPE}
      */
     long countByName(String name);
 
@@ -123,10 +126,11 @@ public interface SecurityRoleRepository
     //===== Insert Data =====//
 
     /**
-     * 新增/更新日志记录
+     * 新增&thinsp;/&thinsp;更新&thinsp;{@linkplain SecurityRole 指定的（安全认证）角色}
      *
-     * @param role
-     * @return
+     * @param role  {@linkplain SecurityRole 指定的（安全认证）角色}
+     *
+     * @return {@linkplain SecurityRole 成功新增/更新的（安全认证）角色}
      */
     @Override
     @Modifying
@@ -156,5 +160,7 @@ public interface SecurityRoleRepository
     @Transactional(isolation = Isolation.SERIALIZABLE
             , propagation = Propagation.REQUIRED)
     long removeByCode(String code);
+
+    //==========//
 
 }
